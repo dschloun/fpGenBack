@@ -1,82 +1,15 @@
 volumes:
   db_data:
     driver: local
-  keycloak_data:
-    driver: local
 
 services:
-
   postgres:
     image: postgres
     volumes:
       - db_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: fpgen
+      POSTGRES_USER: fpgen
+      POSTGRES_PASSWORD: fpgen
     ports:
       - 5432:5432
-
-  keycloak:
-    image: quay.io/keycloak/keycloak:legacy
-    environment:
-      DB_VENDOR: ${DB_VENDOR}
-      DB_ADDR: ${DB_ADDR}
-      DB_DATABASE: ${DB_DATABASE}
-      DB_USER: ${DB_USER}
-      DB_SCHEMA: ${DB_SCHEMA}
-      DB_PASSWORD: ${DB_PASSWORD}
-      KEYCLOAK_USER: ${KEYCLOAK_USER}
-      KEYCLOAK_PASSWORD: ${KEYCLOAK_PASSWORD}
-      KC_PROXY: ${KC_PROXY}
-    volumes:
-      - keycloak_data:/var/lib/keycloak/data
-    ports:
-      - 8080:8080
-    depends_on:
-      - postgres
-
-  angular:
-    image: lhalleux/frontend:${BRANCHNAME}
-    ports:
-      - 80:80
-
-  spring:
-    image: lhalleux/backend:latest
-    environment:
-      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
-      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
-      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
-      - spring.flyway.url=${spring_flyway_url}
-      - spring.flyway.user=${spring_flyway_user}
-      - spring.flyway.password=${spring_flyway_password}
-      - spring.flyway.locations=${spring_flyway_locations}
-      - spring.flyway.enabled=${spring_flyway_enabled}
-      - spring.jpa.show-sql=${spring_jpa_show_sql}
-      - spring.datasource.hikari.minimumIdle=${spring_datasource_hikari_minimumIdle}
-      - spring.datasource.hikari.maximumPoolSize=${spring_datasource_hikari_maximumPoolSize}
-      - spring.datasource.hikari.connectionTimeout=${spring_datasource_hikari_connectionTimeout}
-      - spring.datasource.hikari.idleTimeout=${spring_datasource_hikari_idleTimeout}
-      - spring.datasource.hikari.maxLifetime=${spring_datasource_hikari_maxLifetime}
-      - spring.datasource.hikari.leakDetectionThreshold=${spring_datasource_hikari_leakDetectionThreshold}
-      - logging.level.com.zaxxer.hikari=${logging_level_com_zaxxer_hikari}
-      - server.port=${server_port}
-      - keycloak.realm=${keycloak_realm}
-      - keycloak.resource=${keycloak_resource}
-      - keycloak.auth-server-url=${keycloak_auth_server_url}
-      - keycloak.ssl-required=${keycloak_ssl_required}
-      - keycloak.use-resource-role-mappings=${keycloak_use_resource_role_mappings}
-      - keycloak.bearer-only=${keycloak_bearer_only}
-      - keycloak.cors=${keycloak_cors}
-      - keycloak.disable-trust-manager=${keycloak_disable_trust_manager}
-      - spring.mail.host=${spring_mail_host}
-      - spring.mail.port=${spring_mail_port}
-      - spring.mail.username=${spring_mail_username}
-      - spring.mail.password=${spring_mail_password}
-      - spring.mail.properties.mail.smtp.auth=${spring_mail_properties_mail_smtp_auth}
-      - spring.mail.properties.mail.smtp.starttls.enable=${spring_mail_properties_mail_smtp_starttls_enable}
-      - emailDeliveryList=${emailDeliveryList}
-      - noReplyEmail=${noReplyEmail}
-      - rgpdLink=${rgpdLink}
-    ports:
-      - 8000:8000
