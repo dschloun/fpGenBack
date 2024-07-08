@@ -1,0 +1,185 @@
+### Domains, a place to put your reusable components
+openapi: 3.0.0
+
+info:
+  description: Common Domain
+  version: "0.1.0"
+  title: Common Domain
+
+paths:
+  /fake_path_required_for_model_generation:
+    get:
+      responses:
+        '200':
+          description: OK
+
+components:
+  responses:
+    400:
+      description: 'The server cannot or will not process the request due to something that is perceived to be a client error (e.g., malformed request syntax, invalid request message framing, or deceptive request routing).'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    403:
+      description: 'Forbidden: the server is refusing action, you do not have the necessary permissions this resource'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    404:
+      description: 'The requested resource is not found'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    409:
+      description: 'Conflict: the request could not be completed due to a conflict with the current state of the target resource'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    500:
+      description: 'The server encountered an unexpected condition which prevented it from fulfilling the request'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+  schemas:
+    QueryPage:
+      type: object
+      description: 'Filter the result on a given page with a given number of elements'
+      required:
+        - page
+        - size
+      properties:
+        page:
+          type: integer
+          minimum: 0
+          example: 2
+          description: 'The current page number'
+        size:
+          type: integer
+          minimum: 1
+          example: 50
+          description: 'The number of elements of current page'
+
+    Pagination:
+      type: object
+      required:
+        - page
+        - size
+        - totalSize
+      properties:
+        page:
+          type: integer
+          minimum: 0
+          example: 2
+          description: 'The current page number'
+        size:
+          type: integer
+          minimum: 1
+          example: 50
+          description: 'The number of elements of current page'
+        totalSize:
+          type: integer
+          minimum: 0
+          example: 4
+          description: 'The total number of elements matching the given query'
+
+    ScrollPagination:
+      description: "The end of the result happens when the result returned is less than requested"
+      type: object
+      required:
+        - page
+        - size
+      properties:
+        page:
+          type: integer
+          minimum: 0
+          example: 2
+          description: 'The current page number'
+        size:
+          type: integer
+          minimum: 1
+          example: 50
+          description: 'The number of elements of current page'
+
+    ErrorResponse:
+      type: object
+      properties:
+        errorType:
+          $ref: '#/components/schemas/ErrorType'
+        technicalErrorInstanceId:
+          type: string
+          format: uuid
+          description: "A GUID identifying univoquely the error instance in the applicative log system"
+          example: "b1e0773f-ef0c-43cf-a1df-52d17f4a3017"
+        correlationId:
+          type: string
+          format: uuid
+          nullable: true
+          description: "A GUID identifying a request"
+          example: "b1e0773f-ef0c-43cf-a1df-52d17f4a3017"
+        businessError: # only applicable when {errorType} is Business
+          $ref: '#/components/schemas/BusinessError'
+        message:
+          type: string
+
+    ErrorType:
+      type: string
+      enum:
+        - Technical
+        - Business
+
+    BusinessError:
+      type: object
+      nullable: true
+      description: 'Only applicable when {errorType} is Business'
+      discriminator:
+        propertyName: code
+      properties:
+        code:
+          $ref: '#/components/schemas/BusinessErrorCode'
+
+    BusinessErrorCode:
+      type: string
+      enum:
+        - A # Todo change this when real business error must be thrown
+        - B # Todo change this when real business error must be thrown
+        - C # Todo change this when real business error must be thrown
+
+    Long:
+      type: integer
+      format: int64
+
+    UUID:
+      type: string
+      format: uuid
+      example: "b1e0773f-ef0c-43cf-a1df-52d17f4a3017"
+
+    UUIDWrapper:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/UUID'
+
+    Date:
+      type: string
+      format: 'date'
+      example: '2020-11-23'
+
+    DateTime:
+      type: string
+      format: 'date-time'
+      example: '2020-11-23T14:46:04.911Z'
+
+    Time:
+      type: string
+      pattern: '^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$'
+      example: '14:23'
