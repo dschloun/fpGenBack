@@ -15,6 +15,11 @@ public class InstantMessage extends BaseUuidEntity {
 
     private String content;
 
-    private String
+    private String topic;
+    private String type;
+
+    public String getContent() {
+        return content;
+    }
 
 }
