@@ -1,4 +1,4 @@
-package be.unamur.fpgen.application.configuration;
+package be.unamur.fpgen.configuration;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
