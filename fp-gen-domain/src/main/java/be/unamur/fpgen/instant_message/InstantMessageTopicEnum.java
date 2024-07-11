@@ -1,4 +1,4 @@
-package be.unamur.fpgen;
+package be.unamur.fpgen.instant_message;
 
 public enum InstantMessageTopicEnum {
     SPORT, POLITICS, SCIENCE, TECHNOLOGY, ART, MUSIC, MOVIES, GAMES, LITERATURE, PHILOSOPHY, RELIGION, HISTORY, GEOGRAPHY, ECONOMY, SOCIETY, HEALTH, EDUCATION, ENVIRONMENT, OTHER
