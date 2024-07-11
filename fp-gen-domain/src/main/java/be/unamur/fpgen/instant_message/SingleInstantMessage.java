@@ -12,6 +12,10 @@ public class SingleInstantMessage extends AbstractInstantMessage {
                 builder.getContent());
     }
 
+    public static Builder newBuilder() {
+        return new Builder();
+    }
+
     // builder
     public static final class Builder extends AbstractInstantMessageBuilder<Builder> {
 
