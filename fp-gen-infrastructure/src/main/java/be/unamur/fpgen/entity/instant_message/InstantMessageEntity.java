@@ -5,6 +5,8 @@ import be.unamur.fpgen.instant_message.InstantMessageTopicEnum;
 import be.unamur.fpgen.instant_message.InstantMessageTypeEnum;
 
 import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.MappedSuperclass;
 import java.io.Serial;
 
@@ -21,6 +23,7 @@ public class InstantMessageEntity extends BaseUuidEntity {
 
     // getters and setters
     @Column(name = "topic", nullable = false)
+    @Enumerated(EnumType.STRING)
     public InstantMessageTopicEnum getTopic() {
         return topic;
     }
@@ -29,7 +32,8 @@ public class InstantMessageEntity extends BaseUuidEntity {
         this.topic = topic;
     }
 
-    @Column(name = "instant_message_type", nullable = false)
+    @Column(name = "type", nullable = false)
+    @Enumerated(EnumType.STRING)
     public InstantMessageTypeEnum getType() {
         return type;
     }
