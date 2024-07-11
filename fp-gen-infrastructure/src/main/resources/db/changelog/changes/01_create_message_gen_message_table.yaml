@@ -1,3 +1,46 @@
 databaseChangeLog:
   - changeSet:
-      id: create-
+      id: create-instant-message-table
+      author: dsc
+      changes:
+        - createTable:
+            tableName: single_instant_message
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    - primaryKey: true
+                    - primaryKeyName: pk_single_instant_message
+                    - nullable: false
+                    - unique: true
+              - column:
+                  name: creation_date
+                  type: datetime
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: modification_date
+                  type: datetime
+                  constraints:
+                      - nullable: false
+                      - unique: false
+              - column:
+                  name: topic
+                  type: varchar(20)
+                  constraints:
+                      - nullable: false
+                      - unique: false
+              - column:
+                  name: type
+                  type: varchar(18)
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: content
+                  type: text
+                  constraints:
+                      - nullable: false
+                      - unique: false
