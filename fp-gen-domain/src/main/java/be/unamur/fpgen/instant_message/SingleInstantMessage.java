@@ -9,7 +9,8 @@ public class SingleInstantMessage extends AbstractInstantMessage {
                 builder.getModificationDate(),
                 builder.getTopic(),
                 builder.getType(),
-                builder.getContent());
+                builder.getContent(),
+                builder.getGeneration());
     }
 
     public static Builder newBuilder() {

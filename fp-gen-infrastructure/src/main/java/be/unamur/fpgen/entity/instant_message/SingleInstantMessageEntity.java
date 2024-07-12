@@ -3,6 +3,10 @@ package be.unamur.fpgen.entity.instant_message;
 import javax.persistence.Entity;
 import java.io.Serial;
 
+/**
+ * @overview: SingleInstantMessageEntity is an entity class that represents a single instant message.
+ * SingleInstantMessageEntity extends InstantMessageEntity.
+ */
 @Entity(name = "single_instant_message")
 public class SingleInstantMessageEntity extends InstantMessageEntity {
 

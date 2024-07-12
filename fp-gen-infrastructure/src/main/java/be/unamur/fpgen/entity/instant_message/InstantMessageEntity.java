@@ -15,10 +15,12 @@ import java.io.Serial;
  * InstantMessageEntity is a mapped superclass for instant messages.
  * It provides the basic structure for instant messages.
  * InstantMessageEntity is mutable.
+ * @specfield generationId: String // the generation id of the instant message
+ * format = start by SIM if singleInstantMessage CIM if conversationInstantMessage + 'trigram + date + time': ex SIM_DSC202407120814
  * @specfield topic: MessageTopicEnum // the topic of the message
  * @specfield type: MessageTypeEnum // the type of the message
  * @specfield content: String // the content of the message
- * @invariant this.topic != null && this.type != null && this.content != null
+ * @invariant generationId != null && this.topic != null && this.type != null && this.content != null
  */
 @MappedSuperclass
 public class InstantMessageEntity extends BaseUuidEntity {
@@ -27,16 +29,25 @@ public class InstantMessageEntity extends BaseUuidEntity {
     private static final long serialVersionUID = -80039190673154484L;
 
     // members
+    private String generationId;
     private MessageTopicEnum topic;
     private MessageTypeEnum type;
     private String content;
 
     /**
-     * FA(c): c.topic = topic, c.type = type, c.content = content
-     * IR(c): c.topic != null && c.type != null && c.content != null
+     * FA(c): c.generationId = generationId, c.topic = topic, c.type = type, c.content = content
+     * IR(c): c.generatoinId != null && c.topic != null && c.type != null && c.content != null
      */
 
     // getters and setters
+    @Column(name = "generation_id", nullable = false)
+    public String getGenerationId() {
+        return generationId;
+    }
+
+    public void setGenerationId(final String generationId) {
+        this.generationId = generationId;
+    }
 
     /**
      * @return topic

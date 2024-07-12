@@ -31,7 +31,6 @@ public class BaseEntity implements Serializable {
 
     /**
      * FA(c): c.creationDate = creation_date, c.modificationDate = modification_date
-     *
      * IR(c) : c.creationDate != null && c.modificationDate != null
      */
 
