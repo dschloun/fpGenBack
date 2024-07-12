@@ -74,7 +74,7 @@
         <!-- api -->
         <dependency>
             <groupId>be.unamur</groupId>
-            <artifactId>fpgen</artifactId>
+            <artifactId>fpgen-api</artifactId>
             <version>${fpgen-api-version}</version>
         </dependency>
 

@@ -1,6 +1,7 @@
 package be.unamur.fpgen.mapper.domainToJpa;
 
 import be.unamur.fpgen.entity.instant_message.InstantMessageEntity;
+import be.unamur.fpgen.generation.Generation;
 import be.unamur.fpgen.instant_message.InstantMessage;
 
 /**
@@ -20,11 +21,12 @@ public class InstantMessageDomainToJpaMapper {
      * @requires domain != null
      * @return a InstantMessageEntity object mapped from the given InstantMessage domain object
      */
-    public static InstantMessageEntity mapForCreate(final InstantMessage domain){
+    public static InstantMessageEntity mapForCreate(final InstantMessage domain, final Generation generationDomain){
         final InstantMessageEntity entity = new InstantMessageEntity();
         entity.setTopic(domain.getTopic());
         entity.setType(domain.getType());
         entity.setContent(domain.getContent());
+        entity.setInstantMessageGeneration(GenerationDomainToJpaMapper.mapForCreate(generationDomain));
         return entity;
     }
 

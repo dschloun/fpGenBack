@@ -20,6 +20,7 @@ public class Generation extends BaseUuidDomain {
     private final String authorTrigram;
     private final String details;
     private final GenerationTypeEnum type;
+    private final boolean batch;
 
     // constructors
     private Generation(final Builder builder) {
@@ -28,6 +29,7 @@ public class Generation extends BaseUuidDomain {
         authorTrigram = builder.authorTrigram;
         details = builder.details;
         type = builder.type;
+        batch = builder.batch;
     }
 
     public static Builder newBuilder() {
@@ -55,12 +57,17 @@ public class Generation extends BaseUuidDomain {
         return type;
     }
 
+    public boolean isBatch() {
+        return batch;
+    }
+
     // builder
     public static final class Builder extends AbstractBaseUuidDomainBuilder<Builder> {
         private String generationId;
         private String authorTrigram;
         private String details;
         private GenerationTypeEnum type;
+        private boolean batch;
 
         public Builder() {
         }
@@ -77,6 +84,11 @@ public class Generation extends BaseUuidDomain {
 
         public Builder withType(final GenerationTypeEnum type) {
             this.type = type;
+            return this;
+        }
+
+        public Builder withBatch(final boolean batch) {
+            this.batch = batch;
             return this;
         }
 
