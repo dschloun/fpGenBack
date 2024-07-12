@@ -7,16 +7,16 @@ import java.util.UUID;
 
 public abstract class AbstractInstantMessage extends BaseUuidDomain {
     // members
-    private InstantMessageTopicEnum topic;
-    private InstantMessageTypeEnum type;
+    private MessageTopicEnum topic;
+    private MessageTypeEnum type;
     private String content;
 
     // constructors
     protected AbstractInstantMessage(final UUID id,
                                      final OffsetDateTime creationDate,
                                      final OffsetDateTime modificationDate,
-                                     final InstantMessageTopicEnum topic,
-                                     final InstantMessageTypeEnum type,
+                                     final MessageTopicEnum topic,
+                                     final MessageTypeEnum type,
                                      final String content) {
         super(id, creationDate, modificationDate);
         this.topic = topic;
@@ -25,11 +25,11 @@ public abstract class AbstractInstantMessage extends BaseUuidDomain {
     }
 
     // getters
-    public InstantMessageTopicEnum getTopic() {
+    public MessageTopicEnum getTopic() {
         return topic;
     }
 
-    public InstantMessageTypeEnum getType() {
+    public MessageTypeEnum getType() {
         return type;
     }
 
@@ -39,15 +39,15 @@ public abstract class AbstractInstantMessage extends BaseUuidDomain {
 
     // builder
     public abstract static class AbstractInstantMessageBuilder<T> extends AbstractBaseUuidDomainBuilder<T> {
-        private InstantMessageTopicEnum topic;
-        private InstantMessageTypeEnum type;
+        private MessageTopicEnum topic;
+        private MessageTypeEnum type;
         private String content;
 
-        public InstantMessageTopicEnum getTopic() {
+        public MessageTopicEnum getTopic() {
             return topic;
         }
 
-        public InstantMessageTypeEnum getType() {
+        public MessageTypeEnum getType() {
             return type;
         }
 
@@ -55,12 +55,12 @@ public abstract class AbstractInstantMessage extends BaseUuidDomain {
             return content;
         }
 
-        public T withTopic(final InstantMessageTopicEnum topic) {
+        public T withTopic(final MessageTopicEnum topic) {
             this.topic = topic;
             return self();
         }
 
-        public T withType(final InstantMessageTypeEnum type) {
+        public T withType(final MessageTypeEnum type) {
             this.type = type;
             return self();
         }
