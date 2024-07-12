@@ -21,7 +21,7 @@ public class ConversationEntity extends BaseUuidEntity {
 
     // getters and setters
     @ManyToOne
-    @JoinColumn(name = "conversation_generation_id")
+    @JoinColumn(name = "generation_id")
     public ConversationGenerationEntity getConversationGeneration() {
         return conversationGeneration;
     }

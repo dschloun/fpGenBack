@@ -16,7 +16,7 @@ public class SingleInstantMessageEntity extends InstantMessageEntity {
     private InstantMessageGenerationEntity singleInstantMessageGeneration;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "instant_message_generation_id")
+    @JoinColumn(name = "generation_id")
     public InstantMessageGenerationEntity getSingleInstantMessageGeneration() {
         return singleInstantMessageGeneration;
     }
