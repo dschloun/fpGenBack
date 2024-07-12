@@ -1,5 +1,6 @@
-package be.unamur.fpgen.entity;
+package be.unamur.fpgen.entity.generation;
 
+import be.unamur.fpgen.entity.BaseUuidEntity;
 import be.unamur.fpgen.entity.instant_message.InstantMessageEntity;
 import be.unamur.fpgen.generation.GenerationTypeEnum;
 
@@ -8,7 +9,9 @@ import java.io.Serial;
 import java.util.List;
 
 @Entity(name = "generation")
-public class GenerationEntity extends BaseUuidEntity{
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "kind", discriminatorType = DiscriminatorType.STRING)
+public class GenerationEntity extends BaseUuidEntity {
     @Serial
     private static final long serialVersionUID = -4712056697432095738L;
 
@@ -18,7 +21,7 @@ public class GenerationEntity extends BaseUuidEntity{
     private String details;
     private GenerationTypeEnum type;
     private boolean batch;
-    private List<InstantMessageEntity> instantMessageList;
+//    private List<InstantMessageEntity> instantMessageList;
 
     // getters and setters
     @Column(name = "generation_id", nullable = false)
@@ -67,12 +70,12 @@ public class GenerationEntity extends BaseUuidEntity{
         this.batch = batch;
     }
 
-    @OneToMany(mappedBy = "generation")
-    public List<InstantMessageEntity> getInstantMessageList() {
-        return instantMessageList;
-    }
-
-    public void setInstantMessageList(final List<InstantMessageEntity> instantMessageList) {
-        this.instantMessageList = instantMessageList;
-    }
+//    @OneToMany(mappedBy = "generation")
+//    public List<InstantMessageEntity> getInstantMessageList() {
+//        return instantMessageList;
+//    }
+//
+//    public void setInstantMessageList(final List<InstantMessageEntity> instantMessageList) {
+//        this.instantMessageList = instantMessageList;
+//    }
 }

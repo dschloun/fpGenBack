@@ -1,7 +1,7 @@
 package be.unamur.fpgen.entity.instant_message;
 
 import be.unamur.fpgen.entity.BaseUuidEntity;
-import be.unamur.fpgen.entity.GenerationEntity;
+import be.unamur.fpgen.entity.generation.GenerationEntity;
 import be.unamur.fpgen.instant_message.MessageTopicEnum;
 import be.unamur.fpgen.instant_message.MessageTypeEnum;
 
@@ -29,7 +29,7 @@ public class InstantMessageEntity extends BaseUuidEntity {
     private static final long serialVersionUID = -80039190673154484L;
 
     // members
-    private GenerationEntity generation;
+//    private GenerationEntity generation;
     private MessageTopicEnum topic;
     private MessageTypeEnum type;
     private String content;
@@ -40,15 +40,15 @@ public class InstantMessageEntity extends BaseUuidEntity {
      */
 
     // getters and setters
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "generation_id")
-    public GenerationEntity getGeneration() {
-        return generation;
-    }
-
-    public void setGeneration(final GenerationEntity generation) {
-        this.generation = generation;
-    }
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "generation_id")
+//    public GenerationEntity getGeneration() {
+//        return generation;
+//    }
+//
+//    public void setGeneration(final GenerationEntity generation) {
+//        this.generation = generation;
+//    }
 
     /**
      * @return topic

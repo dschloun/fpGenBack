@@ -1,7 +1,8 @@
 package be.unamur.fpgen.entity.instant_message;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import be.unamur.fpgen.entity.generation.InstantMessageGenerationEntity;
+
+import javax.persistence.*;
 import java.io.Serial;
 
 /**
@@ -12,6 +13,15 @@ import java.io.Serial;
 @DiscriminatorValue(value = "SIM")
 public class SingleInstantMessageEntity extends InstantMessageEntity {
 
-    @Serial
-    private static final long serialVersionUID = -763345217635016682L;
+    private InstantMessageGenerationEntity singleInstantMessageGeneration;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "instant_message_generation_id")
+    public InstantMessageGenerationEntity getSingleInstantMessageGeneration() {
+        return singleInstantMessageGeneration;
+    }
+
+    public void setSingleInstantMessageGeneration(InstantMessageGenerationEntity generation) {
+        this.singleInstantMessageGeneration = generation;
+    }
 }

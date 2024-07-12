@@ -1,0 +1,23 @@
+package be.unamur.fpgen.entity.interlocutor;
+
+
+import be.unamur.fpgen.entity.BaseOnlyLongIdEntity;
+import be.unamur.fpgen.interlocutor.InterlocutorTypeEnum;
+
+import javax.persistence.Entity;
+
+@Entity(name = "interlocutor")
+public class InterlocutorEntity extends BaseOnlyLongIdEntity {
+
+    // members
+    private InterlocutorTypeEnum interlocutorTypeEnum;
+
+    public InterlocutorTypeEnum getInterlocutorTypeEnum() {
+        return interlocutorTypeEnum;
+    }
+
+    public void setInterlocutorTypeEnum(InterlocutorTypeEnum interlocutorTypeEnum) {
+        this.interlocutorTypeEnum = interlocutorTypeEnum;
+    }
+
+}

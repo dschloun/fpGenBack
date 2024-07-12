@@ -33,8 +33,8 @@ public class SingleInstantMessageJpaToDomainMapper {
                 .withTopic(entity.getTopic())
                 .withType(entity.getType())
                 .withContent(entity.getContent())
-                .withGenerationId(entity.getGeneration().getGenerationId())
-                .withBatch(entity.getGeneration().isBatch())
+                .withGenerationId(entity.getSingleInstantMessageGeneration().getGenerationId())
+                .withBatch(entity.getSingleInstantMessageGeneration().isBatch())
                 .build();
     }
 }

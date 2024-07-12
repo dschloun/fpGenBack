@@ -83,6 +83,9 @@ databaseChangeLog:
               - column:
                   name: kind
                   type: varchar(5)
+                  constraints:
+                    - nullable: false
+                    - unique: false
               - column:
                   name: topic
                   type: varchar(20)
@@ -102,11 +105,20 @@ databaseChangeLog:
                       - nullable: false
                       - unique: false
               - column:
-                  name: generation_id
+                  name: instant_message_generation_id
                   type: uuid
                   constraints:
-                    - nullable: false
+                    - nullable: true
                     - unique: false
-                    - foreignKeyName: fk_instant_message_generation
+                    - foreignKeyName: fk_single_instant_message_generation
+                    - references: generation(id)
+                    - onDelete: CASCADE
+              - column:
+                  name: conversation_message_generation_id
+                  type: uuid
+                  constraints:
+                    - nullable: true
+                    - unique: false
+                    - foreignKeyName: fk_conversation_instant_message_generation
                     - references: generation(id)
                     - onDelete: CASCADE
