@@ -1,15 +1,13 @@
 package be.unamur.fpgen.generation;
 
 import be.unamur.fpgen.BaseUuidDomain;
-import be.unamur.fpgen.instant_message.MessageTopicEnum;
-import be.unamur.fpgen.instant_message.MessageTypeEnum;
 import be.unamur.fpgen.utils.DateUtil;
 
 import java.time.OffsetDateTime;
-import java.util.UUID;
 
 /**
  * @overview: generation is a class that represents the generation of a message, message batch, conversation or conversation batch
+ * Generation is immutable.
  * @specfield generationId: String // technical identifier of the generation
  * @specfield generationDate: OffsetDateTime // date of the generation
  * @specfield authorTrigram: String // author trigram of the generation
@@ -25,9 +23,7 @@ public class Generation extends BaseUuidDomain {
 
     // constructors
     private Generation(final Builder builder) {
-        creationDate = builder.creationDate;
-        modificationDate = builder.modificationDate;
-        id = builder.id;
+        super(builder.getId(), builder.getCreationDate(), builder.getModificationDate());
         generationId = builder.generationId;
         authorTrigram = builder.authorTrigram;
         details = builder.details;
@@ -60,31 +56,13 @@ public class Generation extends BaseUuidDomain {
     }
 
     // builder
-    public static final class Builder {
-        private OffsetDateTime creationDate;
-        private OffsetDateTime modificationDate;
-        private UUID id;
+    public static final class Builder extends AbstractBaseUuidDomainBuilder<Builder> {
         private String generationId;
         private String authorTrigram;
         private String details;
         private GenerationTypeEnum type;
 
         public Builder() {
-        }
-
-        public Builder withCreationDate(final OffsetDateTime creationDate) {
-            this.creationDate = creationDate;
-            return this;
-        }
-
-        public Builder withModificationDate(final OffsetDateTime modificationDate) {
-            this.modificationDate = modificationDate;
-            return this;
-        }
-
-        public Builder withId(final UUID id) {
-            this.id = id;
-            return this;
         }
 
         public Builder withAuthorTrigram(final String authorTrigram) {
@@ -109,7 +87,12 @@ public class Generation extends BaseUuidDomain {
 
         // methods
         private String generateGenerationId(){
-            return String.format("%s-%s-%s", this.type, this.authorTrigram, DateUtil.convertOffsetDateTimeToString(this.creationDate));
+            return String.format("%s-%s-%s", this.type, this.authorTrigram, DateUtil.convertOffsetDateTimeToString(this.getCreationDate()));
+        }
+
+        @Override
+        protected Builder self() {
+            return this;
         }
     }
 }

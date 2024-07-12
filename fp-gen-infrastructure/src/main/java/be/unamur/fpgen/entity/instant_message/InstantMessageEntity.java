@@ -1,13 +1,11 @@
 package be.unamur.fpgen.entity.instant_message;
 
 import be.unamur.fpgen.entity.BaseUuidEntity;
+import be.unamur.fpgen.entity.GenerationEntity;
 import be.unamur.fpgen.instant_message.MessageTopicEnum;
 import be.unamur.fpgen.instant_message.MessageTypeEnum;
 
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import java.io.Serial;
 
 /**
@@ -22,14 +20,16 @@ import java.io.Serial;
  * @specfield content: String // the content of the message
  * @invariant generationId != null && this.topic != null && this.type != null && this.content != null
  */
-@MappedSuperclass
+@Entity(name = "instant_message")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "kind", discriminatorType = DiscriminatorType.STRING)
 public class InstantMessageEntity extends BaseUuidEntity {
 
     @Serial
     private static final long serialVersionUID = -80039190673154484L;
 
     // members
-    private String generationId;
+    private GenerationEntity generation;
     private MessageTopicEnum topic;
     private MessageTypeEnum type;
     private String content;
@@ -40,13 +40,14 @@ public class InstantMessageEntity extends BaseUuidEntity {
      */
 
     // getters and setters
-    @Column(name = "generation_id", nullable = false)
-    public String getGenerationId() {
-        return generationId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "generation_id")
+    public GenerationEntity getGeneration() {
+        return generation;
     }
 
-    public void setGenerationId(final String generationId) {
-        this.generationId = generationId;
+    public void setGeneration(final GenerationEntity generation) {
+        this.generation = generation;
     }
 
     /**

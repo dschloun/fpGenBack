@@ -11,7 +11,8 @@ public abstract class AbstractInstantMessage extends BaseUuidDomain {
     private MessageTopicEnum topic;
     private MessageTypeEnum type;
     private String content;
-    private Generation generation;
+    private String generationId;
+    private boolean batch;
 
     // constructors
     protected AbstractInstantMessage(final UUID id,
@@ -20,12 +21,14 @@ public abstract class AbstractInstantMessage extends BaseUuidDomain {
                                      final MessageTopicEnum topic,
                                      final MessageTypeEnum type,
                                      final String content,
-                                     final Generation generation) {
+                                     final String generationId,
+                                     final boolean batch) {
         super(id, creationDate, modificationDate);
         this.topic = topic;
         this.type = type;
         this.content = content;
-        this.generation = generation;
+        this.generationId = generationId;
+        this.batch = batch;
     }
 
     // getters
@@ -41,8 +44,12 @@ public abstract class AbstractInstantMessage extends BaseUuidDomain {
         return content;
     }
 
-    public Generation getGeneration() {
-        return generation;
+    public String getGeneration() {
+        return generationId;
+    }
+
+    public boolean isBatch() {
+        return batch;
     }
 
     // builder
@@ -50,7 +57,8 @@ public abstract class AbstractInstantMessage extends BaseUuidDomain {
         private MessageTopicEnum topic;
         private MessageTypeEnum type;
         private String content;
-        private Generation generation;
+        private String generationId;
+        private boolean batch;
 
         public MessageTopicEnum getTopic() {
             return topic;
@@ -64,8 +72,12 @@ public abstract class AbstractInstantMessage extends BaseUuidDomain {
             return content;
         }
 
-        public Generation getGeneration() {
-            return generation;
+        public String getGeneration() {
+            return generationId;
+        }
+
+        public boolean isBatch() {
+            return batch;
         }
 
         public T withTopic(final MessageTopicEnum topic) {
@@ -83,8 +95,13 @@ public abstract class AbstractInstantMessage extends BaseUuidDomain {
             return self();
         }
 
-        public T withGeneration(final Generation generation){
-            this.generation = generation;
+        public T withGenerationId(final String generationId){
+            this.generationId = generationId;
+            return self();
+        }
+
+        public T withBatch(final boolean batch){
+            this.batch = batch;
             return self();
         }
     }

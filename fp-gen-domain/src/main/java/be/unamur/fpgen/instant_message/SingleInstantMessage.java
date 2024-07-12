@@ -10,7 +10,8 @@ public class SingleInstantMessage extends AbstractInstantMessage {
                 builder.getTopic(),
                 builder.getType(),
                 builder.getContent(),
-                builder.getGeneration());
+                builder.getGeneration(),
+                builder.isBatch());
     }
 
     public static Builder newBuilder() {

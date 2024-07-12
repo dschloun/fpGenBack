@@ -1,10 +1,64 @@
 databaseChangeLog:
   - changeSet:
-      id: create-instant-message-table
+      id: create-generation-and-instant-message-table
       author: dsc
       changes:
         - createTable:
-            tableName: single_instant_message
+            tableName: generation
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    - primaryKey: true
+                    - primaryKeyName: pk_generation
+                    - nullable: false
+                    - unique: true
+              - column:
+                  name: creation_date
+                  type: datetime
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: modification_date
+                  type: datetime
+                  constraints:
+                      - nullable: false
+                      - unique: false
+              - column:
+                  name: generation_id
+                  type: varchar(25)
+                  constraints:
+                      - nullable: false
+                      - unique: true
+              - column:
+                  name: author_trigram
+                  type: varchar(3)
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: details
+                  type: text
+                  constraints:
+                      - nullable: false
+                      - unique: false
+              - column:
+                  name: type
+                  type: varchar(3)
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: batch
+                  type: boolean
+                  constraints:
+                    - nullable: false
+                    - unique: false
+
+        - createTable:
+            tableName: instant_message
             columns:
               - column:
                   name: id
@@ -27,6 +81,9 @@ databaseChangeLog:
                       - nullable: false
                       - unique: false
               - column:
+                  name: kind
+                  type: varchar(5)
+              - column:
                   name: topic
                   type: varchar(20)
                   constraints:
@@ -44,3 +101,12 @@ databaseChangeLog:
                   constraints:
                       - nullable: false
                       - unique: false
+              - column:
+                  name: generation_id
+                  type: uuid
+                  constraints:
+                    - nullable: false
+                    - unique: false
+                    - foreignKeyName: fk_instant_message_generation
+                    - references: generation(id)
+                    - onDelete: CASCADE
