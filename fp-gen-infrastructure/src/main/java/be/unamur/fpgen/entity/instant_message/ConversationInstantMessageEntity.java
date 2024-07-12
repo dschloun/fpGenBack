@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 
 @Entity
 @DiscriminatorValue(value = "CIM")
-public class ConversationInstantMessageEntity extends InstantMessageEntity{
+public class ConversationInstantMessageEntity extends AbstractInstantMessageEntity {
 
     // members
     private ConversationEntity conversation;

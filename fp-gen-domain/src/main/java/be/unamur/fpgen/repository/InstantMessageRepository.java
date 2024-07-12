@@ -1,18 +1,20 @@
 package be.unamur.fpgen.repository;
 
-import be.unamur.fpgen.instant_message.SingleInstantMessage;
+import be.unamur.fpgen.instant_message.InstantMessage;
+
+import java.util.List;
 
 /**
  * @overview
  * The SingleInstantMessageRepository interface provides a contract for SingleInstantMessage,
  * defining methods to manage SingleInstantMessage.
  */
-public interface SingleInstantMessageRepository {
+public interface InstantMessageRepository {
 
     /**
      * Save a SingleInstantMessage.
      * @requires message != null
      * @return the saved SingleInstantMessage
      */
-    SingleInstantMessage saveSingleInstantMessage(SingleInstantMessage singleInstantMessage);
+    List<InstantMessage> saveInstantMessageList(List<InstantMessage> instantMessage);
 }

@@ -1,9 +1,9 @@
 package be.unamur.fpgen.instant_message;
 
-public class SingleInstantMessage extends AbstractInstantMessage {
+public class InstantMessage extends AbstractInstantMessage {
 
     // constructors
-    public SingleInstantMessage(final Builder builder) {
+    public InstantMessage(final Builder builder) {
         super(builder.getId(),
                 builder.getCreationDate(),
                 builder.getModificationDate(),
@@ -24,8 +24,8 @@ public class SingleInstantMessage extends AbstractInstantMessage {
         Builder() {
         }
 
-        public SingleInstantMessage build() {
-            return new SingleInstantMessage(this);
+        public InstantMessage build() {
+            return new InstantMessage(this);
         }
 
         @Override

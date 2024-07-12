@@ -1,12 +1,9 @@
 package be.unamur.fpgen.entity.generation;
 
 import be.unamur.fpgen.entity.BaseUuidEntity;
-import be.unamur.fpgen.entity.instant_message.InstantMessageEntity;
-import be.unamur.fpgen.generation.GenerationTypeEnum;
 
 import javax.persistence.*;
 import java.io.Serial;
-import java.util.List;
 
 @Entity(name = "generation")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)

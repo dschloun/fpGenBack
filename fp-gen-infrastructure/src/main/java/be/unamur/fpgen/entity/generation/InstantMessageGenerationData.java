@@ -1,6 +1,6 @@
 package be.unamur.fpgen.entity.generation;
 
-import be.unamur.fpgen.entity.instant_message.SingleInstantMessageEntity;
+import be.unamur.fpgen.entity.instant_message.InstantMessageEntity;
 
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
@@ -13,15 +13,15 @@ public class InstantMessageGenerationData implements Serializable {
     @Serial
     private static final long serialVersionUID = 4455469519017267792L;
 
-    private List<SingleInstantMessageEntity> singleInstantMessageList;
+    private List<InstantMessageEntity> singleInstantMessageList;
 
     // getters and setters
     @OneToMany(mappedBy = "singleInstantMessageGeneration")
-    public List<SingleInstantMessageEntity> getSingleInstantMessageList() {
+    public List<InstantMessageEntity> getSingleInstantMessageList() {
         return singleInstantMessageList;
     }
 
-    public void setSingleInstantMessageList(List<SingleInstantMessageEntity> singleInstantMessageList) {
+    public void setSingleInstantMessageList(List<InstantMessageEntity> singleInstantMessageList) {
         this.singleInstantMessageList = singleInstantMessageList;
     }
 }
