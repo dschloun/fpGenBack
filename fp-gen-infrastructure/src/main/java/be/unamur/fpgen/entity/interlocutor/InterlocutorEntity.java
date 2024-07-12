@@ -1,7 +1,7 @@
 package be.unamur.fpgen.entity.interlocutor;
 
 
-import be.unamur.fpgen.entity.BaseOnlyLongIdEntity;
+import be.unamur.fpgen.entity.BaseOnlyIntegerIdEntity;
 import be.unamur.fpgen.interlocutor.InterlocutorTypeEnum;
 
 import javax.persistence.Column;
@@ -10,7 +10,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
 @Entity(name = "interlocutor")
-public class InterlocutorEntity extends BaseOnlyLongIdEntity {
+public class InterlocutorEntity extends BaseOnlyIntegerIdEntity {
 
     // members
     private InterlocutorTypeEnum interlocutorTypeEnum;

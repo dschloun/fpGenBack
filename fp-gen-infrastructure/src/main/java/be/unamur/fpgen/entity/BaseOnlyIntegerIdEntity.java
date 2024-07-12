@@ -1,29 +1,27 @@
 package be.unamur.fpgen.entity;
 
-import be.unamur.fpgen.interlocutor.InterlocutorTypeEnum;
-
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 
 @MappedSuperclass
-public class BaseOnlyLongIdEntity implements Serializable {
+public class BaseOnlyIntegerIdEntity implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1079657084325275787L;
 
     // members
-    private Long id;
+    private Integer id;
 
     // getters and setters
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 }
