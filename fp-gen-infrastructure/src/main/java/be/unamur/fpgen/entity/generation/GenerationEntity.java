@@ -19,7 +19,6 @@ public class GenerationEntity extends BaseUuidEntity {
     private String generationId;
     private String authorTrigram;
     private String details;
-    private GenerationTypeEnum type;
     private boolean batch;
 //    private List<InstantMessageEntity> instantMessageList;
 
@@ -49,16 +48,6 @@ public class GenerationEntity extends BaseUuidEntity {
 
     public void setDetails(final String details) {
         this.details = details;
-    }
-
-    @Column(name = "type")
-    @Enumerated(EnumType.STRING)
-    public GenerationTypeEnum getType() {
-        return type;
-    }
-
-    public void setType(final GenerationTypeEnum type) {
-        this.type = type;
     }
 
     @Column(name = "batch")

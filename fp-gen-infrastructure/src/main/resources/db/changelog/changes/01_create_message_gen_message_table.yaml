@@ -3,6 +3,8 @@ databaseChangeLog:
       id: create-generation-and-instant-message-table
       author: dsc
       changes:
+#        GENERATION
+#        ************
         - createTable:
             tableName: generation
             columns:
@@ -27,6 +29,12 @@ databaseChangeLog:
                       - nullable: false
                       - unique: false
               - column:
+                  name: kind
+                  type: varchar(5)
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
                   name: generation_id
                   type: varchar(25)
                   constraints:
@@ -45,18 +53,99 @@ databaseChangeLog:
                       - nullable: false
                       - unique: false
               - column:
-                  name: type
-                  type: varchar(3)
-                  constraints:
-                    - nullable: false
-                    - unique: false
-              - column:
                   name: batch
                   type: boolean
                   constraints:
                     - nullable: false
                     - unique: false
 
+#        INTERLOCUTOR
+#        ****************
+        - createTable:
+            tableName: interlocutor
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  constraints:
+                    - primaryKey: true
+                    - primaryKeyName: pk_interlocutor
+                    - nullable: false
+                    - unique: true
+              - column:
+                  name: creation_date
+                  type: datetime
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: modification_date
+                  type: datetime
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: type
+                  type: varchar(15)
+                  constraints:
+                    - nullable: false
+                    - unique: false
+
+#        CONVERSATION
+#        ****************
+        - createTable:
+            tableName: conversation
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    - primaryKey: true
+                    - primaryKeyName: pk_conversation
+                    - nullable: false
+                    - unique: true
+              - column:
+                  name: creation_date
+                  type: datetime
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: modification_date
+                  type: datetime
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: generation_id
+                  type: uuid
+                  constraints:
+                    - nullable: true
+                    - unique: false
+                    - foreignKeyName: fk_conversation_generation
+                    - references: generation(id)
+                    - onDelete: CASCADE
+              - column:
+                  name: topic
+                  type: varchar(20)
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: type
+                  type: varchar(18)
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: max_interaction_number
+                  type: integer
+                  constraints:
+                      - nullable: false
+                      - unique: false
+
+#        INSTANT MESSAGE
+#        ****************
         - createTable:
             tableName: instant_message
             columns:
@@ -65,7 +154,7 @@ databaseChangeLog:
                   type: uuid
                   constraints:
                     - primaryKey: true
-                    - primaryKeyName: pk_single_instant_message
+                    - primaryKeyName: pk_instant_message
                     - nullable: false
                     - unique: true
               - column:
@@ -84,19 +173,19 @@ databaseChangeLog:
                   name: kind
                   type: varchar(5)
                   constraints:
-                    - nullable: false
+                    - nullable: true
                     - unique: false
               - column:
                   name: topic
                   type: varchar(20)
                   constraints:
-                      - nullable: false
+                      - nullable: true
                       - unique: false
               - column:
                   name: type
                   type: varchar(18)
                   constraints:
-                    - nullable: false
+                    - nullable: true
                     - unique: false
               - column:
                   name: content
@@ -105,7 +194,7 @@ databaseChangeLog:
                       - nullable: false
                       - unique: false
               - column:
-                  name: instant_message_generation_id
+                  name: generation_id
                   type: uuid
                   constraints:
                     - nullable: true
@@ -114,11 +203,29 @@ databaseChangeLog:
                     - references: generation(id)
                     - onDelete: CASCADE
               - column:
-                  name: conversation_message_generation_id
+                  name: sender_id
+                  type: integer
+                  constraints:
+                    - nullable: true
+                    - unique: false
+                    - foreignKeyName: fk_instant_message_sender_interlocutor
+                    - references: interlocutor(id)
+                    - onDelete: CASCADE
+              - column:
+                  name: receiver_id
+                  type: integer
+                  constraints:
+                    - nullable: true
+                    - unique: false
+                    - foreignKeyName: fk_instant_message_receiver_interlocutor
+                    - references: interlocutor(id)
+                    - onDelete: CASCADE
+              - column:
+                  name: conversation_id
                   type: uuid
                   constraints:
                     - nullable: true
                     - unique: false
-                    - foreignKeyName: fk_conversation_instant_message_generation
-                    - references: generation(id)
+                    - foreignKeyName: fk_instant_message_conversation
+                    - references: conversation(id)
                     - onDelete: CASCADE

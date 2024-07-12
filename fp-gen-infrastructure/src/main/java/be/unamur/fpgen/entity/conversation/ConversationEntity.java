@@ -31,6 +31,7 @@ public class ConversationEntity extends BaseUuidEntity {
     }
 
     @Column(name = "type", nullable = false)
+    @Enumerated(EnumType.STRING)
     public MessageTypeEnum getMessageType() {
         return messageType;
     }
@@ -40,6 +41,7 @@ public class ConversationEntity extends BaseUuidEntity {
     }
 
     @Column(name = "topic", nullable = false)
+    @Enumerated(EnumType.STRING)
     public MessageTopicEnum getMessageTopic() {
         return messageTopic;
     }
