@@ -20,8 +20,8 @@ public class JpaInstantMessageRepository implements InstantMessageRepository {
     }
 
     @Override
-    public List<InstantMessage> saveInstantMessageList(List<InstantMessage> instantMessage, Generation generation) {
-        List<InstantMessageEntity> l = jpaInstantMessageRepositoryCRUD.saveAll(ListUtils.emptyIfNull(instantMessage)
+    public List<InstantMessage> saveInstantMessageList(List<InstantMessage> instantMessageList, Generation generation) {
+        List<InstantMessageEntity> l = jpaInstantMessageRepositoryCRUD.saveAll(ListUtils.emptyIfNull(instantMessageList)
                 .stream()
                 .map(i -> InstantMessageDomainToJpaMapper.mapForCreate(i, generation))
                 .toList());

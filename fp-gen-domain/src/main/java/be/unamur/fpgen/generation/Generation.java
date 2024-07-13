@@ -99,7 +99,7 @@ public class Generation extends BaseUuidDomain {
 
         // methods
         private String generateGenerationId(){
-            return String.format("%s-%s-%s", this.type, this.authorTrigram, DateUtil.convertOffsetDateTimeToString(this.getCreationDate()));
+            return String.format("%s-%s-%s", this.type, this.authorTrigram, DateUtil.convertOffsetDateTimeToString(OffsetDateTime.now()));
         }
 
         @Override

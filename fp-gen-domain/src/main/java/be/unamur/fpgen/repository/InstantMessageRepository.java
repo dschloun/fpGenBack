@@ -17,5 +17,5 @@ public interface InstantMessageRepository {
      * @requires message != null
      * @return the saved SingleInstantMessage
      */
-    List<InstantMessage> saveInstantMessageList(List<InstantMessage> instantMessage, Generation generation);
+    List<InstantMessage> saveInstantMessageList(List<InstantMessage> instantMessageList, Generation generation);
 }

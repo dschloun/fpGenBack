@@ -8,8 +8,8 @@ package be.unamur.fpgen.generation;
  * CB: 'CONVERSATION BATCH'
  */
 public enum GenerationTypeEnum {
-    SIM,
-    SIMB,
+    IM,
+    IMB,
     C,
     CB
 }
