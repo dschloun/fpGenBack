@@ -14,7 +14,7 @@ public class InstantMessageEntity extends AbstractInstantMessageEntity {
 
     private InstantMessageGenerationEntity instantMessageGeneration;
 
-    @ManyToOne
+    @ManyToOne //(cascade = CascadeType.ALL)
     @JoinColumn(name = "generation_id")
     public InstantMessageGenerationEntity getInstantMessageGeneration() {
         return instantMessageGeneration;

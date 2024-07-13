@@ -61,6 +61,15 @@ public class Generation extends BaseUuidDomain {
         return batch;
     }
 
+    // methods
+    public boolean isInstantMessageGeneration() {
+        return GenerationTypeEnum.IM.equals(type);
+    }
+
+    public boolean isConversationGeneration() {
+        return GenerationTypeEnum.C.equals(type);
+    }
+
     // builder
     public static final class Builder extends AbstractBaseUuidDomainBuilder<Builder> {
         private String generationId;
