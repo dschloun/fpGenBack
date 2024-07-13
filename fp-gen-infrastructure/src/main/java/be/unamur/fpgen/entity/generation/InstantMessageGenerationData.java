@@ -16,7 +16,7 @@ public class InstantMessageGenerationData implements Serializable {
     private List<InstantMessageEntity> singleInstantMessageList;
 
     // getters and setters
-    @OneToMany(mappedBy = "singleInstantMessageGeneration")
+    @OneToMany(mappedBy = "instantMessageGeneration")
     public List<InstantMessageEntity> getSingleInstantMessageList() {
         return singleInstantMessageList;
     }

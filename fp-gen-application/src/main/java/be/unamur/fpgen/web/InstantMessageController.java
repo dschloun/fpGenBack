@@ -39,6 +39,7 @@ public class InstantMessageController implements V1Api{
 
     @Override
     public ResponseEntity<InstantMessage> getInstantMessageById(UUID instantMessageId) {
+        System.out.println("test");
         return V1Api.super.getInstantMessageById(instantMessageId);
     }
 }
