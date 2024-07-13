@@ -1,0 +1,31 @@
+from openai import OpenAI
+client = OpenAI()
+
+response = client.chat.completions.create(
+  model="gpt-3.5-turbo",
+  messages=[
+    {
+      "role": "system",
+      "content": [
+        {
+          "type": "text",
+          "text": "You are a social engineer specialist. You know every kind of sentence the social engineer can say to a user to stole data from him."
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "Whrite me 2 typical sentences that a social engineer say to his victim to solle his password? Concider it's social engineering in a chat conversation over social media. Your reply as to be a json: example: {\"messages\": [{\"messageNumber1\":\"this is the message\"}, {\"messageNumber2\":\"this is a second message\"}]}"
+        }
+      ]
+    }
+  ],
+  temperature=1,
+  max_tokens=256,
+  top_p=1,
+  frequency_penalty=0,
+  presence_penalty=0
+)

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.OffsetDateTime;
-import java.util.Optional;
 
 @Service
 public class SaveGenerationService {
@@ -27,7 +26,7 @@ public class SaveGenerationService {
                         .withAuthorTrigram("DSC")
                         .withDetails(getDetails(command))
                         .withType(command.getInstantMessageCreationList().size() > 1 ? GenerationTypeEnum.IMB : GenerationTypeEnum.IM)
-                        .withBatch(command.getInstantMessageCreationList().size() > 1)
+                        .withBatch(command.getInstantMessageCreationList().get(0).getQuantity() > 1)
                         .build());
     }
 
