@@ -2,17 +2,14 @@ package be.unamur.fpgen.instant_message;
 
 import be.unamur.fpgen.interlocutor.Interlocutor;
 
-import java.time.OffsetDateTime;
-import java.util.UUID;
-
 public class ConversationMessage extends AbstractInstantMessage {
     private final Interlocutor sender;
     private final Interlocutor receiver;
 
     private ConversationMessage(Builder builder) {
-        super(builder.id,
-                builder.creationDate,
-                builder.modificationDate,
+        super(builder.getId(),
+                builder.getCreationDate(),
+                builder.getModificationDate(),
                 builder.getTopic(),
                 builder.getType(),
                 builder.getContent(),
@@ -36,28 +33,10 @@ public class ConversationMessage extends AbstractInstantMessage {
 
 
     public static final class Builder extends AbstractInstantMessageBuilder<Builder>{
-        private OffsetDateTime creationDate;
-        private OffsetDateTime modificationDate;
-        private UUID id;
         private Interlocutor sender;
         private Interlocutor receiver;
 
         private Builder() {
-        }
-
-        public Builder withCreationDate(OffsetDateTime val) {
-            creationDate = val;
-            return this;
-        }
-
-        public Builder withModificationDate(OffsetDateTime val) {
-            modificationDate = val;
-            return this;
-        }
-
-        public Builder withId(UUID val) {
-            id = val;
-            return this;
         }
 
         public Builder withSender(Interlocutor val) {

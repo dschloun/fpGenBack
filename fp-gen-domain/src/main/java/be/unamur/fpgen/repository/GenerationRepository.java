@@ -1,8 +1,8 @@
 package be.unamur.fpgen.repository;
 
-import be.unamur.fpgen.generation.Generation;
+import be.unamur.fpgen.generation.AbstractGeneration;
 
 public interface GenerationRepository {
 
-    Generation saveInstantMessageGeneration(Generation generation);
+    AbstractGeneration saveInstantMessageGeneration(AbstractGeneration abstractGeneration);
 }

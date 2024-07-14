@@ -1,10 +1,8 @@
 package be.unamur.fpgen.service;
 
-import be.unamur.fpgen.generation.Generation;
-import be.unamur.fpgen.generation.GenerationTypeEnum;
+import be.unamur.fpgen.generation.AbstractGeneration;
 import be.unamur.fpgen.instant_message.InstantMessage;
 import be.unamur.fpgen.mapper.InstantMessageWebToDomainMapper;
-import be.unamur.fpgen.repository.GenerationRepository;
 import be.unamur.fpgen.repository.InstantMessageRepository;
 import be.unamur.model.InstantMessageBatchCreation;
 import org.springframework.stereotype.Service;
@@ -29,7 +27,7 @@ public class InstantMessageBatchGenerationService {
     public void generateInstantMessages(final InstantMessageBatchCreation command) {
         // 0. create generation data
         //todo in future let generation data (author, ...) in the input (modif api)
-        final Generation generation = saveGenerationService.createInstantMessageGeneration(command);
+        final AbstractGeneration abstractGeneration = saveGenerationService.createInstantMessageGeneration(command);
 
         // 1. prepare a list of instant messages
         final List<InstantMessage> instantMessageList = new ArrayList<>();
@@ -43,7 +41,7 @@ public class InstantMessageBatchGenerationService {
                     }
                 });
 
-        List<InstantMessage> saved = instantMessageRepository.saveInstantMessageList(instantMessageList, generation);
+        List<InstantMessage> saved = instantMessageRepository.saveInstantMessageList(instantMessageList, abstractGeneration);
         System.out.println("test");
     }
 

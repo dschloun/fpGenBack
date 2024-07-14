@@ -1,6 +1,6 @@
 package be.unamur.fpgen.repository;
 
-import be.unamur.fpgen.generation.Generation;
+import be.unamur.fpgen.generation.AbstractGeneration;
 import be.unamur.fpgen.instant_message.InstantMessage;
 
 import java.util.List;
@@ -17,5 +17,5 @@ public interface InstantMessageRepository {
      * @requires message != null
      * @return the saved SingleInstantMessage
      */
-    List<InstantMessage> saveInstantMessageList(List<InstantMessage> instantMessageList, Generation generation);
+    List<InstantMessage> saveInstantMessageList(List<InstantMessage> instantMessageList, AbstractGeneration abstractGeneration);
 }

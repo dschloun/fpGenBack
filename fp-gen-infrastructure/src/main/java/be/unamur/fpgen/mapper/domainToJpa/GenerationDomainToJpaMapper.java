@@ -1,11 +1,11 @@
 package be.unamur.fpgen.mapper.domainToJpa;
 
 import be.unamur.fpgen.entity.generation.InstantMessageGenerationEntity;
-import be.unamur.fpgen.generation.Generation;
+import be.unamur.fpgen.generation.AbstractGeneration;
 
 public class GenerationDomainToJpaMapper {
 
-    public static InstantMessageGenerationEntity mapForCreate(final Generation domain){
+    public static InstantMessageGenerationEntity mapForCreate(final AbstractGeneration domain){
         final InstantMessageGenerationEntity entity = new InstantMessageGenerationEntity();
         entity.setGenerationId(domain.getGenerationId());
         //entity.setAuthorTrigram(domain.getAuthorTrigram()); //todo replace by author

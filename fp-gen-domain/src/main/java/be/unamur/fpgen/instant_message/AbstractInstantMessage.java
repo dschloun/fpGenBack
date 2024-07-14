@@ -1,7 +1,6 @@
 package be.unamur.fpgen.instant_message;
 
 import be.unamur.fpgen.BaseUuidDomain;
-import be.unamur.fpgen.generation.Generation;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;

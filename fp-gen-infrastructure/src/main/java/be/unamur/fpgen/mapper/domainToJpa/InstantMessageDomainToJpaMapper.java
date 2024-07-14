@@ -1,12 +1,8 @@
 package be.unamur.fpgen.mapper.domainToJpa;
 
-import be.unamur.fpgen.entity.generation.GenerationEntity;
 import be.unamur.fpgen.entity.generation.InstantMessageGenerationEntity;
 import be.unamur.fpgen.entity.instant_message.InstantMessageEntity;
-import be.unamur.fpgen.generation.Generation;
 import be.unamur.fpgen.instant_message.InstantMessage;
-
-import java.util.Optional;
 
 /**
  * @overview

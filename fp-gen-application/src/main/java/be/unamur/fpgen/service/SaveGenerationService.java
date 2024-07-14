@@ -1,7 +1,6 @@
 package be.unamur.fpgen.service;
 
-import be.unamur.fpgen.generation.Generation;
-import be.unamur.fpgen.generation.GenerationTypeEnum;
+import be.unamur.fpgen.generation.AbstractGeneration;
 import be.unamur.fpgen.repository.GenerationRepository;
 import be.unamur.fpgen.utils.DateUtil;
 import be.unamur.model.InstantMessageBatchCreation;
@@ -20,9 +19,9 @@ public class SaveGenerationService {
     }
 
     @Transactional
-    public Generation createInstantMessageGeneration(final InstantMessageBatchCreation command){
+    public AbstractGeneration createInstantMessageGeneration(final InstantMessageBatchCreation command){
         return generationRepository.saveInstantMessageGeneration(
-                Generation.newBuilder()
+                AbstractGeneration.newBuilder()
                         .withAuthorTrigram("DSC")
                         .withDetails(getDetails(command))
                         .withType(command.getInstantMessageCreationList().size() > 1 ? GenerationTypeEnum.IMB : GenerationTypeEnum.IM)

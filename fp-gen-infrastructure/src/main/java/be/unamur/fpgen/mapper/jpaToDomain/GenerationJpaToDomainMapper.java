@@ -1,12 +1,12 @@
 package be.unamur.fpgen.mapper.jpaToDomain;
 
 import be.unamur.fpgen.entity.generation.InstantMessageGenerationEntity;
-import be.unamur.fpgen.generation.Generation;
+import be.unamur.fpgen.generation.AbstractGeneration;
 
 public class GenerationJpaToDomainMapper {
 
-    public static Generation mapInstantMessageGeneration(final InstantMessageGenerationEntity entity){
-        return Generation.newBuilder()
+    public static AbstractGeneration mapInstantMessageGeneration(final InstantMessageGenerationEntity entity){
+        return AbstractGeneration.newBuilder()
                 .withId(entity.getId())
                 .withCreationDate(entity.getCreationDate())
                 .withModificationDate(entity.getModificationDate())

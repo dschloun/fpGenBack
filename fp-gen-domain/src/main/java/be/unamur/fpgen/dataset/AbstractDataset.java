@@ -55,7 +55,7 @@ public abstract class AbstractDataset extends BaseUuidDomain {
         return author;
     }
 
-    public abstract static class AbstractDatasetBuilder<T> extends AbstractBaseUuidDomainBuilder<T> {
+    protected abstract static class AbstractDatasetBuilder<T> extends AbstractBaseUuidDomainBuilder<T> {
         private String businessId;
         private String version;
         private String name;
