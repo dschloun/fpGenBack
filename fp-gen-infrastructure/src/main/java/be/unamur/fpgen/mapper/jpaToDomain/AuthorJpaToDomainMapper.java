@@ -1,0 +1,28 @@
+package be.unamur.fpgen.mapper.jpaToDomain;
+
+import be.unamur.fpgen.author.Author;
+import be.unamur.fpgen.entity.author.AuthorEntity;
+
+import java.util.Objects;
+
+public class AuthorJpaToDomainMapper {
+
+    public static Author map(final AuthorEntity entity){
+        if (Objects.isNull(entity)){
+            return null;
+        }
+
+        return Author.newBuilder()
+                .withId(entity.getId())
+                .withCreationDate(entity.getCreationDate())
+                .withModificationDate(entity.getModificationDate())
+                .withLastName(entity.getLastName())
+                .withFirstName(entity.getFirstName())
+                .withTrigram(entity.getTrigram())
+                .withOrganization(entity.getOrganization())
+                .withFunction(entity.getFunction())
+                .withEmail(entity.getEmail())
+                .withPhoneNumber(entity.getPhoneNumber())
+                .build();
+    }
+}

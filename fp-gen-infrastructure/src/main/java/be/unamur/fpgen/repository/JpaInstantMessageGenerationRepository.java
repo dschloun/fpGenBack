@@ -1,8 +1,8 @@
 package be.unamur.fpgen.repository;
 
 import be.unamur.fpgen.generation.AbstractGeneration;
-import be.unamur.fpgen.mapper.domainToJpa.GenerationDomainToJpaMapper;
-import be.unamur.fpgen.mapper.jpaToDomain.GenerationJpaToDomainMapper;
+import be.unamur.fpgen.mapper.domainToJpa.InstantMessageGenerationDomainToJpaMapper;
+import be.unamur.fpgen.mapper.jpaToDomain.InstantMessageGenerationJpaToDomainMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -18,8 +18,8 @@ public class JpaInstantMessageGenerationRepository implements GenerationReposito
     @Override
     public AbstractGeneration saveInstantMessageGeneration(AbstractGeneration abstractGeneration) {
         if(abstractGeneration.isInstantMessageGeneration()){
-            return Optional.of(jpaInstantMessageGenerationRepositoryCRUD.saveAndFlush(GenerationDomainToJpaMapper.mapForCreate(abstractGeneration)))
-                    .map(GenerationJpaToDomainMapper::mapInstantMessageGeneration)
+            return Optional.of(jpaInstantMessageGenerationRepositoryCRUD.saveAndFlush(InstantMessageGenerationDomainToJpaMapper.mapForCreate(abstractGeneration)))
+                    .map(InstantMessageGenerationJpaToDomainMapper::mapInstantMessageGeneration)
                     .orElseThrow();
         }
         else{

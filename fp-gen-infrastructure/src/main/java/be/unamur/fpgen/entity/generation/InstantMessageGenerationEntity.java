@@ -12,16 +12,16 @@ import java.util.Set;
 @DiscriminatorValue(value = "IMG")
 public class InstantMessageGenerationEntity extends GenerationEntity {
 
-        private List<InstantMessageEntity> instantMessageList;
+        private Set<InstantMessageEntity> instantMessageList;
         private Set<InstantMessageDatasetEntity> instantMessageDatasetList;
 
         // getters and setters
         @OneToMany(mappedBy = "instantMessageGeneration")
-        public List<InstantMessageEntity> getInstantMessageList() {
+        public Set<InstantMessageEntity> getInstantMessageList() {
                 return instantMessageList;
         }
 
-        public void setInstantMessageList(List<InstantMessageEntity> instantMessageList) {
+        public void setInstantMessageList(Set<InstantMessageEntity> instantMessageList) {
                 this.instantMessageList = instantMessageList;
         }
 

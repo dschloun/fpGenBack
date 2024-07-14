@@ -4,10 +4,10 @@ import be.unamur.fpgen.instant_message.InstantMessage;
 import be.unamur.fpgen.utils.DateUtil;
 
 import java.time.OffsetDateTime;
-import java.util.List;
+import java.util.Set;
 
 public class InstantMessageGeneration extends AbstractGeneration {
-    private final List<InstantMessage> instantMessageList;
+    private final Set<InstantMessage> instantMessageList;
 
     private InstantMessageGeneration(Builder builder) {
         super(builder.getId(),
@@ -24,17 +24,17 @@ public class InstantMessageGeneration extends AbstractGeneration {
         return new Builder();
     }
 
-    public List<InstantMessage> getInstantMessageList() {
+    public Set<InstantMessage> getInstantMessageList() {
         return instantMessageList;
     }
 
     public static final class Builder extends AbstractGenerationBuilder<Builder>{
-        private List<InstantMessage> instantMessageList;
+        private Set<InstantMessage> instantMessageList;
 
         private Builder() {
         }
 
-        public Builder withInstantMessageList(List<InstantMessage> val) {
+        public Builder withInstantMessageList(Set<InstantMessage> val) {
             instantMessageList = val;
             return this;
         }

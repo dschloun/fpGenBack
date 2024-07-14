@@ -3,10 +3,11 @@ package be.unamur.fpgen.dataset;
 import be.unamur.fpgen.generation.InstantMessageGeneration;
 
 import java.util.List;
+import java.util.Set;
 
 public class InstantMessageDataset extends AbstractDataset{
 
-    private final List<InstantMessageGeneration> instantMessageGenerationList;
+    private final Set<InstantMessageGeneration> instantMessageGenerationList;
 
     private InstantMessageDataset(Builder builder) {
         super(builder.getId(),
@@ -25,18 +26,18 @@ public class InstantMessageDataset extends AbstractDataset{
         return new Builder();
     }
 
-    public List<InstantMessageGeneration> getInstantMessageGenerationList() {
+    public Set<InstantMessageGeneration> getInstantMessageGenerationList() {
         return instantMessageGenerationList;
     }
 
     public static final class Builder extends AbstractDatasetBuilder<Builder>{
 
-        private List<InstantMessageGeneration> instantMessageGenerationList;
+        private Set<InstantMessageGeneration> instantMessageGenerationList;
 
         private Builder() {
         }
 
-        public Builder withInstantMessageGenerationList(List<InstantMessageGeneration> val) {
+        public Builder withInstantMessageGenerationList(Set<InstantMessageGeneration> val) {
             instantMessageGenerationList = val;
             return this;
         }

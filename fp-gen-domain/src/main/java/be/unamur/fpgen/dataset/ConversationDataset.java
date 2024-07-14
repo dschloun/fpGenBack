@@ -1,14 +1,14 @@
 package be.unamur.fpgen.dataset;
 
-import be.unamur.fpgen.instant_message.ConversationMessage;
+import be.unamur.fpgen.generation.ConversationGeneration;
 
-import java.util.List;
+import java.util.Set;
 
 public class ConversationDataset extends AbstractDataset {
-    private final List<ConversationMessage> conversationMessageList;
+    private final Set<ConversationGeneration> conversationGenerationList;
 
-    public List<ConversationMessage> getConversationMessageList() {
-        return conversationMessageList;
+    public Set<ConversationGeneration> getConversationGenerationList() {
+        return conversationGenerationList;
     }
 
     public ConversationDataset(Builder builder) {
@@ -21,7 +21,7 @@ public class ConversationDataset extends AbstractDataset {
                 builder.getDescription(),
                 builder.getComment(),
                 builder.getAuthor());
-        this.conversationMessageList = builder.conversationMessageList;
+        this.conversationGenerationList = builder.conversationGenerationList;
     }
 
     public static Builder newBuilder() {
@@ -29,13 +29,13 @@ public class ConversationDataset extends AbstractDataset {
     }
 
     public static final class Builder extends AbstractDatasetBuilder<Builder>{
-        private List<ConversationMessage> conversationMessageList;
+        private Set<ConversationGeneration> conversationGenerationList;
 
         private Builder() {
         }
 
-        public Builder withConversationMessageList(List<ConversationMessage> val) {
-            conversationMessageList = val;
+        public Builder withConversationGenerationList(Set<ConversationGeneration> val) {
+            conversationGenerationList = val;
             return this;
         }
 

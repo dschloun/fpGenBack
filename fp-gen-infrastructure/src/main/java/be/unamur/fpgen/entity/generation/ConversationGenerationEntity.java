@@ -11,15 +11,15 @@ import java.util.Set;
 @DiscriminatorValue(value = "CMG")
 public class ConversationGenerationEntity extends GenerationEntity {
 
-    private List<ConversationEntity> conversationList;
+    private Set<ConversationEntity> conversationList;
     private Set<ConversationDatasetEntity> conversationDatasetList;
 
     @OneToMany(mappedBy = "conversationGeneration")
-    public List<ConversationEntity> getConversationList() {
+    public Set<ConversationEntity> getConversationList() {
         return conversationList;
     }
 
-    public void setConversationList(List<ConversationEntity> conversationList) {
+    public void setConversationList(Set<ConversationEntity> conversationList) {
         this.conversationList = conversationList;
     }
 

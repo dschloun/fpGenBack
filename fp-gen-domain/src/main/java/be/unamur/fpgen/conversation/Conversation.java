@@ -6,12 +6,13 @@ import be.unamur.fpgen.instant_message.MessageTopicEnum;
 import be.unamur.fpgen.instant_message.MessageTypeEnum;
 
 import java.util.List;
+import java.util.Set;
 
 public class Conversation extends BaseUuidDomain {
     private final MessageTypeEnum type;
     private final MessageTopicEnum topic;
     private final Integer maxInteractionNumber;
-    private final List<ConversationMessage> conversationMessageList;
+    private final Set<ConversationMessage> conversationMessageList;
 
     private Conversation(Builder builder) {
         super(builder.getId(), builder.getCreationDate(), builder.getModificationDate());
@@ -37,7 +38,7 @@ public class Conversation extends BaseUuidDomain {
         return maxInteractionNumber;
     }
 
-    public List<ConversationMessage> getConversationMessageList() {
+    public Set<ConversationMessage> getConversationMessageList() {
         return conversationMessageList;
     }
 
@@ -45,7 +46,7 @@ public class Conversation extends BaseUuidDomain {
         private MessageTypeEnum type;
         private MessageTopicEnum topic;
         private Integer maxInteractionNumber;
-        private List<ConversationMessage> conversationMessageList;
+        private Set<ConversationMessage> conversationMessageList;
 
         private Builder() {
         }
@@ -65,7 +66,7 @@ public class Conversation extends BaseUuidDomain {
             return this;
         }
 
-        public Builder withConversationMessageList(List<ConversationMessage> val) {
+        public Builder withConversationMessageList(Set<ConversationMessage> val) {
             conversationMessageList = val;
             return this;
         }
