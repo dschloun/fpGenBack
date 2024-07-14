@@ -3,13 +3,11 @@ package be.unamur.fpgen.entity.generation;
 import be.unamur.fpgen.entity.dataset.InstantMessageDatasetEntity;
 import be.unamur.fpgen.entity.instant_message.InstantMessageEntity;
 
-import javax.persistence.Embeddable;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 @Embeddable
 public class InstantMessageGenerationData implements Serializable {
@@ -17,7 +15,7 @@ public class InstantMessageGenerationData implements Serializable {
     private static final long serialVersionUID = 4455469519017267792L;
 
     private List<InstantMessageEntity> instantMessageList;
-    private InstantMessageDatasetEntity instantMessageDataset;
+    private Set<InstantMessageDatasetEntity> instantMessageDatasetList;
 
     // getters and setters
     @OneToMany(mappedBy = "instantMessageGeneration")
@@ -29,13 +27,12 @@ public class InstantMessageGenerationData implements Serializable {
         this.instantMessageList = instantMessageList;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "dataset_id")
-    public InstantMessageDatasetEntity getInstantMessageDataset() {
-        return instantMessageDataset;
+    @ManyToMany(mappedBy = "instantMessageGenerationList")
+    public Set<InstantMessageDatasetEntity> getInstantMessageDatasetList() {
+        return instantMessageDatasetList;
     }
 
-    public void setInstantMessageDataset(InstantMessageDatasetEntity instantMessageDataset) {
-        this.instantMessageDataset = instantMessageDataset;
+    public void setInstantMessageDatasetList(Set<InstantMessageDatasetEntity> instantMessageDatasetList) {
+        this.instantMessageDatasetList = instantMessageDatasetList;
     }
 }

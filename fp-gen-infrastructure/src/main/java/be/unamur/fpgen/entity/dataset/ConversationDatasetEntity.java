@@ -2,9 +2,7 @@ package be.unamur.fpgen.entity.dataset;
 
 import be.unamur.fpgen.entity.generation.ConversationGenerationEntity;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.Set;
 
 @Entity
@@ -14,7 +12,10 @@ public class ConversationDatasetEntity extends DatasetEntity {
     // members
     private Set<ConversationGenerationEntity> conversationGenerationList;
 
-    @OneToMany(mappedBy = "conversationDataset")
+    @ManyToMany
+    @JoinTable(name = "dataset_generation_join_table",
+            joinColumns = @JoinColumn(name = "dataset_id"),
+            inverseJoinColumns = @JoinColumn(name = "generation_id"))
     public Set<ConversationGenerationEntity> getConversationGenerationList() {
         return conversationGenerationList;
     }

@@ -2,9 +2,7 @@ package be.unamur.fpgen.entity.dataset;
 
 import be.unamur.fpgen.entity.generation.InstantMessageGenerationEntity;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.Set;
 
 @Entity
@@ -12,16 +10,18 @@ import java.util.Set;
 public class InstantMessageDatasetEntity extends DatasetEntity {
 
     // members
-    private Set<InstantMessageGenerationEntity> instantMessageGeneration;
+    private Set<InstantMessageGenerationEntity> instantMessageGenerationList;
 
     // getters and setters
-
-    @OneToMany(mappedBy = "instantMessageDataset")
-    public Set<InstantMessageGenerationEntity> getInstantMessageGeneration() {
-        return instantMessageGeneration;
+    @ManyToMany
+    @JoinTable(name = "dataset_generation_join_table",
+            joinColumns = @JoinColumn(name = "dataset_id"),
+            inverseJoinColumns = @JoinColumn(name = "generation_id"))
+    public Set<InstantMessageGenerationEntity> getInstantMessageGenerationList() {
+        return instantMessageGenerationList;
     }
 
-    public void setInstantMessageGeneration(Set<InstantMessageGenerationEntity> instantMessageGeneration) {
-        this.instantMessageGeneration = instantMessageGeneration;
+    public void setInstantMessageGenerationList(Set<InstantMessageGenerationEntity> instantMessageGeneration) {
+        this.instantMessageGenerationList = instantMessageGeneration;
     }
 }

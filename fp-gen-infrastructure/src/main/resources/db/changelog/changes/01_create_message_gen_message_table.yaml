@@ -221,15 +221,6 @@ databaseChangeLog:
                     - references: author(id)
                     - onDelete: CASCADE
               - column:
-                  name: dataset_id
-                  type: uuid
-                  constraints:
-                    - nullable: false
-                    - unique: false
-                    - foreignKeyName: fk_generation_dataset
-                    - references: dataset(id)
-                    - onDelete: CASCADE
-              - column:
                   name: details
                   type: text
                   constraints:
@@ -380,3 +371,29 @@ databaseChangeLog:
                     - foreignKeyName: fk_instant_message_conversation
                     - references: conversation(id)
                     - onDelete: CASCADE
+
+        #        DATASET_GENERATION_JOIN_TABLE
+        #        ****************
+        - createTable:
+            tableName: dataset_generation_join_table
+            columns:
+              - column:
+                  name: dataset_id
+                  type: uuid
+                  constraints:
+                  - nullable: false
+                  - foreignKeyName: fk_join_dataset
+                  - references: dataset(id)
+                  - onDelete: CASCADE
+              - column:
+                  name: generation_id
+                  type: uuid
+                  constraints:
+                    - nullable: false
+                    - foreignKeyName: fk_join_generation
+                    - references: generation(id)
+                    - onDelete: CASCADE
+        - addUniqueConstraint:
+            tableName: dataset_generation_join_table
+            constraintName: dataset_generation_uk
+            columnNames: dataset_id, generation_id
