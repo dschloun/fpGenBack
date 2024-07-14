@@ -1,6 +1,7 @@
 package be.unamur.fpgen.generation;
 
 import be.unamur.fpgen.BaseUuidDomain;
+import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.utils.DateUtil;
 
 import java.time.OffsetDateTime;
@@ -17,7 +18,7 @@ import java.time.OffsetDateTime;
 public class Generation extends BaseUuidDomain {
     // members
     private final String generationId;
-    private final String authorTrigram;
+    private final Author author;
     private final String details;
     private final GenerationTypeEnum type;
     private final boolean batch;
@@ -26,7 +27,7 @@ public class Generation extends BaseUuidDomain {
     private Generation(final Builder builder) {
         super(builder.getId(), builder.getCreationDate(), builder.getModificationDate());
         generationId = builder.generationId;
-        authorTrigram = builder.authorTrigram;
+        author = builder.author;
         details = builder.details;
         type = builder.type;
         batch = builder.batch;
@@ -45,8 +46,8 @@ public class Generation extends BaseUuidDomain {
         return creationDate;
     }
 
-    public String getAuthorTrigram() {
-        return authorTrigram;
+    public Author getAuthor() {
+        return author;
     }
 
     public String getDetails() {
@@ -73,7 +74,7 @@ public class Generation extends BaseUuidDomain {
     // builder
     public static final class Builder extends AbstractBaseUuidDomainBuilder<Builder> {
         private String generationId;
-        private String authorTrigram;
+        private Author author;
         private String details;
         private GenerationTypeEnum type;
         private boolean batch;
@@ -81,8 +82,8 @@ public class Generation extends BaseUuidDomain {
         public Builder() {
         }
 
-        public Builder withAuthorTrigram(final String authorTrigram) {
-            this.authorTrigram = authorTrigram;
+        public Builder withAuthor(final Author author) {
+            this.author = author;
             return this;
         }
 
@@ -108,7 +109,7 @@ public class Generation extends BaseUuidDomain {
 
         // methods
         private String generateGenerationId(){
-            return String.format("%s-%s-%s", this.type, this.authorTrigram, DateUtil.convertOffsetDateTimeToString(OffsetDateTime.now()));
+            return String.format("%s-%s-%s", this.type, this.author.getTrigram(), DateUtil.convertOffsetDateTimeToString(OffsetDateTime.now()));
         }
 
         @Override
