@@ -1,0 +1,76 @@
+package be.unamur.fpgen.entity.dataset;
+
+import be.unamur.fpgen.entity.author.AuthorEntity;
+import be.unamur.fpgen.entity.base.BaseUuidEntity;
+
+import javax.persistence.*;
+
+@Entity(name = "dataset")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "kind", discriminatorType = DiscriminatorType.STRING)
+public class DatasetEntity extends BaseUuidEntity {
+
+    // members
+    private String businessId;
+    private String version;
+    private String name;
+    private String description;
+    private String comment;
+    private AuthorEntity author;
+
+    // getters and setters
+    @Column(name = "business_id", nullable = false)
+    public String getBusinessId() {
+        return businessId;
+    }
+
+    public void setBusinessId(final String businessId) {
+        this.businessId = businessId;
+    }
+
+    @Column(name = "version", nullable = false)
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(final String version) {
+        this.version = version;
+    }
+
+    @Column(name = "name", nullable = false)
+    public String getName() {
+        return name;
+    }
+
+    public void setName(final String name) {
+        this.name = name;
+    }
+
+    @Column(name = "description", nullable = false)
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(final String description) {
+        this.description = description;
+    }
+
+    @Column(name = "comment")
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(final String comment) {
+        this.comment = comment;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    public AuthorEntity getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(final AuthorEntity author) {
+        this.author = author;
+    }
+}

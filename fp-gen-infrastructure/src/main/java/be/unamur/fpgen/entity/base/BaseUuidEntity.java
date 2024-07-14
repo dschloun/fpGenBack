@@ -1,4 +1,4 @@
-package be.unamur.fpgen.entity;
+package be.unamur.fpgen.entity.base;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 

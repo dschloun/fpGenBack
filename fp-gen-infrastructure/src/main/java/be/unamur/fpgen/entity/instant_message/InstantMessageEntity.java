@@ -5,8 +5,8 @@ import be.unamur.fpgen.entity.generation.InstantMessageGenerationEntity;
 import javax.persistence.*;
 
 /**
- * @overview: SingleInstantMessageEntity is an entity class that represents a single instant message.
- * SingleInstantMessageEntity extends InstantMessageEntity.
+ * @overview: InstantMessageEntity is an entity class that represents an instant message.
+ * InstantMessageEntity extends AbstractInstantMessageEntity.
  */
 @Entity
 @DiscriminatorValue(value = "SIM")
@@ -14,7 +14,7 @@ public class InstantMessageEntity extends AbstractInstantMessageEntity {
 
     private InstantMessageGenerationEntity instantMessageGeneration;
 
-    @ManyToOne //(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "generation_id")
     public InstantMessageGenerationEntity getInstantMessageGeneration() {
         return instantMessageGeneration;

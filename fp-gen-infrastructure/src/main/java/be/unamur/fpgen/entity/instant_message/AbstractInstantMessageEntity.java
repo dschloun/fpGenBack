@@ -1,6 +1,6 @@
 package be.unamur.fpgen.entity.instant_message;
 
-import be.unamur.fpgen.entity.BaseUuidEntity;
+import be.unamur.fpgen.entity.base.BaseUuidEntity;
 import be.unamur.fpgen.instant_message.MessageTopicEnum;
 import be.unamur.fpgen.instant_message.MessageTypeEnum;
 
@@ -13,7 +13,7 @@ import java.io.Serial;
  * It provides the basic structure for instant messages.
  * InstantMessageEntity is mutable.
  * @specfield generationId: String // the generation id of the instant message
- * format = start by SIM if singleInstantMessage CIM if conversationInstantMessage + 'trigram + date + time': ex SIM_DSC202407120814
+ * format = start by SIM if instantMessage CIM if conversationInstantMessage + 'trigram + date + time': ex SIM_DSC202407120814
  * @specfield topic: MessageTopicEnum // the topic of the message
  * @specfield type: MessageTypeEnum // the type of the message
  * @specfield content: String // the content of the message

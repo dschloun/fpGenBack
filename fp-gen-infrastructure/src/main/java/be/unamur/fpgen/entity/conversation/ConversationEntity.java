@@ -1,6 +1,6 @@
 package be.unamur.fpgen.entity.conversation;
 
-import be.unamur.fpgen.entity.BaseUuidEntity;
+import be.unamur.fpgen.entity.base.BaseUuidEntity;
 import be.unamur.fpgen.entity.generation.ConversationGenerationEntity;
 import be.unamur.fpgen.entity.instant_message.ConversationInstantMessageEntity;
 import be.unamur.fpgen.instant_message.MessageTopicEnum;

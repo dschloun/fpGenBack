@@ -1,4 +1,4 @@
-package be.unamur.fpgen.entity;
+package be.unamur.fpgen.entity.base;
 
 import javax.persistence.*;
 import java.io.Serial;

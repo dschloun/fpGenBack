@@ -1,7 +1,7 @@
 package be.unamur.fpgen.entity.interlocutor;
 
 
-import be.unamur.fpgen.entity.BaseOnlyIntegerIdEntity;
+import be.unamur.fpgen.entity.base.BaseOnlyIntegerIdEntity;
 import be.unamur.fpgen.interlocutor.InterlocutorTypeEnum;
 
 import javax.persistence.Column;

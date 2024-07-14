@@ -1,6 +1,8 @@
 package be.unamur.fpgen.entity.generation;
 
-import be.unamur.fpgen.entity.BaseUuidEntity;
+import be.unamur.fpgen.entity.author.AuthorEntity;
+import be.unamur.fpgen.entity.base.BaseUuidEntity;
+import be.unamur.fpgen.entity.dataset.DatasetEntity;
 
 import javax.persistence.*;
 import java.io.Serial;
@@ -14,10 +16,10 @@ public class GenerationEntity extends BaseUuidEntity {
 
     // members
     private String generationId;
-    private String authorTrigram;
+    private AuthorEntity author;
     private String details;
     private boolean batch;
-//    private List<InstantMessageEntity> instantMessageList;
+    private DatasetEntity dataset;
 
     // getters and setters
     @Column(name = "generation_id", nullable = false)
@@ -29,13 +31,14 @@ public class GenerationEntity extends BaseUuidEntity {
         this.generationId = generationId;
     }
 
-    @Column(name = "author_trigram")
-    public String getAuthorTrigram() {
-        return authorTrigram;
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    public AuthorEntity getAuthor() {
+        return author;
     }
 
-    public void setAuthorTrigram(final String authorTrigram) {
-        this.authorTrigram = authorTrigram;
+    public void setAuthor(AuthorEntity author) {
+        this.author = author;
     }
 
     @Column(name = "details")
@@ -56,12 +59,13 @@ public class GenerationEntity extends BaseUuidEntity {
         this.batch = batch;
     }
 
-//    @OneToMany(mappedBy = "generation")
-//    public List<InstantMessageEntity> getInstantMessageList() {
-//        return instantMessageList;
-//    }
-//
-//    public void setInstantMessageList(final List<InstantMessageEntity> instantMessageList) {
-//        this.instantMessageList = instantMessageList;
-//    }
+    @ManyToOne
+    @JoinColumn(name = "dataset_id")
+    public DatasetEntity getDataset() {
+        return dataset;
+    }
+
+    public void setDataset(DatasetEntity dataset) {
+        this.dataset = dataset;
+    }
 }

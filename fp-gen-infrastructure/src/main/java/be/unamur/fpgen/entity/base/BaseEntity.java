@@ -1,4 +1,4 @@
-package be.unamur.fpgen.entity;
+package be.unamur.fpgen.entity.base;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;

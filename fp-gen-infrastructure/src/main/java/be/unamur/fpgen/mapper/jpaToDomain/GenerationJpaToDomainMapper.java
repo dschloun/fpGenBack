@@ -10,7 +10,7 @@ public class GenerationJpaToDomainMapper {
                 .withId(entity.getId())
                 .withCreationDate(entity.getCreationDate())
                 .withModificationDate(entity.getModificationDate())
-                .withAuthorTrigram(entity.getAuthorTrigram())
+                .withAuthorTrigram(entity.getAuthor().getTrigram())
                 .withDetails(entity.getDetails())
                 .withBatch(entity.isBatch())
                 .build();
