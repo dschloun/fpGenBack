@@ -1,23 +1,34 @@
 package be.unamur.fpgen.entity.generation;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
+import be.unamur.fpgen.entity.conversation.ConversationEntity;
+import be.unamur.fpgen.entity.dataset.ConversationDatasetEntity;
+
+import javax.persistence.*;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @DiscriminatorValue(value = "CMG")
 public class ConversationGenerationEntity extends GenerationEntity {
 
-    // members
-    private ConversationGenerationData conversationGenerationData;
+    private List<ConversationEntity> conversationList;
+    private Set<ConversationDatasetEntity> conversationDatasetList;
 
-    // getters and setters
-    @Embedded
-    public ConversationGenerationData getConversationMessageGenerationData() {
-        return conversationGenerationData;
+    @OneToMany(mappedBy = "conversationGeneration")
+    public List<ConversationEntity> getConversationList() {
+        return conversationList;
     }
 
-    public void setConversationMessageGenerationData(final ConversationGenerationData conversationGenerationData) {
-        this.conversationGenerationData = conversationGenerationData;
+    public void setConversationList(List<ConversationEntity> conversationList) {
+        this.conversationList = conversationList;
+    }
+
+    @ManyToMany(mappedBy = "conversationGenerationList")
+    public Set<ConversationDatasetEntity> getConversationDatasetList() {
+        return conversationDatasetList;
+    }
+
+    public void setConversationDatasetList(Set<ConversationDatasetEntity> conversationDatasetList) {
+        this.conversationDatasetList = conversationDatasetList;
     }
 }

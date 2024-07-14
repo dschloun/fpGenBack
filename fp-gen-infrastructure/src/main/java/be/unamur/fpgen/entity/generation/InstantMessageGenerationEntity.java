@@ -1,26 +1,36 @@
 package be.unamur.fpgen.entity.generation;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
+import be.unamur.fpgen.entity.dataset.InstantMessageDatasetEntity;
+import be.unamur.fpgen.entity.instant_message.InstantMessageEntity;
+
+import javax.persistence.*;
 import java.io.Serial;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @DiscriminatorValue(value = "IMG")
 public class InstantMessageGenerationEntity extends GenerationEntity {
 
-        @Serial
-        private static final long serialVersionUID = 1L;
-
-        @Embedded
-        private InstantMessageGenerationData instantMessageGenerationData;
+        private List<InstantMessageEntity> instantMessageList;
+        private Set<InstantMessageDatasetEntity> instantMessageDatasetList;
 
         // getters and setters
-        public InstantMessageGenerationData getInstantMessageGenerationData() {
-                return instantMessageGenerationData;
+        @OneToMany(mappedBy = "instantMessageGeneration")
+        public List<InstantMessageEntity> getInstantMessageList() {
+                return instantMessageList;
         }
 
-        public void setInstantMessageGenerationData(final InstantMessageGenerationData instantMessageGenerationData) {
-                this.instantMessageGenerationData = instantMessageGenerationData;
+        public void setInstantMessageList(List<InstantMessageEntity> instantMessageList) {
+                this.instantMessageList = instantMessageList;
+        }
+
+        @ManyToMany(mappedBy = "instantMessageGenerationList")
+        public Set<InstantMessageDatasetEntity> getInstantMessageDatasetList() {
+                return instantMessageDatasetList;
+        }
+
+        public void setInstantMessageDatasetList(Set<InstantMessageDatasetEntity> instantMessageDatasetList) {
+                this.instantMessageDatasetList = instantMessageDatasetList;
         }
 }
