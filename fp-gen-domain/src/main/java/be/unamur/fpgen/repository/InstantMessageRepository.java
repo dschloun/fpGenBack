@@ -4,6 +4,7 @@ import be.unamur.fpgen.generation.AbstractGeneration;
 import be.unamur.fpgen.instant_message.InstantMessage;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @overview
@@ -18,4 +19,10 @@ public interface InstantMessageRepository {
      * @return the saved SingleInstantMessage
      */
     List<InstantMessage> saveInstantMessageList(List<InstantMessage> instantMessageList, AbstractGeneration abstractGeneration);
+
+    /**
+     * Delete a SingleInstantMessage by id.
+     * @requires instantMessageId != null
+     */
+    void deleteInstantMessageById(UUID instantMessageId);
 }

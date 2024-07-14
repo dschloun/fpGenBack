@@ -1,7 +1,8 @@
 package be.unamur.fpgen.service;
 
 import be.unamur.fpgen.generation.AbstractGeneration;
-import be.unamur.fpgen.repository.GenerationRepository;
+import be.unamur.fpgen.generation.InstantMessageGeneration;
+import be.unamur.fpgen.repository.InstantMessageGenerationRepository;
 import be.unamur.fpgen.utils.DateUtil;
 import be.unamur.model.InstantMessageBatchCreation;
 import be.unamur.model.InstantMessageCreation;
@@ -12,16 +13,16 @@ import java.time.OffsetDateTime;
 
 @Service
 public class SaveGenerationService {
-    private final GenerationRepository generationRepository;
+    private final InstantMessageGenerationRepository instantMessageGenerationRepository;
 
-    public SaveGenerationService(final GenerationRepository generationRepository) {
-        this.generationRepository = generationRepository;
+    public SaveGenerationService(final InstantMessageGenerationRepository instantMessageGenerationRepository) {
+        this.instantMessageGenerationRepository = instantMessageGenerationRepository;
     }
 
     @Transactional
-    public AbstractGeneration createInstantMessageGeneration(final InstantMessageBatchCreation command){
-        return generationRepository.saveInstantMessageGeneration(
-                AbstractGeneration.newBuilder()
+    public InstantMessageGeneration createInstantMessageGeneration(final InstantMessageBatchCreation command){
+        return instantMessageGenerationRepository.saveInstantMessageGeneration(
+                InstantMessageGeneration.newBuilder()
                         .withAuthorTrigram("DSC")
                         .withDetails(getDetails(command))
                         .withType(command.getInstantMessageCreationList().size() > 1 ? GenerationTypeEnum.IMB : GenerationTypeEnum.IM)

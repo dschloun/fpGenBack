@@ -10,6 +10,7 @@ import liquibase.repackaged.org.apache.commons.collections4.ListUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 public class JpaInstantMessageRepository implements InstantMessageRepository {
@@ -34,5 +35,10 @@ public class JpaInstantMessageRepository implements InstantMessageRepository {
         return l.stream()
                 .map(InstantMessageJpaToDomainMapper::map)
                 .toList();
+    }
+
+    @Override
+    public void deleteInstantMessageById(UUID instantMessageId) {
+        jpaInstantMessageRepositoryCRUD.deleteById(instantMessageId);
     }
 }
