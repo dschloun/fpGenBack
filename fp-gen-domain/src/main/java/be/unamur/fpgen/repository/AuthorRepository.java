@@ -2,6 +2,7 @@ package be.unamur.fpgen.repository;
 
 import be.unamur.fpgen.author.Author;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface AuthorRepository {
@@ -10,5 +11,5 @@ public interface AuthorRepository {
 
     Author updateAuthor(Author author);
 
-    Author getAuthorById(UUID authorId);
+    Optional<Author> getAuthorById(UUID authorId);
 }
