@@ -3,6 +3,177 @@ databaseChangeLog:
       id: create-generation-and-instant-message-table
       author: dsc
       changes:
+#        AUTHOR
+#        ************
+        - createTable:
+            tableName: author
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    - primaryKey: true
+                    - primaryKeyName: pk_author
+                    - nullable: false
+                    - unique: true
+              - column:
+                  name: creation_date
+                  type: datetime
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: modification_date
+                  type: datetime
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: lastname
+                  type: varchar(50)
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: firstname
+                  type: varchar(50)
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: trigram
+                  type: varchar(6)
+                  constraints:
+                    - nullable: false
+                    - unique: true
+              - column:
+                  name: organization
+                  type: varchar(50)
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: function
+                  type: varchar(50)
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: email
+                  type: varchar(50)
+                  constraints:
+                    - nullable: false
+                    - unique: true
+              - column:
+                  name: phone_number
+                  type: varchar(20)
+                  constraints:
+                    - nullable: false
+                    - unique: false
+
+#        INTERLOCUTOR
+#        ****************
+        - createTable:
+            tableName: interlocutor
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  constraints:
+                    - primaryKey: true
+                    - primaryKeyName: pk_interlocutor
+                    - nullable: false
+                    - unique: true
+              - column:
+                  name: creation_date
+                  type: datetime
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: modification_date
+                  type: datetime
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: type
+                  type: varchar(15)
+                  constraints:
+                    - nullable: false
+                    - unique: false
+
+#        DATASET
+#        ************
+        - createTable:
+            tableName: dataset
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    - primaryKey: true
+                    - primaryKeyName: pk_dataset
+                    - nullable: false
+                    - unique: true
+              - column:
+                  name: creation_date
+                  type: datetime
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: modification_date
+                  type: datetime
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: kind
+                  type: varchar(5)
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: business_id
+                  type: varchar(50)
+                  constraints:
+                    - nullable: false
+                    - unique: true
+              - column:
+                  name: version
+                  type: varchar(10)
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    - nullable: false
+                    - unique: true
+              - column:
+                  name: description
+                  type: varchar(255)
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: comment
+                  type: text
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: author_id
+                  type: uuid
+                  constraints:
+                    - nullable: false
+                    - unique: false
+                    - foreignKeyName: fk_dataset_author
+                    - references: author(id)
+                    - onDelete: CASCADE
+
 #        GENERATION
 #        ************
         - createTable:
@@ -41,11 +212,23 @@ databaseChangeLog:
                       - nullable: false
                       - unique: true
               - column:
-                  name: author_trigram
-                  type: varchar(3)
+                  name: author_id
+                  type: uuid
                   constraints:
                     - nullable: false
                     - unique: false
+                    - foreignKeyName: fk_generation_author
+                    - references: author(id)
+                    - onDelete: CASCADE
+              - column:
+                  name: dataset_id
+                  type: uuid
+                  constraints:
+                    - nullable: false
+                    - unique: false
+                    - foreignKeyName: fk_generation_dataset
+                    - references: dataset(id)
+                    - onDelete: CASCADE
               - column:
                   name: details
                   type: text
@@ -55,38 +238,6 @@ databaseChangeLog:
               - column:
                   name: batch
                   type: boolean
-                  constraints:
-                    - nullable: false
-                    - unique: false
-
-#        INTERLOCUTOR
-#        ****************
-        - createTable:
-            tableName: interlocutor
-            columns:
-              - column:
-                  name: id
-                  type: integer
-                  constraints:
-                    - primaryKey: true
-                    - primaryKeyName: pk_interlocutor
-                    - nullable: false
-                    - unique: true
-              - column:
-                  name: creation_date
-                  type: datetime
-                  constraints:
-                    - nullable: false
-                    - unique: false
-              - column:
-                  name: modification_date
-                  type: datetime
-                  constraints:
-                    - nullable: false
-                    - unique: false
-              - column:
-                  name: type
-                  type: varchar(15)
                   constraints:
                     - nullable: false
                     - unique: false

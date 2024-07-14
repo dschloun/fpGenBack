@@ -25,7 +25,7 @@ public class AuthorEntity extends BaseUuidEntity {
 
     // getters and setters
 
-    @Column(name = "last_name", nullable = false)
+    @Column(name = "lastname", nullable = false)
     public String getLastName() {
         return lastName;
     }
@@ -34,7 +34,7 @@ public class AuthorEntity extends BaseUuidEntity {
         this.lastName = lastName;
     }
 
-    @Column(name = "first_name", nullable = false)
+    @Column(name = "firstname", nullable = false)
     public String getFirstName() {
         return firstName;
     }

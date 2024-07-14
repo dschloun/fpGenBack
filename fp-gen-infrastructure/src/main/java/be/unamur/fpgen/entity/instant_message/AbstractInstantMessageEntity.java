@@ -28,26 +28,9 @@ public class AbstractInstantMessageEntity extends BaseUuidEntity {
     private static final long serialVersionUID = -80039190673154484L;
 
     // members
-//    private GenerationEntity generation;
     private MessageTopicEnum topic;
     private MessageTypeEnum type;
     private String content;
-
-    /**
-     * FA(c): c.generationId = generationId, c.topic = topic, c.type = type, c.content = content
-     * IR(c): c.generatoinId != null && c.topic != null && c.type != null && c.content != null
-     */
-
-    // getters and setters
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "generation_id")
-//    public GenerationEntity getGeneration() {
-//        return generation;
-//    }
-//
-//    public void setGeneration(final GenerationEntity generation) {
-//        this.generation = generation;
-//    }
 
     /**
      * @return topic

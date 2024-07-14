@@ -19,7 +19,7 @@ public class GenerationEntity extends BaseUuidEntity {
     private AuthorEntity author;
     private String details;
     private boolean batch;
-    private DatasetEntity dataset;
+    //private DatasetEntity dataset;
 
     // getters and setters
     @Column(name = "generation_id", nullable = false)
@@ -59,13 +59,13 @@ public class GenerationEntity extends BaseUuidEntity {
         this.batch = batch;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "dataset_id")
-    public DatasetEntity getDataset() {
-        return dataset;
-    }
-
-    public void setDataset(DatasetEntity dataset) {
-        this.dataset = dataset;
-    }
+//    @ManyToOne
+//    @JoinColumn(name = "dataset_id")
+//    public DatasetEntity getDataset() {
+//        return dataset;
+//    }
+//
+//    public void setDataset(DatasetEntity dataset) {
+//        this.dataset = dataset;
+//    }
 }
