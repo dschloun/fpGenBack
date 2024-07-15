@@ -1,10 +1,12 @@
 package be.unamur.fpgen.service;
 
+import be.unamur.fpgen.Exception.AuthorNotFoundException;
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.repository.AuthorRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.UUID;
 
 @Service
 public class AuthorService {
@@ -18,8 +20,11 @@ public class AuthorService {
     @Transactional
     public Author createIfNotExists(final Author author){
         return authorRepository.getAuthorById(author.getId())
-                .orElseGet(() -> {
-                    return authorRepository.saveAuthor(author);
-                });
+                .orElseGet(() -> authorRepository.saveAuthor(author));
+    }
+
+    @Transactional
+    public Author getAuthorById(final UUID authorId){
+        return authorRepository.getAuthorById(authorId).orElseThrow(() -> AuthorNotFoundException.withId(authorId));
     }
 }

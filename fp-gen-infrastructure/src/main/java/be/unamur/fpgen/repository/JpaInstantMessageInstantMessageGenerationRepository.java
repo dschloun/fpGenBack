@@ -11,21 +11,20 @@ import java.util.UUID;
 @Repository
 public class JpaInstantMessageInstantMessageGenerationRepository implements InstantMessageGenerationRepository {
     private final JpaInstantMessageGenerationRepositoryCRUD jpaInstantMessageGenerationRepositoryCRUD;
+    private final JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD;
 
-    public JpaInstantMessageInstantMessageGenerationRepository(JpaInstantMessageGenerationRepositoryCRUD jpaInstantMessageGenerationRepositoryCRUD) {
+    public JpaInstantMessageInstantMessageGenerationRepository(JpaInstantMessageGenerationRepositoryCRUD jpaInstantMessageGenerationRepositoryCRUD,
+                                                               JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD) {
         this.jpaInstantMessageGenerationRepositoryCRUD = jpaInstantMessageGenerationRepositoryCRUD;
+        this.jpaAuthorRepositoryCRUD = jpaAuthorRepositoryCRUD;
     }
 
     @Override
     public InstantMessageGeneration saveInstantMessageGeneration(InstantMessageGeneration abstractGeneration) {
-        if(abstractGeneration.isInstantMessageGeneration()){
-            return Optional.of(jpaInstantMessageGenerationRepositoryCRUD.saveAndFlush(InstantMessageGenerationDomainToJpaMapper.mapForCreate(abstractGeneration)))
+            return Optional.of(jpaInstantMessageGenerationRepositoryCRUD.saveAndFlush(InstantMessageGenerationDomainToJpaMapper
+                            .mapForCreate(abstractGeneration, jpaAuthorRepositoryCRUD.getReferenceById(abstractGeneration.getAuthor().getId()))))
                     .map(InstantMessageGenerationJpaToDomainMapper::mapInstantMessageGeneration)
                     .orElseThrow();
-        }
-        else{
-            throw new IllegalArgumentException("Generation is not an instant message generation");
-        }
     }
 
     @Override
