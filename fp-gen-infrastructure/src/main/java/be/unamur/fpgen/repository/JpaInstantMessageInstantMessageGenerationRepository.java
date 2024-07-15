@@ -21,7 +21,7 @@ public class JpaInstantMessageInstantMessageGenerationRepository implements Inst
 
     @Override
     public InstantMessageGeneration saveInstantMessageGeneration(InstantMessageGeneration abstractGeneration) {
-            return Optional.of(jpaInstantMessageGenerationRepositoryCRUD.saveAndFlush(InstantMessageGenerationDomainToJpaMapper
+            return Optional.of(jpaInstantMessageGenerationRepositoryCRUD.save(InstantMessageGenerationDomainToJpaMapper
                             .mapForCreate(abstractGeneration, jpaAuthorRepositoryCRUD.getReferenceById(abstractGeneration.getAuthor().getId()))))
                     .map(InstantMessageGenerationJpaToDomainMapper::mapInstantMessageGeneration)
                     .orElseThrow();

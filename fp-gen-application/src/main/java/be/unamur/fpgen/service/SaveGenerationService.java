@@ -6,6 +6,7 @@ import be.unamur.fpgen.generation.InstantMessageGeneration;
 import be.unamur.fpgen.repository.ConversationGenerationRepository;
 import be.unamur.fpgen.repository.InstantMessageGenerationRepository;
 import be.unamur.fpgen.utils.DateUtil;
+import be.unamur.model.GenerationCreation;
 import be.unamur.model.InstantMessageBatchCreation;
 import be.unamur.model.InstantMessageCreation;
 import org.springframework.stereotype.Service;
@@ -27,15 +28,15 @@ public class SaveGenerationService {
     }
 
     @Transactional
-    public InstantMessageGeneration createInstantMessageGeneration(final InstantMessageBatchCreation command){
+    public InstantMessageGeneration createInstantMessageGeneration(final GenerationCreation command){
         // 0. check if author is registered
         final Author author = authorService.getAuthorById(UUID.randomUUID()); //fixme put the author id in the command
         // 1. save the generation
         return instantMessageGenerationRepository.saveInstantMessageGeneration(
                 InstantMessageGeneration.newBuilder()
                         .withAuthor(author)
-                        .withDetails(produceDetails(command))
-                        .withBatch(command.getInstantMessageCreationList().get(0).getQuantity() > 1)
+                        .withDetails(getDetail(command, "instant message"))
+                        .withBatch(command.getQuantity() > 1)
                         .build());
     }
 
@@ -52,18 +53,8 @@ public class SaveGenerationService {
 //                        .build());
 //    }
 
-    private String produceDetails(final InstantMessageBatchCreation command){
-        final String begin = "generate instant message set [\n";
-        final String end = String.format("\n], author: %s \n date: %s", "DSC", DateUtil.convertOffsetDateTimeToString(OffsetDateTime.now()));
-        final StringBuilder loopText = new StringBuilder();
-        command.getInstantMessageCreationList()
-                .forEach(t -> {
-                    loopText.append(getSingleBatchDetail(t));
-                });
-        return begin + loopText + end;
-    }
-
-    private String getSingleBatchDetail(final InstantMessageCreation command){
-        return String.format("{Topic: %s, Type: %s, Quantity: %s}\s", command.getMessageTopic(), command.getMessageType(), command.getQuantity());
+    private String getDetail(final GenerationCreation command, final String generationType){
+        return String.format("generate %s set with Topic: %s, Type: %s, Quantity: %s,}\n System prompt: %s \n User prompt: %s",
+                generationType, command.getTopic(), command.getType(), command.getQuantity(), command.getSystemPrompt(), command.getUserPrompt());
     }
 }

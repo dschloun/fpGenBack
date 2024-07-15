@@ -3,6 +3,7 @@ package be.unamur.fpgen.repository;
 import be.unamur.fpgen.entity.generation.InstantMessageGenerationEntity;
 import be.unamur.fpgen.entity.instant_message.InstantMessageEntity;
 import be.unamur.fpgen.generation.AbstractGeneration;
+import be.unamur.fpgen.generation.InstantMessageGeneration;
 import be.unamur.fpgen.instant_message.InstantMessage;
 import be.unamur.fpgen.mapper.domainToJpa.InstantMessageDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.InstantMessageJpaToDomainMapper;
@@ -25,8 +26,8 @@ public class JpaInstantMessageRepository implements InstantMessageRepository {
     }
 
     @Override
-    public List<InstantMessage> saveInstantMessageList(List<InstantMessage> instantMessageList, AbstractGeneration abstractGeneration) {
-        InstantMessageGenerationEntity generationEntity = jpaInstantMessageGenerationRepositoryCRUD.getReferenceById(abstractGeneration.getId());
+    public List<InstantMessage> saveInstantMessageList(List<InstantMessage> instantMessageList, InstantMessageGeneration instantMessageGeneration) {
+        final InstantMessageGenerationEntity generationEntity = jpaInstantMessageGenerationRepositoryCRUD.getReferenceById(instantMessageGeneration.getId());
         List<InstantMessageEntity> l = jpaInstantMessageRepositoryCRUD.saveAll(ListUtils.emptyIfNull(instantMessageList)
                 .stream()
                 .map(i -> InstantMessageDomainToJpaMapper.mapForCreate(i, generationEntity))
