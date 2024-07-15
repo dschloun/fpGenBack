@@ -17,6 +17,12 @@ public class AuthorService {
         this.authorRepository = authorRepository;
     }
 
+
+    @Transactional
+    public Author create(final Author author){
+        return authorRepository.saveAuthor(author);
+    }
+
     @Transactional
     public Author createIfNotExists(final Author author){
         return authorRepository.getAuthorById(author.getId())

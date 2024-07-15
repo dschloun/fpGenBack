@@ -32,13 +32,13 @@ public class AuthorController implements AuthorApi {
 
     @Override
     public ResponseEntity<Author> createAuthor(@Valid AuthorCreation authorCreation) {
-        final Author author = AuthorDomainToWebMapper.map(authorService.createIfNotExists(AuthorWebToDomainMapper.map(authorCreation)));
+        final Author author = AuthorDomainToWebMapper.map(authorService.create(AuthorWebToDomainMapper.map(authorCreation)));
         return new ResponseEntity<>(author, HttpStatus.CREATED);
     }
 
     @Override
-    public ResponseEntity<Author> getAuthorById(UUID generationId) {
-        return new ResponseEntity<>(AuthorDomainToWebMapper.map(authorService.getAuthorById(generationId)), HttpStatus.OK);
+    public ResponseEntity<Author> getAuthorById(UUID authorId) {
+        return new ResponseEntity<>(AuthorDomainToWebMapper.map(authorService.getAuthorById(authorId)), HttpStatus.OK);
     }
 
     @Override
