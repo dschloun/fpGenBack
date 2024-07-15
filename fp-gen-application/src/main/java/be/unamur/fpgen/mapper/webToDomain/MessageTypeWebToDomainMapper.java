@@ -1,4 +1,4 @@
-package be.unamur.fpgen.mapper;
+package be.unamur.fpgen.mapper.webToDomain;
 
 import be.unamur.fpgen.instant_message.MessageTypeEnum;
 import be.unamur.model.MessageType;

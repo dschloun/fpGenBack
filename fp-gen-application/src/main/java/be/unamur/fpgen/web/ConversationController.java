@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.context.request.NativeWebRequest;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -30,7 +31,7 @@ public class ConversationController implements ConversationApi {
     }
 
     @Override
-    public ResponseEntity<ConversationInstantMessage> getConversationInstantMessageById(UUID conversationId, UUID conversationInstantMessageId) {
-        return ConversationApi.super.getConversationInstantMessageById(conversationId, conversationInstantMessageId);
+    public ResponseEntity<List<ConversationInstantMessage>> getConversationInstantMessageListById(UUID conversationId, UUID conversationInstantMessageId) {
+        return ConversationApi.super.getConversationInstantMessageListById(conversationId, conversationInstantMessageId);
     }
 }

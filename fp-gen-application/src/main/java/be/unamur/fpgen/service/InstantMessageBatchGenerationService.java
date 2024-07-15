@@ -1,11 +1,9 @@
 package be.unamur.fpgen.service;
 
-import be.unamur.fpgen.generation.AbstractGeneration;
 import be.unamur.fpgen.generation.InstantMessageGeneration;
 import be.unamur.fpgen.instant_message.InstantMessage;
-import be.unamur.fpgen.mapper.InstantMessageWebToDomainMapper;
+import be.unamur.fpgen.mapper.webToDomain.InstantMessageWebToDomainMapper;
 import be.unamur.fpgen.repository.InstantMessageRepository;
-import be.unamur.model.GenerationCreation;
 import be.unamur.model.InstantMessageBatchCreation;
 import org.springframework.stereotype.Service;
 

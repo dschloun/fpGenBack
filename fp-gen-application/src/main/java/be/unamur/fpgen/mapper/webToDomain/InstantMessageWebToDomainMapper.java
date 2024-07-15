@@ -1,8 +1,7 @@
-package be.unamur.fpgen.mapper;
+package be.unamur.fpgen.mapper.webToDomain;
 
 import be.unamur.fpgen.instant_message.InstantMessage;
 import be.unamur.model.GenerationCreation;
-import be.unamur.model.InstantMessageCreation;
 
 public class InstantMessageWebToDomainMapper {
 
