@@ -1,9 +1,11 @@
 package be.unamur.fpgen.repository;
 
 import be.unamur.fpgen.dataset.ConversationDataset;
+import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
+@Repository
 public class JpaConversationDatasetRepository implements ConversationDatasetRepository{
     @Override
     public ConversationDataset saveConversationDataset(ConversationDataset conversationDataset) {

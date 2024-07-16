@@ -40,18 +40,18 @@ public class SaveGenerationService {
                         .build());
     }
 
-//    @Transactional
-//    public ConversationGeneration createConversationGeneration(final InstantMessageBatchCreation command){
-//        // 0. check if author is registered
-//        final Author author = authorService.getAuthorById(UUID.randomUUID()); //fixme put the author id in the command
-//        // 1. save the generation
-//        return instantMessageGenerationRepository.saveInstantMessageGeneration(
-//                InstantMessageGeneration.newBuilder()
-//                        .withAuthor(author)
-//                        .withDetails(produceDetails(command))
-//                        .withBatch(command.getInstantMessageCreationList().get(0).getQuantity() > 1)
-//                        .build());
-//    }
+    @Transactional
+    public ConversationGeneration createConversationGeneration(final GenerationCreation command){
+        // 0. check if author is registered
+        final Author author = authorService.getAuthorById(command.getAuthorId());
+        // 1. save the generation
+        return conversationGenerationRepository.saveConversationGeneration(
+                ConversationGeneration.newBuilder()
+                        .withAuthor(author)
+                        .withDetails(getDetail(command, "conversation"))
+                        .withBatch(command.getQuantity() > 1)
+                        .build());
+    }
 
     private String getDetail(final GenerationCreation command, final String generationType){
         return String.format("generate %s set with Topic: %s, Type: %s, Quantity: %s,}\n System prompt: %s \n User prompt: %s",

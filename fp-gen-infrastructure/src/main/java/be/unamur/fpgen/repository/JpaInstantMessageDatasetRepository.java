@@ -1,6 +1,7 @@
 package be.unamur.fpgen.repository;
 
 import be.unamur.fpgen.dataset.InstantMessageDataset;
+import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 

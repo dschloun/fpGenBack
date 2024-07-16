@@ -1,6 +1,7 @@
 package be.unamur.fpgen.repository;
 
 import be.unamur.fpgen.instant_message.ConversationMessage;
+import org.springframework.stereotype.Repository;
 
 import java.util.Set;
 

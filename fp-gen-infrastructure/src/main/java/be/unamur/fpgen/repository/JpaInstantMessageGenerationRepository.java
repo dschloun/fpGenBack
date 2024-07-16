@@ -9,20 +9,20 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public class JpaInstantMessageInstantMessageGenerationRepository implements InstantMessageGenerationRepository {
+public class JpaInstantMessageGenerationRepository implements InstantMessageGenerationRepository {
     private final JpaInstantMessageGenerationRepositoryCRUD jpaInstantMessageGenerationRepositoryCRUD;
     private final JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD;
 
-    public JpaInstantMessageInstantMessageGenerationRepository(JpaInstantMessageGenerationRepositoryCRUD jpaInstantMessageGenerationRepositoryCRUD,
-                                                               JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD) {
+    public JpaInstantMessageGenerationRepository(JpaInstantMessageGenerationRepositoryCRUD jpaInstantMessageGenerationRepositoryCRUD,
+                                                 JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD) {
         this.jpaInstantMessageGenerationRepositoryCRUD = jpaInstantMessageGenerationRepositoryCRUD;
         this.jpaAuthorRepositoryCRUD = jpaAuthorRepositoryCRUD;
     }
 
     @Override
-    public InstantMessageGeneration saveInstantMessageGeneration(InstantMessageGeneration abstractGeneration) {
+    public InstantMessageGeneration saveInstantMessageGeneration(InstantMessageGeneration generation) {
             return Optional.of(jpaInstantMessageGenerationRepositoryCRUD.save(InstantMessageGenerationDomainToJpaMapper
-                            .mapForCreate(abstractGeneration, jpaAuthorRepositoryCRUD.getReferenceById(abstractGeneration.getAuthor().getId()))))
+                            .mapForCreate(generation, jpaAuthorRepositoryCRUD.getReferenceById(generation.getAuthor().getId()))))
                     .map(InstantMessageGenerationJpaToDomainMapper::mapInstantMessageGeneration)
                     .orElseThrow();
     }

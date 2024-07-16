@@ -4,7 +4,7 @@ import be.unamur.fpgen.entity.author.AuthorEntity;
 import be.unamur.fpgen.entity.generation.ConversationGenerationEntity;
 import be.unamur.fpgen.generation.ConversationGeneration;
 
-public class ConversationGenerationDomainToMapper {
+public class ConversationGenerationDomainToJpaMapper {
 
     public static ConversationGenerationEntity mapForCreate(final ConversationGeneration domain, final AuthorEntity author) {
         final ConversationGenerationEntity entity = new ConversationGenerationEntity();
