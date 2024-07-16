@@ -40,6 +40,7 @@ public class InstantMessageGeneration extends AbstractGeneration {
         }
 
         public InstantMessageGeneration build() {
+            generationId = generateGenerationId();
             return new InstantMessageGeneration(this);
         }
 

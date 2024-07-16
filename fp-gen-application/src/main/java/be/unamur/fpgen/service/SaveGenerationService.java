@@ -30,7 +30,7 @@ public class SaveGenerationService {
     @Transactional
     public InstantMessageGeneration createInstantMessageGeneration(final GenerationCreation command){
         // 0. check if author is registered
-        final Author author = authorService.getAuthorById(UUID.randomUUID()); //fixme put the author id in the command
+        final Author author = authorService.getAuthorById(command.getAuthorId());
         // 1. save the generation
         return instantMessageGenerationRepository.saveInstantMessageGeneration(
                 InstantMessageGeneration.newBuilder()

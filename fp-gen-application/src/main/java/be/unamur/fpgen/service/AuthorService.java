@@ -1,6 +1,6 @@
 package be.unamur.fpgen.service;
 
-import be.unamur.fpgen.Exception.AuthorNotFoundException;
+import be.unamur.fpgen.exception.AuthorNotFoundException;
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.repository.AuthorRepository;
 import org.springframework.stereotype.Service;

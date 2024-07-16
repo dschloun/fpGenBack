@@ -59,7 +59,7 @@ public abstract class AbstractGeneration extends BaseUuidDomain {
 
     // builder
     protected abstract static class AbstractGenerationBuilder<T> extends AbstractBaseUuidDomainBuilder<T> implements GenerationId {
-        private String generationId;
+        protected String generationId;
         private Author author;
         private String details;
         private boolean batch;

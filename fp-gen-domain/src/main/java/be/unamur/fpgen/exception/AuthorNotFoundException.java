@@ -1,4 +1,4 @@
-package be.unamur.fpgen.Exception;
+package be.unamur.fpgen.exception;
 
 import java.util.UUID;
 

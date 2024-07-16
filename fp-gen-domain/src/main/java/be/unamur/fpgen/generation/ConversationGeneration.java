@@ -40,6 +40,7 @@ public class ConversationGeneration extends AbstractGeneration{
         }
 
         public ConversationGeneration build() {
+            generationId = generateGenerationId();
             return new ConversationGeneration(this);
         }
 
