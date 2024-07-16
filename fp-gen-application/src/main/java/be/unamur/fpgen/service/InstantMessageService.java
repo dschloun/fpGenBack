@@ -1,5 +1,6 @@
 package be.unamur.fpgen.service;
 
+import be.unamur.fpgen.exception.InstantMessageNotFoundException;
 import be.unamur.fpgen.generation.InstantMessageGeneration;
 import be.unamur.fpgen.instant_message.InstantMessage;
 import be.unamur.fpgen.mapper.webToDomain.InstantMessageWebToDomainMapper;
@@ -10,15 +11,16 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
-public class InstantMessageBatchGenerationService {
+public class InstantMessageService {
 
     private final InstantMessageRepository instantMessageRepository;
     private final SaveGenerationService saveGenerationService;
 
-    public InstantMessageBatchGenerationService(final InstantMessageRepository instantMessageRepository,
-                                                final SaveGenerationService saveGenerationService) {
+    public InstantMessageService(final InstantMessageRepository instantMessageRepository,
+                                 final SaveGenerationService saveGenerationService) {
         this.instantMessageRepository = instantMessageRepository;
         this.saveGenerationService = saveGenerationService;
     }
@@ -40,9 +42,12 @@ public class InstantMessageBatchGenerationService {
             }
             // 4. save the instant messages
             List<InstantMessage> saved = instantMessageRepository.saveInstantMessageList(instantMessageList, generation);
-
-            System.out.println("test");
         });
+    }
+
+    public InstantMessage getInstantMessageById(UUID instantMessageId) {
+        return instantMessageRepository.getInstantMessageById(instantMessageId)
+                .orElseThrow(() -> InstantMessageNotFoundException.withId(instantMessageId));
     }
 
 

@@ -5,6 +5,7 @@ import be.unamur.fpgen.generation.InstantMessageGeneration;
 import be.unamur.fpgen.instant_message.InstantMessage;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -26,4 +27,6 @@ public interface InstantMessageRepository {
      * @requires instantMessageId != null
      */
     void deleteInstantMessageById(UUID instantMessageId);
+
+    Optional<InstantMessage> getInstantMessageById(UUID instantMessageId);
 }

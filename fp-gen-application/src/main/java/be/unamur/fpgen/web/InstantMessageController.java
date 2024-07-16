@@ -1,7 +1,8 @@
 package be.unamur.fpgen.web;
 
 import be.unamur.api.InstantMessageApi;
-import be.unamur.fpgen.service.InstantMessageBatchGenerationService;
+import be.unamur.fpgen.mapper.domainToWeb.InstantMessageDomainToWebMapper;
+import be.unamur.fpgen.service.InstantMessageService;
 import be.unamur.model.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +16,10 @@ import java.util.UUID;
 @Controller
 public class InstantMessageController implements InstantMessageApi {
 
-    private final InstantMessageBatchGenerationService instantMessageBatchGenerationService;
+    private final InstantMessageService instantMessageService;
 
-    public InstantMessageController(final InstantMessageBatchGenerationService instantMessageBatchGenerationService) {
-        this.instantMessageBatchGenerationService = instantMessageBatchGenerationService;
+    public InstantMessageController(final InstantMessageService instantMessageService) {
+        this.instantMessageService = instantMessageService;
     }
 
     @Override
@@ -28,15 +29,14 @@ public class InstantMessageController implements InstantMessageApi {
 
     @Override
     public ResponseEntity<Void> createMessage(@Valid InstantMessageBatchCreation instantMessageBatchCreation) {
-        System.out.println("test creation message");
-        instantMessageBatchGenerationService.generateInstantMessages(instantMessageBatchCreation);
+        instantMessageService.generateInstantMessages(instantMessageBatchCreation);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Override
     public ResponseEntity<InstantMessage> getInstantMessageById(UUID instantMessageId) {
-        System.out.println("test");
-        return InstantMessageApi.super.getInstantMessageById(instantMessageId);
+        return new ResponseEntity<>(
+                InstantMessageDomainToWebMapper.map(
+                        instantMessageService.getInstantMessageById(instantMessageId)), HttpStatus.OK);
     }
-
 }
