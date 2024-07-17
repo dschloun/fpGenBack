@@ -30,7 +30,9 @@ public class JpaConversationGenerationRepository implements ConversationGenerati
 
     @Override
     public ConversationGeneration getConversationGenerationById(UUID conversationGenerationId) {
-        return null;
+        return ConversationGenerationJpaToDomainMapper.map(
+                jpaConversationGenerationRepositoryCRUD.getReferenceById(conversationGenerationId)
+        );
     }
 
     @Override

@@ -9,10 +9,6 @@ import java.util.Objects;
 public class ConversationDomainToJpaMapper {
 
     public static ConversationEntity mapForCreate(final Conversation domain, final ConversationGenerationEntity generationEntity){
-        if (Objects.isNull(domain)){
-            return null;
-        }
-
         final ConversationEntity entity = new ConversationEntity();
         entity.setConversationGeneration(generationEntity);
         entity.setMessageTopic(domain.getTopic());

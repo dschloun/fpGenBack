@@ -7,12 +7,14 @@ import be.unamur.fpgen.instant_message.MessageTypeEnum;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 public class Conversation extends BaseUuidDomain {
     private final MessageTypeEnum type;
     private final MessageTopicEnum topic;
     private final Integer maxInteractionNumber;
     private final Set<ConversationMessage> conversationMessageList;
+    private final UUID generationId;
 
     private Conversation(Builder builder) {
         super(builder.getId(), builder.getCreationDate(), builder.getModificationDate());
@@ -20,6 +22,7 @@ public class Conversation extends BaseUuidDomain {
         topic = builder.topic;
         maxInteractionNumber = builder.maxInteractionNumber;
         conversationMessageList = builder.conversationMessageList;
+        generationId = builder.generationId;
     }
 
     public static Builder newBuilder() {
@@ -42,11 +45,16 @@ public class Conversation extends BaseUuidDomain {
         return conversationMessageList;
     }
 
+    public UUID getGenerationId() {
+        return generationId;
+    }
+
     public static final class Builder extends AbstractBaseUuidDomainBuilder<Builder> {
         private MessageTypeEnum type;
         private MessageTopicEnum topic;
         private Integer maxInteractionNumber;
         private Set<ConversationMessage> conversationMessageList;
+        private UUID generationId;
 
         private Builder() {
         }
@@ -68,6 +76,11 @@ public class Conversation extends BaseUuidDomain {
 
         public Builder withConversationMessageList(Set<ConversationMessage> val) {
             conversationMessageList = val;
+            return this;
+        }
+
+        public Builder withGenerationId(UUID val) {
+            generationId = val;
             return this;
         }
 
