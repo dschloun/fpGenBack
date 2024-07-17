@@ -11,7 +11,6 @@ import be.unamur.fpgen.repository.ConversationMessageRepository;
 import be.unamur.fpgen.repository.ConversationRepository;
 import be.unamur.fpgen.repository.InterlocutorRepository;
 import be.unamur.model.ConversationBatchCreation;
-import be.unamur.model.ConversationCreation;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -24,14 +23,12 @@ public class ConversationService {
     private final ConversationRepository conversationRepository;
     private final SaveGenerationService saveGenerationService;
     private final InterlocutorRepository interlocutorRepository;
-    private final ConversationGenerationRepository conversationGenerationRepository;
     private final ConversationMessageRepository conversationMessageRepository;
 
     public ConversationService(ConversationRepository conversationRepository, SaveGenerationService saveGenerationService, InterlocutorRepository interlocutorRepository, ConversationGenerationRepository conversationGenerationRepository, ConversationMessageRepository conversationMessageRepository) {
         this.conversationRepository = conversationRepository;
         this.saveGenerationService = saveGenerationService;
         this.interlocutorRepository = interlocutorRepository;
-        this.conversationGenerationRepository = conversationGenerationRepository;
         this.conversationMessageRepository = conversationMessageRepository;
     }
 

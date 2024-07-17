@@ -1,9 +1,11 @@
 package be.unamur.fpgen.web;
 
 import be.unamur.api.ConversationApi;
+import be.unamur.fpgen.service.ConversationService;
 import be.unamur.model.Conversation;
 import be.unamur.model.ConversationBatchCreation;
 import be.unamur.model.ConversationInstantMessage;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -15,6 +17,12 @@ import java.util.UUID;
 
 @Controller
 public class ConversationController implements ConversationApi {
+    private final ConversationService conversationService;
+
+    public ConversationController(ConversationService conversationService) {
+        this.conversationService = conversationService;
+    }
+
     @Override
     public Optional<NativeWebRequest> getRequest() {
         return ConversationApi.super.getRequest();
@@ -22,7 +30,8 @@ public class ConversationController implements ConversationApi {
 
     @Override
     public ResponseEntity<Void> generateConversations(@Valid ConversationBatchCreation conversationBatchCreation) {
-        return ConversationApi.super.generateConversations(conversationBatchCreation);
+        conversationService.createConversationList(conversationBatchCreation);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Override
