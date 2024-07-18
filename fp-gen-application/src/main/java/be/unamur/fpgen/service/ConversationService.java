@@ -3,13 +3,15 @@ package be.unamur.fpgen.service;
 import be.unamur.fpgen.conversation.Conversation;
 import be.unamur.fpgen.generation.ConversationGeneration;
 import be.unamur.fpgen.instant_message.ConversationMessage;
+import be.unamur.fpgen.interlocutor.Interlocutor;
 import be.unamur.fpgen.interlocutor.InterlocutorTypeEnum;
 import be.unamur.fpgen.mapper.webToDomain.ConversationCreationWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.ConversationMessageCreationWebToDomainMapper;
 import be.unamur.fpgen.repository.ConversationGenerationRepository;
 import be.unamur.fpgen.repository.ConversationMessageRepository;
 import be.unamur.fpgen.repository.ConversationRepository;
-import be.unamur.fpgen.repository.InterlocutorRepository;
+import be.unamur.fpgen.utils.Alternator;
+import be.unamur.fpgen.utils.TypeCorrespondenceMapper;
 import be.unamur.model.ConversationBatchCreation;
 import org.springframework.stereotype.Service;
 
@@ -22,13 +24,16 @@ public class ConversationService {
 
     private final ConversationRepository conversationRepository;
     private final SaveGenerationService saveGenerationService;
-    private final InterlocutorRepository interlocutorRepository;
+    private final InterlocutorService interlocutorService;
     private final ConversationMessageRepository conversationMessageRepository;
 
-    public ConversationService(ConversationRepository conversationRepository, SaveGenerationService saveGenerationService, InterlocutorRepository interlocutorRepository, ConversationGenerationRepository conversationGenerationRepository, ConversationMessageRepository conversationMessageRepository) {
+    public ConversationService(ConversationRepository conversationRepository,
+                               SaveGenerationService saveGenerationService,
+                               ConversationGenerationRepository conversationGenerationRepository,
+                               InterlocutorService interlocutorService, ConversationMessageRepository conversationMessageRepository) {
         this.conversationRepository = conversationRepository;
         this.saveGenerationService = saveGenerationService;
-        this.interlocutorRepository = interlocutorRepository;
+        this.interlocutorService = interlocutorService;
         this.conversationMessageRepository = conversationMessageRepository;
     }
 
@@ -48,21 +53,27 @@ public class ConversationService {
                 // 3.1. save the conversation
                 final Conversation conversation = createConversation(generation, ConversationCreationWebToDomainMapper.map(cc));
 
-                // 3.2. generate conversation messages
+                // 3.2. get interlocutors
+                final Interlocutor interlocutor1 = interlocutorService.getRandomInterlocutorByType(TypeCorrespondenceMapper.getCorrespondence(conversation.getType()));
+                final Interlocutor interlocutor2 = interlocutorService.getRandomInterlocutorByType(InterlocutorTypeEnum.GENUINE);
+                final Alternator<Interlocutor> alternator = new Alternator<>(interlocutor1, interlocutor2);
+
+                // 3.3. generate conversation messages
                 List<ConversationMessage> l = new ArrayList<>();
                 for (int j = 0; j < conversation.getMaxInteractionNumber(); j++) {
-                    l.add(mockConversationMessageGeneration(ConversationMessageCreationWebToDomainMapper.map(cc), j));
+                    l.add(mockConversationMessageGeneration(ConversationMessageCreationWebToDomainMapper.map(cc, alternator.getNext(), alternator.getNext()), j));
                 }
-                // 3.3. save the conversation messages
+
+                // 3.4. save the conversation messages
                 final List<ConversationMessage> saved = conversationMessageRepository.saveConversationMessageList(conversation, l);
-                // 3.4. add the conversation to the list
+
+                // 3.5. add the conversation to the list
                 conversationList.add(conversationRepository.getConversationById(conversation.getId()));
             }
         });
 
         return conversationList;
     }
-
 
     @Transactional
     public Conversation createConversation(final ConversationGeneration generation, final Conversation conversation) {
@@ -80,8 +91,8 @@ public class ConversationService {
     //fixme replace by chatgpt api call
     private ConversationMessage mockConversationMessageGeneration(final ConversationMessage conversationMessage, final int number) {
         return ConversationMessage.newBuilder()
-                .withSender(interlocutorRepository.getRandomInterlocutorByType(InterlocutorTypeEnum.SOCIAL_ENGINEER))
-                .withReceiver(interlocutorRepository.getRandomInterlocutorByType(InterlocutorTypeEnum.GENUINE))
+                .withSender(conversationMessage.getSender())
+                .withReceiver(conversationMessage.getReceiver())
                 .withTopic(conversationMessage.getTopic())
                 .withType(conversationMessage.getType())
                 .withContent("content SE " + number)

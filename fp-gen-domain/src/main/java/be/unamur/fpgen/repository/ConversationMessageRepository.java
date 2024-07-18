@@ -2,6 +2,7 @@ package be.unamur.fpgen.repository;
 
 import be.unamur.fpgen.conversation.Conversation;
 import be.unamur.fpgen.instant_message.ConversationMessage;
+import be.unamur.fpgen.interlocutor.Interlocutor;
 
 import java.util.List;
 

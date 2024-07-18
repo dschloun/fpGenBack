@@ -1,14 +1,17 @@
 package be.unamur.fpgen.mapper.webToDomain;
 
 import be.unamur.fpgen.instant_message.ConversationMessage;
+import be.unamur.fpgen.interlocutor.Interlocutor;
 import be.unamur.model.GenerationCreation;
 
 public class ConversationMessageCreationWebToDomainMapper {
 
-    public static ConversationMessage map(final GenerationCreation web){
+    public static ConversationMessage map(final GenerationCreation web, final Interlocutor sender, final Interlocutor receiver){
         return ConversationMessage.newBuilder()
                 .withTopic(MessageTopicWebToDomainMapper.map(web.getTopic()))
                 .withType(MessageTypeWebToDomainMapper.map(web.getType()))
+                .withSender(sender)
+                .withReceiver(receiver)
                 .build();
     }
 }
