@@ -42,8 +42,9 @@ public class JpaConversationMessageRepository implements ConversationMessageRepo
                 .map(i -> ConversationInstantMessageDomainToJpaMapper.mapForCreate(
                         i,
                         conversationEntity,
-                        jpaInterlocutorRepositoryCRUD.getReferenceById(i.getSender().getId().longValue()),
-                        jpaInterlocutorRepositoryCRUD.getReferenceById(i.getReceiver().getId().longValue()))//todo why need long???
+                        jpaInterlocutorRepositoryCRUD.getReferenceById(i.getSender().getId()),
+                        jpaInterlocutorRepositoryCRUD.getReferenceById(i.getReceiver().getId())
+                        )
                 )
                 .toList());
 

@@ -61,7 +61,7 @@ public class ConversationService {
                 // 3.3. generate conversation messages
                 List<ConversationMessage> l = new ArrayList<>();
                 for (int j = 0; j < conversation.getMaxInteractionNumber(); j++) {
-                    l.add(mockConversationMessageGeneration(ConversationMessageCreationWebToDomainMapper.map(cc, alternator.getNext(), alternator.getNext()), j));
+                    l.add(mockConversationMessageGeneration(ConversationMessageCreationWebToDomainMapper.map(cc, alternator.getNext(), alternator.getNext(), conversation.getId()), j));
                 }
 
                 // 3.4. save the conversation messages
@@ -77,14 +77,13 @@ public class ConversationService {
 
     @Transactional
     public Conversation createConversation(final ConversationGeneration generation, final Conversation conversation) {
-        conversationRepository.saveConversation(
+        return conversationRepository.saveConversation(
                 Conversation.newBuilder()
                 .withTopic(conversation.getTopic())
                 .withType(conversation.getType())
                 .withMaxInteractionNumber(conversation.getMaxInteractionNumber())
                         .withGenerationId(generation.getId())
                 .build());
-        return conversation;
     }
 
 

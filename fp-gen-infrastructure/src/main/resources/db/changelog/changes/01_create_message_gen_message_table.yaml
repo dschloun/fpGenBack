@@ -397,3 +397,12 @@ databaseChangeLog:
             tableName: dataset_generation_join_table
             constraintName: dataset_generation_uk
             columnNames: dataset_id, generation_id
+
+  - changeSet:
+      id: add-interlocutor-sequence
+      author: dsc
+      changes:
+        createSequence:
+            sequenceName: interlocutor_id_seq
+            startValue: 1
+            incrementBy: 1

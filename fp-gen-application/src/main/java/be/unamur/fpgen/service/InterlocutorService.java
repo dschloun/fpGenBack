@@ -25,6 +25,7 @@ public class InterlocutorService {
 
     @Transactional
     public Interlocutor getRandomInterlocutorByType(final InterlocutorTypeEnum type){
-        return interlocutorRepository.getRandomInterlocutorByType(type);
+        Interlocutor interlocutor = interlocutorRepository.getRandomInterlocutorByType(type);
+        return interlocutor;
     }
 }

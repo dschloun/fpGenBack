@@ -4,10 +4,13 @@ import be.unamur.fpgen.instant_message.ConversationMessage;
 import be.unamur.fpgen.interlocutor.Interlocutor;
 import be.unamur.model.GenerationCreation;
 
+import java.util.UUID;
+
 public class ConversationMessageCreationWebToDomainMapper {
 
-    public static ConversationMessage map(final GenerationCreation web, final Interlocutor sender, final Interlocutor receiver){
+    public static ConversationMessage map(final GenerationCreation web, final Interlocutor sender, final Interlocutor receiver, final UUID conversationId){
         return ConversationMessage.newBuilder()
+                .withConversationId(conversationId)
                 .withTopic(MessageTopicWebToDomainMapper.map(web.getTopic()))
                 .withType(MessageTypeWebToDomainMapper.map(web.getType()))
                 .withSender(sender)
