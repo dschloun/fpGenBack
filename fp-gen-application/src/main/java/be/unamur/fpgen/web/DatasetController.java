@@ -31,7 +31,7 @@ public class DatasetController implements DatasetApi {
         if (DatasetType.INSTANT_MESSAGE.equals(datasetType)){
             instantMessageDatasetService.addInstantMessageListToDataset(datasetId, UUID);
         } else if(DatasetType.CONVERSATION.equals(datasetType)){
-            System.out.println();
+            conversationDatasetService.addConversationListToDataset(datasetId, UUID);
         } else {
             throw new IllegalArgumentException("Unsupported dataset type");
         }

@@ -2,9 +2,7 @@ package be.unamur.fpgen.repository;
 
 import be.unamur.fpgen.generation.ConversationGeneration;
 import be.unamur.fpgen.mapper.domainToJpa.ConversationGenerationDomainToJpaMapper;
-import be.unamur.fpgen.mapper.domainToJpa.InstantMessageGenerationDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.ConversationGenerationJpaToDomainMapper;
-import be.unamur.fpgen.mapper.jpaToDomain.InstantMessageGenerationJpaToDomainMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -29,10 +27,8 @@ public class JpaConversationGenerationRepository implements ConversationGenerati
     }
 
     @Override
-    public ConversationGeneration getConversationGenerationById(UUID conversationGenerationId) {
-        return ConversationGenerationJpaToDomainMapper.map(
-                jpaConversationGenerationRepositoryCRUD.getReferenceById(conversationGenerationId)
-        );
+    public Optional<ConversationGeneration> findConversationGenerationById(UUID conversationGenerationId) {
+        return jpaConversationGenerationRepositoryCRUD.findById(conversationGenerationId).map(ConversationGenerationJpaToDomainMapper::map);
     }
 
     @Override
