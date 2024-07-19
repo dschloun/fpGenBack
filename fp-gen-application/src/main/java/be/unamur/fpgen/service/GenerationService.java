@@ -1,6 +1,7 @@
 package be.unamur.fpgen.service;
 
 import be.unamur.fpgen.author.Author;
+import be.unamur.fpgen.exception.GenerationNotFoundException;
 import be.unamur.fpgen.generation.ConversationGeneration;
 import be.unamur.fpgen.generation.InstantMessageGeneration;
 import be.unamur.fpgen.mapper.webToDomain.MessageTopicWebToDomainMapper;
@@ -11,14 +12,15 @@ import be.unamur.model.GenerationCreation;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.UUID;
 
 @Service
-public class SaveGenerationService {
+public class GenerationService {
     private final InstantMessageGenerationRepository instantMessageGenerationRepository;
     private final ConversationGenerationRepository conversationGenerationRepository;
     private final AuthorService authorService;
 
-    public SaveGenerationService(final InstantMessageGenerationRepository instantMessageGenerationRepository, ConversationGenerationRepository conversationGenerationRepository, AuthorService authorService) {
+    public GenerationService(final InstantMessageGenerationRepository instantMessageGenerationRepository, ConversationGenerationRepository conversationGenerationRepository, AuthorService authorService) {
         this.instantMessageGenerationRepository = instantMessageGenerationRepository;
         this.conversationGenerationRepository = conversationGenerationRepository;
         this.authorService = authorService;
@@ -56,6 +58,12 @@ public class SaveGenerationService {
                         .withSystemPrompt(command.getSystemPrompt())
                         .withUserPrompt(command.getUserPrompt())
                         .build());
+    }
+
+    @Transactional
+    public InstantMessageGeneration findInstantMessageGenerationById(final UUID generationId){
+        return instantMessageGenerationRepository.findInstantMessageGenerationById(generationId)
+                .orElseThrow(() -> GenerationNotFoundException.withId(generationId));
     }
 
     private String getDetail(final GenerationCreation command, final String generationType){

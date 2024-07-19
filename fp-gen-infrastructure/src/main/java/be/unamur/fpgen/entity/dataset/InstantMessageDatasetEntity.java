@@ -3,6 +3,7 @@ package be.unamur.fpgen.entity.dataset;
 import be.unamur.fpgen.entity.generation.InstantMessageGenerationEntity;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -10,7 +11,7 @@ import java.util.Set;
 public class InstantMessageDatasetEntity extends DatasetEntity {
 
     // members
-    private Set<InstantMessageGenerationEntity> instantMessageGenerationList;
+    private Set<InstantMessageGenerationEntity> instantMessageGenerationList = new HashSet<>();
 
     // getters and setters
     @ManyToMany

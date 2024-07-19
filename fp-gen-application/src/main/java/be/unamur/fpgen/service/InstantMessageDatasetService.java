@@ -2,22 +2,30 @@ package be.unamur.fpgen.service;
 
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.dataset.InstantMessageDataset;
+import be.unamur.fpgen.exception.DatasetNotFoundException;
+import be.unamur.fpgen.exception.GenerationNotFoundException;
+import be.unamur.fpgen.generation.InstantMessageGeneration;
 import be.unamur.fpgen.mapper.webToDomain.DatasetWebToDomainMapper;
 import be.unamur.fpgen.repository.InstantMessageDatasetRepository;
 import be.unamur.model.DatasetCreation;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
 public class InstantMessageDatasetService {
     private final AuthorService authorService;
     private final InstantMessageDatasetRepository instantMessageDatasetRepository;
+    private final GenerationService generationService;
 
-    public InstantMessageDatasetService(AuthorService authorService, InstantMessageDatasetRepository instantMessageDatasetRepository) {
+    public InstantMessageDatasetService(AuthorService authorService, InstantMessageDatasetRepository instantMessageDatasetRepository, GenerationService generationService) {
         this.authorService = authorService;
         this.instantMessageDatasetRepository = instantMessageDatasetRepository;
+        this.generationService = generationService;
     }
 
     @Transactional
@@ -36,11 +44,33 @@ public class InstantMessageDatasetService {
 
     @Transactional
     public InstantMessageDataset getDatasetById(UUID datasetId){
-        return instantMessageDatasetRepository.getInstantMessageDatasetById(datasetId);
+        return instantMessageDatasetRepository.findInstantMessageDatasetById(datasetId)
+                .orElseThrow(() -> DatasetNotFoundException.withId(datasetId));
     }
 
     @Transactional
     public void deleteDatasetById(UUID datasetId){
         instantMessageDatasetRepository.deleteInstantMessageDatasetById(datasetId);
+    }
+
+    @Transactional
+    public void addInstantMessageListToDataset(UUID datasetId, List<UUID> instantMessageGenerationIdsList){
+        // 1. get dataset
+        final InstantMessageDataset dataset = getDatasetById(datasetId);
+
+        // 2. get instant message generations
+        final Set<InstantMessageGeneration> instantMessageGenerationList = new HashSet<>();
+        instantMessageGenerationIdsList.forEach(i -> {
+            try {
+                final InstantMessageGeneration instantMessageGeneration = generationService.findInstantMessageGenerationById(i);
+                instantMessageGenerationList.add(instantMessageGeneration);
+            } catch (GenerationNotFoundException e) {
+                System.out.println("generation does not exist");
+            }
+        });
+        // 3. add instant message generations to dataset
+        dataset.getInstantMessageGenerationList().addAll(instantMessageGenerationList);
+        instantMessageDatasetRepository.addInstantMessageListToDataset(dataset, instantMessageGenerationList);
+
     }
 }

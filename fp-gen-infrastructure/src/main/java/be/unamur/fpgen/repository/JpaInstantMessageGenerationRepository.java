@@ -1,5 +1,6 @@
 package be.unamur.fpgen.repository;
 
+import be.unamur.fpgen.exception.GenerationNotFoundException;
 import be.unamur.fpgen.generation.InstantMessageGeneration;
 import be.unamur.fpgen.mapper.domainToJpa.InstantMessageGenerationDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.InstantMessageGenerationJpaToDomainMapper;
@@ -28,8 +29,9 @@ public class JpaInstantMessageGenerationRepository implements InstantMessageGene
     }
 
     @Override
-    public InstantMessageGeneration getInstantMessageGenerationById(UUID instantMessageGenerationId) {
-        return null;
+    public Optional<InstantMessageGeneration> findInstantMessageGenerationById(UUID instantMessageGenerationId) {
+        return jpaInstantMessageGenerationRepositoryCRUD.findById(instantMessageGenerationId)
+                .map(InstantMessageGenerationJpaToDomainMapper::mapInstantMessageGeneration);
     }
 
     @Override

@@ -30,6 +30,17 @@ public class InstantMessageDomainToJpaMapper {
         return entity;
     }
 
+    public static InstantMessageEntity map(final InstantMessage domain){
+        final InstantMessageEntity entity = new InstantMessageEntity();
+        entity.setId(domain.getId());
+        entity.setCreationDate(domain.getCreationDate());
+        entity.setModificationDate(domain.getModificationDate());
+        entity.setTopic(domain.getTopic());
+        entity.setType(domain.getType());
+        entity.setContent(domain.getContent());
+        return entity;
+    }
+
     /**
      * Maps the given InstantMessage domain object to the given InstantMessageEntity JPA object.
      * The goal is for updating an existing InstantMessageEntity object in the database.

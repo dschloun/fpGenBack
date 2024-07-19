@@ -17,12 +17,12 @@ import java.util.UUID;
 public class InstantMessageService {
 
     private final InstantMessageRepository instantMessageRepository;
-    private final SaveGenerationService saveGenerationService;
+    private final GenerationService generationService;
 
     public InstantMessageService(final InstantMessageRepository instantMessageRepository,
-                                 final SaveGenerationService saveGenerationService) {
+                                 final GenerationService generationService) {
         this.instantMessageRepository = instantMessageRepository;
-        this.saveGenerationService = saveGenerationService;
+        this.generationService = generationService;
     }
 
     @Transactional
@@ -30,7 +30,7 @@ public class InstantMessageService {
         // 0. for each
         command.getInstantMessageCreationList().forEach(imc -> {
             // 1. create generation data
-            final InstantMessageGeneration generation = saveGenerationService.createInstantMessageGeneration(imc);
+            final InstantMessageGeneration generation = generationService.createInstantMessageGeneration(imc);
 
             // 2. prepare a list of instant messages
             final List<InstantMessage> instantMessageList = new ArrayList<>();

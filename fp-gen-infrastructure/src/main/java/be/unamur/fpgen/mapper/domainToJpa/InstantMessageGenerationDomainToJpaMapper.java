@@ -18,4 +18,20 @@ public class InstantMessageGenerationDomainToJpaMapper {
         entity.setUserPrompt(domain.getUserPrompt());
         return entity;
     }
+
+    public static InstantMessageGenerationEntity map(final AbstractGeneration domain) {
+        final InstantMessageGenerationEntity entity = new InstantMessageGenerationEntity();
+        entity.setId(domain.getId());
+        entity.setModificationDate(domain.getModificationDate());
+        entity.setCreationDate(domain.getCreationDate());
+        entity.setGenerationId(domain.getGenerationId());
+        entity.setAuthor(AuthorDomainToJpaMapper.map(domain.getAuthor()));
+        entity.setDetails(domain.getDetails());
+        entity.setQuantity(domain.getQuantity());
+        entity.setType(domain.getType());
+        entity.setTopic(domain.getTopic());
+        entity.setSystemPrompt(domain.getSystemPrompt());
+        entity.setUserPrompt(domain.getUserPrompt());
+        return entity;
+    }
 }

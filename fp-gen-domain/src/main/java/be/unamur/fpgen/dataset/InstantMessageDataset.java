@@ -4,12 +4,12 @@ import be.unamur.fpgen.generation.InstantMessageGeneration;
 import be.unamur.fpgen.utils.DateUtil;
 
 import java.time.OffsetDateTime;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
-public class InstantMessageDataset extends AbstractDataset{
+public class InstantMessageDataset extends AbstractDataset {
 
-    private final Set<InstantMessageGeneration> instantMessageGenerationList;
+    private final Set<InstantMessageGeneration> instantMessageGenerationList = new HashSet<>();
 
     private InstantMessageDataset(Builder builder) {
         super(builder.getId(),
@@ -22,7 +22,7 @@ public class InstantMessageDataset extends AbstractDataset{
                 builder.getComment(),
                 builder.getAuthor(),
                 builder.getDatasetFunction());
-        instantMessageGenerationList = builder.instantMessageGenerationList;
+        instantMessageGenerationList.addAll(builder.instantMessageGenerationList);
     }
 
     public static Builder newBuilder() {
@@ -33,9 +33,9 @@ public class InstantMessageDataset extends AbstractDataset{
         return instantMessageGenerationList;
     }
 
-    public static final class Builder extends AbstractDatasetBuilder<Builder>{
+    public static final class Builder extends AbstractDatasetBuilder<Builder> {
 
-        private Set<InstantMessageGeneration> instantMessageGenerationList;
+        private Set<InstantMessageGeneration> instantMessageGenerationList = new HashSet<>();
 
         private Builder() {
         }

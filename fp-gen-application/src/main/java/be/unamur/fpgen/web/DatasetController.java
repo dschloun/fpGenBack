@@ -28,7 +28,14 @@ public class DatasetController implements DatasetApi {
 
     @Override
     public ResponseEntity<Void> addGenerationListToDataset(UUID datasetId, @NotNull @Valid DatasetType datasetType, @Valid List<UUID> UUID) {
-        return DatasetApi.super.addGenerationListToDataset(datasetId, datasetType, UUID);
+        if (DatasetType.INSTANT_MESSAGE.equals(datasetType)){
+            instantMessageDatasetService.addInstantMessageListToDataset(datasetId, UUID);
+        } else if(DatasetType.CONVERSATION.equals(datasetType)){
+            System.out.println();
+        } else {
+            throw new IllegalArgumentException("Unsupported dataset type");
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
