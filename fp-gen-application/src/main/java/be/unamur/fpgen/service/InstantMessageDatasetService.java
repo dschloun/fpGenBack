@@ -68,6 +68,10 @@ public class InstantMessageDatasetService {
                 System.out.println("generation does not exist");
             }
         });
+        // 3. check if list is not empty
+        if (instantMessageGenerationList.isEmpty()) {
+            throw new IllegalArgumentException("No instant message generation found");
+        }
         // 3. add instant message generations to dataset
         dataset.getInstantMessageGenerationList().addAll(instantMessageGenerationList);
         instantMessageDatasetRepository.addInstantMessageListToDataset(dataset, instantMessageGenerationList);
