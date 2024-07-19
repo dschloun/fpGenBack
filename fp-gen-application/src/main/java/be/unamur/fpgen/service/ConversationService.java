@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ConversationService {
@@ -84,6 +85,11 @@ public class ConversationService {
                 .withMaxInteractionNumber(conversation.getMaxInteractionNumber())
                         .withGenerationId(generation.getId())
                 .build());
+    }
+
+    @Transactional
+    public Conversation getConversationById(final UUID conversationId) {
+        return conversationRepository.getConversationById(conversationId);
     }
 
 

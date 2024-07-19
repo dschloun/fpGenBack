@@ -39,4 +39,9 @@ public class InstantMessageController implements InstantMessageApi {
                 InstantMessageDomainToWebMapper.map(
                         instantMessageService.getInstantMessageById(instantMessageId)), HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<InstantMessagesPage> searchInstantMessagesPaginate(@Valid PagedInstantMessageQuery pagedInstantMessageQuery) {
+        return InstantMessageApi.super.searchInstantMessagesPaginate(pagedInstantMessageQuery);
+    }
 }

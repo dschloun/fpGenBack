@@ -2,9 +2,7 @@ package be.unamur.fpgen.web;
 
 import be.unamur.api.ConversationApi;
 import be.unamur.fpgen.service.ConversationService;
-import be.unamur.model.Conversation;
-import be.unamur.model.ConversationBatchCreation;
-import be.unamur.model.ConversationInstantMessage;
+import be.unamur.model.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,6 +15,7 @@ import java.util.UUID;
 
 @Controller
 public class ConversationController implements ConversationApi {
+
     private final ConversationService conversationService;
 
     public ConversationController(ConversationService conversationService) {
@@ -40,7 +39,12 @@ public class ConversationController implements ConversationApi {
     }
 
     @Override
-    public ResponseEntity<List<ConversationInstantMessage>> getConversationInstantMessageListById(UUID conversationId, UUID conversationInstantMessageId) {
+    public ResponseEntity<List<ConversationMessage>> getConversationInstantMessageListById(UUID conversationId, UUID conversationInstantMessageId) {
         return ConversationApi.super.getConversationInstantMessageListById(conversationId, conversationInstantMessageId);
+    }
+
+    @Override
+    public ResponseEntity<ConversationsPage> searchConversationsPaginate(@Valid PagedConversationQuery pagedConversationQuery) {
+        return ConversationApi.super.searchConversationsPaginate(pagedConversationQuery);
     }
 }
