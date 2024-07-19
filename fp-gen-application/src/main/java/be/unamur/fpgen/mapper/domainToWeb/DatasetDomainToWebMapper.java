@@ -10,10 +10,10 @@ import java.util.Optional;
 
 public class DatasetDomainToWebMapper {
 
-    public static DatasetType mapFunction(final DatasetFunctionEnum domain){
+    public static be.unamur.model.DatasetFunctionEnum mapFunction(final DatasetFunctionEnum domain){
         return Optional.ofNullable(domain)
                 .map(Enum::name)
-                .map(DatasetType::valueOf)
+                .map(be.unamur.model.DatasetFunctionEnum::valueOf)
                 .orElseThrow();
     }
 
@@ -23,6 +23,7 @@ public class DatasetDomainToWebMapper {
                 .creationDate(domain.getCreationDate())
                 .modificationDate(domain.getModificationDate())
                 .author(AuthorDomainToWebMapper.map(domain.getAuthor()))
+                .function(mapFunction(domain.getDatasetFunction()))
                 .type(DatasetType.INSTANT_MESSAGE);
     }
 

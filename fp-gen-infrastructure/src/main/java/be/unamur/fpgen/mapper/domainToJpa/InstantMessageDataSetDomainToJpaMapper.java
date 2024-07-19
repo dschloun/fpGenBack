@@ -18,6 +18,7 @@ public class InstantMessageDataSetDomainToJpaMapper {
         entity.setComment(domain.getComment());
         entity.setAuthor(AuthorDomainToJpaMapper.mapForCreate(domain.getAuthor()));
         entity.setFunction(domain.getDatasetFunction());
+        entity.setAuthor(author);
         return entity;
     }
 
