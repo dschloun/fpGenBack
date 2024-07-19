@@ -1,6 +1,7 @@
 package be.unamur.fpgen.web;
 
 import be.unamur.api.ConversationApi;
+import be.unamur.fpgen.mapper.domainToWeb.ConversationDomainToWebMapper;
 import be.unamur.fpgen.service.ConversationService;
 import be.unamur.model.*;
 import org.springframework.http.HttpStatus;
@@ -35,7 +36,10 @@ public class ConversationController implements ConversationApi {
 
     @Override
     public ResponseEntity<Conversation> getConversationById(UUID conversationId) {
-        return ConversationApi.super.getConversationById(conversationId);
+        return new ResponseEntity<>(
+                ConversationDomainToWebMapper
+                        .map(conversationService.getConversationById(conversationId))
+                , HttpStatus.OK);
     }
 
     @Override
