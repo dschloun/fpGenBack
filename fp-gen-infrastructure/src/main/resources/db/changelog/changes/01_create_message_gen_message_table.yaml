@@ -227,8 +227,32 @@ databaseChangeLog:
                       - nullable: false
                       - unique: false
               - column:
-                  name: batch
-                  type: boolean
+                  name: system_prompt
+                  type: text
+                  constraints:
+                    - nullable: true
+                    - unique: false
+              - column:
+                  name: user_prompt
+                  type: text
+                  constraints:
+                    - nullable: true
+                    - unique: false
+              - column:
+                  name: topic
+                  type: varchar(30)
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: type
+                  type: varchar(30)
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: quantity
+                  type: integer
                   constraints:
                     - nullable: false
                     - unique: false
@@ -269,13 +293,13 @@ databaseChangeLog:
                     - onDelete: CASCADE
               - column:
                   name: topic
-                  type: varchar(20)
+                  type: varchar(30)
                   constraints:
                     - nullable: false
                     - unique: false
               - column:
                   name: type
-                  type: varchar(18)
+                  type: varchar(30)
                   constraints:
                     - nullable: false
                     - unique: false
@@ -285,6 +309,12 @@ databaseChangeLog:
                   constraints:
                       - nullable: false
                       - unique: false
+              - column:
+                  name: min_interaction_number
+                  type: integer
+                  constraints:
+                    - nullable: false
+                    - unique: false
 
 #        INSTANT MESSAGE
 #        ****************
@@ -319,13 +349,13 @@ databaseChangeLog:
                     - unique: false
               - column:
                   name: topic
-                  type: varchar(20)
+                  type: varchar(30)
                   constraints:
                       - nullable: true
                       - unique: false
               - column:
                   name: type
-                  type: varchar(18)
+                  type: varchar(30)
                   constraints:
                     - nullable: true
                     - unique: false

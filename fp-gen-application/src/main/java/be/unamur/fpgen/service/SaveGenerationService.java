@@ -5,15 +5,10 @@ import be.unamur.fpgen.generation.ConversationGeneration;
 import be.unamur.fpgen.generation.InstantMessageGeneration;
 import be.unamur.fpgen.repository.ConversationGenerationRepository;
 import be.unamur.fpgen.repository.InstantMessageGenerationRepository;
-import be.unamur.fpgen.utils.DateUtil;
 import be.unamur.model.GenerationCreation;
-import be.unamur.model.InstantMessageBatchCreation;
-import be.unamur.model.InstantMessageCreation;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.OffsetDateTime;
-import java.util.UUID;
 
 @Service
 public class SaveGenerationService {
@@ -36,7 +31,7 @@ public class SaveGenerationService {
                 InstantMessageGeneration.newBuilder()
                         .withAuthor(author)
                         .withDetails(getDetail(command, "instant message"))
-                        .withBatch(command.getQuantity() > 1)
+                        .withQuantity(command.getQuantity())
                         .build());
     }
 
@@ -49,7 +44,7 @@ public class SaveGenerationService {
                 ConversationGeneration.newBuilder()
                         .withAuthor(author)
                         .withDetails(getDetail(command, "conversation"))
-                        .withBatch(command.getQuantity() > 1)
+                        .withQuantity(command.getQuantity())
                         .build());
     }
 

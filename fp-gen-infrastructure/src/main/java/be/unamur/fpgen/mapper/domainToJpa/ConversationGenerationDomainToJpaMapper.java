@@ -11,7 +11,11 @@ public class ConversationGenerationDomainToJpaMapper {
         entity.setAuthor(author);
         entity.setGenerationId(domain.getGenerationId());
         entity.setDetails(domain.getDetails());
-        entity.setBatch(domain.isBatch());
+        entity.setQuantity(domain.getQuantity());
+        entity.setType(domain.getType());
+        entity.setTopic(domain.getTopic());
+        entity.setSystemPrompt(domain.getSystemPrompt());
+        entity.setUserPrompt(domain.getUserPrompt());
         return entity;
     }
 }

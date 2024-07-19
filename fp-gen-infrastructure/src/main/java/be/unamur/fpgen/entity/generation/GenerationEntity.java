@@ -2,7 +2,8 @@ package be.unamur.fpgen.entity.generation;
 
 import be.unamur.fpgen.entity.author.AuthorEntity;
 import be.unamur.fpgen.entity.base.BaseUuidEntity;
-import be.unamur.fpgen.entity.dataset.DatasetEntity;
+import be.unamur.fpgen.instant_message.MessageTopicEnum;
+import be.unamur.fpgen.instant_message.MessageTypeEnum;
 
 import javax.persistence.*;
 import java.io.Serial;
@@ -18,8 +19,11 @@ public class GenerationEntity extends BaseUuidEntity {
     private String generationId;
     private AuthorEntity author;
     private String details;
-    private boolean batch;
-    //private DatasetEntity dataset;
+    private Integer quantity;
+    private MessageTypeEnum type;
+    private MessageTopicEnum topic;
+    private String systemPrompt;
+    private String userPrompt;
 
     // getters and setters
     @Column(name = "generation_id", nullable = false)
@@ -50,22 +54,50 @@ public class GenerationEntity extends BaseUuidEntity {
         this.details = details;
     }
 
-    @Column(name = "batch")
-    public boolean isBatch() {
-        return batch;
+    @Column(name = "quantity", nullable = false)
+    public Integer getQuantity() {
+        return quantity;
     }
 
-    public void setBatch(boolean batch) {
-        this.batch = batch;
+    public void setQuantity(Integer batch) {
+        this.quantity = batch;
     }
 
-//    @ManyToOne
-//    @JoinColumn(name = "dataset_id")
-//    public DatasetEntity getDataset() {
-//        return dataset;
-//    }
-//
-//    public void setDataset(DatasetEntity dataset) {
-//        this.dataset = dataset;
-//    }
+    @Column(name = "type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    public MessageTypeEnum getType() {
+        return type;
+    }
+
+    public void setType(MessageTypeEnum type) {
+        this.type = type;
+    }
+
+    @Column(name = "topic", nullable = false)
+    @Enumerated(EnumType.STRING)
+    public MessageTopicEnum getTopic() {
+        return topic;
+    }
+
+    public void setTopic(MessageTopicEnum topic) {
+        this.topic = topic;
+    }
+
+    @Column(name = "system_prompt")
+    public String getSystemPrompt() {
+        return systemPrompt;
+    }
+
+    public void setSystemPrompt(String systemPrompt) {
+        this.systemPrompt = systemPrompt;
+    }
+
+    @Column(name = "user_prompt")
+    public String getUserPrompt() {
+        return userPrompt;
+    }
+
+    public void setUserPrompt(String userPrompt) {
+        this.userPrompt = userPrompt;
+    }
 }

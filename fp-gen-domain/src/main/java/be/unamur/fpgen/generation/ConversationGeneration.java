@@ -19,7 +19,11 @@ public class ConversationGeneration extends AbstractGeneration{
                 builder.getModificationDate(),
                 builder.getAuthor(),
                 builder.getDetails(),
-                builder.isBatch());
+                builder.getQuantity(),
+                builder.getType(),
+                builder.getTopic(),
+                builder.getSystemPrompt(),
+                builder.getUserPrompt());
         conversationList = builder.conversationList;
         generationId = builder.getGenerationId();
     }

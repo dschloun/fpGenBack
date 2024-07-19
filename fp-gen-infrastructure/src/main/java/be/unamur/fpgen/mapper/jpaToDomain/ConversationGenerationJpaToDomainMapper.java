@@ -17,7 +17,11 @@ public class ConversationGenerationJpaToDomainMapper {
                 .withModificationDate(entity.getModificationDate())
                 .withAuthor(AuthorJpaToDomainMapper.map(entity.getAuthor()))
                 .withDetails(entity.getDetails())
-                .withBatch(entity.isBatch())
+                .withQuantity(entity.getQuantity())
+                .withTopic(entity.getTopic())
+                .withType(entity.getType())
+                .withSystemPrompt(entity.getSystemPrompt())
+                .withUserPrompt(entity.getUserPrompt())
                 .withConversationList(MapperUtil.mapSet(entity.getConversationList(), ConversationJpaToDomainMapper::map))
                 .build();
     }

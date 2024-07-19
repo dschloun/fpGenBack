@@ -13,7 +13,12 @@ public class InstantMessageGenerationJpaToDomainMapper {
                 .withModificationDate(entity.getModificationDate())
                 .withAuthor(AuthorJpaToDomainMapper.map(entity.getAuthor()))
                 .withDetails(entity.getDetails())
-                .withBatch(entity.isBatch())
+                .withQuantity(entity.getQuantity())
+                .withQuantity(entity.getQuantity())
+                .withTopic(entity.getTopic())
+                .withType(entity.getType())
+                .withSystemPrompt(entity.getSystemPrompt())
+                .withUserPrompt(entity.getUserPrompt())
                 .withInstantMessageList(MapperUtil.mapSet(entity.getInstantMessageList(), InstantMessageJpaToDomainMapper::map))
                 .build();
     }

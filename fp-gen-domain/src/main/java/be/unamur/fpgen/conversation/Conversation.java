@@ -13,6 +13,7 @@ public class Conversation extends BaseUuidDomain {
     private final MessageTypeEnum type;
     private final MessageTopicEnum topic;
     private final Integer maxInteractionNumber;
+    private final Integer minInteractionNumber;
     private final Set<ConversationMessage> conversationMessageList;
     private final UUID generationId;
 
@@ -21,6 +22,7 @@ public class Conversation extends BaseUuidDomain {
         type = builder.type;
         topic = builder.topic;
         maxInteractionNumber = builder.maxInteractionNumber;
+        minInteractionNumber = builder.minInteractionNumber;
         conversationMessageList = builder.conversationMessageList;
         generationId = builder.generationId;
     }
@@ -41,6 +43,10 @@ public class Conversation extends BaseUuidDomain {
         return maxInteractionNumber;
     }
 
+    public Integer getMinInteractionNumber() {
+        return minInteractionNumber;
+    }
+
     public Set<ConversationMessage> getConversationMessageList() {
         return conversationMessageList;
     }
@@ -53,6 +59,7 @@ public class Conversation extends BaseUuidDomain {
         private MessageTypeEnum type;
         private MessageTopicEnum topic;
         private Integer maxInteractionNumber;
+        private Integer minInteractionNumber;
         private Set<ConversationMessage> conversationMessageList;
         private UUID generationId;
 
@@ -71,6 +78,11 @@ public class Conversation extends BaseUuidDomain {
 
         public Builder withMaxInteractionNumber(Integer val) {
             maxInteractionNumber = val;
+            return this;
+        }
+
+        public Builder withMinInteractionNumber(Integer val) {
+            minInteractionNumber = val;
             return this;
         }
 

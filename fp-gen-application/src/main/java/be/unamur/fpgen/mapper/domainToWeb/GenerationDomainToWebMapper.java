@@ -15,6 +15,6 @@ public class GenerationDomainToWebMapper {
                 .generationType(GenerationType.INSTANT_MESSAGE)
                 .author(domain.getAuthor().getTrigram())
                 .details(domain.getDetails())
-                .batch(domain.isBatch());
+                .batch(domain.getQuantity());
     }
 }

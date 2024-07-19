@@ -15,7 +15,11 @@ public class InstantMessageGeneration extends AbstractGeneration {
                 builder.getModificationDate(),
                 builder.getAuthor(),
                 builder.getDetails(),
-                builder.isBatch());
+                builder.getQuantity(),
+                builder.getType(),
+                builder.getTopic(),
+                builder.getSystemPrompt(),
+                builder.getUserPrompt());
         instantMessageList = builder.instantMessageList;
         generationId = builder.getGenerationId();
     }

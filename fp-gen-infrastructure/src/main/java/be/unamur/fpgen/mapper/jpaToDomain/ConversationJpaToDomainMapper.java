@@ -20,6 +20,7 @@ public class ConversationJpaToDomainMapper {
                 .withType(entity.getMessageType())
                 .withTopic(entity.getMessageTopic())
                 .withMaxInteractionNumber(entity.getMaxInteractionNumber())
+                .withMinInteractionNumber(entity.getMinInteractionNumber())
                 .withConversationMessageList(MapperUtil.mapSet(entity.getMessageSet(), ConversationInstantMessageJpaToDomainMapper::map))
                 .build();
     }

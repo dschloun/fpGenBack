@@ -17,6 +17,7 @@ public class ConversationEntity extends BaseUuidEntity {
     private MessageTypeEnum messageType;
     private MessageTopicEnum messageTopic;
     private Integer maxInteractionNumber;
+    private Integer minInteractionNumber;
     private Set<ConversationInstantMessageEntity> messageSet;
 
     // getters and setters
@@ -66,5 +67,14 @@ public class ConversationEntity extends BaseUuidEntity {
 
     public void setMaxInteractionNumber(Integer interactionNumber) {
         this.maxInteractionNumber = interactionNumber;
+    }
+
+    @Column(name = "min_interaction_number")
+    public Integer getMinInteractionNumber() {
+        return minInteractionNumber;
+    }
+
+    public void setMinInteractionNumber(Integer minInteractionNumber) {
+        this.minInteractionNumber = minInteractionNumber;
     }
 }

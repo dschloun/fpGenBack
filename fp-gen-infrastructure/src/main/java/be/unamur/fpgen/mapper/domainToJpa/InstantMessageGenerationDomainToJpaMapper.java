@@ -1,8 +1,6 @@
 package be.unamur.fpgen.mapper.domainToJpa;
 
 import be.unamur.fpgen.entity.author.AuthorEntity;
-import be.unamur.fpgen.entity.dataset.DatasetEntity;
-import be.unamur.fpgen.entity.dataset.InstantMessageDatasetEntity;
 import be.unamur.fpgen.entity.generation.InstantMessageGenerationEntity;
 import be.unamur.fpgen.generation.AbstractGeneration;
 
@@ -13,7 +11,11 @@ public class InstantMessageGenerationDomainToJpaMapper {
         entity.setGenerationId(domain.getGenerationId());
         entity.setAuthor(author);
         entity.setDetails(domain.getDetails());
-        entity.setBatch(domain.isBatch());
+        entity.setQuantity(domain.getQuantity());
+        entity.setType(domain.getType());
+        entity.setTopic(domain.getTopic());
+        entity.setSystemPrompt(domain.getSystemPrompt());
+        entity.setUserPrompt(domain.getUserPrompt());
         return entity;
     }
 }

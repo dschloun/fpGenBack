@@ -3,6 +3,8 @@ package be.unamur.fpgen.generation;
 import be.unamur.fpgen.BaseUuidDomain;
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.dataset.GenerationId;
+import be.unamur.fpgen.instant_message.MessageTopicEnum;
+import be.unamur.fpgen.instant_message.MessageTypeEnum;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -21,7 +23,11 @@ public abstract class AbstractGeneration extends BaseUuidDomain {
     protected String generationId;
     private final Author author;
     private final String details;
-    private final boolean batch;
+    private final Integer quantity;
+    private final MessageTypeEnum type;
+    private final MessageTopicEnum topic;
+    private final String systemPrompt;
+    private final String userPrompt;
 
     // constructors
     protected AbstractGeneration(final UUID id,
@@ -29,11 +35,19 @@ public abstract class AbstractGeneration extends BaseUuidDomain {
                                  final OffsetDateTime modificationDate,
                                  final Author author,
                                  final String details,
-                                 final boolean batch) {
+                                 final Integer quantity,
+                                 final MessageTypeEnum type,
+                                 final MessageTopicEnum topic,
+                                 final String systemPrompt,
+                                 final String userPrompt) {
         super(id, creationDate, modificationDate);
         this.author = author;
         this.details = details;
-        this.batch = batch;
+        this.quantity = quantity;
+        this.type = type;
+        this.topic = topic;
+        this.systemPrompt = systemPrompt;
+        this.userPrompt = userPrompt;
     }
 
     // getters
@@ -53,8 +67,24 @@ public abstract class AbstractGeneration extends BaseUuidDomain {
         return details;
     }
 
-    public boolean isBatch() {
-        return batch;
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public MessageTypeEnum getType() {
+        return type;
+    }
+
+    public MessageTopicEnum getTopic() {
+        return topic;
+    }
+
+    public String getSystemPrompt() {
+        return systemPrompt;
+    }
+
+    public String getUserPrompt() {
+        return userPrompt;
     }
 
     // builder
@@ -62,7 +92,11 @@ public abstract class AbstractGeneration extends BaseUuidDomain {
         protected String generationId;
         private Author author;
         private String details;
-        private boolean batch;
+        private Integer quantity;
+        private MessageTypeEnum type;
+        private MessageTopicEnum topic;
+        private String systemPrompt;
+        private String userPrompt;
 
         public String getGenerationId() {
             return generationId;
@@ -76,8 +110,24 @@ public abstract class AbstractGeneration extends BaseUuidDomain {
             return details;
         }
 
-        public boolean isBatch() {
-            return batch;
+        public Integer getQuantity() {
+            return quantity;
+        }
+
+        public MessageTypeEnum getType() {
+            return type;
+        }
+
+        public MessageTopicEnum getTopic() {
+            return topic;
+        }
+
+        public String getSystemPrompt() {
+            return systemPrompt;
+        }
+
+        public String getUserPrompt() {
+            return userPrompt;
         }
 
         public T withAuthor(final Author author) {
@@ -90,13 +140,33 @@ public abstract class AbstractGeneration extends BaseUuidDomain {
             return self();
         }
 
-        public T withBatch(final boolean batch) {
-            this.batch = batch;
+        public T withQuantity(final Integer quantity) {
+            this.quantity = quantity;
+            return self();
+        }
+
+        public T withType(final MessageTypeEnum type) {
+            this.type = type;
+            return self();
+        }
+
+        public T withTopic(final MessageTopicEnum topic) {
+            this.topic = topic;
+            return self();
+        }
+
+        public T withSystemPrompt(final String systemPrompt) {
+            this.systemPrompt = systemPrompt;
+            return self();
+        }
+
+        public T withUserPrompt(final String userPrompt) {
+            this.userPrompt = userPrompt;
             return self();
         }
 
         protected String returnBatchOrSingle(){
-            return this.batch ? "BATCH" : "SINGLE";
+            return this.quantity > 1 ? "BATCH" : "SINGLE";
         }
     }
 }

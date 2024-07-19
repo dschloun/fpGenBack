@@ -19,6 +19,7 @@ public class ConversationInstantMessageJpaToDomainMapper {
                 .withContent(entity.getContent())
                 .withSender(InterlocutorJpaToDomainMapper.map(entity.getSender()))
                 .withReceiver(InterlocutorJpaToDomainMapper.map(entity.getReceiver()))
+                .withBatch(entity.getConversation().getConversationGeneration().getQuantity() > 1)
                 .build();
     }
 }
