@@ -3,6 +3,7 @@ package be.unamur.fpgen.entity.dataset;
 import be.unamur.fpgen.entity.generation.ConversationGenerationEntity;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -10,7 +11,7 @@ import java.util.Set;
 public class ConversationDatasetEntity extends DatasetEntity {
 
     // members
-    private Set<ConversationGenerationEntity> conversationGenerationList;
+    private Set<ConversationGenerationEntity> conversationGenerationList = new HashSet<>();;
 
     @ManyToMany
     @JoinTable(name = "dataset_generation_join_table",

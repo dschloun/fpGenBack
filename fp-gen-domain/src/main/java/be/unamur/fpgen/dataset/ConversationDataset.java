@@ -4,10 +4,11 @@ import be.unamur.fpgen.generation.ConversationGeneration;
 import be.unamur.fpgen.utils.DateUtil;
 
 import java.time.OffsetDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 public class ConversationDataset extends AbstractDataset {
-    private final Set<ConversationGeneration> conversationGenerationList;
+    private final Set<ConversationGeneration> conversationGenerationList = new HashSet<>();
 
     public Set<ConversationGeneration> getConversationGenerationList() {
         return conversationGenerationList;
@@ -24,7 +25,7 @@ public class ConversationDataset extends AbstractDataset {
                 builder.getComment(),
                 builder.getAuthor(),
                 builder.getDatasetFunction());
-        this.conversationGenerationList = builder.conversationGenerationList;
+        this.conversationGenerationList.addAll(builder.conversationGenerationList);
     }
 
     public static Builder newBuilder() {
@@ -32,7 +33,7 @@ public class ConversationDataset extends AbstractDataset {
     }
 
     public static final class Builder extends AbstractDatasetBuilder<Builder>{
-        private Set<ConversationGeneration> conversationGenerationList;
+        private Set<ConversationGeneration> conversationGenerationList = new HashSet<>();
 
         private Builder() {
         }
