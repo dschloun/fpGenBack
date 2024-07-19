@@ -436,3 +436,15 @@ databaseChangeLog:
             sequenceName: interlocutor_id_seq
             startValue: 1
             incrementBy: 1
+
+  - changeSet:
+      id: modify-dataset-kind-length
+      author: dsc
+      changes:
+       -  modifyDataType:
+            tableName: dataset
+            columnName: kind
+            newDataType: varchar(30)
+            constraints:
+              - nullable: false
+              - unique: false
