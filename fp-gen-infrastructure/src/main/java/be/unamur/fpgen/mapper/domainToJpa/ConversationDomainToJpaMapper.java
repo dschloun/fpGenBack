@@ -14,6 +14,7 @@ public class ConversationDomainToJpaMapper {
         entity.setMessageTopic(domain.getTopic());
         entity.setMessageType(domain.getType());
         entity.setMaxInteractionNumber(domain.getMaxInteractionNumber());
+        entity.setMinInteractionNumber(domain.getMinInteractionNumber());
 
         return entity;
     }

@@ -80,11 +80,12 @@ public class ConversationService {
     public Conversation createConversation(final ConversationGeneration generation, final Conversation conversation) {
         return conversationRepository.saveConversation(
                 Conversation.newBuilder()
-                .withTopic(conversation.getTopic())
-                .withType(conversation.getType())
-                .withMaxInteractionNumber(conversation.getMaxInteractionNumber())
+                        .withTopic(conversation.getTopic())
+                        .withType(conversation.getType())
+                        .withMaxInteractionNumber(conversation.getMaxInteractionNumber())
+                        .withMinInteractionNumber(conversation.getMinInteractionNumber())
                         .withGenerationId(generation.getId())
-                .build());
+                        .build());
     }
 
     @Transactional
