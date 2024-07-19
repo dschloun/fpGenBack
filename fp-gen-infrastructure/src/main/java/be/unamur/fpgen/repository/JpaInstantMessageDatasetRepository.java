@@ -11,29 +11,29 @@ import java.util.UUID;
 @Repository
 public class JpaInstantMessageDatasetRepository implements InstantMessageDatasetRepository{
 
-    private final JpaInstantMessageDatasetRepositoryCRUD instantMessageDatasetRepositoryCRUD;
-    private final JpaAuthorRepositoryCRUD authorRepositoryCRUD;
+    private final JpaInstantMessageDatasetRepositoryCRUD jpaInstantMessageDatasetRepositoryCRUD;
+    private final JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD;
 
-    public JpaInstantMessageDatasetRepository(JpaInstantMessageDatasetRepositoryCRUD instantMessageDatasetRepositoryCRUD, JpaAuthorRepositoryCRUD authorRepositoryCRUD) {
-        this.instantMessageDatasetRepositoryCRUD = instantMessageDatasetRepositoryCRUD;
-        this.authorRepositoryCRUD = authorRepositoryCRUD;
+    public JpaInstantMessageDatasetRepository(JpaInstantMessageDatasetRepositoryCRUD jpaInstantMessageDatasetRepositoryCRUD, JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD) {
+        this.jpaInstantMessageDatasetRepositoryCRUD = jpaInstantMessageDatasetRepositoryCRUD;
+        this.jpaAuthorRepositoryCRUD = jpaAuthorRepositoryCRUD;
     }
 
     @Override
     public InstantMessageDataset saveInstantMessageDataset(InstantMessageDataset instantMessageDataset) {
-        final AuthorEntity author = authorRepositoryCRUD.getReferenceById(instantMessageDataset.getAuthor().getId());
+        final AuthorEntity author = jpaAuthorRepositoryCRUD.getReferenceById(instantMessageDataset.getAuthor().getId());
 
-        return InstantMessageDatasetJpaToDomainMapper.map(instantMessageDatasetRepositoryCRUD.save(InstantMessageDataSetDomainToJpaMapper
+        return InstantMessageDatasetJpaToDomainMapper.map(jpaInstantMessageDatasetRepositoryCRUD.save(InstantMessageDataSetDomainToJpaMapper
                 .mapForCreate(instantMessageDataset, author)));
     }
 
     @Override
     public InstantMessageDataset getInstantMessageDatasetById(UUID instantMessageDatasetId) {
-        return InstantMessageDatasetJpaToDomainMapper.map(instantMessageDatasetRepositoryCRUD.getReferenceById(instantMessageDatasetId));
+        return InstantMessageDatasetJpaToDomainMapper.map(jpaInstantMessageDatasetRepositoryCRUD.getReferenceById(instantMessageDatasetId));
     }
 
     @Override
     public void deleteInstantMessageDatasetById(UUID instantMessageDatasetId) {
-        instantMessageDatasetRepositoryCRUD.deleteById(instantMessageDatasetId);
+        jpaInstantMessageDatasetRepositoryCRUD.deleteById(instantMessageDatasetId);
     }
 }
