@@ -1,6 +1,18 @@
 package be.unamur.fpgen.instant_message;
 
+import java.util.UUID;
+
 public class InstantMessage extends AbstractInstantMessage {
+    private final UUID generationTechniqueId;
+    private final String generationBusinessId;
+
+    public UUID getGenerationTechniqueId() {
+        return generationTechniqueId;
+    }
+
+    public String getGenerationBusinessId() {
+        return generationBusinessId;
+    }
 
     // constructors
     public InstantMessage(final Builder builder) {
@@ -12,6 +24,8 @@ public class InstantMessage extends AbstractInstantMessage {
                 builder.getContent(),
                 builder.getGeneration(),
                 builder.isBatch());
+        generationTechniqueId = builder.generationTechniqueId;
+        generationBusinessId = builder.generationBusinessId;
     }
 
     public static Builder newBuilder() {
@@ -20,8 +34,20 @@ public class InstantMessage extends AbstractInstantMessage {
 
     // builder
     public static final class Builder extends AbstractInstantMessageBuilder<Builder> {
+        private UUID generationTechniqueId;
+        private String generationBusinessId;
 
         Builder() {
+        }
+
+        public Builder withGenerationTechniqueId(UUID generationTechniqueId) {
+            this.generationTechniqueId = generationTechniqueId;
+            return this;
+        }
+
+        public Builder withGenerationBusinessId(String generationBusinessId) {
+            this.generationBusinessId = generationBusinessId;
+            return this;
         }
 
         public InstantMessage build() {

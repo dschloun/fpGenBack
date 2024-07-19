@@ -33,7 +33,9 @@ public class InstantMessageJpaToDomainMapper {
                 .withTopic(entity.getTopic())
                 .withType(entity.getType())
                 .withContent(entity.getContent())
-                .withGenerationId(entity.getInstantMessageGeneration().getGenerationId())
+                .withGenerationId(entity.getInstantMessageGeneration().getGenerationId()) //fixme remove later (double)
+                .withGenerationTechniqueId(entity.getInstantMessageGeneration().getId())
+                .withGenerationBusinessId(entity.getInstantMessageGeneration().getGenerationId())
                 .withBatch(entity.getInstantMessageGeneration().getQuantity() > 1)
                 .build();
     }
