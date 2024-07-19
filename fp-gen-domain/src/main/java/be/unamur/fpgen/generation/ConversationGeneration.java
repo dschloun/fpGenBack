@@ -4,10 +4,11 @@ import be.unamur.fpgen.conversation.Conversation;
 import be.unamur.fpgen.utils.DateUtil;
 
 import java.time.OffsetDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 public class ConversationGeneration extends AbstractGeneration{
-    private final Set<Conversation> conversationList;
+    private final Set<Conversation> conversationList = new HashSet<>();
 
     public Set<Conversation> getConversationList() {
         return conversationList;
@@ -24,7 +25,7 @@ public class ConversationGeneration extends AbstractGeneration{
                 builder.getTopic(),
                 builder.getSystemPrompt(),
                 builder.getUserPrompt());
-        conversationList = builder.conversationList;
+        conversationList.addAll(builder.conversationList);
         generationId = builder.getGenerationId();
     }
 
@@ -33,7 +34,7 @@ public class ConversationGeneration extends AbstractGeneration{
     }
 
     public static final class Builder extends AbstractGenerationBuilder<Builder>{
-        private Set<Conversation> conversationList;
+        private Set<Conversation> conversationList = new HashSet<>();
 
         private Builder() {
         }

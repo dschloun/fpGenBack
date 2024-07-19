@@ -5,6 +5,7 @@ import be.unamur.fpgen.entity.instant_message.InstantMessageEntity;
 
 import javax.persistence.*;
 import java.io.Serial;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -12,8 +13,8 @@ import java.util.Set;
 @DiscriminatorValue(value = "IMG")
 public class InstantMessageGenerationEntity extends GenerationEntity {
 
-        private Set<InstantMessageEntity> instantMessageList;
-        private Set<InstantMessageDatasetEntity> instantMessageDatasetList;
+        private Set<InstantMessageEntity> instantMessageList = new HashSet<>();
+        private Set<InstantMessageDatasetEntity> instantMessageDatasetList = new HashSet<>();
 
         // getters and setters
         @OneToMany(mappedBy = "instantMessageGeneration")

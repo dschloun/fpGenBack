@@ -7,6 +7,7 @@ import be.unamur.fpgen.instant_message.MessageTopicEnum;
 import be.unamur.fpgen.instant_message.MessageTypeEnum;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity(name = "conversation")
@@ -18,7 +19,7 @@ public class ConversationEntity extends BaseUuidEntity {
     private MessageTopicEnum messageTopic;
     private Integer maxInteractionNumber;
     private Integer minInteractionNumber;
-    private Set<ConversationInstantMessageEntity> messageSet;
+    private Set<ConversationInstantMessageEntity> messageSet = new HashSet<>();
 
     // getters and setters
     @ManyToOne

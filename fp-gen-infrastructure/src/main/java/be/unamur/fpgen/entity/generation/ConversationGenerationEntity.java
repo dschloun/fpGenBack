@@ -4,6 +4,7 @@ import be.unamur.fpgen.entity.conversation.ConversationEntity;
 import be.unamur.fpgen.entity.dataset.ConversationDatasetEntity;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -11,8 +12,8 @@ import java.util.Set;
 @DiscriminatorValue(value = "CMG")
 public class ConversationGenerationEntity extends GenerationEntity {
 
-    private Set<ConversationEntity> conversationList;
-    private Set<ConversationDatasetEntity> conversationDatasetList;
+    private Set<ConversationEntity> conversationList = new HashSet<>();
+    private Set<ConversationDatasetEntity> conversationDatasetList = new HashSet<>();
 
     @OneToMany(mappedBy = "conversationGeneration")
     public Set<ConversationEntity> getConversationList() {
