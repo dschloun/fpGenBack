@@ -7,12 +7,13 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 public abstract class AbstractDataset extends BaseUuidDomain {
-    private final String businessId;
+    protected String businessId;
     private final String version;
     private final String name;
     private final String description;
     private final String comment;
     private final Author author;
+    private final DatasetFunctionEnum datasetFunction;
 
     protected AbstractDataset (final UUID id,
                                final OffsetDateTime creationDate,
@@ -22,7 +23,8 @@ public abstract class AbstractDataset extends BaseUuidDomain {
                                final String name,
                                final String description,
                                final String comment,
-                               final Author author) {
+                               final Author author,
+                               final DatasetFunctionEnum datasetFunction) {
         super(id, creationDate, modificationDate);
         this.businessId = businessId;
         this.version = version;
@@ -30,6 +32,7 @@ public abstract class AbstractDataset extends BaseUuidDomain {
         this.description = description;
         this.comment = comment;
         this.author = author;
+        this.datasetFunction = datasetFunction;
     }
     public String getBusinessId() {
         return businessId;
@@ -55,13 +58,18 @@ public abstract class AbstractDataset extends BaseUuidDomain {
         return author;
     }
 
-    protected abstract static class AbstractDatasetBuilder<T> extends AbstractBaseUuidDomainBuilder<T> {
-        private String businessId;
+    public DatasetFunctionEnum getDatasetFunction() {
+        return datasetFunction;
+    }
+
+    protected abstract static class AbstractDatasetBuilder<T> extends AbstractBaseUuidDomainBuilder<T> implements GenerationId {
+        protected String businessId;
         private String version;
         private String name;
         private String description;
         private String comment;
         private Author author;
+        private DatasetFunctionEnum datasetFunction;
 
         public String getBusinessId() {
             return businessId;
@@ -87,6 +95,10 @@ public abstract class AbstractDataset extends BaseUuidDomain {
             return author;
         }
 
+        public DatasetFunctionEnum getDatasetFunction() {
+            return datasetFunction;
+        }
+
         public T withBusinessId(String businessId) {
             this.businessId = businessId;
             return self();
@@ -110,6 +122,11 @@ public abstract class AbstractDataset extends BaseUuidDomain {
         }
         public T withAuthor(Author author) {
             this.author = author;
+            return self();
+        }
+
+        public T withDatasetFunction(DatasetFunctionEnum datasetFunction) {
+            this.datasetFunction = datasetFunction;
             return self();
         }
     }

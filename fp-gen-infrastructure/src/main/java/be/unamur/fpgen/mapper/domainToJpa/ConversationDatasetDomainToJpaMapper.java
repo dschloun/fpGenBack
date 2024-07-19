@@ -14,6 +14,7 @@ public class ConversationDatasetDomainToJpaMapper {
         entity.setDescription(domain.getDescription());
         entity.setName(domain.getName());
         entity.setVersion(domain.getVersion());
+        entity.setFunction(domain.getDatasetFunction());
         return entity;
     }
 }

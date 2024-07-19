@@ -1,7 +1,9 @@
 package be.unamur.fpgen.dataset;
 
 import be.unamur.fpgen.generation.InstantMessageGeneration;
+import be.unamur.fpgen.utils.DateUtil;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -18,7 +20,8 @@ public class InstantMessageDataset extends AbstractDataset{
                 builder.getName(),
                 builder.getDescription(),
                 builder.getComment(),
-                builder.getAuthor());
+                builder.getAuthor(),
+                builder.getDatasetFunction());
         instantMessageGenerationList = builder.instantMessageGenerationList;
     }
 
@@ -43,12 +46,18 @@ public class InstantMessageDataset extends AbstractDataset{
         }
 
         public InstantMessageDataset build() {
+            businessId = generateGenerationId();
             return new InstantMessageDataset(this);
         }
 
         @Override
         protected Builder self() {
             return this;
+        }
+
+        @Override
+        public String generateGenerationId() {
+            return String.format("IMDS-%s-%s-%s", this.getDatasetFunction(), this.getAuthor().getTrigram(), DateUtil.convertOffsetDateTimeToString(OffsetDateTime.now()));
         }
     }
 }

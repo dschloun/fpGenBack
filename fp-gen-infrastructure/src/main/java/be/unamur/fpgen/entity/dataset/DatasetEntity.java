@@ -1,5 +1,6 @@
 package be.unamur.fpgen.entity.dataset;
 
+import be.unamur.fpgen.dataset.DatasetFunctionEnum;
 import be.unamur.fpgen.entity.author.AuthorEntity;
 import be.unamur.fpgen.entity.base.BaseUuidEntity;
 
@@ -17,6 +18,7 @@ public class DatasetEntity extends BaseUuidEntity {
     private String description;
     private String comment;
     private AuthorEntity author;
+    private DatasetFunctionEnum function;
 
     // getters and setters
     @Column(name = "business_id", nullable = false)
@@ -72,5 +74,15 @@ public class DatasetEntity extends BaseUuidEntity {
 
     public void setAuthor(final AuthorEntity author) {
         this.author = author;
+    }
+
+    @Column(name = "function")
+    @Enumerated(EnumType.STRING)
+    public DatasetFunctionEnum getFunction() {
+        return function;
+    }
+
+    public void setFunction(DatasetFunctionEnum kind) {
+        this.function = kind;
     }
 }

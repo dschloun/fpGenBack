@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-function-column-to-dataset
+      author: dsc
+      changes:
+        - addColumn:
+            tableName: dataset
+            columns:
+            - column:
+                name: function
+                type: varchar(20)
+                constraints:
+                  nullable: false
+                  unique: false

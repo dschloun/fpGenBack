@@ -1,7 +1,9 @@
 package be.unamur.fpgen.dataset;
 
 import be.unamur.fpgen.generation.ConversationGeneration;
+import be.unamur.fpgen.utils.DateUtil;
 
+import java.time.OffsetDateTime;
 import java.util.Set;
 
 public class ConversationDataset extends AbstractDataset {
@@ -20,7 +22,8 @@ public class ConversationDataset extends AbstractDataset {
                 builder.getName(),
                 builder.getDescription(),
                 builder.getComment(),
-                builder.getAuthor());
+                builder.getAuthor(),
+                builder.getDatasetFunction());
         this.conversationGenerationList = builder.conversationGenerationList;
     }
 
@@ -40,12 +43,18 @@ public class ConversationDataset extends AbstractDataset {
         }
 
         public ConversationDataset build() {
+            businessId = generateGenerationId();
             return new ConversationDataset(this);
         }
 
         @Override
         protected Builder self() {
             return this;
+        }
+
+        @Override
+        public String generateGenerationId() {
+            return String.format("CDS-%s-%s-%s", this.getDatasetFunction(), this.getAuthor().getTrigram(), DateUtil.convertOffsetDateTimeToString(OffsetDateTime.now()));
         }
     }
 }

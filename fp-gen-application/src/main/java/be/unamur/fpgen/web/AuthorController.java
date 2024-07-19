@@ -6,6 +6,8 @@ import be.unamur.fpgen.mapper.webToDomain.AuthorWebToDomainMapper;
 import be.unamur.fpgen.service.AuthorService;
 import be.unamur.model.Author;
 import be.unamur.model.AuthorCreation;
+import be.unamur.model.DatasetsPage;
+import be.unamur.model.PagedAuthorQuery;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -44,5 +46,10 @@ public class AuthorController implements AuthorApi {
     @Override
     public ResponseEntity<List<Author>> getAuthorList() {
         return AuthorApi.super.getAuthorList();
+    }
+
+    @Override
+    public ResponseEntity<DatasetsPage> searchAuthorsPaginate(@Valid PagedAuthorQuery pagedAuthorQuery) {
+        return AuthorApi.super.searchAuthorsPaginate(pagedAuthorQuery);
     }
 }

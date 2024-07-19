@@ -20,6 +20,7 @@ public class ConversationDatasetJpaToDomainMapper {
                 .withDescription(entity.getDescription())
                 .withComment(entity.getComment())
                 .withAuthor(AuthorJpaToDomainMapper.map(entity.getAuthor()))
+                .withDatasetFunction(entity.getFunction())
                 .withConversationGenerationList(MapperUtil.mapSet(entity.getConversationGenerationList(), ConversationGenerationJpaToDomainMapper::map))
                 .build();
     }

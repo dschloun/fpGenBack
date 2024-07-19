@@ -4,5 +4,6 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
 
     <include file="changes/01_create_message_gen_message_table.yaml" relativeToChangelogFile="true"/>
+    <include file="changes/02_add_missing_fields_to_tables.yaml" relativeToChangelogFile="true"/>
     <include file="changelog-quartz.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>
