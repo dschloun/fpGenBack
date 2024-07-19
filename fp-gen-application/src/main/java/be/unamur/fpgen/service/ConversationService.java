@@ -52,7 +52,7 @@ public class ConversationService {
             //todo chat gpt api with prompt // return the x messages in json format, unmarshall, ...
             for (int i = 0; i < cc.getQuantity(); i++) {
                 // 3.1. save the conversation
-                final Conversation conversation = createConversation(generation, ConversationCreationWebToDomainMapper.map(cc));
+                final Conversation conversation = createConversation(generation, ConversationCreationWebToDomainMapper.map(cc, command.getMinInteractionNumber(), command.getMaxInteractionNumber()));
 
                 // 3.2. get interlocutors
                 final Interlocutor interlocutor1 = interlocutorService.getRandomInterlocutorByType(TypeCorrespondenceMapper.getCorrespondence(conversation.getType()));

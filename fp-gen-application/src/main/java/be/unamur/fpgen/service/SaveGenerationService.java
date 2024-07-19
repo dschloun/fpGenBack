@@ -3,6 +3,8 @@ package be.unamur.fpgen.service;
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.generation.ConversationGeneration;
 import be.unamur.fpgen.generation.InstantMessageGeneration;
+import be.unamur.fpgen.mapper.webToDomain.MessageTopicWebToDomainMapper;
+import be.unamur.fpgen.mapper.webToDomain.MessageTypeWebToDomainMapper;
 import be.unamur.fpgen.repository.ConversationGenerationRepository;
 import be.unamur.fpgen.repository.InstantMessageGenerationRepository;
 import be.unamur.model.GenerationCreation;
@@ -32,6 +34,10 @@ public class SaveGenerationService {
                         .withAuthor(author)
                         .withDetails(getDetail(command, "instant message"))
                         .withQuantity(command.getQuantity())
+                        .withTopic(MessageTopicWebToDomainMapper.map(command.getTopic()))
+                        .withType(MessageTypeWebToDomainMapper.map(command.getType()))
+                        .withSystemPrompt(command.getSystemPrompt())
+                        .withUserPrompt(command.getUserPrompt())
                         .build());
     }
 
@@ -45,6 +51,10 @@ public class SaveGenerationService {
                         .withAuthor(author)
                         .withDetails(getDetail(command, "conversation"))
                         .withQuantity(command.getQuantity())
+                        .withTopic(MessageTopicWebToDomainMapper.map(command.getTopic()))
+                        .withType(MessageTypeWebToDomainMapper.map(command.getType()))
+                        .withSystemPrompt(command.getSystemPrompt())
+                        .withUserPrompt(command.getUserPrompt())
                         .build());
     }
 
