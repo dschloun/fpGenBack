@@ -24,6 +24,10 @@ public class DatasetDomainToWebMapper {
                 .modificationDate(domain.getModificationDate())
                 .author(AuthorDomainToWebMapper.map(domain.getAuthor()))
                 .function(mapFunction(domain.getDatasetFunction()))
+                .comment(domain.getComment())
+                .description(domain.getDescription())
+                .version(domain.getVersion())
+                .name(domain.getName())
                 .type(DatasetType.INSTANT_MESSAGE);
     }
 
@@ -33,6 +37,11 @@ public class DatasetDomainToWebMapper {
                 .creationDate(domain.getCreationDate())
                 .modificationDate(domain.getModificationDate())
                 .author(AuthorDomainToWebMapper.map(domain.getAuthor()))
+                .function(mapFunction(domain.getDatasetFunction()))
+                .comment(domain.getComment())
+                .description(domain.getDescription())
+                .version(domain.getVersion())
+                .name(domain.getName())
                 .type(DatasetType.CONVERSATION);
     }
 }
