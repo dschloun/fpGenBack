@@ -25,13 +25,11 @@ import java.util.UUID;
 public class GenerationService {
     private final InstantMessageGenerationRepository instantMessageGenerationRepository;
     private final ConversationGenerationRepository conversationGenerationRepository;
-    private final GenerationRepository generationRepository;
     private final AuthorService authorService;
 
-    public GenerationService(final InstantMessageGenerationRepository instantMessageGenerationRepository, ConversationGenerationRepository conversationGenerationRepository, GenerationRepository generationRepository, AuthorService authorService) {
+    public GenerationService(final InstantMessageGenerationRepository instantMessageGenerationRepository, ConversationGenerationRepository conversationGenerationRepository, AuthorService authorService) {
         this.instantMessageGenerationRepository = instantMessageGenerationRepository;
         this.conversationGenerationRepository = conversationGenerationRepository;
-        this.generationRepository = generationRepository;
         this.authorService = authorService;
     }
 
@@ -96,7 +94,7 @@ public class GenerationService {
                         query.getQueryPage().getSize());
         //2. search generations
         if (GenerationTypeEnum.CONVERSATION.equals(query.getGenerationQuery().getGenerationType())) {
-            return generationRepository.findPagination(
+            return conversationGenerationRepository.findPagination(
                     query.getGenerationQuery().getMessageType(),
                     query.getGenerationQuery().getMessageTopic(),
                     query.getGenerationQuery().getUserPrompt(),
@@ -107,7 +105,7 @@ public class GenerationService {
                     query.getGenerationQuery().getEndDate(),
                     pageable);
         } else if (GenerationTypeEnum.INSTANT_MESSAGE.equals(query.getGenerationQuery().getGenerationType())) {
-            return generationRepository.findPagination(
+            return instantMessageGenerationRepository.findPagination(
                     query.getGenerationQuery().getMessageType(),
                     query.getGenerationQuery().getMessageTopic(),
                     query.getGenerationQuery().getUserPrompt(),

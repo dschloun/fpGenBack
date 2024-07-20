@@ -1,11 +1,18 @@
 package be.unamur.fpgen.repository;
 
-import be.unamur.fpgen.exception.GenerationNotFoundException;
+import be.unamur.fpgen.generation.ConversationGeneration;
 import be.unamur.fpgen.generation.InstantMessageGeneration;
+import be.unamur.fpgen.generation.pagination.GenerationsPage;
+import be.unamur.fpgen.instant_message.MessageTopicEnum;
+import be.unamur.fpgen.instant_message.MessageTypeEnum;
 import be.unamur.fpgen.mapper.domainToJpa.InstantMessageGenerationDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.InstantMessageGenerationJpaToDomainMapper;
+import be.unamur.fpgen.pagination.Pagination;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -37,5 +44,33 @@ public class JpaInstantMessageGenerationRepository implements InstantMessageGene
     @Override
     public void deleteInstantMessageGenerationById(UUID instantMessageGenerationId) {
 
+    }
+
+    @Override
+    public GenerationsPage findPagination(MessageTypeEnum messageType, MessageTopicEnum messageTopic, String userPrompt, String systemPrompt, Integer quantity, String authorTrigram, OffsetDateTime startDate, OffsetDateTime endDate, Pageable pageable) {
+        // 1. get in Page format
+        Page<ConversationGeneration> page = jpaInstantMessageGenerationRepositoryCRUD.findPagination(
+                messageTopic,
+                messageType,
+                authorTrigram,
+                quantity,
+                userPrompt,
+                systemPrompt,
+                startDate,
+                endDate,
+                pageable
+        ).map(InstantMessageGenerationJpaToDomainMapper::map);
+
+        final GenerationsPage generationsPage = GenerationsPage.newBuilder()
+                .withPagination(new Pagination.Builder()
+                        .size(page.getSize())
+                        .totalSize((int) page.getTotalElements())
+                        .page(page.getNumber())
+                        .build())
+                .withConversationGenerationList(page.getContent())
+                .build();
+
+        // 3. return
+        return generationsPage;
     }
 }

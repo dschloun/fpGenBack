@@ -1,30 +1,22 @@
 package be.unamur.fpgen.repository;
 
-import be.unamur.fpgen.author.Author;
-import be.unamur.fpgen.conversation.Conversation;
-import be.unamur.fpgen.conversation.pagination.ConversationsPage;
-import be.unamur.fpgen.entity.author.AuthorEntity;
-import be.unamur.fpgen.generation.AbstractGeneration;
 import be.unamur.fpgen.generation.ConversationGeneration;
-import be.unamur.fpgen.generation.GenerationTypeEnum;
 import be.unamur.fpgen.generation.pagination.GenerationsPage;
 import be.unamur.fpgen.instant_message.MessageTopicEnum;
 import be.unamur.fpgen.instant_message.MessageTypeEnum;
 import be.unamur.fpgen.mapper.domainToJpa.ConversationGenerationDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.ConversationGenerationJpaToDomainMapper;
-import be.unamur.fpgen.mapper.jpaToDomain.ConversationJpaToDomainMapper;
 import be.unamur.fpgen.pagination.Pagination;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.time.OffsetDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public class JpaConversationGenerationRepository implements ConversationGenerationRepository, GenerationRepository{
+public class JpaConversationGenerationRepository implements ConversationGenerationRepository{
     private final JpaConversationGenerationRepositoryCRUD jpaConversationGenerationRepositoryCRUD;
     private final JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD;
 
