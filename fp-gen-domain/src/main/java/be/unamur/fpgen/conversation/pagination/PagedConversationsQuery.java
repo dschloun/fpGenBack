@@ -1,6 +1,6 @@
 package be.unamur.fpgen.conversation.pagination;
 
-import be.unamur.fpgen.exception.pagination.general.IncompletePagedConversationsQueryException;
+import be.unamur.fpgen.exception.pagination.IncompletePagedConversationsQueryException;
 import be.unamur.fpgen.pagination.QueryPage;
 import be.unamur.fpgen.utils.ViolationHandler;
 
@@ -51,7 +51,7 @@ public class PagedConversationsQuery {
             violations.addAll(cannotBeNull(conversationQuery, "conversationQuery"));
 
             if (!violations.isEmpty()) {
-                throw new IncompletePagedConversationsQueryException(buildMessage("The paged instant message query is incomplete because", violations));
+                throw new IncompletePagedConversationsQueryException(buildMessage("The paged conversation query is incomplete because", violations));
             }
             return new PagedConversationsQuery(this);
         }

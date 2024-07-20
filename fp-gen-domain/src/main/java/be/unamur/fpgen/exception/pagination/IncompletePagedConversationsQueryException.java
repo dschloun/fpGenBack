@@ -1,4 +1,4 @@
-package be.unamur.fpgen.exception.pagination.general;
+package be.unamur.fpgen.exception.pagination;
 
 public class IncompletePagedConversationsQueryException extends RuntimeException{
     public IncompletePagedConversationsQueryException(String message) {
