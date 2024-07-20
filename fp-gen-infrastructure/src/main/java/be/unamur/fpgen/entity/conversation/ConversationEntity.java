@@ -16,8 +16,8 @@ public class ConversationEntity extends BaseUuidEntity {
 
     // members
     private ConversationGenerationEntity conversationGeneration;
-    private MessageTypeEnum messageType;
-    private MessageTopicEnum messageTopic;
+    private MessageTypeEnum type;
+    private MessageTopicEnum topic;
     private Integer maxInteractionNumber;
     private Integer minInteractionNumber;
     private Set<ConversationInstantMessageEntity> messageSet = new HashSet<>();
@@ -35,22 +35,22 @@ public class ConversationEntity extends BaseUuidEntity {
 
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
-    public MessageTypeEnum getMessageType() {
-        return messageType;
+    public MessageTypeEnum getType() {
+        return type;
     }
 
-    public void setMessageType(MessageTypeEnum messageType) {
-        this.messageType = messageType;
+    public void setType(MessageTypeEnum messageType) {
+        this.type = messageType;
     }
 
     @Column(name = "topic", nullable = false)
     @Enumerated(EnumType.STRING)
-    public MessageTopicEnum getMessageTopic() {
-        return messageTopic;
+    public MessageTopicEnum getTopic() {
+        return topic;
     }
 
-    public void setMessageTopic(MessageTopicEnum messageTopic) {
-        this.messageTopic = messageTopic;
+    public void setTopic(MessageTopicEnum messageTopic) {
+        this.topic = messageTopic;
     }
 
     @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL, orphanRemoval = true)

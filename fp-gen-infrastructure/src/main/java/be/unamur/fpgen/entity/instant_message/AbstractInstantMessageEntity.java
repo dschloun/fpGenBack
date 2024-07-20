@@ -19,7 +19,8 @@ import java.io.Serial;
  * @specfield content: String // the content of the message
  * @invariant generationId != null && this.topic != null && this.type != null && this.content != null
  */
-@Entity(name = "instant_message")
+@Entity
+@Table(name = "instant_message")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "kind", discriminatorType = DiscriminatorType.STRING)
 public class AbstractInstantMessageEntity extends BaseUuidEntity {

@@ -9,8 +9,8 @@ public class ConversationDomainToJpaMapper {
     public static ConversationEntity mapForCreate(final Conversation domain, final ConversationGenerationEntity generationEntity){
         final ConversationEntity entity = new ConversationEntity();
         entity.setConversationGeneration(generationEntity);
-        entity.setMessageTopic(domain.getTopic());
-        entity.setMessageType(domain.getType());
+        entity.setTopic(domain.getTopic());
+        entity.setType(domain.getType());
         entity.setMaxInteractionNumber(domain.getMaxInteractionNumber());
         entity.setMinInteractionNumber(domain.getMinInteractionNumber());
 

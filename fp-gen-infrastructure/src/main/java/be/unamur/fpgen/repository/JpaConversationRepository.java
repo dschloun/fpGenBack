@@ -51,8 +51,8 @@ public class JpaConversationRepository implements ConversationRepository {
         Page<Conversation> page = jpaConversationRepositoryCRUD.findPagination(
                 topic,
                 type,
-                maxInteractionNumber,
                 minInteractionNumber,
+                maxInteractionNumber,
                 startDate,
                 endDate,
                 pageable

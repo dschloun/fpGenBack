@@ -8,7 +8,8 @@ import be.unamur.fpgen.instant_message.MessageTypeEnum;
 import javax.persistence.*;
 import java.io.Serial;
 
-@Entity(name = "generation")
+@Entity
+@Table(name = "generation")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "kind", discriminatorType = DiscriminatorType.STRING)
 public class GenerationEntity extends BaseUuidEntity {

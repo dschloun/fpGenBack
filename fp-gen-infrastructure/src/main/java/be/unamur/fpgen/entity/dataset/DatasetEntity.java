@@ -6,7 +6,8 @@ import be.unamur.fpgen.entity.base.BaseUuidEntity;
 
 import javax.persistence.*;
 
-@Entity(name = "dataset")
+@Entity
+@Table(name = "dataset")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "kind", discriminatorType = DiscriminatorType.STRING)
 public class DatasetEntity extends BaseUuidEntity {

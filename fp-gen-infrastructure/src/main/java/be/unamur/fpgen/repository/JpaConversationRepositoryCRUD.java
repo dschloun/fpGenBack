@@ -16,8 +16,8 @@ import java.util.UUID;
 public interface JpaConversationRepositoryCRUD extends JpaRepository<ConversationEntity, UUID>{
 
     @Query(value = "SELECT DISTINCT c from ConversationEntity c" +
-            " WHERE (:topic is null or c.messageTopic = :topic)" +
-            " AND (:type is null or c.messageType = :type)" +
+            " WHERE (:topic is null or c.topic = :topic)" +
+            " AND (:type is null or c.type = :type)" +
             " AND (:minInteractionNumber is null or c.minInteractionNumber >= :minInteractionNumber)" +
             " AND (:maxInteractionNumber is null or c.maxInteractionNumber <= :maxInteractionNumber)" +
             " AND c.creationDate >= cast(:startDate as timestamp)" +
