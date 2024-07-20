@@ -14,7 +14,7 @@ public class GenerationQuery {
     private final String userPrompt;
     private final String systemPrompt;
     private final Integer quantity;
-    private final UUID authorId;
+    private final String authorTrigram;
     private final OffsetDateTime startDate;
     private final OffsetDateTime endDate;
 
@@ -25,7 +25,7 @@ public class GenerationQuery {
         userPrompt = builder.userPrompt;
         systemPrompt = builder.systemPrompt;
         quantity = builder.quantity;
-        authorId = builder.authorId;
+        authorTrigram = builder.authorTrigram;
         startDate = builder.startDate;
         endDate = builder.endDate;
     }
@@ -57,8 +57,8 @@ public class GenerationQuery {
         return quantity;
     }
 
-    public UUID getAuthorId() {
-        return authorId;
+    public String getAuthorTrigram() {
+        return authorTrigram;
     }
 
     public OffsetDateTime getStartDate() {
@@ -76,7 +76,7 @@ public class GenerationQuery {
         private String userPrompt;
         private String systemPrompt;
         private Integer quantity;
-        private UUID authorId;
+        private String authorTrigram;
         private OffsetDateTime startDate;
         private OffsetDateTime endDate;
 
@@ -113,8 +113,8 @@ public class GenerationQuery {
             return this;
         }
 
-        public Builder withAuthorId(UUID val) {
-            authorId = val;
+        public Builder withAuthorTrigram(String val) {
+            authorTrigram = val;
             return this;
         }
 

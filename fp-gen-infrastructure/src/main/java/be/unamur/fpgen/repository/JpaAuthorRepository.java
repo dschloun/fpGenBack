@@ -33,4 +33,9 @@ public class JpaAuthorRepository implements AuthorRepository{
     public Optional<Author> getAuthorById(UUID authorId) {
         return jpaAuthorRepositoryCRUD.findById(authorId).map(AuthorJpaToDomainMapper::map);
     }
+
+    @Override
+    public Optional<Author> findAuthorByTrigram(String trigram) {
+        return jpaAuthorRepositoryCRUD.findByTrigram(trigram).map(AuthorJpaToDomainMapper::map);
+    }
 }

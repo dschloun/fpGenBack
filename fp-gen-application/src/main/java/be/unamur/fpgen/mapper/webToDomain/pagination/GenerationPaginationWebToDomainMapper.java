@@ -23,7 +23,7 @@ public class GenerationPaginationWebToDomainMapper {
                 .withMessageTopic(MessageTopicWebToDomainMapper.map(web.getMessageTopic()))
                 .withMessageType(MessageTypeWebToDomainMapper.map(web.getMessageType()))
                 .withGenerationType(GenerationTypeWebToDomainMapper.map(web.getGenerationType()))
-                .withAuthorId(Objects.nonNull(web.getAuthor()) ? UUID.fromString(web.getAuthor()) : null)
+                .withAuthorTrigram(web.getAuthor())
                 .withQuantity(web.getQuantity())
                 .withSystemPrompt(web.getSystemPrompt())
                 .withUserPrompt(web.getUserPrompt())

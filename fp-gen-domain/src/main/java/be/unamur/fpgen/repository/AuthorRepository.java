@@ -12,4 +12,6 @@ public interface AuthorRepository {
     Author updateAuthor(Author author);
 
     Optional<Author> getAuthorById(UUID authorId);
+
+    Optional<Author> findAuthorByTrigram(String trigram);
 }

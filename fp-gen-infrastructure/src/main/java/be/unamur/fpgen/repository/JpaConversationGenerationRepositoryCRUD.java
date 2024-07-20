@@ -17,7 +17,7 @@ public interface JpaConversationGenerationRepositoryCRUD extends JpaRepository<C
     @Query(value = "SELECT DISTINCT g from ConversationGenerationEntity g" +
             " WHERE (:topic is null or g.topic = :topic)" +
             " AND (:type is null or g.type = :type)" +
-            " AND (:author is null or g.author = :author)" +
+            " AND (:authorTrigram is null or g.author.trigram = :authorTrigram)" +
             " AND (:userPrompt is null or lower(g.userPrompt) like %:userPrompt%)" +
             " AND (:systemPrompt is null or lower(g.systemPrompt) like %:userPrompt%)" +
             " AND (:quantity is null or g.quantity <= :quantity)" +
@@ -26,7 +26,7 @@ public interface JpaConversationGenerationRepositoryCRUD extends JpaRepository<C
     )
     Page<ConversationGenerationEntity> findPagination(@Param("topic") MessageTopicEnum topic,
                                           @Param("type") MessageTypeEnum type,
-                                          @Param("author") AuthorEntity author,
+                                          @Param("authorTrigram") String authorTrigram,
                                           @Param("quantity") Integer quantity,
                                           @Param("userPrompt") String userPrompt,
                                           @Param("systemPrompt") String systemPrompt,

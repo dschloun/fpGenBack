@@ -13,7 +13,6 @@ import be.unamur.fpgen.repository.ConversationGenerationRepository;
 import be.unamur.fpgen.repository.GenerationRepository;
 import be.unamur.fpgen.repository.InstantMessageGenerationRepository;
 import be.unamur.model.GenerationCreation;
-import be.unamur.model.PagedGenerationQuery;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -90,12 +89,11 @@ public class GenerationService {
     @Transactional
     public GenerationsPage searchGenerationsPaginate(PagedGenerationsQuery query) {
         //0. get author
-        final Author author = authorService.getAuthorById(query.getGenerationQuery().getAuthorId());
+        final Author author = query.getGenerationQuery().getAuthorTrigram() != null ? authorService.getAuthorByTrigram(query.getGenerationQuery().getAuthorTrigram()) : null;
         //1. get pageable
         final Pageable pageable = PageRequest
                 .of(query.getQueryPage().getPage(),
-                        query.getQueryPage().getSize(),
-                        Sort.by("type", "topic").ascending());
+                        query.getQueryPage().getSize());
         //2. search generations
         if (GenerationTypeEnum.CONVERSATION.equals(query.getGenerationQuery().getGenerationType())) {
             return generationRepository.findPagination(
@@ -104,7 +102,7 @@ public class GenerationService {
                     query.getGenerationQuery().getUserPrompt(),
                     query.getGenerationQuery().getSystemPrompt(),
                     query.getGenerationQuery().getQuantity(),
-                    author,
+                    query.getGenerationQuery().getAuthorTrigram(),
                     query.getGenerationQuery().getStartDate(),
                     query.getGenerationQuery().getEndDate(),
                     pageable);
@@ -115,7 +113,7 @@ public class GenerationService {
                     query.getGenerationQuery().getUserPrompt(),
                     query.getGenerationQuery().getSystemPrompt(),
                     query.getGenerationQuery().getQuantity(),
-                    author,
+                    query.getGenerationQuery().getAuthorTrigram(),
                     query.getGenerationQuery().getStartDate(),
                     query.getGenerationQuery().getEndDate(),
                     pageable);

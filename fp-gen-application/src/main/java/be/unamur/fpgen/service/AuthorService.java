@@ -33,4 +33,9 @@ public class AuthorService {
     public Author getAuthorById(final UUID authorId){
         return authorRepository.getAuthorById(authorId).orElseThrow(() -> AuthorNotFoundException.withId(authorId));
     }
+
+    @Transactional
+    public Author getAuthorByTrigram(final String trigram){
+        return authorRepository.findAuthorByTrigram(trigram).orElseThrow(() -> AuthorNotFoundException.withTrigram(trigram));
+    }
 }

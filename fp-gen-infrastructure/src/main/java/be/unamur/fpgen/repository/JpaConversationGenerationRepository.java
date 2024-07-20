@@ -52,14 +52,13 @@ public class JpaConversationGenerationRepository implements ConversationGenerati
     }
 
     @Override
-    public GenerationsPage findPagination(MessageTypeEnum messageType, MessageTopicEnum messageTopic, String userPrompt, String systemPrompt, Integer quantity, Author author, OffsetDateTime startDate, OffsetDateTime endDate, Pageable pageable) {
-        // 0. get the author Entity
-        final AuthorEntity authorEntity = jpaAuthorRepositoryCRUD.getReferenceById(author.getId());
+    public GenerationsPage findPagination(MessageTypeEnum messageType, MessageTopicEnum messageTopic, String userPrompt, String systemPrompt, Integer quantity, String authorTrigram, OffsetDateTime startDate, OffsetDateTime endDate, Pageable pageable) {
+
         // 1. get in Page format
         Page<ConversationGeneration> page = jpaConversationGenerationRepositoryCRUD.findPagination(
                 messageTopic,
                 messageType,
-                authorEntity,
+                authorTrigram,
                 quantity,
                 userPrompt,
                 systemPrompt,
