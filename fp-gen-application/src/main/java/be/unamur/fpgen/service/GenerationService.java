@@ -108,6 +108,17 @@ public class GenerationService {
                     query.getGenerationQuery().getStartDate(),
                     query.getGenerationQuery().getEndDate(),
                     pageable);
+        } else if (GenerationTypeEnum.INSTANT_MESSAGE.equals(query.getGenerationQuery().getGenerationType())) {
+            return generationRepository.findPagination(
+                    query.getGenerationQuery().getMessageType(),
+                    query.getGenerationQuery().getMessageTopic(),
+                    query.getGenerationQuery().getUserPrompt(),
+                    query.getGenerationQuery().getSystemPrompt(),
+                    query.getGenerationQuery().getQuantity(),
+                    author,
+                    query.getGenerationQuery().getStartDate(),
+                    query.getGenerationQuery().getEndDate(),
+                    pageable);
         } else {
             throw new IllegalArgumentException("Generation type not supported");
         }
