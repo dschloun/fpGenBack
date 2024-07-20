@@ -15,7 +15,7 @@ public class PagedDatasetsQuery {
         return queryPage;
     }
 
-    public DatasetQuery getConversationQuery() {
+    public DatasetQuery getDatasetQuery() {
         return datasetQuery;
     }
 
@@ -39,7 +39,7 @@ public class PagedDatasetsQuery {
             return this;
         }
 
-        public Builder withConversationQuery(DatasetQuery val) {
+        public Builder withDatasetQuery(DatasetQuery val) {
             datasetQuery = val;
             return this;
         }
