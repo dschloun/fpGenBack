@@ -70,7 +70,7 @@ public class JpaInstantMessageRepository implements InstantMessageRepository {
                         pageable
                 ).map(InstantMessageJpaToDomainMapper::map);
 
-        // 2. convert in InstantMessagesPage
+        // 2. convert
         final InstantMessagesPage instantMessagesPage = InstantMessagesPage.newBuilder()
                 .withPagination(new Pagination.Builder()
                         .size(page.getSize())

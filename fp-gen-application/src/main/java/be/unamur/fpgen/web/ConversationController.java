@@ -2,6 +2,8 @@ package be.unamur.fpgen.web;
 
 import be.unamur.api.ConversationApi;
 import be.unamur.fpgen.mapper.domainToWeb.ConversationDomainToWebMapper;
+import be.unamur.fpgen.mapper.domainToWeb.pagination.ConversationPaginationDomainToWebMapper;
+import be.unamur.fpgen.mapper.webToDomain.pagination.ConversationPaginationWebToDomainMapper;
 import be.unamur.fpgen.service.ConversationService;
 import be.unamur.model.*;
 import org.springframework.http.HttpStatus;
@@ -49,6 +51,9 @@ public class ConversationController implements ConversationApi {
 
     @Override
     public ResponseEntity<ConversationsPage> searchConversationsPaginate(@Valid PagedConversationQuery pagedConversationQuery) {
-        return ConversationApi.super.searchConversationsPaginate(pagedConversationQuery);
+        return new ResponseEntity<>(ConversationPaginationDomainToWebMapper.map(
+                conversationService.searchConversationsPaginate(
+                        ConversationPaginationWebToDomainMapper.map(pagedConversationQuery)))
+                , HttpStatus.OK);
     }
 }

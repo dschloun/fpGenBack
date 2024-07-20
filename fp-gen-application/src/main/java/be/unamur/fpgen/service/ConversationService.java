@@ -1,6 +1,8 @@
 package be.unamur.fpgen.service;
 
 import be.unamur.fpgen.conversation.Conversation;
+import be.unamur.fpgen.conversation.pagination.ConversationsPage;
+import be.unamur.fpgen.conversation.pagination.PagedConversationsQuery;
 import be.unamur.fpgen.generation.ConversationGeneration;
 import be.unamur.fpgen.instant_message.ConversationMessage;
 import be.unamur.fpgen.interlocutor.Interlocutor;
@@ -13,6 +15,9 @@ import be.unamur.fpgen.repository.ConversationRepository;
 import be.unamur.fpgen.utils.Alternator;
 import be.unamur.fpgen.utils.TypeCorrespondenceMapper;
 import be.unamur.model.ConversationBatchCreation;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -103,5 +108,22 @@ public class ConversationService {
                 .withType(conversationMessage.getType())
                 .withContent("content SE " + number)
                 .build();
+    }
+
+    @Transactional
+    public ConversationsPage searchConversationsPaginate(final PagedConversationsQuery query){
+        final Pageable pageable = PageRequest
+                .of(query.getQueryPage().getPage(),
+                        query.getQueryPage().getSize(),
+                        Sort.by("type", "topic").ascending());
+
+        return conversationRepository.findPagination(
+                query.getConversationQuery().getMessageTopic(),
+                query.getConversationQuery().getMessageType(),
+                query.getConversationQuery().getMaxInteractionNumber(),
+                query.getConversationQuery().getMinInteractionNumber(),
+                query.getConversationQuery().getStartDate(),
+                query.getConversationQuery().getEndDate(),
+                pageable);
     }
 }
