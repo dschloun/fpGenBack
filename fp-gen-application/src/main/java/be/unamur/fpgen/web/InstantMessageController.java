@@ -2,6 +2,8 @@ package be.unamur.fpgen.web;
 
 import be.unamur.api.InstantMessageApi;
 import be.unamur.fpgen.mapper.domainToWeb.InstantMessageDomainToWebMapper;
+import be.unamur.fpgen.mapper.domainToWeb.InstantMessagePaginationDomainToWebMapper;
+import be.unamur.fpgen.mapper.webToDomain.InstantMessagePaginationWebToDomainMapper;
 import be.unamur.fpgen.service.InstantMessageService;
 import be.unamur.model.*;
 import org.springframework.http.HttpStatus;
@@ -42,6 +44,11 @@ public class InstantMessageController implements InstantMessageApi {
 
     @Override
     public ResponseEntity<InstantMessagesPage> searchInstantMessagesPaginate(@Valid PagedInstantMessageQuery pagedInstantMessageQuery) {
-        return InstantMessageApi.super.searchInstantMessagesPaginate(pagedInstantMessageQuery);
+        return new ResponseEntity<>(
+                InstantMessagePaginationDomainToWebMapper.map(
+                        instantMessageService.searchInstantMessagesPaginate(
+                                InstantMessagePaginationWebToDomainMapper.map(pagedInstantMessageQuery))
+                ), HttpStatus.OK
+        );
     }
 }

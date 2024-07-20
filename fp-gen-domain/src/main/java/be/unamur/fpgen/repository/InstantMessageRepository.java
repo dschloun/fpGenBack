@@ -3,7 +3,12 @@ package be.unamur.fpgen.repository;
 import be.unamur.fpgen.generation.AbstractGeneration;
 import be.unamur.fpgen.generation.InstantMessageGeneration;
 import be.unamur.fpgen.instant_message.InstantMessage;
+import be.unamur.fpgen.instant_message.MessageTopicEnum;
+import be.unamur.fpgen.instant_message.MessageTypeEnum;
+import be.unamur.fpgen.instant_message.pagination.InstantMessagesPage;
+import org.springframework.data.domain.Pageable;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -29,4 +34,6 @@ public interface InstantMessageRepository {
     void deleteInstantMessageById(UUID instantMessageId);
 
     Optional<InstantMessage> getInstantMessageById(UUID instantMessageId);
+
+    InstantMessagesPage findPagination(MessageTopicEnum topic, MessageTypeEnum type, String content, OffsetDateTime startDate, OffsetDateTime endDate, Pageable pageable);
 }

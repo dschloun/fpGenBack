@@ -3,9 +3,14 @@ package be.unamur.fpgen.service;
 import be.unamur.fpgen.exception.InstantMessageNotFoundException;
 import be.unamur.fpgen.generation.InstantMessageGeneration;
 import be.unamur.fpgen.instant_message.InstantMessage;
+import be.unamur.fpgen.instant_message.pagination.InstantMessagesPage;
+import be.unamur.fpgen.instant_message.pagination.PagedInstantMessagesQuery;
 import be.unamur.fpgen.mapper.webToDomain.InstantMessageWebToDomainMapper;
 import be.unamur.fpgen.repository.InstantMessageRepository;
 import be.unamur.model.InstantMessageBatchCreation;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -45,10 +50,26 @@ public class InstantMessageService {
         });
     }
 
+    @Transactional
     public InstantMessage getInstantMessageById(UUID instantMessageId) {
         return instantMessageRepository.getInstantMessageById(instantMessageId)
                 .orElseThrow(() -> InstantMessageNotFoundException.withId(instantMessageId));
     }
 
+    @Transactional
+    public InstantMessagesPage searchInstantMessagesPaginate(final PagedInstantMessagesQuery query) {
+        final Pageable pageable = PageRequest
+                .of(query.getQueryPage().getPage(),
+                        query.getQueryPage().getSize(),
+                        Sort.by("type", "topic").ascending());
+
+        return instantMessageRepository.findPagination(
+                query.getInstantMessageQuery().getMessageTopic(),
+                query.getInstantMessageQuery().getMessageType(),
+                query.getInstantMessageQuery().getContent(),
+                query.getInstantMessageQuery().getStartDate(),
+                query.getInstantMessageQuery().getEndDate(),
+                pageable);
+    }
 
 }
