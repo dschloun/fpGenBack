@@ -1,4 +1,4 @@
-package be.unamur.fpgen.mapper.domainToWeb;
+package be.unamur.fpgen.mapper.domainToWeb.pagination;
 
 import be.unamur.model.Pagination;
 import be.unamur.model.QueryPage;

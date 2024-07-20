@@ -1,6 +1,6 @@
 package be.unamur.fpgen.pagination;
 
-import be.unamur.fpgen.exception.IncompletePaginationException;
+import be.unamur.fpgen.exception.pagination.general.IncompletePaginationException;
 import be.unamur.fpgen.utils.ViolationHandler;
 
 import java.util.ArrayList;

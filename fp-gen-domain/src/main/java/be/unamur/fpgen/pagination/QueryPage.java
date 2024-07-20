@@ -1,7 +1,7 @@
 package be.unamur.fpgen.pagination;
 
 
-import be.unamur.fpgen.exception.IncompleteQueryPageException;
+import be.unamur.fpgen.exception.pagination.general.IncompleteQueryPageException;
 import be.unamur.fpgen.utils.ViolationHandler;
 
 import java.util.ArrayList;

@@ -2,8 +2,8 @@ package be.unamur.fpgen.web;
 
 import be.unamur.api.InstantMessageApi;
 import be.unamur.fpgen.mapper.domainToWeb.InstantMessageDomainToWebMapper;
-import be.unamur.fpgen.mapper.domainToWeb.InstantMessagePaginationDomainToWebMapper;
-import be.unamur.fpgen.mapper.webToDomain.InstantMessagePaginationWebToDomainMapper;
+import be.unamur.fpgen.mapper.domainToWeb.pagination.InstantMessagePaginationDomainToWebMapper;
+import be.unamur.fpgen.mapper.webToDomain.pagination.InstantMessagePaginationWebToDomainMapper;
 import be.unamur.fpgen.service.InstantMessageService;
 import be.unamur.model.*;
 import org.springframework.http.HttpStatus;

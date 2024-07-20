@@ -1,5 +1,6 @@
-package be.unamur.fpgen.mapper.domainToWeb;
+package be.unamur.fpgen.mapper.domainToWeb.pagination;
 
+import be.unamur.fpgen.mapper.domainToWeb.InstantMessageDomainToWebMapper;
 import be.unamur.fpgen.utils.MapperUtil;
 import be.unamur.model.InstantMessagesPage;
 

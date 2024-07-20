@@ -1,7 +1,10 @@
-package be.unamur.fpgen.mapper.webToDomain;
+package be.unamur.fpgen.mapper.webToDomain.pagination;
 
 import be.unamur.fpgen.instant_message.pagination.InstantMessageQuery;
 import be.unamur.fpgen.instant_message.pagination.PagedInstantMessagesQuery;
+import be.unamur.fpgen.mapper.webToDomain.MessageTopicWebToDomainMapper;
+import be.unamur.fpgen.mapper.webToDomain.MessageTypeWebToDomainMapper;
+import be.unamur.fpgen.mapper.webToDomain.PaginationWebToDomainMapper;
 import be.unamur.fpgen.utils.DateUtil;
 import be.unamur.model.PagedInstantMessageQuery;
 

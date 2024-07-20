@@ -1,6 +1,6 @@
 package be.unamur.fpgen.instant_message.pagination;
 
-import be.unamur.fpgen.exception.IncompletePagedInstantMessagesQueryException;
+import be.unamur.fpgen.exception.pagination.IncompletePagedInstantMessagesQueryException;
 import be.unamur.fpgen.pagination.QueryPage;
 import be.unamur.fpgen.utils.ViolationHandler;
 
