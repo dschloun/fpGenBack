@@ -10,13 +10,11 @@ import be.unamur.fpgen.generation.pagination.PagedGenerationsQuery;
 import be.unamur.fpgen.mapper.webToDomain.MessageTopicWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.MessageTypeWebToDomainMapper;
 import be.unamur.fpgen.repository.ConversationGenerationRepository;
-import be.unamur.fpgen.repository.GenerationRepository;
 import be.unamur.fpgen.repository.InstantMessageGenerationRepository;
 import be.unamur.fpgen.utils.DateUtil;
 import be.unamur.model.GenerationCreation;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

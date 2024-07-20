@@ -1,10 +1,11 @@
 package be.unamur.fpgen.repository;
 
 import be.unamur.fpgen.dataset.InstantMessageDataset;
+import be.unamur.fpgen.dataset.pagination.DatasetsPage;
 import be.unamur.fpgen.generation.InstantMessageGeneration;
-import be.unamur.fpgen.instant_message.InstantMessage;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
+import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -18,4 +19,6 @@ public interface InstantMessageDatasetRepository {
     default void deleteInstantMessageDatasetById(UUID instantMessageDatasetId) {    }
 
     void addInstantMessageListToDataset(InstantMessageDataset dataset, Set<InstantMessageGeneration> generations);
+
+    DatasetsPage findPagination(String version, String name, String description, String comment, String authorTrigram, OffsetDateTime startDate, OffsetDateTime endDate, Pageable pageable);
 }
