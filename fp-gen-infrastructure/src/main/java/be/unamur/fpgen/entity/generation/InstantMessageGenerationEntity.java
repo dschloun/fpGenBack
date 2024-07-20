@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@DiscriminatorValue(value = "IMG")
+@DiscriminatorValue(value = "INSTANT_MESSAGE")
 public class InstantMessageGenerationEntity extends GenerationEntity {
 
         private Set<InstantMessageEntity> instantMessageList = new HashSet<>();

@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@DiscriminatorValue(value = "CMG")
+@DiscriminatorValue(value = "CONVERSATION")
 public class ConversationGenerationEntity extends GenerationEntity {
 
     private Set<ConversationEntity> conversationList = new HashSet<>();

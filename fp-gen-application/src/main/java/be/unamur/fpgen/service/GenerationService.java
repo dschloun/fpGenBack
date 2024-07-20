@@ -3,12 +3,20 @@ package be.unamur.fpgen.service;
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.exception.GenerationNotFoundException;
 import be.unamur.fpgen.generation.ConversationGeneration;
+import be.unamur.fpgen.generation.GenerationTypeEnum;
 import be.unamur.fpgen.generation.InstantMessageGeneration;
+import be.unamur.fpgen.generation.pagination.GenerationsPage;
+import be.unamur.fpgen.generation.pagination.PagedGenerationsQuery;
 import be.unamur.fpgen.mapper.webToDomain.MessageTopicWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.MessageTypeWebToDomainMapper;
 import be.unamur.fpgen.repository.ConversationGenerationRepository;
+import be.unamur.fpgen.repository.GenerationRepository;
 import be.unamur.fpgen.repository.InstantMessageGenerationRepository;
 import be.unamur.model.GenerationCreation;
+import be.unamur.model.PagedGenerationQuery;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -18,16 +26,18 @@ import java.util.UUID;
 public class GenerationService {
     private final InstantMessageGenerationRepository instantMessageGenerationRepository;
     private final ConversationGenerationRepository conversationGenerationRepository;
+    private final GenerationRepository generationRepository;
     private final AuthorService authorService;
 
-    public GenerationService(final InstantMessageGenerationRepository instantMessageGenerationRepository, ConversationGenerationRepository conversationGenerationRepository, AuthorService authorService) {
+    public GenerationService(final InstantMessageGenerationRepository instantMessageGenerationRepository, ConversationGenerationRepository conversationGenerationRepository, GenerationRepository generationRepository, AuthorService authorService) {
         this.instantMessageGenerationRepository = instantMessageGenerationRepository;
         this.conversationGenerationRepository = conversationGenerationRepository;
+        this.generationRepository = generationRepository;
         this.authorService = authorService;
     }
 
     @Transactional
-    public InstantMessageGeneration createInstantMessageGeneration(final GenerationCreation command){
+    public InstantMessageGeneration createInstantMessageGeneration(final GenerationCreation command) {
         // 0. check if author is registered
         final Author author = authorService.getAuthorById(command.getAuthorId());
         // 1. save the generation
@@ -44,7 +54,7 @@ public class GenerationService {
     }
 
     @Transactional
-    public ConversationGeneration createConversationGeneration(final GenerationCreation command){
+    public ConversationGeneration createConversationGeneration(final GenerationCreation command) {
         // 0. check if author is registered
         final Author author = authorService.getAuthorById(command.getAuthorId());
         // 1. save the generation
@@ -61,19 +71,45 @@ public class GenerationService {
     }
 
     @Transactional
-    public InstantMessageGeneration findInstantMessageGenerationById(final UUID generationId){
+    public InstantMessageGeneration findInstantMessageGenerationById(final UUID generationId) {
         return instantMessageGenerationRepository.findInstantMessageGenerationById(generationId)
                 .orElseThrow(() -> GenerationNotFoundException.withId(generationId));
     }
 
     @Transactional
-    public ConversationGeneration findConversationGenerationById(final UUID generationId){
+    public ConversationGeneration findConversationGenerationById(final UUID generationId) {
         return conversationGenerationRepository.findConversationGenerationById(generationId)
                 .orElseThrow(() -> GenerationNotFoundException.withId(generationId));
     }
 
-    private String getDetail(final GenerationCreation command, final String generationType){
+    private String getDetail(final GenerationCreation command, final String generationType) {
         return String.format("generate %s set with Topic: %s, Type: %s, Quantity: %s,}\n System prompt: %s \n User prompt: %s",
                 generationType, command.getTopic(), command.getType(), command.getQuantity(), command.getSystemPrompt(), command.getUserPrompt());
+    }
+
+    @Transactional
+    public GenerationsPage searchGenerationsPaginate(PagedGenerationsQuery query) {
+        //0. get author
+        final Author author = authorService.getAuthorById(query.getGenerationQuery().getAuthorId());
+        //1. get pageable
+        final Pageable pageable = PageRequest
+                .of(query.getQueryPage().getPage(),
+                        query.getQueryPage().getSize(),
+                        Sort.by("type", "topic").ascending());
+        //2. search generations
+        if (GenerationTypeEnum.CONVERSATION.equals(query.getGenerationQuery().getGenerationType())) {
+            return generationRepository.findPagination(
+                    query.getGenerationQuery().getMessageType(),
+                    query.getGenerationQuery().getMessageTopic(),
+                    query.getGenerationQuery().getUserPrompt(),
+                    query.getGenerationQuery().getSystemPrompt(),
+                    query.getGenerationQuery().getQuantity(),
+                    author,
+                    query.getGenerationQuery().getStartDate(),
+                    query.getGenerationQuery().getEndDate(),
+                    pageable);
+        } else {
+            throw new IllegalArgumentException("Generation type not supported");
+        }
     }
 }
