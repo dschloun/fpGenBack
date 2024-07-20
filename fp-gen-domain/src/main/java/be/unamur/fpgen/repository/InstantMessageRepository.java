@@ -1,6 +1,5 @@
 package be.unamur.fpgen.repository;
 
-import be.unamur.fpgen.generation.AbstractGeneration;
 import be.unamur.fpgen.generation.InstantMessageGeneration;
 import be.unamur.fpgen.instant_message.InstantMessage;
 import be.unamur.fpgen.instant_message.MessageTopicEnum;

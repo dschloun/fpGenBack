@@ -35,4 +35,10 @@ public class DateUtil {
         ZonedDateTime zonedDateTime = localDate.atStartOfDay(brusselsZoneId);
         return zonedDateTime.toOffsetDateTime();
     }
+    public static OffsetDateTime ifNullReturnOldDate(OffsetDateTime date) {
+        return date != null ? date : OffsetDateTime.now().minusYears(5);
+    }
+    public static OffsetDateTime ifNullReturnTomorrow(OffsetDateTime date) {
+        return date == null ? OffsetDateTime.now().plusDays(1) : date;
+    }
 }

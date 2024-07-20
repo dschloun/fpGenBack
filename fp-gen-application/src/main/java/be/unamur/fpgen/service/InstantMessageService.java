@@ -7,6 +7,7 @@ import be.unamur.fpgen.instant_message.pagination.InstantMessagesPage;
 import be.unamur.fpgen.instant_message.pagination.PagedInstantMessagesQuery;
 import be.unamur.fpgen.mapper.webToDomain.InstantMessageWebToDomainMapper;
 import be.unamur.fpgen.repository.InstantMessageRepository;
+import be.unamur.fpgen.utils.DateUtil;
 import be.unamur.model.InstantMessageBatchCreation;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -60,15 +61,14 @@ public class InstantMessageService {
     public InstantMessagesPage searchInstantMessagesPaginate(final PagedInstantMessagesQuery query) {
         final Pageable pageable = PageRequest
                 .of(query.getQueryPage().getPage(),
-                        query.getQueryPage().getSize(),
-                        Sort.by("type", "topic").ascending());
+                        query.getQueryPage().getSize());
 
         return instantMessageRepository.findPagination(
                 query.getInstantMessageQuery().getMessageTopic(),
                 query.getInstantMessageQuery().getMessageType(),
                 query.getInstantMessageQuery().getContent(),
-                query.getInstantMessageQuery().getStartDate(),
-                query.getInstantMessageQuery().getEndDate(),
+                DateUtil.ifNullReturnOldDate(query.getInstantMessageQuery().getStartDate()),
+                DateUtil.ifNullReturnTomorrow(query.getInstantMessageQuery().getEndDate()),
                 pageable);
     }
 
