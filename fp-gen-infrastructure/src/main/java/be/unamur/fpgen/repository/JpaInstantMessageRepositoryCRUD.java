@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public interface JpaInstantMessageRepositoryCRUD extends JpaRepository<InstantMessageEntity, UUID> {
 
-    @Query(value = "SELECT DISTINCT i from instant_message i" +
+    @Query(value = "SELECT DISTINCT i from InstantMessageEntity i" +
             " WHERE (:topic is null or i.topic = :topic)" +
             " AND (:type is null or i.type = :type)" +
             " AND (:content is null or lower(i.content) like %:content%)" +
