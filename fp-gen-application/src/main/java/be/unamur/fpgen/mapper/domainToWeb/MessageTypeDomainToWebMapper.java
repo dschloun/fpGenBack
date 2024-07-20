@@ -11,6 +11,6 @@ public class MessageTypeDomainToWebMapper {
         return Optional.ofNullable(domain)
                 .map(Enum::name)
                 .map(MessageType::valueOf)
-                .orElseThrow();
+                .orElse(null);
     }
 }
