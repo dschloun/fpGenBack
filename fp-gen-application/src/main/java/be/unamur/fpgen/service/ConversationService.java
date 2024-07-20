@@ -13,6 +13,7 @@ import be.unamur.fpgen.repository.ConversationGenerationRepository;
 import be.unamur.fpgen.repository.ConversationMessageRepository;
 import be.unamur.fpgen.repository.ConversationRepository;
 import be.unamur.fpgen.utils.Alternator;
+import be.unamur.fpgen.utils.DateUtil;
 import be.unamur.fpgen.utils.TypeCorrespondenceMapper;
 import be.unamur.model.ConversationBatchCreation;
 import org.springframework.data.domain.PageRequest;
@@ -122,8 +123,8 @@ public class ConversationService {
                 query.getConversationQuery().getMessageType(),
                 query.getConversationQuery().getMaxInteractionNumber(),
                 query.getConversationQuery().getMinInteractionNumber(),
-                query.getConversationQuery().getStartDate(),
-                query.getConversationQuery().getEndDate(),
+                DateUtil.ifNullReturnOldDate(query.getConversationQuery().getStartDate()),
+                DateUtil.ifNullReturnTomorrow(query.getConversationQuery().getEndDate()),
                 pageable);
     }
 }

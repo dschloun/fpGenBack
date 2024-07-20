@@ -12,6 +12,7 @@ import be.unamur.fpgen.mapper.webToDomain.MessageTypeWebToDomainMapper;
 import be.unamur.fpgen.repository.ConversationGenerationRepository;
 import be.unamur.fpgen.repository.GenerationRepository;
 import be.unamur.fpgen.repository.InstantMessageGenerationRepository;
+import be.unamur.fpgen.utils.DateUtil;
 import be.unamur.model.GenerationCreation;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -101,8 +102,8 @@ public class GenerationService {
                     query.getGenerationQuery().getSystemPrompt(),
                     query.getGenerationQuery().getQuantity(),
                     query.getGenerationQuery().getAuthorTrigram(),
-                    query.getGenerationQuery().getStartDate(),
-                    query.getGenerationQuery().getEndDate(),
+                    DateUtil.ifNullReturnOldDate(query.getGenerationQuery().getStartDate()),
+                    DateUtil.ifNullReturnTomorrow(query.getGenerationQuery().getEndDate()),
                     pageable);
         } else if (GenerationTypeEnum.INSTANT_MESSAGE.equals(query.getGenerationQuery().getGenerationType())) {
             return instantMessageGenerationRepository.findPagination(
@@ -112,8 +113,8 @@ public class GenerationService {
                     query.getGenerationQuery().getSystemPrompt(),
                     query.getGenerationQuery().getQuantity(),
                     query.getGenerationQuery().getAuthorTrigram(),
-                    query.getGenerationQuery().getStartDate(),
-                    query.getGenerationQuery().getEndDate(),
+                    DateUtil.ifNullReturnOldDate(query.getGenerationQuery().getStartDate()),
+                    DateUtil.ifNullReturnTomorrow(query.getGenerationQuery().getEndDate()),
                     pageable);
         } else {
             throw new IllegalArgumentException("Generation type not supported");
