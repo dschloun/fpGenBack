@@ -3,11 +3,19 @@ package be.unamur.fpgen.repository;
 import be.unamur.fpgen.conversation.Conversation;
 import be.unamur.fpgen.entity.conversation.ConversationEntity;
 import be.unamur.fpgen.entity.instant_message.ConversationInstantMessageEntity;
-import be.unamur.fpgen.message.ConversationMessage;
 import be.unamur.fpgen.mapper.domainToJpa.ConversationInstantMessageDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.ConversationInstantMessageJpaToDomainMapper;
+import be.unamur.fpgen.message.ConversationMessage;
+import be.unamur.fpgen.message.MessageTopicEnum;
+import be.unamur.fpgen.message.MessageTypeEnum;
+import be.unamur.fpgen.message.pagination.conversation_message.ConversationMessagesPage;
+import be.unamur.fpgen.pagination.Pagination;
+import be.unamur.fpgen.utils.StringUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Repository
@@ -53,5 +61,32 @@ public class JpaConversationMessageRepository implements ConversationMessageRepo
     @Override
     public void deleteConversationMessageById(Long conversationInstantMessageId) {
 
+    }
+
+    @Override
+    public ConversationMessagesPage findPagination(MessageTopicEnum topic, MessageTypeEnum type, String content, OffsetDateTime startDate, OffsetDateTime endDate, Pageable pageable) {
+        // 1. get in Page format
+        Page<ConversationMessage> page = jpaConversationMessageRepositoryCRUD
+                .findPagination(
+                        topic,
+                        type,
+                        StringUtil.toLowerCaseIfNotNull(content),
+                        startDate,
+                        endDate,
+                        pageable
+                ).map(ConversationInstantMessageJpaToDomainMapper::map);
+
+        // 2. convert
+        final ConversationMessagesPage conversationMessagesPage = ConversationMessagesPage.newBuilder()
+                .withPagination(new Pagination.Builder()
+                        .size(page.getSize())
+                        .totalSize((int) page.getTotalElements())
+                        .page(page.getNumber())
+                        .build())
+                .withConversationMessageList(page.getContent())
+                .build();
+
+        // 3. return
+        return conversationMessagesPage;
     }
 }
