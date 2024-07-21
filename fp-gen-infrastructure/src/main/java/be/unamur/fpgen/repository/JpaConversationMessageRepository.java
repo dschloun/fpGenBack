@@ -34,11 +34,6 @@ public class JpaConversationMessageRepository implements ConversationMessageRepo
     }
 
     @Override
-    public ConversationMessage saveConversationMessage(ConversationMessage conversationInstantMessage) {
-        return null;
-    }
-
-    @Override
     public List<ConversationMessage> saveConversationMessageList(Conversation conversation, List<ConversationMessage> conversationInstantMessageList) {
         final ConversationEntity conversationEntity = jpaConversationRepositoryCRUD.getReferenceById(conversation.getId());
 
@@ -59,9 +54,7 @@ public class JpaConversationMessageRepository implements ConversationMessageRepo
     }
 
     @Override
-    public void deleteConversationMessageById(Long conversationInstantMessageId) {
-
-    }
+    public void deleteConversationMessageById(Long conversationInstantMessageId) {}
 
     @Override
     public ConversationMessagesPage findPagination(MessageTopicEnum topic, MessageTypeEnum type, String content, OffsetDateTime startDate, OffsetDateTime endDate, Pageable pageable) {
