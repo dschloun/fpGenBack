@@ -55,6 +55,7 @@ public class ConversationController implements ConversationApi {
 
     @Override
     public ResponseEntity<Void> deleteConversationById(UUID conversationId) {
-        return ConversationApi.super.deleteConversationById(conversationId);
+        conversationService.deleteConversationById(conversationId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
