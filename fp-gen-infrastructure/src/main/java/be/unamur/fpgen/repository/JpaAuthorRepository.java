@@ -38,4 +38,9 @@ public class JpaAuthorRepository implements AuthorRepository{
     public Optional<Author> findAuthorByTrigram(String trigram) {
         return jpaAuthorRepositoryCRUD.findByTrigram(trigram).map(AuthorJpaToDomainMapper::map);
     }
+
+    @Override
+    public boolean existsAuthorByTrigram(String trigram) {
+        return jpaAuthorRepositoryCRUD.existsByTrigram(trigram);
+    }
 }

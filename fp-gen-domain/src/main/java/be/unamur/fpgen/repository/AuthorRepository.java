@@ -14,4 +14,6 @@ public interface AuthorRepository {
     Optional<Author> getAuthorById(UUID authorId);
 
     Optional<Author> findAuthorByTrigram(String trigram);
+
+    boolean existsAuthorByTrigram(String trigram);
 }

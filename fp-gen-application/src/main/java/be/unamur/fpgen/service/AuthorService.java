@@ -25,8 +25,10 @@ public class AuthorService {
 
     @Transactional
     public Author createIfNotExists(final Author author){
-        return authorRepository.getAuthorById(author.getId())
-                .orElseGet(() -> authorRepository.saveAuthor(author));
+        if(authorRepository.existsAuthorByTrigram(author.getTrigram())){
+            throw AuthorNotFoundException.withTrigram(author.getTrigram());
+        }
+        return authorRepository.saveAuthor(author);
     }
 
     @Transactional

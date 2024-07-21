@@ -9,4 +9,6 @@ import java.util.UUID;
 public interface JpaAuthorRepositoryCRUD extends JpaRepository<AuthorEntity, UUID> {
 
     Optional<AuthorEntity> findByTrigram(String trigram);
+
+    boolean existsByTrigram(String trigram);
 }
