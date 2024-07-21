@@ -62,6 +62,13 @@ public class JpaInstantMessageDatasetRepository implements InstantMessageDataset
     }
 
     @Override
+    public void removeInstantMessageListFromDataset(InstantMessageDataset dataset, Set<InstantMessageGeneration> generations) {
+        final InstantMessageDatasetEntity datasetEntity = jpaInstantMessageDatasetRepositoryCRUD.getReferenceById(dataset.getId());
+        datasetEntity.getInstantMessageGenerationList().removeAll(getGenerationList(generations));
+        jpaInstantMessageDatasetRepositoryCRUD.save(datasetEntity);
+    }
+
+    @Override
     public DatasetsPage findPagination(String version, String name, String description, String comment, String authorTrigram, OffsetDateTime startDate, OffsetDateTime endDate, Pageable pageable) {
         // 1. get in Page format
         Page<ConversationDataset> page = jpaInstantMessageDatasetRepositoryCRUD.findPagination(
@@ -85,5 +92,13 @@ public class JpaInstantMessageDatasetRepository implements InstantMessageDataset
                 .build();
 
         return datasetsPage;
+    }
+
+    private Set<InstantMessageGenerationEntity> getGenerationList(Set<InstantMessageGeneration> generations){
+        final HashSet<InstantMessageGenerationEntity> instantMessageGenerations = new HashSet<>();
+        generations.forEach(g ->{
+            instantMessageGenerations.add(jpaInstantMessageGenerationRepositoryCRUD.getReferenceById(g.getId()));
+        });
+        return instantMessageGenerations;
     }
 }

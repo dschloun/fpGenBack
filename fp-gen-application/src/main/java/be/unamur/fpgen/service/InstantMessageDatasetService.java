@@ -82,6 +82,19 @@ public class InstantMessageDatasetService {
         instantMessageDatasetRepository.addInstantMessageListToDataset(dataset, instantMessageGenerationList);
 
     }
+    @Transactional
+    public void removeInstantMessageListFromDataset(UUID datasetId, List<UUID> instantMessageGenerationIdsList) {
+        // 1. get dataset
+        final InstantMessageDataset dataset = getDatasetById(datasetId);
+
+        // 2. get instant message generations
+        final Set<InstantMessageGeneration> instantMessageGenerationList = getInstantMessageGenerationList(instantMessageGenerationIdsList);
+
+        // 3. remove instant message generations from dataset
+        dataset.getInstantMessageGenerationList().removeAll(getInstantMessageGenerationList(instantMessageGenerationIdsList));
+        instantMessageDatasetRepository.removeInstantMessageListFromDataset(dataset, instantMessageGenerationList);
+    }
+
 
     @Transactional
     public DatasetsPage searchDatasetPaginate(final PagedDatasetsQuery query) {
@@ -103,5 +116,23 @@ public class InstantMessageDatasetService {
                 DateUtil.ifNullReturnOldDate(query.getDatasetQuery().getStartDate()),
                 DateUtil.ifNullReturnTomorrow(query.getDatasetQuery().getEndDate()),
                 pageable);
+    }
+
+    private Set<InstantMessageGeneration> getInstantMessageGenerationList(List<UUID> instantMessageGenerationIdsList) {
+        // 1. get instant message generations
+        final Set<InstantMessageGeneration> instantMessageGenerationList = new HashSet<>();
+        instantMessageGenerationIdsList.forEach(i -> {
+            try {
+                final InstantMessageGeneration instantMessageGeneration = instantMessageGenerationService.findInstantMessageGenerationById(i);
+                instantMessageGenerationList.add(instantMessageGeneration);
+            } catch (GenerationNotFoundException e) {
+                System.out.println("generation does not exist");
+            }
+        });
+        // 2. check if list is not empty
+        if (instantMessageGenerationList.isEmpty()) {
+            throw new IllegalArgumentException("No instant message generation found");
+        }
+        return instantMessageGenerationList;
     }
 }

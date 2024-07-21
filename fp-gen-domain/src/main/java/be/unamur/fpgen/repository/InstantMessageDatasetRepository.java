@@ -20,5 +20,6 @@ public interface InstantMessageDatasetRepository {
 
     void addInstantMessageListToDataset(InstantMessageDataset dataset, Set<InstantMessageGeneration> generations);
 
+    void removeInstantMessageListFromDataset(InstantMessageDataset dataset, Set<InstantMessageGeneration> generations);
     DatasetsPage findPagination(String version, String name, String description, String comment, String authorTrigram, OffsetDateTime startDate, OffsetDateTime endDate, Pageable pageable);
 }

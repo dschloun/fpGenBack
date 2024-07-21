@@ -5,10 +5,12 @@ import be.unamur.fpgen.dataset.pagination.DatasetsPage;
 import be.unamur.fpgen.entity.author.AuthorEntity;
 import be.unamur.fpgen.entity.dataset.ConversationDatasetEntity;
 import be.unamur.fpgen.entity.generation.ConversationGenerationEntity;
+import be.unamur.fpgen.entity.generation.ConversationGenerationEntity;
+import be.unamur.fpgen.generation.ConversationGeneration;
 import be.unamur.fpgen.generation.ConversationGeneration;
 import be.unamur.fpgen.mapper.domainToJpa.ConversationDatasetDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.ConversationDatasetJpaToDomainMapper;
-import be.unamur.fpgen.mapper.jpaToDomain.InstantMessageDatasetJpaToDomainMapper;
+import be.unamur.fpgen.mapper.jpaToDomain.ConversationDatasetJpaToDomainMapper;
 import be.unamur.fpgen.pagination.Pagination;
 import be.unamur.fpgen.utils.StringUtil;
 import org.springframework.data.domain.Page;
@@ -62,6 +64,13 @@ public class JpaConversationDatasetRepository implements ConversationDatasetRepo
     }
 
     @Override
+    public void removeConversationListFromDataset(ConversationDataset datasetIn, Set<ConversationGeneration> generations) {
+        final ConversationDatasetEntity dataset = jpaConversationDatasetRepositoryCRUD.getReferenceById(datasetIn.getId());
+        dataset.getConversationGenerationList().removeAll(getGenerationList(generations));
+        jpaConversationDatasetRepositoryCRUD.save(dataset);
+    }
+
+    @Override
     public DatasetsPage findPagination(String version, String name, String description, String comment, String authorTrigram, OffsetDateTime startDate, OffsetDateTime endDate, Pageable pageable) {
         // 1. get in Page format
         Page<ConversationDataset> page = jpaConversationDatasetRepositoryCRUD.findPagination(
@@ -85,5 +94,13 @@ public class JpaConversationDatasetRepository implements ConversationDatasetRepo
                 .build();
 
         return datasetsPage;
+    }
+
+    private Set<ConversationGenerationEntity> getGenerationList(Set<ConversationGeneration> generations){
+        final HashSet<ConversationGenerationEntity> conversationGenerations = new HashSet<>();
+        generations.forEach(g ->{
+            conversationGenerations.add(jpaConversationGenerationRepositoryCRUD.getReferenceById(g.getId()));
+        });
+        return conversationGenerations;
     }
 }

@@ -2,9 +2,12 @@ package be.unamur.fpgen.service;
 
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.dataset.ConversationDataset;
+import be.unamur.fpgen.dataset.ConversationDataset;
 import be.unamur.fpgen.dataset.pagination.DatasetsPage;
 import be.unamur.fpgen.dataset.pagination.PagedDatasetsQuery;
 import be.unamur.fpgen.exception.GenerationNotFoundException;
+import be.unamur.fpgen.generation.ConversationGeneration;
+import be.unamur.fpgen.generation.ConversationGeneration;
 import be.unamur.fpgen.generation.ConversationGeneration;
 import be.unamur.fpgen.mapper.webToDomain.DatasetWebToDomainMapper;
 import be.unamur.fpgen.repository.ConversationDatasetRepository;
@@ -61,23 +64,36 @@ public class ConversationDatasetService {
         // 1. get dataset
         final ConversationDataset dataset = getDatasetById(datasetId);
 
-        // 2. get instant message generations
+        // 2. get conversation message generations
         final Set<ConversationGeneration> conversationGenerationList = new HashSet<>();
         conversationGenerationIdsList.forEach(i -> {
             try {
-                final ConversationGeneration instantMessageGeneration = conversationGenerationService.findConversationGenerationById(i);
-                conversationGenerationList.add(instantMessageGeneration);
+                final ConversationGeneration conversationMessageGeneration = conversationGenerationService.findConversationGenerationById(i);
+                conversationGenerationList.add(conversationMessageGeneration);
             } catch (GenerationNotFoundException e) {
                 System.out.println("generation does not exist");
             }
         });
         // 3. check if list is not empty
         if (conversationGenerationList.isEmpty()) {
-            throw new IllegalArgumentException("No instant message generation found");
+            throw new IllegalArgumentException("No conversation message generation found");
         }
-        // 3. add instant message generations to dataset
+        // 3. add conversation message generations to dataset
         dataset.getConversationGenerationList().addAll(conversationGenerationList);
         conversationDatasetRepository.addConversationListToDataset(dataset, conversationGenerationList);
+    }
+
+    @Transactional
+    public void removeConversationListFromDataset(UUID datasetId, List<UUID> conversationMessageGenerationIdsList) {
+        // 1. get dataset
+        final ConversationDataset dataset = getDatasetById(datasetId);
+
+        // 2. get conversation message generations
+        final Set<ConversationGeneration> conversationMessageGenerationList = getConversationGenerationList(conversationMessageGenerationIdsList);
+
+        // 3. remove conversation message generations from dataset
+        dataset.getConversationGenerationList().removeAll(getConversationGenerationList(conversationMessageGenerationIdsList));
+        conversationDatasetRepository.removeConversationListFromDataset(dataset, conversationMessageGenerationList);
     }
 
     @Transactional
@@ -100,5 +116,23 @@ public class ConversationDatasetService {
                 DateUtil.ifNullReturnOldDate(query.getDatasetQuery().getStartDate()),
                 DateUtil.ifNullReturnTomorrow(query.getDatasetQuery().getEndDate()),
                 pageable);
+    }
+
+    private Set<ConversationGeneration> getConversationGenerationList(List<UUID> conversationGenerationIdsList) {
+        // 1. get instant message generations
+        final Set<ConversationGeneration> conversationGenerationList = new HashSet<>();
+        conversationGenerationIdsList.forEach(i -> {
+            try {
+                final ConversationGeneration conversationGeneration = conversationGenerationService.findConversationGenerationById(i);
+                conversationGenerationList.add(conversationGeneration);
+            } catch (GenerationNotFoundException e) {
+                System.out.println("generation does not exist");
+            }
+        });
+        // 2. check if list is not empty
+        if (conversationGenerationList.isEmpty()) {
+            throw new IllegalArgumentException("No conversation message generation found");
+        }
+        return conversationGenerationList;
     }
 }

@@ -19,5 +19,6 @@ public interface ConversationDatasetRepository {
 
     void addConversationListToDataset(ConversationDataset dataset, Set<ConversationGeneration> generations);
 
+    void removeConversationListFromDataset(ConversationDataset datasetIn, Set<ConversationGeneration> generations);
     DatasetsPage findPagination(String version, String name, String description, String comment, String authorTrigram, OffsetDateTime startDate, OffsetDateTime endDate, Pageable pageable);
 }

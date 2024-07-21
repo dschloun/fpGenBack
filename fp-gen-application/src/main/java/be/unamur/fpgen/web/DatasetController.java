@@ -39,6 +39,18 @@ public class DatasetController implements DatasetApi {
     }
 
     @Override
+    public ResponseEntity<Void> removeGenerationFromDataset(UUID datasetId, @NotNull @Valid DatasetType datasetType, @Valid List<UUID> UUID) {
+        if (DatasetType.INSTANT_MESSAGE.equals(datasetType)){
+            instantMessageDatasetService.removeInstantMessageListFromDataset(datasetId, UUID);
+        } else if(DatasetType.CONVERSATION.equals(datasetType)){
+            conversationDatasetService.removeConversationListFromDataset(datasetId, UUID);
+        } else {
+            throw new IllegalArgumentException("Unsupported dataset type");
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @Override
     public ResponseEntity<Dataset> createDataset(@NotNull @Valid DatasetType datasetType, @Valid DatasetCreation datasetCreation) {
         Dataset dataset;
         if (DatasetType.INSTANT_MESSAGE.equals(datasetType)){
@@ -74,11 +86,6 @@ public class DatasetController implements DatasetApi {
             throw new IllegalArgumentException("Unsupported dataset type");
         }
         return new ResponseEntity<>(dataset, HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<Void> removeGenerationFromDataset(UUID datasetId, @NotNull @Valid DatasetType datasetType, @Valid List<UUID> UUID) {
-        return DatasetApi.super.removeGenerationFromDataset(datasetId, datasetType, UUID);
     }
 
     @Override
