@@ -1,7 +1,6 @@
 package be.unamur.fpgen.service;
 
 import be.unamur.fpgen.author.Author;
-import be.unamur.fpgen.dataset.DatasetTypeEnum;
 import be.unamur.fpgen.dataset.InstantMessageDataset;
 import be.unamur.fpgen.dataset.pagination.DatasetsPage;
 import be.unamur.fpgen.dataset.pagination.PagedDatasetsQuery;
@@ -26,12 +25,12 @@ import java.util.UUID;
 public class InstantMessageDatasetService {
     private final AuthorService authorService;
     private final InstantMessageDatasetRepository instantMessageDatasetRepository;
-    private final GenerationService generationService;
+    private final InstantMessageGenerationService instantMessageGenerationService;
 
-    public InstantMessageDatasetService(AuthorService authorService, InstantMessageDatasetRepository instantMessageDatasetRepository, GenerationService generationService) {
+    public InstantMessageDatasetService(AuthorService authorService, InstantMessageDatasetRepository instantMessageDatasetRepository, InstantMessageGenerationService instantMessageGenerationService) {
         this.authorService = authorService;
         this.instantMessageDatasetRepository = instantMessageDatasetRepository;
-        this.generationService = generationService;
+        this.instantMessageGenerationService = instantMessageGenerationService;
     }
 
     @Transactional
@@ -68,7 +67,7 @@ public class InstantMessageDatasetService {
         final Set<InstantMessageGeneration> instantMessageGenerationList = new HashSet<>();
         instantMessageGenerationIdsList.forEach(i -> {
             try {
-                final InstantMessageGeneration instantMessageGeneration = generationService.findInstantMessageGenerationById(i);
+                final InstantMessageGeneration instantMessageGeneration = instantMessageGenerationService.findInstantMessageGenerationById(i);
                 instantMessageGenerationList.add(instantMessageGeneration);
             } catch (GenerationNotFoundException e) {
                 System.out.println("generation does not exist");

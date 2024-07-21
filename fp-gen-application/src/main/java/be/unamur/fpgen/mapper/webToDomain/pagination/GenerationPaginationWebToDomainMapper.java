@@ -23,7 +23,7 @@ public class GenerationPaginationWebToDomainMapper {
                 .withMessageTopic(MessageTopicWebToDomainMapper.map(web.getMessageTopic()))
                 .withMessageType(MessageTypeWebToDomainMapper.map(web.getMessageType()))
                 .withGenerationType(GenerationTypeWebToDomainMapper.map(web.getGenerationType()))
-                .withAuthorTrigram(web.getAuthor())
+                .withAuthorTrigram(web.getAuthorTrigram())
                 .withQuantity(web.getQuantity())
                 .withSystemPrompt(web.getSystemPrompt())
                 .withUserPrompt(web.getUserPrompt())

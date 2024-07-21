@@ -11,7 +11,6 @@ import be.unamur.fpgen.utils.DateUtil;
 import be.unamur.model.InstantMessageBatchCreation;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -23,12 +22,12 @@ import java.util.UUID;
 public class InstantMessageService {
 
     private final InstantMessageRepository instantMessageRepository;
-    private final GenerationService generationService;
+    private final InstantMessageGenerationService instantMessageGenerationService;
 
     public InstantMessageService(final InstantMessageRepository instantMessageRepository,
-                                 final GenerationService generationService) {
+                                 final InstantMessageGenerationService instantMessageGenerationService) {
         this.instantMessageRepository = instantMessageRepository;
-        this.generationService = generationService;
+        this.instantMessageGenerationService = instantMessageGenerationService;
     }
 
     @Transactional
@@ -36,7 +35,7 @@ public class InstantMessageService {
         // 0. for each
         command.getInstantMessageCreationList().forEach(imc -> {
             // 1. create generation data
-            final InstantMessageGeneration generation = generationService.createInstantMessageGeneration(imc);
+            final InstantMessageGeneration generation = instantMessageGenerationService.createInstantMessageGeneration(imc);
 
             // 2. prepare a list of instant messages
             final List<InstantMessage> instantMessageList = new ArrayList<>();

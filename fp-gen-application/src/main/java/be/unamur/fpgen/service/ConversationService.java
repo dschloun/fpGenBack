@@ -30,16 +30,16 @@ import java.util.UUID;
 public class ConversationService {
 
     private final ConversationRepository conversationRepository;
-    private final GenerationService generationService;
+    private final ConversationGenerationService conversationGenerationService;
     private final InterlocutorService interlocutorService;
     private final ConversationMessageRepository conversationMessageRepository;
 
     public ConversationService(ConversationRepository conversationRepository,
-                               GenerationService generationService,
+                               ConversationGenerationService conversationGenerationService,
                                ConversationGenerationRepository conversationGenerationRepository,
                                InterlocutorService interlocutorService, ConversationMessageRepository conversationMessageRepository) {
         this.conversationRepository = conversationRepository;
-        this.generationService = generationService;
+        this.conversationGenerationService = conversationGenerationService;
         this.interlocutorService = interlocutorService;
         this.conversationMessageRepository = conversationMessageRepository;
     }
@@ -52,7 +52,7 @@ public class ConversationService {
         // 0. for each
         command.getConversationCreationList().forEach(cc -> {
             // 1. create generation data
-            final ConversationGeneration generation = generationService.createConversationGeneration(cc);
+            final ConversationGeneration generation = conversationGenerationService.createConversationGeneration(cc);
 
             // 3. generate conversations
             //todo chat gpt api with prompt // return the x messages in json format, unmarshall, ...

@@ -2,7 +2,6 @@ package be.unamur.fpgen.service;
 
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.dataset.ConversationDataset;
-import be.unamur.fpgen.dataset.ConversationDataset;
 import be.unamur.fpgen.exception.GenerationNotFoundException;
 import be.unamur.fpgen.generation.ConversationGeneration;
 import be.unamur.fpgen.mapper.webToDomain.DatasetWebToDomainMapper;
@@ -20,12 +19,12 @@ import java.util.UUID;
 public class ConversationDatasetService {
     private final AuthorService authorService;
     private final ConversationDatasetRepository conversationDatasetRepository;
-    private final GenerationService generationService;
+    private final ConversationGenerationService conversationGenerationService;
 
-    public ConversationDatasetService(AuthorService authorService, ConversationDatasetRepository conversationDatasetRepository, GenerationService generationService) {
+    public ConversationDatasetService(AuthorService authorService, ConversationDatasetRepository conversationDatasetRepository, ConversationGenerationService conversationGenerationService) {
         this.authorService = authorService;
         this.conversationDatasetRepository = conversationDatasetRepository;
-        this.generationService = generationService;
+        this.conversationGenerationService = conversationGenerationService;
     }
 
     @Transactional
@@ -61,7 +60,7 @@ public class ConversationDatasetService {
         final Set<ConversationGeneration> conversationGenerationList = new HashSet<>();
         conversationGenerationIdsList.forEach(i -> {
             try {
-                final ConversationGeneration instantMessageGeneration = generationService.findConversationGenerationById(i);
+                final ConversationGeneration instantMessageGeneration = conversationGenerationService.findConversationGenerationById(i);
                 conversationGenerationList.add(instantMessageGeneration);
             } catch (GenerationNotFoundException e) {
                 System.out.println("generation does not exist");
