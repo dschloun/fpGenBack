@@ -2,6 +2,7 @@ package be.unamur.fpgen.service;
 
 import be.unamur.fpgen.author.pagination.AuthorsPage;
 import be.unamur.fpgen.author.pagination.PagedAuthorsQuery;
+import be.unamur.fpgen.exception.AuthorAlreadyExistException;
 import be.unamur.fpgen.exception.AuthorNotFoundException;
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.repository.AuthorRepository;
@@ -30,7 +31,7 @@ public class AuthorService {
     @Transactional
     public Author createIfNotExists(final Author author){
         if(authorRepository.existsAuthorByTrigram(author.getTrigram())){
-            throw AuthorNotFoundException.withTrigram(author.getTrigram());
+            throw AuthorAlreadyExistException.withTrigram(author.getTrigram());
         }
         return authorRepository.saveAuthor(author);
     }
