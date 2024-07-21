@@ -51,4 +51,10 @@ public class InstantMessageController implements InstantMessageApi {
                 ), HttpStatus.OK
         );
     }
+
+    @Override
+    public ResponseEntity<Void> deleteInstantMessageById(UUID instantMessageId) {
+        instantMessageService.deleteById(instantMessageId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

@@ -26,11 +26,6 @@ public class ConversationController implements ConversationApi {
     }
 
     @Override
-    public Optional<NativeWebRequest> getRequest() {
-        return ConversationApi.super.getRequest();
-    }
-
-    @Override
     public ResponseEntity<Void> generateConversations(@Valid ConversationBatchCreation conversationBatchCreation) {
         conversationService.createConversationList(conversationBatchCreation);
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -44,6 +39,7 @@ public class ConversationController implements ConversationApi {
                 , HttpStatus.OK);
     }
 
+    //fixme not very useful
     @Override
     public ResponseEntity<List<ConversationMessage>> getConversationInstantMessageListById(UUID conversationId, UUID conversationInstantMessageId) {
         return ConversationApi.super.getConversationInstantMessageListById(conversationId, conversationInstantMessageId);

@@ -27,11 +27,6 @@ public class AuthorController implements AuthorApi {
     }
 
     @Override
-    public Optional<NativeWebRequest> getRequest() {
-        return AuthorApi.super.getRequest();
-    }
-
-    @Override
     public ResponseEntity<Author> createAuthor(@Valid AuthorCreation authorCreation) {
         final Author author = AuthorDomainToWebMapper.map(authorService.createIfNotExists(AuthorWebToDomainMapper.map(authorCreation)));
         return new ResponseEntity<>(author, HttpStatus.CREATED);
@@ -43,17 +38,11 @@ public class AuthorController implements AuthorApi {
     }
 
     @Override
-    public ResponseEntity<List<Author>> getAuthorList() {
-        return AuthorApi.super.getAuthorList();
-    }
-
-    @Override
     public ResponseEntity<AuthorsPage> searchAuthorsPaginate(@Valid PagedAuthorQuery pagedAuthorQuery) {
         return new ResponseEntity<>(
                 AuthorPaginationDomainToWebMapper.map(authorService.searchAuthorPaginate(
                         AuthorPaginationWebToDomainMapper.map(pagedAuthorQuery)
                 )
                 ), HttpStatus.OK);
-
     }
 }

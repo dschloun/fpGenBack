@@ -71,4 +71,9 @@ public class InstantMessageService {
                 pageable);
     }
 
+    @Transactional
+    public void deleteById(UUID instantMessageId) {
+        instantMessageRepository.deleteInstantMessageById(instantMessageId);
+    }
+
 }

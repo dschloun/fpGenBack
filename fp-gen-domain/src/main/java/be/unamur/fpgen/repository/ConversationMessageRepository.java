@@ -12,8 +12,6 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 public interface ConversationMessageRepository {
-    ConversationMessage saveConversationMessage(ConversationMessage conversationInstantMessage);
-
     List<ConversationMessage> saveConversationMessageList(Conversation conversation, List<ConversationMessage> conversationInstantMessageList);
 
     void deleteConversationMessageById(Long conversationInstantMessageId);
