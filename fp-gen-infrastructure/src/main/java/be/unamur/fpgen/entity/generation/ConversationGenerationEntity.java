@@ -14,7 +14,7 @@ public class ConversationGenerationEntity extends GenerationEntity {
     private Set<ConversationEntity> conversationList = new HashSet<>();
     private Set<ConversationDatasetEntity> conversationDatasetList = new HashSet<>();
 
-    @OneToMany(mappedBy = "conversationGeneration")
+    @OneToMany(mappedBy = "conversationGeneration", cascade = CascadeType.ALL, orphanRemoval = true)
     public Set<ConversationEntity> getConversationList() {
         return conversationList;
     }

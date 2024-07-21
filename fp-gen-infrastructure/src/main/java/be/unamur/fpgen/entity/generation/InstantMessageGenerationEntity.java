@@ -17,7 +17,7 @@ public class InstantMessageGenerationEntity extends GenerationEntity {
         private Set<InstantMessageDatasetEntity> instantMessageDatasetList = new HashSet<>();
 
         // getters and setters
-        @OneToMany(mappedBy = "instantMessageGeneration")
+        @OneToMany(mappedBy = "instantMessageGeneration", cascade = CascadeType.ALL, orphanRemoval = true)
         public Set<InstantMessageEntity> getInstantMessageList() {
                 return instantMessageList;
         }
