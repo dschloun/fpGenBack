@@ -1,8 +1,12 @@
 package be.unamur.fpgen.repository;
 
 import be.unamur.fpgen.author.Author;
+import be.unamur.fpgen.author.pagination.AuthorsPage;
 import be.unamur.fpgen.mapper.domainToJpa.AuthorDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.AuthorJpaToDomainMapper;
+import be.unamur.fpgen.pagination.Pagination;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -42,5 +46,32 @@ public class JpaAuthorRepository implements AuthorRepository{
     @Override
     public boolean existsAuthorByTrigram(String trigram) {
         return jpaAuthorRepositoryCRUD.existsByTrigram(trigram);
+    }
+
+    @Override
+    public AuthorsPage findAuthorsPagination(String lastName, String firstName, String organization, String function, String trigram, String email, Pageable pageable) {
+        // 1. get in Page format
+        Page<Author> page = jpaAuthorRepositoryCRUD.findPagination(
+                lastName,
+                firstName,
+                organization,
+                function,
+                trigram,
+                email,
+                pageable
+        ).map(AuthorJpaToDomainMapper::map);
+
+        // 2. convert
+        final AuthorsPage authorsPage = AuthorsPage.newBuilder()
+                .withPagination(new Pagination.Builder()
+                        .size(page.getSize())
+                        .totalSize((int) page.getTotalElements())
+                        .page(page.getNumber())
+                        .build())
+                .withAuthorList(page.getContent())
+                .build();
+
+        // 3. return
+        return authorsPage;
     }
 }

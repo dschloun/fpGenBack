@@ -15,8 +15,8 @@ import java.util.Set;
 public class AuthorEntity extends BaseUuidEntity {
 
     // members
-    private String lastName;
-    private String firstName;
+    private String lastname;
+    private String firstname;
     private String trigram;
     private String organization;
     private String function;
@@ -28,21 +28,21 @@ public class AuthorEntity extends BaseUuidEntity {
     // getters and setters
 
     @Column(name = "lastname", nullable = false)
-    public String getLastName() {
-        return lastName;
+    public String getLastname() {
+        return lastname;
     }
 
-    public void setLastName(final String lastName) {
-        this.lastName = lastName;
+    public void setLastname(final String lastName) {
+        this.lastname = lastName;
     }
 
     @Column(name = "firstname", nullable = false)
-    public String getFirstName() {
-        return firstName;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setFirstName(final String firstName) {
-        this.firstName = firstName;
+    public void setFirstname(final String firstName) {
+        this.firstname = firstName;
     }
 
     @Column(name = "trigram", nullable = false)

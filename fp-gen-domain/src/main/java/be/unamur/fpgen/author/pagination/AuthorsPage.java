@@ -16,6 +16,9 @@ public class AuthorsPage {
         pagination = builder.pagination;
         authorList = builder.authorList;
     }
+    public static Builder newBuilder() {
+        return new Builder();
+    }
 
     public Pagination getPagination() {
         return pagination;
@@ -32,9 +35,7 @@ public class AuthorsPage {
         private Builder() {
         }
 
-        public static Builder newBuilder() {
-            return new Builder();
-        }
+
 
         public Builder withPagination(Pagination val) {
             pagination = val;

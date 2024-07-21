@@ -13,8 +13,8 @@ public class AuthorDomainToJpaMapper {
         }
 
         final AuthorEntity entity = new AuthorEntity();
-        entity.setLastName(domain.getLastName());
-        entity.setFirstName(domain.getFirstName());
+        entity.setLastname(domain.getLastName());
+        entity.setFirstname(domain.getFirstName());
         entity.setTrigram(domain.getTrigram());
         entity.setOrganization(domain.getOrganization());
         entity.setFunction(domain.getFunction());
@@ -30,8 +30,8 @@ public class AuthorDomainToJpaMapper {
         entity.setId(domain.getId());
         entity.setCreationDate(domain.getCreationDate());
         entity.setModificationDate(domain.getModificationDate());
-        entity.setLastName(domain.getLastName());
-        entity.setFirstName(domain.getFirstName());
+        entity.setLastname(domain.getLastName());
+        entity.setFirstname(domain.getFirstName());
         entity.setTrigram(domain.getTrigram());
         entity.setOrganization(domain.getOrganization());
         entity.setFunction(domain.getFunction());
@@ -46,8 +46,8 @@ public class AuthorDomainToJpaMapper {
             return null;
         }
 
-        entity.setLastName(domain.getLastName());
-        entity.setFirstName(domain.getFirstName());
+        entity.setLastname(domain.getLastName());
+        entity.setFirstname(domain.getFirstName());
         entity.setTrigram(domain.getTrigram());
         entity.setOrganization(domain.getOrganization());
         entity.setFunction(domain.getFunction());

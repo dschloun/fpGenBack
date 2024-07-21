@@ -3,22 +3,18 @@ package be.unamur.fpgen.author.pagination;
 public class AuthorQuery {
     private final String lastname;
     private final String firstname;
-    private final String organisation;
+    private final String organization;
     private final String function;
     private final String trigram;
-    private final String description;
-    private final String comment;
-    private final String authorTrigram;
+    private final String email;
 
     private AuthorQuery(Builder builder) {
         lastname = builder.lastname;
         firstname = builder.firstname;
-        organisation = builder.organisation;
+        organization = builder.organization;
         function = builder.function;
         trigram = builder.trigram;
-        description = builder.description;
-        comment = builder.comment;
-        authorTrigram = builder.authorTrigram;
+        email = builder.email;
     }
     public static Builder newBuilder() {
         return new Builder();
@@ -32,8 +28,8 @@ public class AuthorQuery {
         return firstname;
     }
 
-    public String getOrganisation() {
-        return organisation;
+    public String getOrganization() {
+        return organization;
     }
 
     public String getFunction() {
@@ -44,27 +40,17 @@ public class AuthorQuery {
         return trigram;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public String getAuthorTrigram() {
-        return authorTrigram;
+    public String getEmail() {
+        return email;
     }
 
     public static final class Builder {
         private String lastname;
         private String firstname;
-        private String organisation;
+        private String organization;
         private String function;
         private String trigram;
-        private String description;
-        private String comment;
-        private String authorTrigram;
+        private String email;
 
         private Builder() {
         }
@@ -79,8 +65,8 @@ public class AuthorQuery {
             return this;
         }
 
-        public Builder withOrganisation(String val) {
-            organisation = val;
+        public Builder withOrganization(String val) {
+            organization = val;
             return this;
         }
 
@@ -94,18 +80,8 @@ public class AuthorQuery {
             return this;
         }
 
-        public Builder withDescription(String val) {
-            description = val;
-            return this;
-        }
-
-        public Builder withComment(String val) {
-            comment = val;
-            return this;
-        }
-
-        public Builder withAuthorTrigram(String val) {
-            authorTrigram = val;
+        public Builder withEmail(String val) {
+            email = val;
             return this;
         }
 
