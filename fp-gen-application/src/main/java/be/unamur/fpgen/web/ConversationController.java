@@ -52,4 +52,9 @@ public class ConversationController implements ConversationApi {
                         ConversationPaginationWebToDomainMapper.map(pagedConversationQuery)))
                 , HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<Void> deleteConversationById(UUID conversationId) {
+        return ConversationApi.super.deleteConversationById(conversationId);
+    }
 }

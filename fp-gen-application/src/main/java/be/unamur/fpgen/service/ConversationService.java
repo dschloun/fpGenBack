@@ -127,4 +127,9 @@ public class ConversationService {
                 DateUtil.ifNullReturnTomorrow(query.getConversationQuery().getEndDate()),
                 pageable);
     }
+
+    @Transactional
+    public void deleteConversationById(final UUID conversationId) {
+        conversationRepository.deleteConversationById(conversationId);
+    }
 }

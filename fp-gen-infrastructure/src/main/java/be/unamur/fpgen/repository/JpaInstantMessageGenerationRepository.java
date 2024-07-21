@@ -44,7 +44,7 @@ public class JpaInstantMessageGenerationRepository implements InstantMessageGene
 
     @Override
     public void deleteInstantMessageGenerationById(UUID instantMessageGenerationId) {
-
+        jpaInstantMessageGenerationRepositoryCRUD.deleteById(instantMessageGenerationId);
     }
 
     @Override

@@ -3,7 +3,6 @@ package be.unamur.fpgen.service;
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.exception.GenerationNotFoundException;
 import be.unamur.fpgen.generation.ConversationGeneration;
-import be.unamur.fpgen.generation.GenerationTypeEnum;
 import be.unamur.fpgen.generation.pagination.GenerationsPage;
 import be.unamur.fpgen.generation.pagination.PagedGenerationsQuery;
 import be.unamur.fpgen.mapper.webToDomain.MessageTopicWebToDomainMapper;
@@ -70,6 +69,11 @@ public class ConversationGenerationService {
                     DateUtil.ifNullReturnOldDate(query.getGenerationQuery().getStartDate()),
                     DateUtil.ifNullReturnTomorrow(query.getGenerationQuery().getEndDate()),
                     pageable);
+    }
+
+    @Transactional
+    public void deleteConversationGenerationById(final UUID generationId) {
+        conversationGenerationRepository.deleteConversationGenerationById(generationId);
     }
 
     private String getDetail(final GenerationCreation command, final String generationType) {

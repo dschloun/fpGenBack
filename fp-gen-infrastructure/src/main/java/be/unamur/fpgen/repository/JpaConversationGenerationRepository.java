@@ -41,7 +41,7 @@ public class JpaConversationGenerationRepository implements ConversationGenerati
 
     @Override
     public void deleteConversationGenerationById(UUID conversationGenerationId) {
-
+        jpaConversationGenerationRepositoryCRUD.deleteById(conversationGenerationId);
     }
 
     @Override

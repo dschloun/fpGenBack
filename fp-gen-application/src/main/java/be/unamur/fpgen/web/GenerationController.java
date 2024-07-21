@@ -51,4 +51,16 @@ public class GenerationController implements GenerationApi {
         }
         return new ResponseEntity<>(generationsPage, HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<Void> deleteGenerationById(UUID generationId, @NotNull @Valid GenerationType generationType) {
+        if (GenerationType.INSTANT_MESSAGE.equals(generationType)){
+            instantMessageGenerationService.deleteInstantMessageGenerationById(generationId);
+        } else if (GenerationType.CONVERSATION.equals(generationType)){
+            conversationGenerationService.deleteConversationGenerationById(generationId);
+        } else {
+            throw new IllegalArgumentException("Unsupported generation type");
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

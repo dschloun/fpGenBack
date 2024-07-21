@@ -71,6 +71,11 @@ public class InstantMessageGenerationService {
                 pageable);
     }
 
+    @Transactional
+    public void deleteInstantMessageGenerationById(final UUID generationId) {
+        instantMessageGenerationRepository.deleteInstantMessageGenerationById(generationId);
+    }
+
     private String getDetail(final GenerationCreation command, final String generationType) {
         return String.format("generate %s set with Topic: %s, Type: %s, Quantity: %s,}\n System prompt: %s \n User prompt: %s",
                 generationType, command.getTopic(), command.getType(), command.getQuantity(), command.getSystemPrompt(), command.getUserPrompt());

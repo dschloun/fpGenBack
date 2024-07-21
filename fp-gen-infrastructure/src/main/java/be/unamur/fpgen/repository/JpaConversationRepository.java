@@ -42,7 +42,7 @@ public class JpaConversationRepository implements ConversationRepository {
 
     @Override
     public void deleteConversationById(UUID conversationId) {
-
+        jpaConversationRepositoryCRUD.deleteById(conversationId);
     }
 
     @Override
