@@ -55,11 +55,7 @@ public class JpaConversationDatasetRepository implements ConversationDatasetRepo
     @Override
     public void addConversationListToDataset(ConversationDataset datasetIn, Set<ConversationGeneration> generations) {
         final ConversationDatasetEntity dataset = jpaConversationDatasetRepositoryCRUD.getReferenceById(datasetIn.getId());
-        final HashSet<ConversationGenerationEntity> ConversationGenerations = new HashSet<>();
-        generations.forEach(g ->{
-            ConversationGenerations.add(jpaConversationGenerationRepositoryCRUD.getReferenceById(g.getId()));
-        });
-        dataset.getConversationGenerationList().addAll(ConversationGenerations);
+        dataset.getConversationGenerationList().addAll(getGenerationList(generations));
         jpaConversationDatasetRepositoryCRUD.save(dataset);
     }
 

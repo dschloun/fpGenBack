@@ -65,35 +65,24 @@ public class ConversationDatasetService {
         final ConversationDataset dataset = getDatasetById(datasetId);
 
         // 2. get conversation message generations
-        final Set<ConversationGeneration> conversationGenerationList = new HashSet<>();
-        conversationGenerationIdsList.forEach(i -> {
-            try {
-                final ConversationGeneration conversationMessageGeneration = conversationGenerationService.findConversationGenerationById(i);
-                conversationGenerationList.add(conversationMessageGeneration);
-            } catch (GenerationNotFoundException e) {
-                System.out.println("generation does not exist");
-            }
-        });
-        // 3. check if list is not empty
-        if (conversationGenerationList.isEmpty()) {
-            throw new IllegalArgumentException("No conversation message generation found");
-        }
+        final Set<ConversationGeneration> conversationGenerationList = getConversationGenerationList(conversationGenerationIdsList);
+
         // 3. add conversation message generations to dataset
         dataset.getConversationGenerationList().addAll(conversationGenerationList);
         conversationDatasetRepository.addConversationListToDataset(dataset, conversationGenerationList);
     }
 
     @Transactional
-    public void removeConversationListFromDataset(UUID datasetId, List<UUID> conversationMessageGenerationIdsList) {
+    public void removeConversationListFromDataset(UUID datasetId, List<UUID> conversationGenerationIdsList) {
         // 1. get dataset
         final ConversationDataset dataset = getDatasetById(datasetId);
 
         // 2. get conversation message generations
-        final Set<ConversationGeneration> conversationMessageGenerationList = getConversationGenerationList(conversationMessageGenerationIdsList);
+        final Set<ConversationGeneration> conversationGenerationList = getConversationGenerationList(conversationGenerationIdsList);
 
         // 3. remove conversation message generations from dataset
-        dataset.getConversationGenerationList().removeAll(getConversationGenerationList(conversationMessageGenerationIdsList));
-        conversationDatasetRepository.removeConversationListFromDataset(dataset, conversationMessageGenerationList);
+        dataset.getConversationGenerationList().removeAll(getConversationGenerationList(conversationGenerationIdsList));
+        conversationDatasetRepository.removeConversationListFromDataset(dataset, conversationGenerationList);
     }
 
     @Transactional

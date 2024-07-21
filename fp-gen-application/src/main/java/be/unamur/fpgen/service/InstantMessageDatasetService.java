@@ -64,19 +64,8 @@ public class InstantMessageDatasetService {
         final InstantMessageDataset dataset = getDatasetById(datasetId);
 
         // 2. get instant message generations
-        final Set<InstantMessageGeneration> instantMessageGenerationList = new HashSet<>();
-        instantMessageGenerationIdsList.forEach(i -> {
-            try {
-                final InstantMessageGeneration instantMessageGeneration = instantMessageGenerationService.findInstantMessageGenerationById(i);
-                instantMessageGenerationList.add(instantMessageGeneration);
-            } catch (GenerationNotFoundException e) {
-                System.out.println("generation does not exist");
-            }
-        });
-        // 3. check if list is not empty
-        if (instantMessageGenerationList.isEmpty()) {
-            throw new IllegalArgumentException("No instant message generation found");
-        }
+        final Set<InstantMessageGeneration> instantMessageGenerationList = getInstantMessageGenerationList(instantMessageGenerationIdsList);
+
         // 3. add instant message generations to dataset
         dataset.getInstantMessageGenerationList().addAll(instantMessageGenerationList);
         instantMessageDatasetRepository.addInstantMessageListToDataset(dataset, instantMessageGenerationList);

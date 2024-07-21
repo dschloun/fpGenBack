@@ -53,11 +53,7 @@ public class JpaInstantMessageDatasetRepository implements InstantMessageDataset
     @Override
     public void addInstantMessageListToDataset(InstantMessageDataset datasetId, Set<InstantMessageGeneration> generations) {
         final InstantMessageDatasetEntity dataset = jpaInstantMessageDatasetRepositoryCRUD.getReferenceById(datasetId.getId());
-        final HashSet<InstantMessageGenerationEntity> instantMessageGenerations = new HashSet<>();
-        generations.forEach(g ->{
-            instantMessageGenerations.add(jpaInstantMessageGenerationRepositoryCRUD.getReferenceById(g.getId()));
-        });
-        dataset.getInstantMessageGenerationList().addAll(instantMessageGenerations);
+        dataset.getInstantMessageGenerationList().addAll(getGenerationList(generations));
         jpaInstantMessageDatasetRepositoryCRUD.save(dataset);
     }
 
