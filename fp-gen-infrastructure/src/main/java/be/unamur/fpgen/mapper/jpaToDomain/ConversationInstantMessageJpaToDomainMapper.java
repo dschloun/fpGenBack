@@ -1,7 +1,7 @@
 package be.unamur.fpgen.mapper.jpaToDomain;
 
 import be.unamur.fpgen.entity.instant_message.ConversationInstantMessageEntity;
-import be.unamur.fpgen.instant_message.ConversationMessage;
+import be.unamur.fpgen.message.ConversationMessage;
 
 import java.util.Objects;
 

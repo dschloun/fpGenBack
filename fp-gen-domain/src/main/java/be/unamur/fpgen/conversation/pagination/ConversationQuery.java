@@ -1,7 +1,7 @@
 package be.unamur.fpgen.conversation.pagination;
 
-import be.unamur.fpgen.instant_message.MessageTopicEnum;
-import be.unamur.fpgen.instant_message.MessageTypeEnum;
+import be.unamur.fpgen.message.MessageTopicEnum;
+import be.unamur.fpgen.message.MessageTypeEnum;
 
 import java.time.OffsetDateTime;
 

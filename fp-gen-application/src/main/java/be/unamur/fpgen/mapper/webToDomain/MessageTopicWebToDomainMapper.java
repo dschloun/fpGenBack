@@ -1,6 +1,6 @@
 package be.unamur.fpgen.mapper.webToDomain;
 
-import be.unamur.fpgen.instant_message.MessageTopicEnum;
+import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.model.MessageTopic;
 
 import java.util.Optional;

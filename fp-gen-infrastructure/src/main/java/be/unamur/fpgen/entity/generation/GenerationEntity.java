@@ -2,8 +2,8 @@ package be.unamur.fpgen.entity.generation;
 
 import be.unamur.fpgen.entity.author.AuthorEntity;
 import be.unamur.fpgen.entity.base.BaseUuidEntity;
-import be.unamur.fpgen.instant_message.MessageTopicEnum;
-import be.unamur.fpgen.instant_message.MessageTypeEnum;
+import be.unamur.fpgen.message.MessageTopicEnum;
+import be.unamur.fpgen.message.MessageTypeEnum;
 
 import javax.persistence.*;
 import java.io.Serial;

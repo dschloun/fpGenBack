@@ -1,4 +1,4 @@
-package be.unamur.fpgen.instant_message;
+package be.unamur.fpgen.message;
 
 public enum MessageTopicEnum {
     SPORT,

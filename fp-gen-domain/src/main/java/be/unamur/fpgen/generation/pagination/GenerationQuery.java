@@ -1,11 +1,10 @@
 package be.unamur.fpgen.generation.pagination;
 
 import be.unamur.fpgen.generation.GenerationTypeEnum;
-import be.unamur.fpgen.instant_message.MessageTopicEnum;
-import be.unamur.fpgen.instant_message.MessageTypeEnum;
+import be.unamur.fpgen.message.MessageTopicEnum;
+import be.unamur.fpgen.message.MessageTypeEnum;
 
 import java.time.OffsetDateTime;
-import java.util.UUID;
 
 public class GenerationQuery {
     private final GenerationTypeEnum generationType;

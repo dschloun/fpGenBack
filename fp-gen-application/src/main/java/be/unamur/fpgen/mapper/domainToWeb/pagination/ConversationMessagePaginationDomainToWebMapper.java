@@ -6,7 +6,7 @@ import be.unamur.model.ConversationMessagesPage;
 
 public class ConversationMessagePaginationDomainToWebMapper {
 
-    public static ConversationMessagesPage map(be.unamur.fpgen.instant_message.pagination.ConversationMessagesPage domain) {
+    public static ConversationMessagesPage map(be.unamur.fpgen.message.pagination.conversation_message.ConversationMessagesPage domain) {
         return new ConversationMessagesPage()
                 .conversationMessages(MapperUtil.mapList(domain.getConversationMessageList(), ConversationMessageDomainToWebMapper::map))
                 .pagination(PaginationDomainToWebMapper.map(domain.getPagination()));

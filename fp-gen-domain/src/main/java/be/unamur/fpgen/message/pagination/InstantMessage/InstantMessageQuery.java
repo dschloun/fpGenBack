@@ -1,31 +1,36 @@
-package be.unamur.fpgen.instant_message.pagination;
+package be.unamur.fpgen.message.pagination.InstantMessage;
 
-import be.unamur.fpgen.instant_message.MessageTopicEnum;
-import be.unamur.fpgen.instant_message.MessageTypeEnum;
+import be.unamur.fpgen.message.MessageTopicEnum;
+import be.unamur.fpgen.message.MessageTypeEnum;
 
 import java.time.OffsetDateTime;
 
-public class ConversationMessageQuery {
-    private final MessageTopicEnum topic;
-    private final MessageTypeEnum type;
+public class InstantMessageQuery {
+
+    private final MessageTypeEnum messageType;
+    private final MessageTopicEnum messageTopic;
     private final String content;
     private final OffsetDateTime startDate;
     private final OffsetDateTime endDate;
 
-    private ConversationMessageQuery(Builder builder) {
-        topic = builder.topic;
-        type = builder.type;
+    private InstantMessageQuery(Builder builder) {
+        messageType = builder.messageType;
+        messageTopic = builder.messageTopic;
         content = builder.content;
         startDate = builder.startDate;
         endDate = builder.endDate;
     }
 
-    public MessageTopicEnum getTopic() {
-        return topic;
+    public static Builder newBuilder() {
+        return new Builder();
     }
 
-    public MessageTypeEnum getType() {
-        return type;
+    public MessageTypeEnum getMessageType() {
+        return messageType;
+    }
+
+    public MessageTopicEnum getMessageTopic() {
+        return messageTopic;
     }
 
     public String getContent() {
@@ -40,13 +45,9 @@ public class ConversationMessageQuery {
         return endDate;
     }
 
-    public static Builder newBuilder() {
-        return new Builder();
-    }
-
     public static final class Builder {
-        private MessageTopicEnum topic;
-        private MessageTypeEnum type;
+        private MessageTypeEnum messageType;
+        private MessageTopicEnum messageTopic;
         private String content;
         private OffsetDateTime startDate;
         private OffsetDateTime endDate;
@@ -54,13 +55,13 @@ public class ConversationMessageQuery {
         private Builder() {
         }
 
-        public Builder withTopic(MessageTopicEnum val) {
-            topic = val;
+        public Builder withMessageType(MessageTypeEnum val) {
+            messageType = val;
             return this;
         }
 
-        public Builder withType(MessageTypeEnum val) {
-            type = val;
+        public Builder withMessageTopic(MessageTopicEnum val) {
+            messageTopic = val;
             return this;
         }
 
@@ -79,8 +80,8 @@ public class ConversationMessageQuery {
             return this;
         }
 
-        public ConversationMessageQuery build() {
-            return new ConversationMessageQuery(this);
+        public InstantMessageQuery build() {
+            return new InstantMessageQuery(this);
         }
     }
 }

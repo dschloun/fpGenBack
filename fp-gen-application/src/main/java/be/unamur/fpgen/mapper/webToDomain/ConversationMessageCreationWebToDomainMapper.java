@@ -1,6 +1,6 @@
 package be.unamur.fpgen.mapper.webToDomain;
 
-import be.unamur.fpgen.instant_message.ConversationMessage;
+import be.unamur.fpgen.message.ConversationMessage;
 import be.unamur.fpgen.interlocutor.Interlocutor;
 import be.unamur.model.GenerationCreation;
 

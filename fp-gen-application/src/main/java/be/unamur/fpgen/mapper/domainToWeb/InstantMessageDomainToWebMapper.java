@@ -4,7 +4,7 @@ import be.unamur.model.InstantMessage;
 
 public class InstantMessageDomainToWebMapper {
 
-    public static InstantMessage map(final be.unamur.fpgen.instant_message.InstantMessage domain){
+    public static InstantMessage map(final be.unamur.fpgen.message.InstantMessage domain){
         return new InstantMessage()
                 .id(domain.getId())
                 .messageType(MessageTypeDomainToWebMapper.map(domain.getType()))

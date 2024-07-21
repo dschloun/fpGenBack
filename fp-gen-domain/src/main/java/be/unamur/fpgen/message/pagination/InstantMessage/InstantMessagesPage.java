@@ -1,7 +1,7 @@
-package be.unamur.fpgen.instant_message.pagination;
+package be.unamur.fpgen.message.pagination.InstantMessage;
 
 import be.unamur.fpgen.exception.pagination.IncompleteInstantMessagesPageException;
-import be.unamur.fpgen.instant_message.InstantMessage;
+import be.unamur.fpgen.message.InstantMessage;
 import be.unamur.fpgen.pagination.Pagination;
 import be.unamur.fpgen.utils.ViolationHandler;
 

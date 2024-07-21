@@ -3,7 +3,7 @@ package be.unamur.fpgen.repository;
 import be.unamur.fpgen.conversation.Conversation;
 import be.unamur.fpgen.entity.conversation.ConversationEntity;
 import be.unamur.fpgen.entity.instant_message.ConversationInstantMessageEntity;
-import be.unamur.fpgen.instant_message.ConversationMessage;
+import be.unamur.fpgen.message.ConversationMessage;
 import be.unamur.fpgen.mapper.domainToJpa.ConversationInstantMessageDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.ConversationInstantMessageJpaToDomainMapper;
 import org.springframework.stereotype.Repository;

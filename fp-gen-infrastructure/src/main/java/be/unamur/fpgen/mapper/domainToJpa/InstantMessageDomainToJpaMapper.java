@@ -2,7 +2,7 @@ package be.unamur.fpgen.mapper.domainToJpa;
 
 import be.unamur.fpgen.entity.generation.InstantMessageGenerationEntity;
 import be.unamur.fpgen.entity.instant_message.InstantMessageEntity;
-import be.unamur.fpgen.instant_message.InstantMessage;
+import be.unamur.fpgen.message.InstantMessage;
 
 /**
  * @overview

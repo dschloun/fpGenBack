@@ -1,10 +1,10 @@
 package be.unamur.fpgen.repository;
 
 import be.unamur.fpgen.generation.InstantMessageGeneration;
-import be.unamur.fpgen.instant_message.InstantMessage;
-import be.unamur.fpgen.instant_message.MessageTopicEnum;
-import be.unamur.fpgen.instant_message.MessageTypeEnum;
-import be.unamur.fpgen.instant_message.pagination.InstantMessagesPage;
+import be.unamur.fpgen.message.InstantMessage;
+import be.unamur.fpgen.message.MessageTopicEnum;
+import be.unamur.fpgen.message.MessageTypeEnum;
+import be.unamur.fpgen.message.pagination.InstantMessage.InstantMessagesPage;
 import org.springframework.data.domain.Pageable;
 
 import java.time.OffsetDateTime;

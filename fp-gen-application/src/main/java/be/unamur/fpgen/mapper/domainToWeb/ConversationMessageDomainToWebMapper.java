@@ -4,7 +4,7 @@ import be.unamur.model.ConversationMessage;
 
 public class ConversationMessageDomainToWebMapper {
 
-    public static ConversationMessage map(be.unamur.fpgen.instant_message.ConversationMessage domain) {
+    public static ConversationMessage map(be.unamur.fpgen.message.ConversationMessage domain) {
         return new ConversationMessage()
                 .id(domain.getId())
                 .conversationId(domain.getConversationId())

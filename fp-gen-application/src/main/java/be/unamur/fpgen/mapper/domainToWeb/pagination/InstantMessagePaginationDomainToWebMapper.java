@@ -6,7 +6,7 @@ import be.unamur.model.InstantMessagesPage;
 
 public class InstantMessagePaginationDomainToWebMapper {
 
-    public static InstantMessagesPage map(be.unamur.fpgen.instant_message.pagination.InstantMessagesPage domain) {
+    public static InstantMessagesPage map(be.unamur.fpgen.message.pagination.InstantMessage.InstantMessagesPage domain) {
         return new InstantMessagesPage()
                 .instantMessages(MapperUtil.mapList(domain.getInstantMessageList(), InstantMessageDomainToWebMapper::map))
                 .pagination(PaginationDomainToWebMapper.map(domain.getPagination()));

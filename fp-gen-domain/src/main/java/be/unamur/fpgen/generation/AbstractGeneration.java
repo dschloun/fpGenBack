@@ -3,8 +3,8 @@ package be.unamur.fpgen.generation;
 import be.unamur.fpgen.BaseUuidDomain;
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.dataset.GenerationId;
-import be.unamur.fpgen.instant_message.MessageTopicEnum;
-import be.unamur.fpgen.instant_message.MessageTypeEnum;
+import be.unamur.fpgen.message.MessageTopicEnum;
+import be.unamur.fpgen.message.MessageTypeEnum;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;

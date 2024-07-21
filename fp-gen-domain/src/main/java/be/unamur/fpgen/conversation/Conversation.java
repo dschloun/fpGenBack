@@ -1,12 +1,11 @@
 package be.unamur.fpgen.conversation;
 
 import be.unamur.fpgen.BaseUuidDomain;
-import be.unamur.fpgen.instant_message.ConversationMessage;
-import be.unamur.fpgen.instant_message.MessageTopicEnum;
-import be.unamur.fpgen.instant_message.MessageTypeEnum;
+import be.unamur.fpgen.message.ConversationMessage;
+import be.unamur.fpgen.message.MessageTopicEnum;
+import be.unamur.fpgen.message.MessageTypeEnum;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 

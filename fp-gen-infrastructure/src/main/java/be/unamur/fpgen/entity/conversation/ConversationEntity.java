@@ -3,8 +3,8 @@ package be.unamur.fpgen.entity.conversation;
 import be.unamur.fpgen.entity.base.BaseUuidEntity;
 import be.unamur.fpgen.entity.generation.ConversationGenerationEntity;
 import be.unamur.fpgen.entity.instant_message.ConversationInstantMessageEntity;
-import be.unamur.fpgen.instant_message.MessageTopicEnum;
-import be.unamur.fpgen.instant_message.MessageTypeEnum;
+import be.unamur.fpgen.message.MessageTopicEnum;
+import be.unamur.fpgen.message.MessageTypeEnum;
 
 import javax.persistence.*;
 import java.util.HashSet;

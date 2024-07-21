@@ -2,8 +2,8 @@ package be.unamur.fpgen.repository;
 
 import be.unamur.fpgen.conversation.Conversation;
 import be.unamur.fpgen.conversation.pagination.ConversationsPage;
-import be.unamur.fpgen.instant_message.MessageTopicEnum;
-import be.unamur.fpgen.instant_message.MessageTypeEnum;
+import be.unamur.fpgen.message.MessageTopicEnum;
+import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.mapper.domainToJpa.ConversationDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.ConversationJpaToDomainMapper;
 import be.unamur.fpgen.pagination.Pagination;

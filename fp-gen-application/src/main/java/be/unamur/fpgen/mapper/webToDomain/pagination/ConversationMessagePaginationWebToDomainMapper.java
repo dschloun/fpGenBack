@@ -1,7 +1,7 @@
 package be.unamur.fpgen.mapper.webToDomain.pagination;
 
-import be.unamur.fpgen.instant_message.pagination.ConversationMessageQuery;
-import be.unamur.fpgen.instant_message.pagination.PagedConversationMessagesQuery;
+import be.unamur.fpgen.message.pagination.conversation_message.ConversationMessageQuery;
+import be.unamur.fpgen.message.pagination.conversation_message.PagedConversationMessagesQuery;
 import be.unamur.fpgen.mapper.webToDomain.MessageTopicWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.MessageTypeWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.PaginationWebToDomainMapper;

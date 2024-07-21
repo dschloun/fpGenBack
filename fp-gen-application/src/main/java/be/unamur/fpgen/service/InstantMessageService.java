@@ -2,9 +2,9 @@ package be.unamur.fpgen.service;
 
 import be.unamur.fpgen.exception.InstantMessageNotFoundException;
 import be.unamur.fpgen.generation.InstantMessageGeneration;
-import be.unamur.fpgen.instant_message.InstantMessage;
-import be.unamur.fpgen.instant_message.pagination.InstantMessagesPage;
-import be.unamur.fpgen.instant_message.pagination.PagedInstantMessagesQuery;
+import be.unamur.fpgen.message.InstantMessage;
+import be.unamur.fpgen.message.pagination.InstantMessage.InstantMessagesPage;
+import be.unamur.fpgen.message.pagination.InstantMessage.PagedInstantMessagesQuery;
 import be.unamur.fpgen.mapper.webToDomain.InstantMessageWebToDomainMapper;
 import be.unamur.fpgen.repository.InstantMessageRepository;
 import be.unamur.fpgen.utils.DateUtil;

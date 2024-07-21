@@ -4,7 +4,7 @@ import be.unamur.fpgen.conversation.Conversation;
 import be.unamur.fpgen.conversation.pagination.ConversationsPage;
 import be.unamur.fpgen.conversation.pagination.PagedConversationsQuery;
 import be.unamur.fpgen.generation.ConversationGeneration;
-import be.unamur.fpgen.instant_message.ConversationMessage;
+import be.unamur.fpgen.message.ConversationMessage;
 import be.unamur.fpgen.interlocutor.Interlocutor;
 import be.unamur.fpgen.interlocutor.InterlocutorTypeEnum;
 import be.unamur.fpgen.mapper.webToDomain.ConversationCreationWebToDomainMapper;

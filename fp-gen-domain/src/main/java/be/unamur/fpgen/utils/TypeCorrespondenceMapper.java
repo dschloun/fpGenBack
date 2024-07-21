@@ -1,6 +1,6 @@
 package be.unamur.fpgen.utils;
 
-import be.unamur.fpgen.instant_message.MessageTypeEnum;
+import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.interlocutor.InterlocutorTypeEnum;
 
 import java.util.HashMap;

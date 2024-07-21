@@ -1,4 +1,4 @@
-package be.unamur.fpgen.instant_message.pagination;
+package be.unamur.fpgen.message.pagination.InstantMessage;
 
 import be.unamur.fpgen.exception.pagination.IncompletePagedInstantMessagesQueryException;
 import be.unamur.fpgen.pagination.QueryPage;
