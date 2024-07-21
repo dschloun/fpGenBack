@@ -32,7 +32,7 @@ public class DatasetDomainToWebMapper {
                 .type(DatasetType.INSTANT_MESSAGE);
     }
 
-    public static Dataset map(final AbstractDataset domain){
+    public static Dataset map(final AbstractDataset domain, final DatasetType datasetType){
         return new Dataset()
                 .id(domain.getId())
                 .creationDate(domain.getCreationDate())
@@ -43,6 +43,6 @@ public class DatasetDomainToWebMapper {
                 .description(domain.getDescription())
                 .version(domain.getVersion())
                 .name(domain.getName())
-                .type(domain instanceof ConversationDataset ? DatasetType.CONVERSATION : DatasetType.INSTANT_MESSAGE);
+                .type(datasetType);
     }
 }

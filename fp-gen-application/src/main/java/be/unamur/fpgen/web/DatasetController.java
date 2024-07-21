@@ -42,9 +42,9 @@ public class DatasetController implements DatasetApi {
     public ResponseEntity<Dataset> createDataset(@NotNull @Valid DatasetType datasetType, @Valid DatasetCreation datasetCreation) {
         Dataset dataset;
         if (DatasetType.INSTANT_MESSAGE.equals(datasetType)){
-            dataset = DatasetDomainToWebMapper.map(instantMessageDatasetService.createDataset(datasetCreation));
+            dataset = DatasetDomainToWebMapper.map(instantMessageDatasetService.createDataset(datasetCreation), DatasetType.INSTANT_MESSAGE);
         } else if(DatasetType.CONVERSATION.equals(datasetType)){
-            dataset = DatasetDomainToWebMapper.map(conversationDatasetService.createDataset(datasetCreation));
+            dataset = DatasetDomainToWebMapper.map(conversationDatasetService.createDataset(datasetCreation), DatasetType.CONVERSATION);
         } else {
             throw new IllegalArgumentException("Unsupported dataset type");
         }
@@ -67,9 +67,9 @@ public class DatasetController implements DatasetApi {
     public ResponseEntity<Dataset> getDatasetById(UUID datasetId, @NotNull @Valid DatasetType datasetType) {
         Dataset dataset;
         if (DatasetType.INSTANT_MESSAGE.equals(datasetType)){
-            dataset = DatasetDomainToWebMapper.map(instantMessageDatasetService.getDatasetById(datasetId));
+            dataset = DatasetDomainToWebMapper.map(instantMessageDatasetService.getDatasetById(datasetId), DatasetType.INSTANT_MESSAGE);
         } else if(DatasetType.CONVERSATION.equals(datasetType)){
-            dataset = DatasetDomainToWebMapper.map(conversationDatasetService.getDatasetById(datasetId));
+            dataset = DatasetDomainToWebMapper.map(conversationDatasetService.getDatasetById(datasetId), DatasetType.CONVERSATION);
         } else {
             throw new IllegalArgumentException("Unsupported dataset type");
         }
@@ -85,7 +85,7 @@ public class DatasetController implements DatasetApi {
     public ResponseEntity<DatasetsPage> searchDatasetsPaginate(@NotNull @Valid DatasetType datasetType, @Valid PagedDatasetQuery pagedDatasetQuery) {
         DatasetsPage datasetsPage;
         if (DatasetType.INSTANT_MESSAGE.equals(datasetType)) {
-            datasetsPage = DatasetPaginationDomainToWebMapper.map(instantMessageDatasetService.searchDatasetPaginate(DatasetPaginationWebToDomainMapper.map(pagedDatasetQuery)));
+            datasetsPage = DatasetPaginationDomainToWebMapper.map(instantMessageDatasetService.searchDatasetPaginate(DatasetPaginationWebToDomainMapper.map(pagedDatasetQuery)), DatasetType.INSTANT_MESSAGE);
         }
             //        } else if(DatasetType.CONVERSATION.equals(datasetType)){
 //            dataset = DatasetDomainToWebMapper.map(conversationDatasetService.searchDatasetPaginate(pagedDatasetQuery));
