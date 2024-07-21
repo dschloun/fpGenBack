@@ -86,10 +86,9 @@ public class DatasetController implements DatasetApi {
         DatasetsPage datasetsPage;
         if (DatasetType.INSTANT_MESSAGE.equals(datasetType)) {
             datasetsPage = DatasetPaginationDomainToWebMapper.map(instantMessageDatasetService.searchDatasetPaginate(DatasetPaginationWebToDomainMapper.map(pagedDatasetQuery)), DatasetType.INSTANT_MESSAGE);
+        } else if(DatasetType.CONVERSATION.equals(datasetType)){
+            datasetsPage = DatasetPaginationDomainToWebMapper.map(conversationDatasetService.searchDatasetPaginate(DatasetPaginationWebToDomainMapper.map(pagedDatasetQuery)), DatasetType.CONVERSATION);
         }
-            //        } else if(DatasetType.CONVERSATION.equals(datasetType)){
-//            dataset = DatasetDomainToWebMapper.map(conversationDatasetService.searchDatasetPaginate(pagedDatasetQuery));
-//        }
         else {
             throw new IllegalArgumentException("Unsupported dataset type");
         }

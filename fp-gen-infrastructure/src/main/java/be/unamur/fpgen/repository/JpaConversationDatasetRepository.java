@@ -1,14 +1,20 @@
 package be.unamur.fpgen.repository;
 
 import be.unamur.fpgen.dataset.ConversationDataset;
+import be.unamur.fpgen.dataset.pagination.DatasetsPage;
 import be.unamur.fpgen.entity.author.AuthorEntity;
 import be.unamur.fpgen.entity.dataset.ConversationDatasetEntity;
 import be.unamur.fpgen.entity.generation.ConversationGenerationEntity;
 import be.unamur.fpgen.generation.ConversationGeneration;
 import be.unamur.fpgen.mapper.domainToJpa.ConversationDatasetDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.ConversationDatasetJpaToDomainMapper;
+import be.unamur.fpgen.mapper.jpaToDomain.InstantMessageDatasetJpaToDomainMapper;
+import be.unamur.fpgen.pagination.Pagination;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -52,5 +58,31 @@ public class JpaConversationDatasetRepository implements ConversationDatasetRepo
         });
         dataset.getConversationGenerationList().addAll(ConversationGenerations);
         jpaConversationDatasetRepositoryCRUD.save(dataset);
+    }
+
+    @Override
+    public DatasetsPage findPagination(String version, String name, String description, String comment, String authorTrigram, OffsetDateTime startDate, OffsetDateTime endDate, Pageable pageable) {
+        // 1. get in Page format
+        Page<ConversationDataset> page = jpaConversationDatasetRepositoryCRUD.findPagination(
+                name,
+                version,
+                authorTrigram,
+                description,
+                comment,
+                startDate,
+                endDate,
+                pageable
+        ).map(ConversationDatasetJpaToDomainMapper::map);
+
+        final DatasetsPage datasetsPage = DatasetsPage.newBuilder()
+                .withPagination(new Pagination.Builder()
+                        .size(page.getSize())
+                        .totalSize((int) page.getTotalElements())
+                        .page(page.getNumber())
+                        .build())
+                .withDatasetList(page.getContent())
+                .build();
+
+        return datasetsPage;
     }
 }

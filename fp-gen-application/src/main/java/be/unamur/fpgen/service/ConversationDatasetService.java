@@ -2,11 +2,16 @@ package be.unamur.fpgen.service;
 
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.dataset.ConversationDataset;
+import be.unamur.fpgen.dataset.pagination.DatasetsPage;
+import be.unamur.fpgen.dataset.pagination.PagedDatasetsQuery;
 import be.unamur.fpgen.exception.GenerationNotFoundException;
 import be.unamur.fpgen.generation.ConversationGeneration;
 import be.unamur.fpgen.mapper.webToDomain.DatasetWebToDomainMapper;
 import be.unamur.fpgen.repository.ConversationDatasetRepository;
+import be.unamur.fpgen.utils.DateUtil;
 import be.unamur.model.DatasetCreation;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -73,5 +78,27 @@ public class ConversationDatasetService {
         // 3. add instant message generations to dataset
         dataset.getConversationGenerationList().addAll(conversationGenerationList);
         conversationDatasetRepository.addConversationListToDataset(dataset, conversationGenerationList);
+    }
+
+    @Transactional
+    public DatasetsPage searchDatasetPaginate(final PagedDatasetsQuery query) {
+        //0. get author
+        final Author author = query.getDatasetQuery().getAuthorTrigram() != null ? authorService.getAuthorByTrigram(query.getDatasetQuery().getAuthorTrigram()) : null;
+
+        //1. get pageable
+        final Pageable pageable = PageRequest
+                .of(query.getQueryPage().getPage(),
+                        query.getQueryPage().getSize());
+
+        //2. search datasets
+        return conversationDatasetRepository.findPagination(
+                query.getDatasetQuery().getVersion(),
+                query.getDatasetQuery().getName(),
+                query.getDatasetQuery().getDescription(),
+                query.getDatasetQuery().getComment(),
+                query.getDatasetQuery().getAuthorTrigram(),
+                DateUtil.ifNullReturnOldDate(query.getDatasetQuery().getStartDate()),
+                DateUtil.ifNullReturnTomorrow(query.getDatasetQuery().getEndDate()),
+                pageable);
     }
 }
