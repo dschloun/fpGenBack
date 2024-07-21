@@ -8,7 +8,7 @@ public class DatasetPaginationDomainToWebMapper {
 
     public static DatasetsPage map(be.unamur.fpgen.dataset.pagination.DatasetsPage domain) {
         return new DatasetsPage()
-                .datasets(MapperUtil.mapList(domain.getConversationDatasetList(), DatasetDomainToWebMapper::mapConversationDataset))
+                .datasets(MapperUtil.mapList(domain.getConversationDatasetList(), DatasetDomainToWebMapper::map))
                 .pagination(PaginationDomainToWebMapper.map(domain.getPagination()));
     }
 }

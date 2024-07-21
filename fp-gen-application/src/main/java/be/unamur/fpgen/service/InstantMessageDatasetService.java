@@ -1,13 +1,18 @@
 package be.unamur.fpgen.service;
 
 import be.unamur.fpgen.author.Author;
+import be.unamur.fpgen.dataset.DatasetTypeEnum;
 import be.unamur.fpgen.dataset.InstantMessageDataset;
+import be.unamur.fpgen.dataset.pagination.DatasetsPage;
+import be.unamur.fpgen.dataset.pagination.PagedDatasetsQuery;
 import be.unamur.fpgen.exception.DatasetNotFoundException;
 import be.unamur.fpgen.exception.GenerationNotFoundException;
 import be.unamur.fpgen.generation.InstantMessageGeneration;
 import be.unamur.fpgen.mapper.webToDomain.DatasetWebToDomainMapper;
 import be.unamur.fpgen.repository.InstantMessageDatasetRepository;
 import be.unamur.model.DatasetCreation;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -29,7 +34,7 @@ public class InstantMessageDatasetService {
     }
 
     @Transactional
-    public InstantMessageDataset createDataset(DatasetCreation datasetCreation){
+    public InstantMessageDataset createDataset(DatasetCreation datasetCreation) {
         final Author author = authorService.getAuthorById(datasetCreation.getAuthorId());
         return instantMessageDatasetRepository.saveInstantMessageDataset(
                 InstantMessageDataset.newBuilder()
@@ -43,18 +48,18 @@ public class InstantMessageDatasetService {
     }
 
     @Transactional
-    public InstantMessageDataset getDatasetById(UUID datasetId){
+    public InstantMessageDataset getDatasetById(UUID datasetId) {
         return instantMessageDatasetRepository.findInstantMessageDatasetById(datasetId)
                 .orElseThrow(() -> DatasetNotFoundException.withId(datasetId));
     }
 
     @Transactional
-    public void deleteDatasetById(UUID datasetId){
+    public void deleteDatasetById(UUID datasetId) {
         instantMessageDatasetRepository.deleteInstantMessageDatasetById(datasetId);
     }
 
     @Transactional
-    public void addInstantMessageListToDataset(UUID datasetId, List<UUID> instantMessageGenerationIdsList){
+    public void addInstantMessageListToDataset(UUID datasetId, List<UUID> instantMessageGenerationIdsList) {
         // 1. get dataset
         final InstantMessageDataset dataset = getDatasetById(datasetId);
 
@@ -76,5 +81,27 @@ public class InstantMessageDatasetService {
         dataset.getInstantMessageGenerationList().addAll(instantMessageGenerationList);
         instantMessageDatasetRepository.addInstantMessageListToDataset(dataset, instantMessageGenerationList);
 
+    }
+
+    @Transactional
+    public DatasetsPage searchDatasetPaginate(final PagedDatasetsQuery query) {
+        //0. get author
+        final Author author = query.getDatasetQuery().getAuthorTrigram() != null ? authorService.getAuthorByTrigram(query.getDatasetQuery().getAuthorTrigram()) : null;
+
+        //1. get pageable
+        final Pageable pageable = PageRequest
+                .of(query.getQueryPage().getPage(),
+                        query.getQueryPage().getSize());
+
+        //2. search datasets
+        return instantMessageDatasetRepository.findPagination(
+                query.getDatasetQuery().getVersion(),
+                query.getDatasetQuery().getName(),
+                query.getDatasetQuery().getDescription(),
+                query.getDatasetQuery().getComment(),
+                query.getDatasetQuery().getAuthorTrigram(),
+                query.getDatasetQuery().getStartDate(),
+                query.getDatasetQuery().getEndDate(),
+                pageable);
     }
 }

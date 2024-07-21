@@ -1,5 +1,6 @@
 package be.unamur.fpgen.mapper.domainToWeb;
 
+import be.unamur.fpgen.dataset.AbstractDataset;
 import be.unamur.fpgen.dataset.ConversationDataset;
 import be.unamur.fpgen.dataset.DatasetFunctionEnum;
 import be.unamur.fpgen.dataset.InstantMessageDataset;
@@ -31,7 +32,7 @@ public class DatasetDomainToWebMapper {
                 .type(DatasetType.INSTANT_MESSAGE);
     }
 
-    public static Dataset mapConversationDataset(final ConversationDataset domain){
+    public static Dataset map(final AbstractDataset domain){
         return new Dataset()
                 .id(domain.getId())
                 .creationDate(domain.getCreationDate())
@@ -42,6 +43,6 @@ public class DatasetDomainToWebMapper {
                 .description(domain.getDescription())
                 .version(domain.getVersion())
                 .name(domain.getName())
-                .type(DatasetType.CONVERSATION);
+                .type(domain instanceof ConversationDataset ? DatasetType.CONVERSATION : DatasetType.INSTANT_MESSAGE);
     }
 }

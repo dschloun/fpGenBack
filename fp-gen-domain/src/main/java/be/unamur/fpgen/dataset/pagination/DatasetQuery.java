@@ -1,5 +1,7 @@
 package be.unamur.fpgen.dataset.pagination;
 
+import be.unamur.fpgen.dataset.DatasetTypeEnum;
+
 import java.time.OffsetDateTime;
 
 public class DatasetQuery {
@@ -11,6 +13,7 @@ public class DatasetQuery {
     private final String authorTrigram;
     private final OffsetDateTime startDate;
     private final OffsetDateTime endDate;
+    private final DatasetTypeEnum type;
 
     private DatasetQuery(Builder builder) {
         version = builder.version;
@@ -20,6 +23,7 @@ public class DatasetQuery {
         authorTrigram = builder.authorTrigram;
         startDate = builder.startDate;
         endDate = builder.endDate;
+        type = builder.type;
     }
     public static Builder newBuilder() {
         return new Builder();
@@ -53,6 +57,10 @@ public class DatasetQuery {
         return endDate;
     }
 
+    public DatasetTypeEnum getType() {
+        return type;
+    }
+
     public static final class Builder {
         private String version;
         private String name;
@@ -61,6 +69,7 @@ public class DatasetQuery {
         private String authorTrigram;
         private OffsetDateTime startDate;
         private OffsetDateTime endDate;
+        private DatasetTypeEnum type;
 
         private Builder() {
         }
@@ -97,6 +106,11 @@ public class DatasetQuery {
 
         public Builder withEndDate(OffsetDateTime val) {
             endDate = val;
+            return this;
+        }
+
+        public Builder withType(DatasetTypeEnum val) {
+            type = val;
             return this;
         }
 

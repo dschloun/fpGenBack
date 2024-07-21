@@ -3,6 +3,7 @@ package be.unamur.fpgen.mapper.webToDomain.pagination;
 
 import be.unamur.fpgen.dataset.pagination.DatasetQuery;
 import be.unamur.fpgen.dataset.pagination.PagedDatasetsQuery;
+import be.unamur.fpgen.mapper.webToDomain.DatasetTypeWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.PaginationWebToDomainMapper;
 import be.unamur.fpgen.utils.DateUtil;
 import be.unamur.model.PagedDatasetQuery;
@@ -18,6 +19,7 @@ public class DatasetPaginationWebToDomainMapper {
                 .withVersion(web.getVersion())
                 .withComment(web.getComment())
                 .withDescription(web.getDescription())
+                .withType(DatasetTypeWebToDomainMapper.map(web.getDatasetType()))
                 .build();
     }
 
