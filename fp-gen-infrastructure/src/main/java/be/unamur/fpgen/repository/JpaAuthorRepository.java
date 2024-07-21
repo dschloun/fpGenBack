@@ -5,6 +5,7 @@ import be.unamur.fpgen.author.pagination.AuthorsPage;
 import be.unamur.fpgen.mapper.domainToJpa.AuthorDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.AuthorJpaToDomainMapper;
 import be.unamur.fpgen.pagination.Pagination;
+import be.unamur.fpgen.utils.StringUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -52,12 +53,12 @@ public class JpaAuthorRepository implements AuthorRepository{
     public AuthorsPage findAuthorsPagination(String lastName, String firstName, String organization, String function, String trigram, String email, Pageable pageable) {
         // 1. get in Page format
         Page<Author> page = jpaAuthorRepositoryCRUD.findPagination(
-                lastName,
-                firstName,
-                organization,
-                function,
-                trigram,
-                email,
+                StringUtil.toLowerCaseIfNotNull(lastName),
+                StringUtil.toLowerCaseIfNotNull(firstName),
+                StringUtil.toLowerCaseIfNotNull(organization),
+                StringUtil.toLowerCaseIfNotNull(function),
+                StringUtil.toLowerCaseIfNotNull(trigram),
+                StringUtil.toLowerCaseIfNotNull(email),
                 pageable
         ).map(AuthorJpaToDomainMapper::map);
 

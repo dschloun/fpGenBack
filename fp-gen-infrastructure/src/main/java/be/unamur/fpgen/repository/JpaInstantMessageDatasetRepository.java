@@ -10,6 +10,7 @@ import be.unamur.fpgen.generation.InstantMessageGeneration;
 import be.unamur.fpgen.mapper.domainToJpa.InstantMessageDataSetDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.InstantMessageDatasetJpaToDomainMapper;
 import be.unamur.fpgen.pagination.Pagination;
+import be.unamur.fpgen.utils.StringUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -64,11 +65,11 @@ public class JpaInstantMessageDatasetRepository implements InstantMessageDataset
     public DatasetsPage findPagination(String version, String name, String description, String comment, String authorTrigram, OffsetDateTime startDate, OffsetDateTime endDate, Pageable pageable) {
         // 1. get in Page format
         Page<ConversationDataset> page = jpaInstantMessageDatasetRepositoryCRUD.findPagination(
-                name,
-                version,
+                StringUtil.toLowerCaseIfNotNull(name),
+                StringUtil.toLowerCaseIfNotNull(version),
                 authorTrigram,
-                description,
-                comment,
+                StringUtil.toLowerCaseIfNotNull(description),
+                StringUtil.toLowerCaseIfNotNull(comment),
                 startDate,
                 endDate,
                 pageable

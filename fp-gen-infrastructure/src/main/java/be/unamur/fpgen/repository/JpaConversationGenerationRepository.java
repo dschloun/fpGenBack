@@ -7,6 +7,7 @@ import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.mapper.domainToJpa.ConversationGenerationDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.ConversationGenerationJpaToDomainMapper;
 import be.unamur.fpgen.pagination.Pagination;
+import be.unamur.fpgen.utils.StringUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -52,8 +53,8 @@ public class JpaConversationGenerationRepository implements ConversationGenerati
                 messageType,
                 authorTrigram,
                 quantity,
-                userPrompt,
-                systemPrompt,
+                StringUtil.toLowerCaseIfNotNull(userPrompt),
+                StringUtil.toLowerCaseIfNotNull(systemPrompt),
                 startDate,
                 endDate,
                 pageable

@@ -8,6 +8,7 @@ import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.mapper.domainToJpa.InstantMessageGenerationDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.InstantMessageGenerationJpaToDomainMapper;
 import be.unamur.fpgen.pagination.Pagination;
+import be.unamur.fpgen.utils.StringUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -54,8 +55,8 @@ public class JpaInstantMessageGenerationRepository implements InstantMessageGene
                 messageType,
                 authorTrigram,
                 quantity,
-                userPrompt,
-                systemPrompt,
+                StringUtil.toLowerCaseIfNotNull(userPrompt),
+                StringUtil.toLowerCaseIfNotNull(systemPrompt),
                 startDate,
                 endDate,
                 pageable
