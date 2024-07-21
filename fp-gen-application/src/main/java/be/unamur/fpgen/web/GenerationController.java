@@ -1,6 +1,7 @@
 package be.unamur.fpgen.web;
 
 import be.unamur.api.GenerationApi;
+import be.unamur.fpgen.mapper.domainToWeb.GenerationDomainToWebMapper;
 import be.unamur.fpgen.mapper.domainToWeb.pagination.GenerationPaginationDomainToWebMapper;
 import be.unamur.fpgen.mapper.webToDomain.pagination.GenerationPaginationWebToDomainMapper;
 import be.unamur.fpgen.service.ConversationGenerationService;
@@ -26,10 +27,7 @@ public class GenerationController implements GenerationApi {
         this.conversationGenerationService = conversationGenerationService;
     }
 
-    @Override
-    public ResponseEntity<Generation> getGenerationById(UUID generationId) {
-        return GenerationApi.super.getGenerationById(generationId);
-    }
+
 
     @Override
     public ResponseEntity<GenerationsPage> searchGenerationsPaginate(@NotNull @Valid GenerationType generationType, @Valid PagedGenerationQuery pagedGenerationQuery) {
