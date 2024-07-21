@@ -25,6 +25,7 @@ public class InstantMessageGenerationJpaToDomainMapper {
                 .build();
     }
 
+    // strange but on purpose to get back each type in one for pagination in order to use abstract
     public static ConversationGeneration map(final InstantMessageGenerationEntity entity){
         if (entity == null){
             return null;

@@ -10,6 +10,7 @@ import be.unamur.fpgen.exception.GenerationNotFoundException;
 import be.unamur.fpgen.generation.InstantMessageGeneration;
 import be.unamur.fpgen.mapper.webToDomain.DatasetWebToDomainMapper;
 import be.unamur.fpgen.repository.InstantMessageDatasetRepository;
+import be.unamur.fpgen.utils.DateUtil;
 import be.unamur.model.DatasetCreation;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -100,8 +101,8 @@ public class InstantMessageDatasetService {
                 query.getDatasetQuery().getDescription(),
                 query.getDatasetQuery().getComment(),
                 query.getDatasetQuery().getAuthorTrigram(),
-                query.getDatasetQuery().getStartDate(),
-                query.getDatasetQuery().getEndDate(),
+                DateUtil.ifNullReturnOldDate(query.getDatasetQuery().getStartDate()),
+                DateUtil.ifNullReturnTomorrow(query.getDatasetQuery().getEndDate()),
                 pageable);
     }
 }

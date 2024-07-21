@@ -8,7 +8,7 @@ public class GenerationPaginationDomainToWebMapper {
 
     public static GenerationsPage map(be.unamur.fpgen.generation.pagination.GenerationsPage domain) {
         return new GenerationsPage()
-                .generations(MapperUtil.mapList(domain.getConversationGenerations(), GenerationDomainToWebMapper::map))
+                .generations(MapperUtil.mapList(domain.getGenerationList(), GenerationDomainToWebMapper::map))
                 .pagination(PaginationDomainToWebMapper.map(domain.getPagination()));
     }
 }

@@ -1,5 +1,6 @@
 package be.unamur.fpgen.repository;
 
+import be.unamur.fpgen.dataset.ConversationDataset;
 import be.unamur.fpgen.dataset.InstantMessageDataset;
 import be.unamur.fpgen.dataset.pagination.DatasetsPage;
 import be.unamur.fpgen.entity.author.AuthorEntity;
@@ -33,14 +34,14 @@ public class JpaInstantMessageDatasetRepository implements InstantMessageDataset
     public InstantMessageDataset saveInstantMessageDataset(InstantMessageDataset instantMessageDataset) {
         final AuthorEntity author = jpaAuthorRepositoryCRUD.getReferenceById(instantMessageDataset.getAuthor().getId());
 
-        return InstantMessageDatasetJpaToDomainMapper.map(jpaInstantMessageDatasetRepositoryCRUD.save(InstantMessageDataSetDomainToJpaMapper
+        return InstantMessageDatasetJpaToDomainMapper.mapInstantMessageDataset(jpaInstantMessageDatasetRepositoryCRUD.save(InstantMessageDataSetDomainToJpaMapper
                 .mapForCreate(instantMessageDataset, author)));
     }
 
     @Override
     public Optional<InstantMessageDataset> findInstantMessageDatasetById(UUID instantMessageDatasetId) {
         return jpaInstantMessageDatasetRepositoryCRUD.findById(instantMessageDatasetId)
-                .map(InstantMessageDatasetJpaToDomainMapper::map);
+                .map(InstantMessageDatasetJpaToDomainMapper::mapInstantMessageDataset);
     }
 
     @Override
@@ -62,7 +63,7 @@ public class JpaInstantMessageDatasetRepository implements InstantMessageDataset
     @Override
     public DatasetsPage findPagination(String version, String name, String description, String comment, String authorTrigram, OffsetDateTime startDate, OffsetDateTime endDate, Pageable pageable) {
         // 1. get in Page format
-        Page<InstantMessageDataset> page = jpaInstantMessageDatasetRepositoryCRUD.findPagination(
+        Page<ConversationDataset> page = jpaInstantMessageDatasetRepositoryCRUD.findPagination(
                 name,
                 version,
                 authorTrigram,
@@ -71,7 +72,7 @@ public class JpaInstantMessageDatasetRepository implements InstantMessageDataset
                 startDate,
                 endDate,
                 pageable
-        ).map(InstantMessageDatasetJpaToDomainMapper::map);
+        ).map(InstantMessageDatasetJpaToDomainMapper::mapForAbstract);
 
         final DatasetsPage datasetsPage = DatasetsPage.newBuilder()
                 .withPagination(new Pagination.Builder()
@@ -79,7 +80,7 @@ public class JpaInstantMessageDatasetRepository implements InstantMessageDataset
                         .totalSize((int) page.getTotalElements())
                         .page(page.getNumber())
                         .build())
-                .withInstantMessageDatasetList(page.getContent())
+                .withDatasetList(page.getContent())
                 .build();
 
         return datasetsPage;

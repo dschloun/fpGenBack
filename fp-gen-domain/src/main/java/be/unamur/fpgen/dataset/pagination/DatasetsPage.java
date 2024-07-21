@@ -2,7 +2,6 @@ package be.unamur.fpgen.dataset.pagination;
 
 
 import be.unamur.fpgen.dataset.ConversationDataset;
-import be.unamur.fpgen.dataset.InstantMessageDataset;
 import be.unamur.fpgen.exception.pagination.IncompleteDatasetsPageException;
 import be.unamur.fpgen.pagination.Pagination;
 import be.unamur.fpgen.utils.ViolationHandler;
@@ -12,13 +11,11 @@ import java.util.List;
 
 public class DatasetsPage {
     private final Pagination pagination;
-    private final List<ConversationDataset> conversationDatasetList;
-    private final List<InstantMessageDataset> instantMessageDatasetList;
+    private final List<ConversationDataset> datasetList;
 
     private DatasetsPage(Builder builder) {
         pagination = builder.pagination;
-        conversationDatasetList = builder.conversationList;
-        instantMessageDatasetList = builder.instantMessageDatasetList;
+        datasetList = builder.datasetList;
     }
     public static Builder newBuilder() {
         return new Builder();
@@ -28,18 +25,13 @@ public class DatasetsPage {
         return pagination;
     }
 
-    public List<ConversationDataset> getConversationDatasetList() {
-        return conversationDatasetList;
-    }
-
-    public List<InstantMessageDataset> getInstantMessageDatasetList() {
-        return instantMessageDatasetList;
+    public List<ConversationDataset> getDatasetList() {
+        return datasetList;
     }
 
     public static final class Builder extends ViolationHandler {
         private Pagination pagination;
-        private List<ConversationDataset> conversationList;
-        private List<InstantMessageDataset> instantMessageDatasetList;
+        private List<ConversationDataset> datasetList;
 
         private Builder() {
         }
@@ -49,13 +41,8 @@ public class DatasetsPage {
             return this;
         }
 
-        public Builder withConversationDatasetList(List<ConversationDataset> val) {
-            conversationList = val;
-            return this;
-        }
-
-        public Builder withInstantMessageDatasetList(List<InstantMessageDataset> val) {
-            instantMessageDatasetList = val;
+        public Builder withDatasetList(List<ConversationDataset> val) {
+            datasetList = val;
             return this;
         }
 
@@ -63,6 +50,7 @@ public class DatasetsPage {
             // Validation
             List<String> violations = new ArrayList<>();
             violations.addAll(cannotBeNull(pagination, "pagination"));
+            violations.addAll(cannotBeNull(datasetList, "datasetList"));
 
             if (!violations.isEmpty()) {
                 throw new IncompleteDatasetsPageException(buildMessage("The dataset page is incomplete because", violations));

@@ -65,7 +65,7 @@ public class JpaConversationGenerationRepository implements ConversationGenerati
                         .totalSize((int) page.getTotalElements())
                         .page(page.getNumber())
                         .build())
-                .withConversationGenerationList(page.getContent())
+                .withGenerationList(page.getContent())
                 .build();
 
         // 3. return
