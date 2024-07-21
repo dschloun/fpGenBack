@@ -1,0 +1,14 @@
+package be.unamur.fpgen.mapper.domainToWeb.pagination;
+
+import be.unamur.fpgen.mapper.domainToWeb.ConversationMessageDomainToWebMapper;
+import be.unamur.fpgen.utils.MapperUtil;
+import be.unamur.model.ConversationMessagesPage;
+
+public class ConversationMessagePaginationDomainToWebMapper {
+
+    public static ConversationMessagesPage map(be.unamur.fpgen.instant_message.pagination.ConversationMessagesPage domain) {
+        return new ConversationMessagesPage()
+                .conversationMessages(MapperUtil.mapList(domain.getConversationMessageList(), ConversationMessageDomainToWebMapper::map))
+                .pagination(PaginationDomainToWebMapper.map(domain.getPagination()));
+    }
+}
