@@ -11,7 +11,7 @@ public class AuthorWebToDomainMapper {
                 .withFirstName(authorCreation.getFirstName())
                 .withTrigram(authorCreation.getTrigram())
                 .withOrganization(authorCreation.getOrganization())
-                .withFunction(authorCreation.getFunction())
+                .withFunction(authorCreation.getAuthorFunction())
                 .withEmail(authorCreation.getEmail())
                 .withPhoneNumber(authorCreation.getPhoneNumber())
                 .build();

@@ -41,7 +41,7 @@ public class ConversationDatasetService {
         return conversationDatasetRepository.saveConversationDataset(
                 ConversationDataset.newBuilder()
                         .withAuthor(author)
-                        .withDatasetFunction(DatasetWebToDomainMapper.mapFunction(datasetCreation.getFunction()))
+                        .withDatasetFunction(DatasetWebToDomainMapper.mapFunction(datasetCreation.getDatasetFunction()))
                         .withComment(datasetCreation.getComment())
                         .withDescription(datasetCreation.getDescription())
                         .withVersion(datasetCreation.getVersion())

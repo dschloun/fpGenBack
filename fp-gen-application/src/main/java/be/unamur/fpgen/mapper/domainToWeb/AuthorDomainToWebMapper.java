@@ -9,7 +9,7 @@ public class AuthorDomainToWebMapper {
                 .firstName(domain.getFirstName())
                 .trigram(domain.getTrigram())
                 .organization(domain.getOrganization())
-                .function(domain.getFunction())
+                .authorFunction(domain.getFunction())
                 .email(domain.getEmail())
                 .phoneNumber(domain.getPhoneNumber());
     }

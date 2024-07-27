@@ -39,7 +39,7 @@ public class InstantMessageDatasetService {
         return instantMessageDatasetRepository.saveInstantMessageDataset(
                 InstantMessageDataset.newBuilder()
                         .withAuthor(author)
-                        .withDatasetFunction(DatasetWebToDomainMapper.mapFunction(datasetCreation.getFunction()))
+                        .withDatasetFunction(DatasetWebToDomainMapper.mapFunction(datasetCreation.getDatasetFunction()))
                         .withComment(datasetCreation.getComment())
                         .withDescription(datasetCreation.getDescription())
                         .withVersion(datasetCreation.getVersion())

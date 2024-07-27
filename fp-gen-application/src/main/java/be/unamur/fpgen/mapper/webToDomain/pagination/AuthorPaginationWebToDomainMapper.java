@@ -11,7 +11,7 @@ public class AuthorPaginationWebToDomainMapper {
                 .withFirstname(web.getFirstname())
                 .withLastname(web.getLastname())
                 .withOrganization(web.getOrganization())
-                .withFunction(web.getFunction())
+                .withFunction(web.getAuthorFunction())
                 .withTrigram(web.getTrigram())
                 .withEmail(web.getEmail())
                 .build();
