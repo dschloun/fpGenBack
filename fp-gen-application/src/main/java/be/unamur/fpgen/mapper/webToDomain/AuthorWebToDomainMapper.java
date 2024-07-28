@@ -7,8 +7,8 @@ public class AuthorWebToDomainMapper {
 
     public static Author map(AuthorCreation authorCreation){
         return Author.newBuilder()
-                .withLastName(authorCreation.getLastName())
-                .withFirstName(authorCreation.getFirstName())
+                .withLastName(authorCreation.getLastname())
+                .withFirstName(authorCreation.getFirstname())
                 .withTrigram(authorCreation.getTrigram())
                 .withOrganization(authorCreation.getOrganization())
                 .withFunction(authorCreation.getAuthorFunction())
