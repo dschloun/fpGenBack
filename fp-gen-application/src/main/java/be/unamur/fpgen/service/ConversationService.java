@@ -52,7 +52,7 @@ public class ConversationService {
         // 0. for each
         command.getConversationCreationList().forEach(cc -> {
             // 1. create generation data
-            final ConversationGeneration generation = conversationGenerationService.createConversationGeneration(cc);
+            final ConversationGeneration generation = conversationGenerationService.createConversationGeneration(cc, command.getAuthorId());
 
             // 3. generate conversations
             //todo chat gpt api with prompt // return the x messages in json format, unmarshall, ...

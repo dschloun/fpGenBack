@@ -28,9 +28,9 @@ public class ConversationGenerationService {
     }
 
     @Transactional
-    public ConversationGeneration createConversationGeneration(final GenerationCreation command) {
+    public ConversationGeneration createConversationGeneration(final GenerationCreation command, final UUID authorId) {
         // 0. check if author is registered
-        final Author author = authorService.getAuthorById(command.getAuthorId());
+        final Author author = authorService.getAuthorById(authorId);
         // 1. save the generation
         return conversationGenerationRepository.saveConversationGeneration(
                 ConversationGeneration.newBuilder()

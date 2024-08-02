@@ -35,7 +35,7 @@ public class InstantMessageService {
         // 0. for each
         command.getInstantMessageCreationList().forEach(imc -> {
             // 1. create generation data
-            final InstantMessageGeneration generation = instantMessageGenerationService.createInstantMessageGeneration(imc);
+            final InstantMessageGeneration generation = instantMessageGenerationService.createInstantMessageGeneration(imc, command.getAuthorId());
 
             // 2. prepare a list of instant messages
             final List<InstantMessage> instantMessageList = new ArrayList<>();
