@@ -6,6 +6,7 @@ import be.unamur.fpgen.mapper.domainToWeb.pagination.AuthorPaginationDomainToWeb
 import be.unamur.fpgen.mapper.webToDomain.AuthorWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.pagination.AuthorPaginationWebToDomainMapper;
 import be.unamur.fpgen.service.AuthorService;
+import be.unamur.fpgen.utils.MapperUtil;
 import be.unamur.model.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,5 +45,10 @@ public class AuthorController implements AuthorApi {
                         AuthorPaginationWebToDomainMapper.map(pagedAuthorQuery)
                 )
                 ), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<List<Author>> getAuthorList() {
+        return new ResponseEntity<>(MapperUtil.mapList(authorService.getAuthors(), AuthorDomainToWebMapper::map), HttpStatus.OK);
     }
 }

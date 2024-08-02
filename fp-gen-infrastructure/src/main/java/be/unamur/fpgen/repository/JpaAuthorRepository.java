@@ -10,11 +10,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public class JpaAuthorRepository implements AuthorRepository{
+public class JpaAuthorRepository implements AuthorRepository {
 
     private final JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD;
 
@@ -47,6 +48,14 @@ public class JpaAuthorRepository implements AuthorRepository{
     @Override
     public boolean existsAuthorByTrigram(String trigram) {
         return jpaAuthorRepositoryCRUD.existsByTrigram(trigram);
+    }
+
+    @Override
+    public List<Author> getAuthors() {
+        return jpaAuthorRepositoryCRUD.findAllByOrderByTrigramAsc()
+                .stream()
+                .map(AuthorJpaToDomainMapper::map)
+                .toList();
     }
 
     @Override
