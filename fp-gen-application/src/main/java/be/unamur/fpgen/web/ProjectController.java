@@ -25,7 +25,7 @@ public class ProjectController implements ProjectApi {
     @Override
     public ResponseEntity<Project> createProject(@Valid ProjectCreation projectCreation) {
         return new ResponseEntity<>(ProjectDomainToWebMapper.map(
-                projectService.createProject(ProjectWebToDomainMapper.map(projectCreation), projectCreation.getAuthorId())
+                projectService.createProject(projectCreation)
         ), HttpStatus.OK);
     }
 

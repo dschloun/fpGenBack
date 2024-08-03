@@ -3,8 +3,10 @@ package be.unamur.fpgen.service;
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.dataset.AbstractDataset;
 import be.unamur.fpgen.dataset.DatasetFunctionEnum;
+import be.unamur.fpgen.mapper.webToDomain.ProjectWebToDomainMapper;
 import be.unamur.fpgen.project.Project;
 import be.unamur.fpgen.repository.ProjectRepository;
+import be.unamur.model.ProjectCreation;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -21,12 +23,13 @@ public class ProjectService {
     }
 
     @Transactional
-    public Project createProject(final Project project, UUID authorId){
+    public Project createProject(ProjectCreation projectCreation){
         // 0. get author
-        final Author author = authorService.getAuthorById(authorId);
+        final Author author = authorService.getAuthorById(projectCreation.getAuthorId());
 
         // 1. generate 3 datasets for the project
-        project.generateInitialDatasets(author);
+        final Project project = ProjectWebToDomainMapper.map(projectCreation, author);
+        project.generateInitialDatasets();
 
         return projectRepository.save(project, author);
     }

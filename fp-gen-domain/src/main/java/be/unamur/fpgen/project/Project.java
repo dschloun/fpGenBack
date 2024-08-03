@@ -56,11 +56,11 @@ public class Project extends BaseUuidDomain {
         return datasetList;
     }
 
-    public void generateInitialDatasets(Author author){
+    public void generateInitialDatasets(){
         final Set<AbstractDataset> datasets = new HashSet<>();
-        datasets.add(this.generateDataset(author, DatasetFunctionEnum.TRAINING));
-        datasets.add(this.generateDataset(author, DatasetFunctionEnum.TEST));
-        datasets.add(this.generateDataset(author, DatasetFunctionEnum.VALIDATION));
+        datasets.add(this.generateDataset(this.getAuthor(), DatasetFunctionEnum.TRAINING));
+        datasets.add(this.generateDataset(this.getAuthor(), DatasetFunctionEnum.TEST));
+        datasets.add(this.generateDataset(this.getAuthor(), DatasetFunctionEnum.VALIDATION));
         this.datasetList.addAll(datasets);
     }
 
@@ -107,7 +107,7 @@ public class Project extends BaseUuidDomain {
         private String organisation;
         private String businessId;
         private Author author;
-        private Set<AbstractDataset> datasetList;
+        private Set<AbstractDataset> datasetList= new HashSet<>();
 
         private Builder() {
         }
