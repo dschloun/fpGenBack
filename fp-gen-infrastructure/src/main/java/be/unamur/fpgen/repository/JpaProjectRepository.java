@@ -30,7 +30,6 @@ public class JpaProjectRepository implements ProjectRepository {
         return ProjectJpaToDomainMapper.mapProject(jpaProjectRepositoryCRUD
                 .save(ProjectDomainToJpaMapper
                         .mapForCreate(project, authorEntity)));
-
     }
 
     @Override

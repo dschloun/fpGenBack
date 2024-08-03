@@ -2,7 +2,7 @@ package be.unamur.fpgen.project;
 
 import be.unamur.fpgen.BaseUuidDomain;
 import be.unamur.fpgen.author.Author;
-import be.unamur.fpgen.dataset.AbstractDataset;
+import be.unamur.fpgen.dataset.*;
 import be.unamur.fpgen.utils.DateUtil;
 
 import java.time.OffsetDateTime;
@@ -10,12 +10,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Project extends BaseUuidDomain {
-    private ProjectTypeEnum type;
-    private String name;
-    private String description;
-    private String organisation;
-    private String businessId;
-    private Author author;
+    private final ProjectTypeEnum type;
+    private final String name;
+    private final String description;
+    private final String organisation;
+    private final String businessId;
+    private final Author author;
     private Set<AbstractDataset> datasetList = new HashSet<>();
 
     private Project(Builder builder) {
@@ -25,7 +25,7 @@ public class Project extends BaseUuidDomain {
         organisation = builder.organisation;
         businessId = builder.businessId;
         author = builder.author;
-        datasetList = builder.datasetList;
+        datasetList.addAll(builder.datasetList);
     }
 
     public ProjectTypeEnum getType() {
@@ -54,6 +54,46 @@ public class Project extends BaseUuidDomain {
 
     public Set<AbstractDataset> getDatasetList() {
         return datasetList;
+    }
+
+    public void generateInitialDatasets(Author author){
+        final Set<AbstractDataset> datasets = new HashSet<>();
+        datasets.add(this.generateDataset(author, DatasetFunctionEnum.TRAINING));
+        datasets.add(this.generateDataset(author, DatasetFunctionEnum.TEST));
+        datasets.add(this.generateDataset(author, DatasetFunctionEnum.VALIDATION));
+        this.datasetList.addAll(datasets);
+    }
+
+    private AbstractDataset generateDataset(Author author, DatasetFunctionEnum datasetFunctionEnum){
+        if(ProjectTypeEnum.INSTANT_MESSAGE.equals(this.getType())){
+            return InstantMessageDataset.newBuilder()
+                    .withAuthor(author)
+//                    .withBusinessId(generateDatasetBusinessId( author, datasetFunctionEnum, DatasetTypeEnum.INSTANT_MESSAGE))
+                    .withDatasetFunction(datasetFunctionEnum)
+                    .withName(generateDatasetName(datasetFunctionEnum))
+                    .withVersion("0")
+                    .build();
+        } else {
+            return ConversationDataset.newBuilder()
+                    .withAuthor(author)
+//                    .withBusinessId(generateDatasetBusinessId( author, datasetFunctionEnum, DatasetTypeEnum.CONVERSATION))
+                    .withDatasetFunction(datasetFunctionEnum)
+                    .withName(generateDatasetName(datasetFunctionEnum))
+                    .withVersion("0")
+                    .build();
+        }
+    }
+
+//    private String generateDatasetBusinessId(Author author, DatasetFunctionEnum datasetFunctionEnum, DatasetTypeEnum datasetTypeEnum){
+//        if(DatasetTypeEnum.INSTANT_MESSAGE.equals(datasetTypeEnum)) {
+//            return String.format("IMDS-%s-%s-%s", datasetFunctionEnum, author.getTrigram(), DateUtil.convertOffsetDateTimeToString(OffsetDateTime.now()));
+//        } else {
+//            return String.format("CDS-%s-%s-%s", datasetFunctionEnum, author.getTrigram(), DateUtil.convertOffsetDateTimeToString(OffsetDateTime.now()));
+//        }
+//    }
+
+    private String generateDatasetName(DatasetFunctionEnum datasetFunctionEnum){
+        return String.format("%s-%s", this.getName(), datasetFunctionEnum.name());
     }
 
     public static Builder newBuilder() {
@@ -118,7 +158,7 @@ public class Project extends BaseUuidDomain {
         }
 
         public String generateBusinessId() {
-            return String.format("%s-%s-%s", "C", this.author.getTrigram(), this.name, DateUtil.convertOffsetDateTimeToString(OffsetDateTime.now()));
+            return String.format("%s-%s-%s", this.author.getTrigram(), this.name, DateUtil.convertOffsetDateTimeToString(OffsetDateTime.now()));
         }
     }
 }
