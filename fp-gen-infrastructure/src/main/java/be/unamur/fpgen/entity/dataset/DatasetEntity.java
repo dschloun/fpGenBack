@@ -51,7 +51,7 @@ public class DatasetEntity extends BaseUuidEntity {
         this.name = name;
     }
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description")
     public String getDescription() {
         return description;
     }

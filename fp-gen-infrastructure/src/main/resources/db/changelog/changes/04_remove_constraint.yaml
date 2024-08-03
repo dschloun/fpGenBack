@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: remove-constraint-on-dataset-table
+      author: dsc
+      changes:
+        - dropNotNullConstraint:
+            tableName: dataset
+            columnName: description
+        - dropNotNullConstraint:
+            tableName: dataset
+            columnName: comment

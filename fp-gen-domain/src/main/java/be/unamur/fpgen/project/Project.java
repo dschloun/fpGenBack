@@ -68,7 +68,6 @@ public class Project extends BaseUuidDomain {
         if(ProjectTypeEnum.INSTANT_MESSAGE.equals(this.getType())){
             return InstantMessageDataset.newBuilder()
                     .withAuthor(author)
-//                    .withBusinessId(generateDatasetBusinessId( author, datasetFunctionEnum, DatasetTypeEnum.INSTANT_MESSAGE))
                     .withDatasetFunction(datasetFunctionEnum)
                     .withName(generateDatasetName(datasetFunctionEnum))
                     .withVersion("0")
@@ -76,21 +75,12 @@ public class Project extends BaseUuidDomain {
         } else {
             return ConversationDataset.newBuilder()
                     .withAuthor(author)
-//                    .withBusinessId(generateDatasetBusinessId( author, datasetFunctionEnum, DatasetTypeEnum.CONVERSATION))
                     .withDatasetFunction(datasetFunctionEnum)
                     .withName(generateDatasetName(datasetFunctionEnum))
                     .withVersion("0")
                     .build();
         }
     }
-
-//    private String generateDatasetBusinessId(Author author, DatasetFunctionEnum datasetFunctionEnum, DatasetTypeEnum datasetTypeEnum){
-//        if(DatasetTypeEnum.INSTANT_MESSAGE.equals(datasetTypeEnum)) {
-//            return String.format("IMDS-%s-%s-%s", datasetFunctionEnum, author.getTrigram(), DateUtil.convertOffsetDateTimeToString(OffsetDateTime.now()));
-//        } else {
-//            return String.format("CDS-%s-%s-%s", datasetFunctionEnum, author.getTrigram(), DateUtil.convertOffsetDateTimeToString(OffsetDateTime.now()));
-//        }
-//    }
 
     private String generateDatasetName(DatasetFunctionEnum datasetFunctionEnum){
         return String.format("%s-%s", this.getName(), datasetFunctionEnum.name());
