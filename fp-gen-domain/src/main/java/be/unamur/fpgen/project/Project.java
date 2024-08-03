@@ -1,12 +1,13 @@
 package be.unamur.fpgen.project;
 
+import be.unamur.fpgen.BaseUuidDomain;
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.dataset.AbstractDataset;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class Project {
+public class Project extends BaseUuidDomain {
     private String name;
     private String description;
     private String organisation;
@@ -51,7 +52,7 @@ public class Project {
         return new Builder();
     }
 
-    public static final class Builder {
+    public static final class Builder extends AbstractBaseUuidDomainBuilder<Builder>{
         private String name;
         private String description;
         private String organisation;
@@ -94,6 +95,11 @@ public class Project {
 
         public Project build() {
             return new Project(this);
+        }
+
+        @Override
+        protected Builder self() {
+            return this;
         }
     }
 }
