@@ -36,7 +36,9 @@ public class ProjectController implements ProjectApi {
 
     @Override
     public ResponseEntity<Project> getProjectById(UUID projectId) {
-        return ProjectApi.super.getProjectById(projectId);
+        return new ResponseEntity<>(ProjectDomainToWebMapper.map(
+                projectService.findById(projectId)
+        ), HttpStatus.OK);
     }
 
     @Override
