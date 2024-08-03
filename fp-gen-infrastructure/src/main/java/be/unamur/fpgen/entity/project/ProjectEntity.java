@@ -3,6 +3,7 @@ package be.unamur.fpgen.entity.project;
 import be.unamur.fpgen.entity.author.AuthorEntity;
 import be.unamur.fpgen.entity.base.BaseUuidEntity;
 import be.unamur.fpgen.entity.dataset.DatasetEntity;
+import be.unamur.fpgen.project.ProjectTypeEnum;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -12,6 +13,7 @@ import java.util.Set;
 @Table(name = "project")
 public class ProjectEntity extends BaseUuidEntity {
     // members
+    private ProjectTypeEnum type;
     private String name;
     private String description;
     private String organisation;
@@ -20,6 +22,16 @@ public class ProjectEntity extends BaseUuidEntity {
     private Set<DatasetEntity> datasetList = new HashSet<>();
 
     // getters and setters
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false)
+    public ProjectTypeEnum getType() {
+        return type;
+    }
+
+    public void setType(ProjectTypeEnum type) {
+        this.type = type;
+    }
 
     @Column(name = "name", nullable = false)
     public String getName() {

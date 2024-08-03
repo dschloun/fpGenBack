@@ -22,6 +22,7 @@ public class ProjectJpaToDomainMapper {
                 .withId(projectEntity.getId())
                 .withCreationDate(projectEntity.getCreationDate())
                 .withModificationDate(projectEntity.getModificationDate())
+                .withType(projectEntity.getType())
                 .withName(projectEntity.getName())
                 .withDescription(projectEntity.getDescription())
                 .withOrganisation(projectEntity.getOrganisation())

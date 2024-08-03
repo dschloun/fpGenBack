@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Project extends BaseUuidDomain {
+    private ProjectTypeEnum type;
     private String name;
     private String description;
     private String organisation;
@@ -16,12 +17,17 @@ public class Project extends BaseUuidDomain {
     private Set<AbstractDataset> datasetList = new HashSet<>();
 
     private Project(Builder builder) {
+        type = builder.type;
         name = builder.name;
         description = builder.description;
         organisation = builder.organisation;
         businessId = builder.businessId;
         author = builder.author;
         datasetList = builder.datasetList;
+    }
+
+    public ProjectTypeEnum getType() {
+        return type;
     }
 
     public String getName() {
@@ -53,6 +59,7 @@ public class Project extends BaseUuidDomain {
     }
 
     public static final class Builder extends AbstractBaseUuidDomainBuilder<Builder>{
+        private ProjectTypeEnum type;
         private String name;
         private String description;
         private String organisation;
@@ -61,6 +68,11 @@ public class Project extends BaseUuidDomain {
         private Set<AbstractDataset> datasetList;
 
         private Builder() {
+        }
+
+        public Builder withType(ProjectTypeEnum val) {
+            type = val;
+            return this;
         }
 
         public Builder withName(String val) {
