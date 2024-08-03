@@ -83,4 +83,12 @@ public class JpaInstantMessageRepository implements InstantMessageRepository {
         // 3. return
         return instantMessagesPage;
     }
+
+    @Override
+    public List<InstantMessage> findInstantMessageByGenerationId(UUID generationId) {
+        return jpaInstantMessageRepositoryCRUD.findAllByInstantMessageGenerationId(generationId)
+                .stream()
+                .map(InstantMessageJpaToDomainMapper::map)
+                .toList();
+    }
 }

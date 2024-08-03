@@ -76,4 +76,9 @@ public class InstantMessageService {
         instantMessageRepository.deleteInstantMessageById(instantMessageId);
     }
 
+    @Transactional
+    public List<InstantMessage> findInstantMessageByGenerationId(UUID generationId) {
+        return instantMessageRepository.findInstantMessageByGenerationId(generationId);
+    }
+
 }
