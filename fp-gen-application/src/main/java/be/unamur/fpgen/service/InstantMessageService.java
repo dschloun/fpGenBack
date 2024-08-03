@@ -77,7 +77,7 @@ public class InstantMessageService {
     }
 
     @Transactional
-    public List<InstantMessage> findInstantMessageByGenerationId(UUID generationId) {
+    public List<InstantMessage> findAllByGenerationId(UUID generationId) {
         return instantMessageRepository.findInstantMessageByGenerationId(generationId);
     }
 

@@ -64,7 +64,7 @@ public class InstantMessageController implements InstantMessageApi {
     @Override
     public ResponseEntity<List<InstantMessage>> findInstantMessagesByGenerationId(UUID generationId) {
         return new ResponseEntity<>(
-                MapperUtil.mapList(instantMessageService.findInstantMessageByGenerationId(generationId), InstantMessageDomainToWebMapper::map),
+                MapperUtil.mapList(instantMessageService.findAllByGenerationId(generationId), InstantMessageDomainToWebMapper::map),
                 HttpStatus.OK);
     }
 }
