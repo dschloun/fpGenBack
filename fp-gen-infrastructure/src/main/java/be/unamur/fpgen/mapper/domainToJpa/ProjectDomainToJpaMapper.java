@@ -20,18 +20,18 @@ public class ProjectDomainToJpaMapper {
         projectEntity.setOrganisation(domain.getOrganisation());
         projectEntity.setBusinessId(domain.getBusinessId());
         projectEntity.setAuthor(authorEntity);
-        projectEntity.setDatasetList(mapDatasets(domain.getDatasetList(), authorEntity));
+        projectEntity.setDatasetList(mapDatasets(domain.getDatasetList(), authorEntity, projectEntity));
         return projectEntity;
 
     }
 
-    private static Set<DatasetEntity> mapDatasets(Set<AbstractDataset> dataset, AuthorEntity author) {
+    private static Set<DatasetEntity> mapDatasets(Set<AbstractDataset> dataset, AuthorEntity author, ProjectEntity projectEntity) {
         Set<DatasetEntity> datasets = new HashSet<>();
         dataset.forEach(ds -> {
             if (ds instanceof InstantMessageDataset imd) {
-                datasets.add(InstantMessageDataSetDomainToJpaMapper.mapForCreate(imd, author));
+                datasets.add(InstantMessageDataSetDomainToJpaMapper.mapForCreate(imd, author, projectEntity));
             } else if (ds instanceof ConversationDataset cd) {
-                datasets.add(ConversationDatasetDomainToJpaMapper.mapForCreate(cd, author));
+                datasets.add(ConversationDatasetDomainToJpaMapper.mapForCreate(cd, author, projectEntity));
             } else {
                 throw new IllegalArgumentException("Unknown dataset type");
             }
