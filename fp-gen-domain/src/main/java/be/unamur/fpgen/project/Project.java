@@ -3,7 +3,9 @@ package be.unamur.fpgen.project;
 import be.unamur.fpgen.BaseUuidDomain;
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.dataset.AbstractDataset;
+import be.unamur.fpgen.utils.DateUtil;
 
+import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -106,12 +108,17 @@ public class Project extends BaseUuidDomain {
         }
 
         public Project build() {
+            businessId = generateBusinessId();
             return new Project(this);
         }
 
         @Override
         protected Builder self() {
             return this;
+        }
+
+        public String generateBusinessId() {
+            return String.format("%s-%s-%s", "C", this.author.getTrigram(), this.name, DateUtil.convertOffsetDateTimeToString(OffsetDateTime.now()));
         }
     }
 }

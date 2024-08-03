@@ -1,0 +1,26 @@
+package be.unamur.fpgen.mapper.webToDomain;
+
+
+import be.unamur.fpgen.project.Project;
+import be.unamur.fpgen.project.ProjectTypeEnum;
+import be.unamur.model.ProjectType;
+
+import java.util.Optional;
+
+public class ProjectWebToDomainMapper {
+    public static Project map(final be.unamur.model.ProjectCreation web){
+        return Project.newBuilder()
+                .withType(map(web.getProjectType()))
+                .withName(web.getName())
+                .withDescription(web.getDescription())
+                .withOrganisation(web.getOrganisation())
+                .build();
+    }
+
+    public static ProjectTypeEnum map(final ProjectType domain) {
+        return Optional.ofNullable(domain)
+                .map(Enum::name)
+                .map(ProjectTypeEnum::valueOf)
+                .orElse(null);
+    }
+}
