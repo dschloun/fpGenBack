@@ -3,6 +3,7 @@ package be.unamur.fpgen.entity.author;
 import be.unamur.fpgen.entity.base.BaseUuidEntity;
 import be.unamur.fpgen.entity.dataset.DatasetEntity;
 import be.unamur.fpgen.entity.generation.GenerationEntity;
+import be.unamur.fpgen.entity.project.ProjectEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,6 +25,7 @@ public class AuthorEntity extends BaseUuidEntity {
     private String phoneNumber;
     private Set<GenerationEntity> generationList;
     private Set<DatasetEntity> datasetList;
+    private Set<ProjectEntity> projectList;
 
     // getters and setters
 
@@ -106,5 +108,14 @@ public class AuthorEntity extends BaseUuidEntity {
 
     public void setDatasetList(final Set<DatasetEntity> datasetList) {
         this.datasetList = datasetList;
+    }
+
+    @OneToMany(mappedBy = "author")
+    public Set<ProjectEntity> getProjectList() {
+        return projectList;
+    }
+
+    public void setProjectList(Set<ProjectEntity> projectList) {
+        this.projectList = projectList;
     }
 }

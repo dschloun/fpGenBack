@@ -5,5 +5,6 @@
 
     <include file="changes/01_create_message_gen_message_table.yaml" relativeToChangelogFile="true"/>
     <include file="changes/02_add_missing_fields_to_tables.yaml" relativeToChangelogFile="true"/>
+    <include file="changes/03_add_project_table.yaml" relativeToChangelogFile="true"/>
     <include file="changelog-quartz.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

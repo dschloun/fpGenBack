@@ -1,0 +1,74 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-project-table
+      author: dsc
+      changes:
+        - createTable:
+            tableName: project
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    - primaryKey: true
+                    - primaryKeyName: pk_project
+                    - nullable: false
+                    - unique: true
+              - column:
+                  name: creation_date
+                  type: datetime
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: modification_date
+                  type: datetime
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: business_id
+                  type: varchar(255)
+                  constraints:
+                    - nullable: false
+                    - unique: true
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: description
+                  type: varchar(255)
+                  constraints:
+                    - nullable: false
+                    - unique: true
+              - column:
+                  name: organization
+                  type: varchar(255)
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: author_id
+                  type: uuid
+                  constraints:
+                    - nullable: false
+                    - unique: false
+                    - foreignKeyName: fk_project_author
+                    - references: author(id)
+                    - onDelete: CASCADE
+
+        - addColumn:
+            tableName: dataset
+            columns:
+              - column:
+                  name: project_id
+                  type: uuid
+                  constraints:
+                    - nullable: true
+                    - unique: false
+                    - foreignKeyName: fk_dataset_project
+                    - references: project(id)
+                    - onDelete: CASCADE
