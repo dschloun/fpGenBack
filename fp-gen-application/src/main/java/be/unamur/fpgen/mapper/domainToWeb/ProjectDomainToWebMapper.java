@@ -24,6 +24,7 @@ public class ProjectDomainToWebMapper {
                 .description(domain.getDescription())
                 .organization(domain.getOrganisation())
                 .type(map(domain.getType()))
+                .author(AuthorDomainToWebMapper.map(domain.getAuthor()))
                 .datasets(domain.getDatasetList()
                         .stream()
                         .map(d ->
