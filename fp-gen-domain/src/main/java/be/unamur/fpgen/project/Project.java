@@ -19,6 +19,7 @@ public class Project extends BaseUuidDomain {
     private Set<AbstractDataset> datasetList = new HashSet<>();
 
     private Project(Builder builder) {
+        super(builder.getId(), builder.getCreationDate(), builder.getModificationDate());
         type = builder.type;
         name = builder.name;
         description = builder.description;
