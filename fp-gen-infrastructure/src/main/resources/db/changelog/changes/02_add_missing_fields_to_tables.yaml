@@ -12,3 +12,12 @@ databaseChangeLog:
                 constraints:
                   nullable: false
                   unique: false
+
+  - changeSet:
+      id: increase-generation-id-limit
+      author: dsc
+      changes:
+        - modifyDataType:
+            tableName: generation
+            columnName: generation_id
+            newDataType: varchar(35)
