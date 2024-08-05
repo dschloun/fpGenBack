@@ -36,4 +36,7 @@ public interface JpaInstantMessageGenerationRepositoryCRUD extends JpaRepository
                                                       @Param("endDate") OffsetDateTime endDate,
                                                         @Param("datasetIdList") List<UUID> datasetIdList,
                                                       Pageable pageable);
+
+    //fixme :p is null or ... only works for string, not for UUID, so to counter the problem put a random UUID if datasetList is empty
+    // not very clean but it's the only way
 }

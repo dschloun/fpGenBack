@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -60,7 +61,7 @@ public class JpaInstantMessageGenerationRepository implements InstantMessageGene
                 StringUtil.toLowerCaseIfNotNull(systemPrompt),
                 startDate,
                 endDate,
-                datasetIdList,
+                Objects.nonNull(datasetIdList) ? datasetIdList : List.of(UUID.fromString("00000000-0000-0000-0000-000000000000")),
                 pageable
         ).map(InstantMessageGenerationJpaToDomainMapper::map);
 
