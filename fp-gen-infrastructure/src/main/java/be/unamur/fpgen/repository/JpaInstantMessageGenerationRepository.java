@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -48,7 +49,7 @@ public class JpaInstantMessageGenerationRepository implements InstantMessageGene
     }
 
     @Override
-    public GenerationsPage findPagination(MessageTypeEnum messageType, MessageTopicEnum messageTopic, String userPrompt, String systemPrompt, Integer quantity, String authorTrigram, OffsetDateTime startDate, OffsetDateTime endDate, Pageable pageable) {
+    public GenerationsPage findPagination(MessageTypeEnum messageType, MessageTopicEnum messageTopic, String userPrompt, String systemPrompt, Integer quantity, String authorTrigram, OffsetDateTime startDate, OffsetDateTime endDate, List<UUID> datasetIdList, Pageable pageable) {
         // 1. get in Page format
         Page<ConversationGeneration> page = jpaInstantMessageGenerationRepositoryCRUD.findPagination(
                 messageTopic,
@@ -59,6 +60,7 @@ public class JpaInstantMessageGenerationRepository implements InstantMessageGene
                 StringUtil.toLowerCaseIfNotNull(systemPrompt),
                 startDate,
                 endDate,
+                datasetIdList,
                 pageable
         ).map(InstantMessageGenerationJpaToDomainMapper::map);
 

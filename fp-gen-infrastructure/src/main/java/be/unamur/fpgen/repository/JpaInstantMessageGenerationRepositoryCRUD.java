@@ -10,10 +10,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 
 public interface JpaInstantMessageGenerationRepositoryCRUD extends JpaRepository<InstantMessageGenerationEntity, UUID> {
     @Query(value = "SELECT DISTINCT g from InstantMessageGenerationEntity g" +
+            " LEFT JOIN g.instantMessageDatasetList gd" +
             " WHERE (:topic is null or g.topic = :topic)" +
             " AND (:type is null or g.type = :type)" +
             " AND (:authorTrigram is null or g.author.trigram = :authorTrigram)" +
@@ -21,7 +23,8 @@ public interface JpaInstantMessageGenerationRepositoryCRUD extends JpaRepository
             " AND (:systemPrompt is null or lower(g.systemPrompt) like %:userPrompt%)" +
             " AND (:quantity is null or g.quantity <= :quantity)" +
             " AND g.creationDate >= cast(:startDate as timestamp)" +
-            " AND g.creationDate <= cast(:endDate as timestamp)"
+            " AND g.creationDate <= cast(:endDate as timestamp)" +
+            " AND gd.id NOT IN (:datasetIdList)"
     )
     Page<InstantMessageGenerationEntity> findPagination(@Param("topic") MessageTopicEnum topic,
                                                       @Param("type") MessageTypeEnum type,
@@ -31,5 +34,6 @@ public interface JpaInstantMessageGenerationRepositoryCRUD extends JpaRepository
                                                       @Param("systemPrompt") String systemPrompt,
                                                       @Param("startDate") OffsetDateTime startDate,
                                                       @Param("endDate") OffsetDateTime endDate,
+                                                        @Param("datasetIdList") List<UUID> datasetIdList,
                                                       Pageable pageable);
 }

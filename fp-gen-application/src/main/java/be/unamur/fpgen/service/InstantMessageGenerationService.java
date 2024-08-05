@@ -68,6 +68,7 @@ public class InstantMessageGenerationService {
                 query.getGenerationQuery().getAuthorTrigram(),
                 DateUtil.ifNullReturnOldDate(query.getGenerationQuery().getStartDate()),
                 DateUtil.ifNullReturnTomorrow(query.getGenerationQuery().getEndDate()),
+                query.getGenerationQuery().getDatasetIdList(),
                 pageable);
     }
 

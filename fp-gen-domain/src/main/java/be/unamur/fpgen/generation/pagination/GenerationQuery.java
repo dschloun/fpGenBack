@@ -5,6 +5,8 @@ import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
 
 import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.UUID;
 
 public class GenerationQuery {
     private final GenerationTypeEnum generationType;
@@ -14,6 +16,7 @@ public class GenerationQuery {
     private final String systemPrompt;
     private final Integer quantity;
     private final String authorTrigram;
+    private final List<UUID> datasetIdList;
     private final OffsetDateTime startDate;
     private final OffsetDateTime endDate;
 
@@ -25,6 +28,7 @@ public class GenerationQuery {
         systemPrompt = builder.systemPrompt;
         quantity = builder.quantity;
         authorTrigram = builder.authorTrigram;
+        datasetIdList = builder.datasetIdList;
         startDate = builder.startDate;
         endDate = builder.endDate;
     }
@@ -60,6 +64,10 @@ public class GenerationQuery {
         return authorTrigram;
     }
 
+    public List<UUID> getDatasetIdList() {
+        return datasetIdList;
+    }
+
     public OffsetDateTime getStartDate() {
         return startDate;
     }
@@ -76,6 +84,7 @@ public class GenerationQuery {
         private String systemPrompt;
         private Integer quantity;
         private String authorTrigram;
+        private List<UUID> datasetIdList;
         private OffsetDateTime startDate;
         private OffsetDateTime endDate;
 
@@ -114,6 +123,11 @@ public class GenerationQuery {
 
         public Builder withAuthorTrigram(String val) {
             authorTrigram = val;
+            return this;
+        }
+
+        public Builder withDatasetIdList(List<UUID> val) {
+            datasetIdList = val;
             return this;
         }
 

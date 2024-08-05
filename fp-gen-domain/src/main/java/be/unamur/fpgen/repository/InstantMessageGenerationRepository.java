@@ -7,6 +7,7 @@ import be.unamur.fpgen.message.MessageTypeEnum;
 import org.springframework.data.domain.Pageable;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,5 +27,6 @@ public interface InstantMessageGenerationRepository {
                                    String authorTrigram,
                                    OffsetDateTime startDate,
                                    OffsetDateTime endDate,
+                                   List<UUID> datasetIdList,
                                    Pageable pageable);
 }

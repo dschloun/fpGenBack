@@ -9,9 +9,11 @@ import be.unamur.fpgen.mapper.webToDomain.MessageTopicWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.MessageTypeWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.PaginationWebToDomainMapper;
 import be.unamur.fpgen.utils.DateUtil;
+import be.unamur.fpgen.utils.MapperUtil;
 import be.unamur.model.PagedGenerationQuery;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 public class GenerationPaginationWebToDomainMapper {
@@ -24,6 +26,7 @@ public class GenerationPaginationWebToDomainMapper {
                 .withMessageType(MessageTypeWebToDomainMapper.map(web.getMessageType()))
                 .withGenerationType(GenerationTypeWebToDomainMapper.map(web.getGenerationType()))
                 .withAuthorTrigram(web.getAuthorTrigram())
+                .withDatasetIdList(web.getDatasetIdList())
                 .withQuantity(web.getQuantity())
                 .withSystemPrompt(web.getSystemPrompt())
                 .withUserPrompt(web.getUserPrompt())

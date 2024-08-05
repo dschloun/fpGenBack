@@ -14,7 +14,7 @@ public class ProjectWebToDomainMapper {
                 .withType(map(web.getProjectType()))
                 .withName(web.getName())
                 .withDescription(web.getDescription())
-                .withOrganisation(web.getOrganisation())
+                .withOrganisation(web.getOrganization())
                 .withAuthor(author)
                 .build();
     }
