@@ -1,7 +1,7 @@
 package be.unamur.fpgen.repository;
 
 import be.unamur.fpgen.generation.ConversationGeneration;
-import be.unamur.fpgen.generation.pagination.GenerationsPage;
+import be.unamur.fpgen.generation.pagination.ConversationGenerationsPage;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
 import org.springframework.data.domain.Pageable;
@@ -18,14 +18,14 @@ public interface ConversationGenerationRepository {
 
     void deleteConversationGenerationById(UUID conversationGenerationId);
 
-    GenerationsPage findPagination(MessageTypeEnum messageType,
-                                   MessageTopicEnum messageTopic,
-                                   String userPrompt,
-                                   String systemPrompt,
-                                   Integer quantity,
-                                   String authorTrigram,
-                                   OffsetDateTime startDate,
-                                   OffsetDateTime endDate,
-                                   Pageable pageable);
+    ConversationGenerationsPage findPagination(MessageTypeEnum messageType,
+                                               MessageTopicEnum messageTopic,
+                                               String userPrompt,
+                                               String systemPrompt,
+                                               Integer quantity,
+                                               String authorTrigram,
+                                               OffsetDateTime startDate,
+                                               OffsetDateTime endDate,
+                                               Pageable pageable);
 
 }

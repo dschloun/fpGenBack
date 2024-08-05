@@ -3,7 +3,8 @@ package be.unamur.fpgen.service;
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.exception.GenerationNotFoundException;
 import be.unamur.fpgen.generation.InstantMessageGeneration;
-import be.unamur.fpgen.generation.pagination.GenerationsPage;
+import be.unamur.fpgen.generation.pagination.ConversationGenerationsPage;
+import be.unamur.fpgen.generation.pagination.InstantMessageGenerationsPage;
 import be.unamur.fpgen.generation.pagination.PagedGenerationsQuery;
 import be.unamur.fpgen.mapper.webToDomain.MessageTopicWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.MessageTypeWebToDomainMapper;
@@ -51,10 +52,8 @@ public class InstantMessageGenerationService {
     }
 
     @Transactional
-    public GenerationsPage searchGenerationsPaginate(PagedGenerationsQuery query) {
-        //0. get author
-        final Author author = query.getGenerationQuery().getAuthorTrigram() != null ? authorService.getAuthorByTrigram(query.getGenerationQuery().getAuthorTrigram()) : null;
-        //1. get pageable
+    public InstantMessageGenerationsPage searchGenerationsPaginate(PagedGenerationsQuery query) {
+       //1. get pageable
         final Pageable pageable = PageRequest
                 .of(query.getQueryPage().getPage(),
                         query.getQueryPage().getSize());

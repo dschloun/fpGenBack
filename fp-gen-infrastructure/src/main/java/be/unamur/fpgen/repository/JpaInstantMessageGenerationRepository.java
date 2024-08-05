@@ -2,7 +2,8 @@ package be.unamur.fpgen.repository;
 
 import be.unamur.fpgen.generation.ConversationGeneration;
 import be.unamur.fpgen.generation.InstantMessageGeneration;
-import be.unamur.fpgen.generation.pagination.GenerationsPage;
+import be.unamur.fpgen.generation.pagination.ConversationGenerationsPage;
+import be.unamur.fpgen.generation.pagination.InstantMessageGenerationsPage;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.mapper.domainToJpa.InstantMessageGenerationDomainToJpaMapper;
@@ -50,9 +51,9 @@ public class JpaInstantMessageGenerationRepository implements InstantMessageGene
     }
 
     @Override
-    public GenerationsPage findPagination(MessageTypeEnum messageType, MessageTopicEnum messageTopic, String userPrompt, String systemPrompt, Integer quantity, String authorTrigram, OffsetDateTime startDate, OffsetDateTime endDate, List<UUID> datasetIdList, Pageable pageable) {
+    public InstantMessageGenerationsPage findPagination(MessageTypeEnum messageType, MessageTopicEnum messageTopic, String userPrompt, String systemPrompt, Integer quantity, String authorTrigram, OffsetDateTime startDate, OffsetDateTime endDate, List<UUID> datasetIdList, Pageable pageable) {
         // 1. get in Page format
-        Page<ConversationGeneration> page = jpaInstantMessageGenerationRepositoryCRUD.findPagination(
+        Page<InstantMessageGeneration> page = jpaInstantMessageGenerationRepositoryCRUD.findPagination(
                 messageTopic,
                 messageType,
                 authorTrigram,
@@ -65,7 +66,7 @@ public class JpaInstantMessageGenerationRepository implements InstantMessageGene
                 pageable
         ).map(InstantMessageGenerationJpaToDomainMapper::map);
 
-        final GenerationsPage generationsPage = GenerationsPage.newBuilder()
+        final InstantMessageGenerationsPage instantMessageGenerationsPage = InstantMessageGenerationsPage.newBuilder()
                 .withPagination(new Pagination.Builder()
                         .size(page.getSize())
                         .totalSize((int) page.getTotalElements())
@@ -75,6 +76,6 @@ public class JpaInstantMessageGenerationRepository implements InstantMessageGene
                 .build();
 
         // 3. return
-        return generationsPage;
+        return instantMessageGenerationsPage;
     }
 }

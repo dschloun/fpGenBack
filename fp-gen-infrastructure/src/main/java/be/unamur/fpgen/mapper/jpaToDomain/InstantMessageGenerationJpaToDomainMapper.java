@@ -1,8 +1,6 @@
 package be.unamur.fpgen.mapper.jpaToDomain;
 
-import be.unamur.fpgen.entity.generation.ConversationGenerationEntity;
 import be.unamur.fpgen.entity.generation.InstantMessageGenerationEntity;
-import be.unamur.fpgen.generation.ConversationGeneration;
 import be.unamur.fpgen.generation.InstantMessageGeneration;
 import be.unamur.fpgen.utils.MapperUtil;
 
@@ -25,13 +23,12 @@ public class InstantMessageGenerationJpaToDomainMapper {
                 .build();
     }
 
-    // strange but on purpose to get back each type in one for pagination in order to use abstract
-    public static ConversationGeneration map(final InstantMessageGenerationEntity entity){
+    public static InstantMessageGeneration map(final InstantMessageGenerationEntity entity){
         if (entity == null){
             return null;
         }
 
-        return ConversationGeneration.newBuilder()
+        return InstantMessageGeneration.newBuilder()
                 .withId(entity.getId())
                 .withCreationDate(entity.getCreationDate())
                 .withModificationDate(entity.getModificationDate())

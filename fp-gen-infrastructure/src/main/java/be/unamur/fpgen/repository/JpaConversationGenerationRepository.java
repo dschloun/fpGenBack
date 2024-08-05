@@ -1,7 +1,7 @@
 package be.unamur.fpgen.repository;
 
 import be.unamur.fpgen.generation.ConversationGeneration;
-import be.unamur.fpgen.generation.pagination.GenerationsPage;
+import be.unamur.fpgen.generation.pagination.ConversationGenerationsPage;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.mapper.domainToJpa.ConversationGenerationDomainToJpaMapper;
@@ -45,7 +45,7 @@ public class JpaConversationGenerationRepository implements ConversationGenerati
     }
 
     @Override
-    public GenerationsPage findPagination(MessageTypeEnum messageType, MessageTopicEnum messageTopic, String userPrompt, String systemPrompt, Integer quantity, String authorTrigram, OffsetDateTime startDate, OffsetDateTime endDate, Pageable pageable) {
+    public ConversationGenerationsPage findPagination(MessageTypeEnum messageType, MessageTopicEnum messageTopic, String userPrompt, String systemPrompt, Integer quantity, String authorTrigram, OffsetDateTime startDate, OffsetDateTime endDate, Pageable pageable) {
 
         // 1. get in Page format
         Page<ConversationGeneration> page = jpaConversationGenerationRepositoryCRUD.findPagination(
@@ -60,7 +60,7 @@ public class JpaConversationGenerationRepository implements ConversationGenerati
                 pageable
         ).map(ConversationGenerationJpaToDomainMapper::map);
 
-        final GenerationsPage generationsPage = GenerationsPage.newBuilder()
+        final ConversationGenerationsPage conversationGenerationsPage = ConversationGenerationsPage.newBuilder()
                 .withPagination(new Pagination.Builder()
                         .size(page.getSize())
                         .totalSize((int) page.getTotalElements())
@@ -70,6 +70,6 @@ public class JpaConversationGenerationRepository implements ConversationGenerati
                 .build();
 
         // 3. return
-        return generationsPage;
+        return conversationGenerationsPage;
     }
 }

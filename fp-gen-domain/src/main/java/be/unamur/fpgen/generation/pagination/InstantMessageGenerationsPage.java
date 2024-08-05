@@ -2,17 +2,18 @@ package be.unamur.fpgen.generation.pagination;
 
 import be.unamur.fpgen.exception.pagination.IncompleteGenerationsPageException;
 import be.unamur.fpgen.generation.ConversationGeneration;
+import be.unamur.fpgen.generation.InstantMessageGeneration;
 import be.unamur.fpgen.pagination.Pagination;
 import be.unamur.fpgen.utils.ViolationHandler;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GenerationsPage {
+public class InstantMessageGenerationsPage {
     private final Pagination pagination;
-    private final List<ConversationGeneration> generationList;
+    private final List<InstantMessageGeneration> generationList;
 
-    private GenerationsPage(Builder builder) {
+    private InstantMessageGenerationsPage(Builder builder) {
         pagination = builder.pagination;
         generationList = builder.generationList;
     }
@@ -24,13 +25,13 @@ public class GenerationsPage {
         return pagination;
     }
 
-    public List<ConversationGeneration> getGenerationList() {
+    public List<InstantMessageGeneration> getGenerationList() {
         return generationList;
     }
 
     public static final class Builder extends ViolationHandler {
         private Pagination pagination;
-        private List<ConversationGeneration> generationList;
+        private List<InstantMessageGeneration> generationList;
 
         private Builder() {
         }
@@ -40,12 +41,12 @@ public class GenerationsPage {
             return this;
         }
 
-        public Builder withGenerationList(List<ConversationGeneration> val) {
+        public Builder withGenerationList(List<InstantMessageGeneration> val) {
             generationList = val;
             return this;
         }
 
-        public GenerationsPage build() {
+        public InstantMessageGenerationsPage build() {
             // Validation
             List<String> violations = new ArrayList<>();
             violations.addAll(cannotBeNull(pagination, "pagination"));
@@ -54,7 +55,7 @@ public class GenerationsPage {
             if (!violations.isEmpty()) {
                 throw new IncompleteGenerationsPageException(buildMessage("The instant generation page is incomplete because", violations));
             }
-            return new GenerationsPage(this);
+            return new InstantMessageGenerationsPage(this);
         }
     }
 }
