@@ -59,17 +59,6 @@ public class JpaInstantMessageGenerationRepository implements InstantMessageGene
     @Override
     public InstantMessageGenerationsPage findPagination(MessageTypeEnum messageType, MessageTopicEnum messageTopic, String userPrompt, String systemPrompt, Integer quantity, String authorTrigram, OffsetDateTime startDate, OffsetDateTime endDate, List<UUID> datasetIdList, Pageable pageable) {
         // 1. get in Page format
-        Page<AbstractGeneration> projectionPage = jpaInstantMessageGenerationRepositoryCRUD.search(
-                Objects.nonNull(messageTopic) ? messageTopic.name() : null,
-                Objects.nonNull(messageType) ? messageType.name() : null,
-                authorTrigram,
-                quantity,
-                StringUtil.toLowerCaseIfNotNull(userPrompt),
-                startDate,
-                endDate,
-                Objects.nonNull(datasetIdList) ? datasetIdList.stream().map(UUID::toString).toList() : List.of("00000000-0000-0000-0000-000000000000"),
-                pageable
-        ).map(GenerationProjectionJpaToDomainMapper::map);
         Page<InstantMessageGeneration> page = jpaInstantMessageGenerationRepositoryCRUD.findPagination(
                 messageTopic,
                 messageType,

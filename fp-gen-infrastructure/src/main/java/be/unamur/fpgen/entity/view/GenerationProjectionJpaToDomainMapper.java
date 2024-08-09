@@ -18,7 +18,7 @@ public class GenerationProjectionJpaToDomainMapper {
          if("IMG".equals(entity.getKind())){
              return InstantMessageGeneration.newBuilder()
                      .withId(UUID.fromString(entity.getId()))
-                     .withCreationDate(entity.getCreationDate())
+                     //.withCreationDate(entity.getCreationDate())
                      .withType(MessageTypeEnum.valueOf(entity.getType()))
                      .withTopic(MessageTopicEnum.valueOf(entity.getTopic()))
                      .withUserPrompt(entity.getUserPrompt())
@@ -29,7 +29,7 @@ public class GenerationProjectionJpaToDomainMapper {
          } else if("CMG".equals(entity.getKind())){
              return ConversationGeneration.newBuilder()
                      .withId(UUID.fromString(entity.getId()))
-                     .withCreationDate(entity.getCreationDate())
+                     //.withCreationDate(entity.getCreationDate())
                      .withType(MessageTypeEnum.valueOf(entity.getType()))
                      .withTopic(MessageTopicEnum.valueOf(entity.getTopic()))
                      .withUserPrompt(entity.getUserPrompt())

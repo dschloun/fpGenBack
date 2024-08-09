@@ -25,7 +25,7 @@ public interface JpaInstantMessageGenerationRepositoryCRUD extends JpaRepository
             " AND (:quantity is null or g.quantity <= :quantity)" +
             " AND g.creationDate >= cast(:startDate as timestamp)" +
             " AND g.creationDate <= cast(:endDate as timestamp)" +
-            " AND gd.id NOT IN (:datasetIdList)"
+            " AND (gd.id NOT IN (:datasetIdList) or gd.id is null)"
     )
     Page<InstantMessageGenerationEntity> findPagination(@Param("topic") MessageTopicEnum topic,
                                                       @Param("type") MessageTypeEnum type,
@@ -61,7 +61,7 @@ public interface JpaInstantMessageGenerationRepositoryCRUD extends JpaRepository
                     "AND (:quantity is null or quantity <= :quantity) " +
                     "AND creation_date >= cast(:startDate as timestamp) " +
                     "AND creation_date <= cast(:endDate as timestamp) " +
-                    "AND dataset_id NOT IN (:datasetIdList)"
+                    "AND (dataset_id NOT IN (:datasetIdList) or dataset_id is null)"
     )
     Page<GenerationProjection> search(@Param("topic") String topic,
                                       @Param("type") String type,
