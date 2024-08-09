@@ -18,9 +18,9 @@ databaseChangeLog:
               g.topic as topic,
               g.type as type,
               g.quantity as quantity,
-              gdj.dataset_id as dataset_id
+              CAST(gdj.dataset_id as varchar) as dataset_id
               from generation g 
-              left join generation_dataset_join_table gdj 
+              left join dataset_generation_join_table gdj 
               on g.id = gdj.generation_id
               inner join author a
               on g.author_id = a.id;

@@ -1,5 +1,6 @@
 package be.unamur.fpgen.entity.view;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 public interface GenerationProjection {
@@ -7,7 +8,7 @@ public interface GenerationProjection {
     OffsetDateTime getCreationDate();
     String getKind();
     String getGenerationId();
-    String getAuthorId();
+    String getAuthorTrigram();
     String getDetails();
     String getUserPrompt();
     String getTopic();

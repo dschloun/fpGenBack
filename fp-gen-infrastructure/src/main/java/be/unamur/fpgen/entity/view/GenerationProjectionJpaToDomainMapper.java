@@ -22,7 +22,7 @@ public class GenerationProjectionJpaToDomainMapper {
                      .withType(MessageTypeEnum.valueOf(entity.getType()))
                      .withTopic(MessageTopicEnum.valueOf(entity.getTopic()))
                      .withUserPrompt(entity.getUserPrompt())
-                     .withAuthor(Author.newBuilder().withTrigram(entity.getAuthorId()).build())
+                     .withAuthor(Author.newBuilder().withTrigram(entity.getAuthorTrigram()).build())
                      .withDetails(entity.getDetails())
                      .withQuantity(entity.getQuantity())
                      .build();
@@ -33,7 +33,7 @@ public class GenerationProjectionJpaToDomainMapper {
                      .withType(MessageTypeEnum.valueOf(entity.getType()))
                      .withTopic(MessageTopicEnum.valueOf(entity.getTopic()))
                      .withUserPrompt(entity.getUserPrompt())
-                     .withAuthor(Author.newBuilder().withTrigram(entity.getAuthorId()).build())
+                     .withAuthor(Author.newBuilder().withTrigram(entity.getAuthorTrigram()).build())
                      .withDetails(entity.getDetails())
                      .withQuantity(entity.getQuantity())
                      .build();

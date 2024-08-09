@@ -1,7 +1,9 @@
 package be.unamur.fpgen.repository;
 
 import be.unamur.fpgen.entity.view.GenerationProjection;
+import be.unamur.fpgen.entity.view.GenerationProjectionJpaToDomainMapper;
 import be.unamur.fpgen.entity.view.JpaGenerationProjectionRepositoryCRUD;
+import be.unamur.fpgen.generation.AbstractGeneration;
 import be.unamur.fpgen.generation.ConversationGeneration;
 import be.unamur.fpgen.generation.InstantMessageGeneration;
 import be.unamur.fpgen.generation.pagination.ConversationGenerationsPage;
@@ -26,13 +28,13 @@ import java.util.UUID;
 public class JpaInstantMessageGenerationRepository implements InstantMessageGenerationRepository {
     private final JpaInstantMessageGenerationRepositoryCRUD jpaInstantMessageGenerationRepositoryCRUD;
     private final JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD;
-    private final JpaGenerationProjectionRepositoryCRUD jpaGenerationProjectionRepositoryCRUD;
+
 
     public JpaInstantMessageGenerationRepository(JpaInstantMessageGenerationRepositoryCRUD jpaInstantMessageGenerationRepositoryCRUD,
-                                                 JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD, JpaGenerationProjectionRepositoryCRUD jpaGenerationProjectionRepositoryCRUD) {
+                                                 JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD) {
         this.jpaInstantMessageGenerationRepositoryCRUD = jpaInstantMessageGenerationRepositoryCRUD;
         this.jpaAuthorRepositoryCRUD = jpaAuthorRepositoryCRUD;
-        this.jpaGenerationProjectionRepositoryCRUD = jpaGenerationProjectionRepositoryCRUD;
+
     }
 
     @Override
@@ -57,7 +59,7 @@ public class JpaInstantMessageGenerationRepository implements InstantMessageGene
     @Override
     public InstantMessageGenerationsPage findPagination(MessageTypeEnum messageType, MessageTopicEnum messageTopic, String userPrompt, String systemPrompt, Integer quantity, String authorTrigram, OffsetDateTime startDate, OffsetDateTime endDate, List<UUID> datasetIdList, Pageable pageable) {
         // 1. get in Page format
-        Page<GenerationProjection> projectionPage = jpaGenerationProjectionRepositoryCRUD.search(
+        Page<AbstractGeneration> projectionPage = jpaInstantMessageGenerationRepositoryCRUD.search(
                 Objects.nonNull(messageTopic) ? messageTopic.name() : null,
                 Objects.nonNull(messageType) ? messageType.name() : null,
                 authorTrigram,
@@ -65,9 +67,9 @@ public class JpaInstantMessageGenerationRepository implements InstantMessageGene
                 StringUtil.toLowerCaseIfNotNull(userPrompt),
                 startDate,
                 endDate,
-                Objects.nonNull(datasetIdList) ? datasetIdList : List.of(UUID.fromString("00000000-0000-0000-0000-000000000000")),
+                Objects.nonNull(datasetIdList) ? datasetIdList.stream().map(UUID::toString).toList() : List.of("00000000-0000-0000-0000-000000000000"),
                 pageable
-        );
+        ).map(GenerationProjectionJpaToDomainMapper::map);
         Page<InstantMessageGeneration> page = jpaInstantMessageGenerationRepositoryCRUD.findPagination(
                 messageTopic,
                 messageType,
