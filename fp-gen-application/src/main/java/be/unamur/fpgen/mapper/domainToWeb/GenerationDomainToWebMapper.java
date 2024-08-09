@@ -26,6 +26,10 @@ public class GenerationDomainToWebMapper {
                 .modificationDate(domain.getModificationDate())
                 .generationDate(domain.getGenerationDate())
                 .generationType(domain instanceof InstantMessageGeneration ? GenerationType.INSTANT_MESSAGE : GenerationType.CONVERSATION)
+                .messageType(MessageTypeDomainToWebMapper.map(domain.getType()))
+                .messageTopic(MessageTopicDomainToWebMapper.map(domain.getTopic()))
+                .systemPrompt(domain.getSystemPrompt())
+                .userPrompt(domain.getUserPrompt())
                 .author(domain.getAuthor().getTrigram())
                 .details(domain.getDetails())
                 .quantity(domain.getQuantity());
