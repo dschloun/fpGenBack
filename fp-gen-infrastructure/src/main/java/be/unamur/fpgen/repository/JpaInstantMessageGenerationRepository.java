@@ -1,17 +1,11 @@
 package be.unamur.fpgen.repository;
 
-import be.unamur.fpgen.entity.view.GenerationProjection;
-import be.unamur.fpgen.entity.view.GenerationProjectionJpaToDomainMapper;
-import be.unamur.fpgen.entity.view.JpaGenerationProjectionRepositoryCRUD;
-import be.unamur.fpgen.generation.AbstractGeneration;
-import be.unamur.fpgen.generation.ConversationGeneration;
 import be.unamur.fpgen.generation.InstantMessageGeneration;
-import be.unamur.fpgen.generation.pagination.ConversationGenerationsPage;
 import be.unamur.fpgen.generation.pagination.InstantMessageGenerationsPage;
-import be.unamur.fpgen.message.MessageTopicEnum;
-import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.mapper.domainToJpa.InstantMessageGenerationDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.InstantMessageGenerationJpaToDomainMapper;
+import be.unamur.fpgen.message.MessageTopicEnum;
+import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.pagination.Pagination;
 import be.unamur.fpgen.utils.StringUtil;
 import org.springframework.data.domain.Page;
