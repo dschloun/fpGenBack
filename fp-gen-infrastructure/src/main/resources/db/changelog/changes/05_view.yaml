@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_generation_search_view
+      author: dsc
+      changes:
+        - createView:
+            viewName: generation_search_view
+            replaceIfExists: true
+            encoding: UTF-8
+            selectQuery: select
+              CAST(g.id as varchar) as id,
+              g.creation_date as creation_date,
+              g.kind as kind,
+              g.generation_id as generation_id,
+              a.trigram as author_trigram,
+              g.details as details,
+              g.user_prompt as user_prompt,
+              g.topic as topic,
+              g.type as type,
+              g.quantity as quantity,
+              gdj.dataset_id as dataset_id
+              from generation g 
+              left join generation_dataset_join_table gdj 
+              on g.id = gdj.generation_id
+              inner join author a
+              on g.author_id = a.id;
