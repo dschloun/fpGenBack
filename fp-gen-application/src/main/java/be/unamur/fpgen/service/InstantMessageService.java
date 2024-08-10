@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -23,11 +24,14 @@ public class InstantMessageService {
 
     private final InstantMessageRepository instantMessageRepository;
     private final InstantMessageGenerationService instantMessageGenerationService;
+    private final InstantMessageDatasetService instantMessageDatasetService;
 
     public InstantMessageService(final InstantMessageRepository instantMessageRepository,
-                                 final InstantMessageGenerationService instantMessageGenerationService) {
+                                 final InstantMessageGenerationService instantMessageGenerationService,
+                                 final InstantMessageDatasetService instantMessageDatasetService) {
         this.instantMessageRepository = instantMessageRepository;
         this.instantMessageGenerationService = instantMessageGenerationService;
+        this.instantMessageDatasetService = instantMessageDatasetService;
     }
 
     @Transactional
@@ -47,6 +51,11 @@ public class InstantMessageService {
             }
             // 4. save the instant messages
             List<InstantMessage> saved = instantMessageRepository.saveInstantMessageList(instantMessageList, generation);
+
+            // 5. add generation to dataset if needed
+            if (Objects.nonNull(command.getDatasetId())) {
+                instantMessageDatasetService.addInstantMessageGenerationListToDataset(generation.getId(), List.of(command.getDatasetId()));
+            }
         });
     }
 

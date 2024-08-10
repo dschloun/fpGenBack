@@ -2,12 +2,9 @@ package be.unamur.fpgen.service;
 
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.dataset.ConversationDataset;
-import be.unamur.fpgen.dataset.ConversationDataset;
 import be.unamur.fpgen.dataset.pagination.DatasetsPage;
 import be.unamur.fpgen.dataset.pagination.PagedDatasetsQuery;
 import be.unamur.fpgen.exception.GenerationNotFoundException;
-import be.unamur.fpgen.generation.ConversationGeneration;
-import be.unamur.fpgen.generation.ConversationGeneration;
 import be.unamur.fpgen.generation.ConversationGeneration;
 import be.unamur.fpgen.mapper.webToDomain.DatasetWebToDomainMapper;
 import be.unamur.fpgen.repository.ConversationDatasetRepository;
@@ -60,7 +57,7 @@ public class ConversationDatasetService {
     }
 
     @Transactional
-    public void addConversationListToDataset(UUID datasetId, List<UUID> conversationGenerationIdsList){
+    public void addConversationGenerationListToDataset(UUID datasetId, List<UUID> conversationGenerationIdsList){
         // 1. get dataset
         final ConversationDataset dataset = getDatasetById(datasetId);
 

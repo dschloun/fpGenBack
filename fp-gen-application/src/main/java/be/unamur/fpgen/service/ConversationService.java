@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -33,15 +34,19 @@ public class ConversationService {
     private final ConversationGenerationService conversationGenerationService;
     private final InterlocutorService interlocutorService;
     private final ConversationMessageRepository conversationMessageRepository;
+    private final ConversationDatasetService conversationDatasetService;
 
     public ConversationService(ConversationRepository conversationRepository,
                                ConversationGenerationService conversationGenerationService,
                                ConversationGenerationRepository conversationGenerationRepository,
-                               InterlocutorService interlocutorService, ConversationMessageRepository conversationMessageRepository) {
+                               InterlocutorService interlocutorService,
+                               ConversationMessageRepository conversationMessageRepository,
+                               ConversationDatasetService conversationDatasetService) {
         this.conversationRepository = conversationRepository;
         this.conversationGenerationService = conversationGenerationService;
         this.interlocutorService = interlocutorService;
         this.conversationMessageRepository = conversationMessageRepository;
+        this.conversationDatasetService = conversationDatasetService;
     }
 
     @Transactional
@@ -76,6 +81,11 @@ public class ConversationService {
 
                 // 3.5. add the conversation to the list
                 conversationList.add(conversationRepository.getConversationById(conversation.getId()));
+
+                // 4. add generation to dataset if needed
+                if (Objects.nonNull(command.getDatasetId())) {
+                    conversationDatasetService.addConversationGenerationListToDataset(generation.getId(), List.of(command.getDatasetId()));
+                }
             }
         });
 

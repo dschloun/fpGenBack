@@ -59,7 +59,7 @@ public class InstantMessageDatasetService {
     }
 
     @Transactional
-    public void addInstantMessageListToDataset(UUID datasetId, List<UUID> instantMessageGenerationIdsList) {
+    public void addInstantMessageGenerationListToDataset(UUID datasetId, List<UUID> instantMessageGenerationIdsList) {
         // 1. get dataset
         final InstantMessageDataset dataset = getDatasetById(datasetId);
 
