@@ -71,14 +71,14 @@ public class Project extends BaseUuidDomain {
                     .withAuthor(author)
                     .withDatasetFunction(datasetFunctionEnum)
                     .withName(generateDatasetName(datasetFunctionEnum))
-                    .withVersion("0")
+                    .withVersion(0)
                     .build();
         } else {
             return ConversationDataset.newBuilder()
                     .withAuthor(author)
                     .withDatasetFunction(datasetFunctionEnum)
                     .withName(generateDatasetName(datasetFunctionEnum))
-                    .withVersion("0")
+                    .withVersion(0)
                     .build();
         }
     }

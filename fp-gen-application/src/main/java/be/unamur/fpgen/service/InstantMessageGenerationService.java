@@ -3,7 +3,6 @@ package be.unamur.fpgen.service;
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.exception.GenerationNotFoundException;
 import be.unamur.fpgen.generation.InstantMessageGeneration;
-import be.unamur.fpgen.generation.pagination.ConversationGenerationsPage;
 import be.unamur.fpgen.generation.pagination.InstantMessageGenerationsPage;
 import be.unamur.fpgen.generation.pagination.PagedGenerationsQuery;
 import be.unamur.fpgen.mapper.webToDomain.MessageTopicWebToDomainMapper;
@@ -67,7 +66,7 @@ public class InstantMessageGenerationService {
                 query.getGenerationQuery().getAuthorTrigram(),
                 DateUtil.ifNullReturnOldDate(query.getGenerationQuery().getStartDate()),
                 DateUtil.ifNullReturnTomorrow(query.getGenerationQuery().getEndDate()),
-                query.getGenerationQuery().getDatasetIdList(),
+                query.getGenerationQuery().getNotInDatasetIdList(),
                 pageable);
     }
 

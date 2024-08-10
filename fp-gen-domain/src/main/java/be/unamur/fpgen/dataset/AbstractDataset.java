@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public abstract class AbstractDataset extends BaseUuidDomain {
     protected String businessId;
-    private final String version;
+    private final Integer version;
     private final String name;
     private final String description;
     private final String comment;
@@ -19,7 +19,7 @@ public abstract class AbstractDataset extends BaseUuidDomain {
                                final OffsetDateTime creationDate,
                                final OffsetDateTime modificationDate,
                                final String businessId,
-                               final String version,
+                               final Integer version,
                                final String name,
                                final String description,
                                final String comment,
@@ -38,7 +38,7 @@ public abstract class AbstractDataset extends BaseUuidDomain {
         return businessId;
     }
 
-    public String getVersion() {
+    public Integer getVersion() {
         return version;
     }
 
@@ -64,7 +64,7 @@ public abstract class AbstractDataset extends BaseUuidDomain {
 
     protected abstract static class AbstractDatasetBuilder<T> extends AbstractBaseUuidDomainBuilder<T> implements GenerationId {
         protected String businessId;
-        private String version;
+        private Integer version;
         private String name;
         private String description;
         private String comment;
@@ -75,7 +75,7 @@ public abstract class AbstractDataset extends BaseUuidDomain {
             return businessId;
         }
 
-        public String getVersion() {
+        public Integer getVersion() {
             return version;
         }
 
@@ -103,7 +103,7 @@ public abstract class AbstractDataset extends BaseUuidDomain {
             this.businessId = businessId;
             return self();
         }
-        public T withVersion(String version) {
+        public T withVersion(Integer version) {
             this.version = version;
             return self();
         }

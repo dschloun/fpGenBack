@@ -41,7 +41,7 @@ public class ConversationDatasetService {
                         .withDatasetFunction(DatasetWebToDomainMapper.mapFunction(datasetCreation.getDatasetFunction()))
                         .withComment(datasetCreation.getComment())
                         .withDescription(datasetCreation.getDescription())
-                        .withVersion(datasetCreation.getVersion())
+                        .withVersion(0)
                         .withName(datasetCreation.getName())
                         .build());
     }

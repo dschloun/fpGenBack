@@ -1,12 +1,12 @@
 package be.unamur.fpgen.mapper.domainToWeb;
 
 import be.unamur.fpgen.dataset.AbstractDataset;
-import be.unamur.fpgen.dataset.ConversationDataset;
 import be.unamur.fpgen.dataset.DatasetFunctionEnum;
 import be.unamur.fpgen.dataset.InstantMessageDataset;
 import be.unamur.model.Dataset;
 import be.unamur.model.DatasetType;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 public class DatasetDomainToWebMapper {
@@ -27,7 +27,7 @@ public class DatasetDomainToWebMapper {
                 .datasetFunction(mapFunction(domain.getDatasetFunction()))
                 .comment(domain.getComment())
                 .description(domain.getDescription())
-                .version(domain.getVersion())
+                .version(BigDecimal.valueOf(domain.getVersion()))
                 .name(domain.getName())
                 .type(DatasetType.INSTANT_MESSAGE);
     }
@@ -41,7 +41,7 @@ public class DatasetDomainToWebMapper {
                 .datasetFunction(mapFunction(domain.getDatasetFunction()))
                 .comment(domain.getComment())
                 .description(domain.getDescription())
-                .version(domain.getVersion())
+                .version(BigDecimal.valueOf(domain.getVersion()))
                 .name(domain.getName())
                 .type(datasetType);
     }

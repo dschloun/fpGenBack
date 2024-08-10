@@ -16,7 +16,8 @@ public class GenerationQuery {
     private final String systemPrompt;
     private final Integer quantity;
     private final String authorTrigram;
-    private final List<UUID> datasetIdList;
+    private final List<UUID> notInDatasetIdList;
+    private final List<UUID> inDatasetIdList;
     private final OffsetDateTime startDate;
     private final OffsetDateTime endDate;
 
@@ -28,10 +29,12 @@ public class GenerationQuery {
         systemPrompt = builder.systemPrompt;
         quantity = builder.quantity;
         authorTrigram = builder.authorTrigram;
-        datasetIdList = builder.datasetIdList;
+        notInDatasetIdList = builder.notInDatasetIdList;
+        inDatasetIdList = builder.inDatasetIdList;
         startDate = builder.startDate;
         endDate = builder.endDate;
     }
+
     public static Builder newBuilder() {
         return new Builder();
     }
@@ -64,8 +67,12 @@ public class GenerationQuery {
         return authorTrigram;
     }
 
-    public List<UUID> getDatasetIdList() {
-        return datasetIdList;
+    public List<UUID> getNotInDatasetIdList() {
+        return notInDatasetIdList;
+    }
+
+    public List<UUID> getInDatasetIdList() {
+        return inDatasetIdList;
     }
 
     public OffsetDateTime getStartDate() {
@@ -84,7 +91,8 @@ public class GenerationQuery {
         private String systemPrompt;
         private Integer quantity;
         private String authorTrigram;
-        private List<UUID> datasetIdList;
+        private List<UUID> notInDatasetIdList;
+        private List<UUID> inDatasetIdList;
         private OffsetDateTime startDate;
         private OffsetDateTime endDate;
 
@@ -126,8 +134,13 @@ public class GenerationQuery {
             return this;
         }
 
-        public Builder withDatasetIdList(List<UUID> val) {
-            datasetIdList = val;
+        public Builder withNotInDatasetIdList(List<UUID> val) {
+            notInDatasetIdList = val;
+            return this;
+        }
+
+        public Builder withInDatasetIdList(List<UUID> val) {
+            inDatasetIdList = val;
             return this;
         }
 

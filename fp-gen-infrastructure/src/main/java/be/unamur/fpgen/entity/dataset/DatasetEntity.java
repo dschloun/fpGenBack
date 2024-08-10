@@ -15,7 +15,7 @@ public class DatasetEntity extends BaseUuidEntity {
 
     // members
     private String businessId;
-    private String version;
+    private Integer version;
     private String name;
     private String description;
     private String comment;
@@ -34,11 +34,11 @@ public class DatasetEntity extends BaseUuidEntity {
     }
 
     @Column(name = "version", nullable = false)
-    public String getVersion() {
+    public Integer getVersion() {
         return version;
     }
 
-    public void setVersion(final String version) {
+    public void setVersion(final Integer version) {
         this.version = version;
     }
 
