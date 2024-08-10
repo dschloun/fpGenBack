@@ -25,22 +25,48 @@ public interface JpaInstantMessageGenerationRepositoryCRUD extends JpaRepository
             " AND (:quantity is null or g.quantity <= :quantity)" +
             " AND g.creationDate >= cast(:startDate as timestamp)" +
             " AND g.creationDate <= cast(:endDate as timestamp)" +
-            " AND (gd.id NOT IN (:datasetIdList) or gd.id is null)"
+            " AND (gd.id NOT IN (:notInDatasetIdList) or gd.id is null)"
     )
-    Page<InstantMessageGenerationEntity> findPagination(@Param("topic") MessageTopicEnum topic,
-                                                      @Param("type") MessageTypeEnum type,
-                                                      @Param("authorTrigram") String authorTrigram,
-                                                      @Param("quantity") Integer quantity,
-                                                      @Param("userPrompt") String userPrompt,
-                                                      @Param("systemPrompt") String systemPrompt,
-                                                      @Param("startDate") OffsetDateTime startDate,
-                                                      @Param("endDate") OffsetDateTime endDate,
-                                                        @Param("datasetIdList") List<UUID> datasetIdList,
-                                                      Pageable pageable);
+    Page<InstantMessageGenerationEntity> findPaginationNotIn(@Param("topic") MessageTopicEnum topic,
+                                                             @Param("type") MessageTypeEnum type,
+                                                             @Param("authorTrigram") String authorTrigram,
+                                                             @Param("quantity") Integer quantity,
+                                                             @Param("userPrompt") String userPrompt,
+                                                             @Param("systemPrompt") String systemPrompt,
+                                                             @Param("startDate") OffsetDateTime startDate,
+                                                             @Param("endDate") OffsetDateTime endDate,
+                                                             @Param("notInDatasetIdList") List<UUID> notInDatasetIdList,
+                                                             Pageable pageable);
+
+
+    @Query(value = "SELECT DISTINCT g from InstantMessageGenerationEntity g" +
+            " LEFT JOIN g.instantMessageDatasetList gd" +
+            " WHERE (:topic is null or g.topic = :topic)" +
+            " AND (:type is null or g.type = :type)" +
+            " AND (:authorTrigram is null or g.author.trigram = :authorTrigram)" +
+            " AND (:userPrompt is null or lower(g.userPrompt) like %:userPrompt%)" +
+            " AND (:systemPrompt is null or lower(g.systemPrompt) like %:userPrompt%)" +
+            " AND (:quantity is null or g.quantity <= :quantity)" +
+            " AND g.creationDate >= cast(:startDate as timestamp)" +
+            " AND g.creationDate <= cast(:endDate as timestamp)" +
+            " AND (gd.id IN (:inDatasetIdList))"
+    )
+    Page<InstantMessageGenerationEntity> findPaginationIn(@Param("topic") MessageTopicEnum topic,
+                                                        @Param("type") MessageTypeEnum type,
+                                                        @Param("authorTrigram") String authorTrigram,
+                                                        @Param("quantity") Integer quantity,
+                                                        @Param("userPrompt") String userPrompt,
+                                                        @Param("systemPrompt") String systemPrompt,
+                                                        @Param("startDate") OffsetDateTime startDate,
+                                                        @Param("endDate") OffsetDateTime endDate,
+                                                        @Param("inDatasetIdList") List<UUID> inDatasetIdList,
+                                                        Pageable pageable);
 
     //fixme :p is null or ... only works for string, not for UUID, so to counter the problem put a random UUID if datasetList is empty
     // not very clean but it's the only way
 
+
+    //todo remove later when sure it won't be usefull anymore
     @Query(nativeQuery = true, value =
             "SELECT distinct id as id, " +
                     "creation_date as creationDate, " +

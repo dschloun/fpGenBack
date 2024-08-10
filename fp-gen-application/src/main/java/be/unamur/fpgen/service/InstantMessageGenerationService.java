@@ -67,6 +67,7 @@ public class InstantMessageGenerationService {
                 DateUtil.ifNullReturnOldDate(query.getGenerationQuery().getStartDate()),
                 DateUtil.ifNullReturnTomorrow(query.getGenerationQuery().getEndDate()),
                 query.getGenerationQuery().getNotInDatasetIdList(),
+                query.getGenerationQuery().getInDatasetIdList(),
                 pageable);
     }
 

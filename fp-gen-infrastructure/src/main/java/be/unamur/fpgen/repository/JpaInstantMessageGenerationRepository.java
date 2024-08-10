@@ -33,10 +33,10 @@ public class JpaInstantMessageGenerationRepository implements InstantMessageGene
 
     @Override
     public InstantMessageGeneration saveInstantMessageGeneration(InstantMessageGeneration generation) {
-            return Optional.of(jpaInstantMessageGenerationRepositoryCRUD.save(InstantMessageGenerationDomainToJpaMapper
-                            .mapForCreate(generation, jpaAuthorRepositoryCRUD.getReferenceById(generation.getAuthor().getId()))))
-                    .map(InstantMessageGenerationJpaToDomainMapper::mapInstantMessageGeneration)
-                    .orElseThrow();
+        return Optional.of(jpaInstantMessageGenerationRepositoryCRUD.save(InstantMessageGenerationDomainToJpaMapper
+                        .mapForCreate(generation, jpaAuthorRepositoryCRUD.getReferenceById(generation.getAuthor().getId()))))
+                .map(InstantMessageGenerationJpaToDomainMapper::mapInstantMessageGeneration)
+                .orElseThrow();
     }
 
     @Override
@@ -51,20 +51,50 @@ public class JpaInstantMessageGenerationRepository implements InstantMessageGene
     }
 
     @Override
-    public InstantMessageGenerationsPage findPagination(MessageTypeEnum messageType, MessageTopicEnum messageTopic, String userPrompt, String systemPrompt, Integer quantity, String authorTrigram, OffsetDateTime startDate, OffsetDateTime endDate, List<UUID> datasetIdList, Pageable pageable) {
+    public InstantMessageGenerationsPage findPagination(
+            MessageTypeEnum messageType,
+            MessageTopicEnum messageTopic,
+            String userPrompt,
+            String systemPrompt,
+            Integer quantity,
+            String authorTrigram,
+            OffsetDateTime startDate,
+            OffsetDateTime endDate,
+            List<UUID> notInDatasetIdList,
+            List<UUID> inDatasetIdList,
+            Pageable pageable) {
         // 1. get in Page format
-        Page<InstantMessageGeneration> page = jpaInstantMessageGenerationRepositoryCRUD.findPagination(
-                messageTopic,
-                messageType,
-                authorTrigram,
-                quantity,
-                StringUtil.toLowerCaseIfNotNull(userPrompt),
-                StringUtil.toLowerCaseIfNotNull(systemPrompt),
-                startDate,
-                endDate,
-                Objects.nonNull(datasetIdList) ? datasetIdList : List.of(UUID.fromString("00000000-0000-0000-0000-000000000000")),
-                pageable
-        ).map(InstantMessageGenerationJpaToDomainMapper::map);
+        final Page<InstantMessageGeneration> page;
+
+        if (Objects.nonNull(inDatasetIdList) && !inDatasetIdList.isEmpty() && Objects.isNull(notInDatasetIdList)) {
+            page = jpaInstantMessageGenerationRepositoryCRUD.findPaginationIn(
+                    messageTopic,
+                    messageType,
+                    authorTrigram,
+                    quantity,
+                    StringUtil.toLowerCaseIfNotNull(userPrompt),
+                    StringUtil.toLowerCaseIfNotNull(systemPrompt),
+                    startDate,
+                    endDate,
+                    inDatasetIdList,
+                    pageable
+            ).map(InstantMessageGenerationJpaToDomainMapper::map);
+        } else if (Objects.isNull(inDatasetIdList)) {
+            page = jpaInstantMessageGenerationRepositoryCRUD.findPaginationNotIn(
+                    messageTopic,
+                    messageType,
+                    authorTrigram,
+                    quantity,
+                    StringUtil.toLowerCaseIfNotNull(userPrompt),
+                    StringUtil.toLowerCaseIfNotNull(systemPrompt),
+                    startDate,
+                    endDate,
+                    Objects.nonNull(notInDatasetIdList) ? notInDatasetIdList : List.of(UUID.fromString("00000000-0000-0000-0000-000000000000")),
+                    pageable
+            ).map(InstantMessageGenerationJpaToDomainMapper::map);
+        } else {
+            throw new IllegalArgumentException("Either inDatasetIdList or notInDatasetIdList must be provided");
+        }
 
         final InstantMessageGenerationsPage instantMessageGenerationsPage = InstantMessageGenerationsPage.newBuilder()
                 .withPagination(new Pagination.Builder()
