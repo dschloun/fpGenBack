@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: change-version-type-in-dataset
+      author: dsc
+      changes:
+        - dropColumn:
+            tableName: dataset
+            columnName: version
+
+        - addColumn:
+            tableName: dataset
+            columns:
+              - column:
+                  name: version
+                  type: int
+
+        - update:
+            tableName: dataset
+            columns:
+              - column:
+                  name: version
+                  value: '0'
+
+        - addNotNullConstraint:
+            tableName: dataset
+            columnName: version
