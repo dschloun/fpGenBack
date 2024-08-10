@@ -14,6 +14,7 @@ public abstract class AbstractDataset extends BaseUuidDomain {
     private final String comment;
     private final Author author;
     private final DatasetFunctionEnum datasetFunction;
+    private final UUID ongoingGenerationId;
 
     protected AbstractDataset (final UUID id,
                                final OffsetDateTime creationDate,
@@ -24,7 +25,8 @@ public abstract class AbstractDataset extends BaseUuidDomain {
                                final String description,
                                final String comment,
                                final Author author,
-                               final DatasetFunctionEnum datasetFunction) {
+                               final DatasetFunctionEnum datasetFunction,
+                               final UUID ongoingGenerationId) {
         super(id, creationDate, modificationDate);
         this.businessId = businessId;
         this.version = version;
@@ -33,6 +35,7 @@ public abstract class AbstractDataset extends BaseUuidDomain {
         this.comment = comment;
         this.author = author;
         this.datasetFunction = datasetFunction;
+        this.ongoingGenerationId = ongoingGenerationId;
     }
     public String getBusinessId() {
         return businessId;
@@ -62,6 +65,10 @@ public abstract class AbstractDataset extends BaseUuidDomain {
         return datasetFunction;
     }
 
+    public UUID getOngoingGenerationId() {
+        return ongoingGenerationId;
+    }
+
     protected abstract static class AbstractDatasetBuilder<T> extends AbstractBaseUuidDomainBuilder<T> implements GenerationId {
         protected String businessId;
         private Integer version;
@@ -70,6 +77,7 @@ public abstract class AbstractDataset extends BaseUuidDomain {
         private String comment;
         private Author author;
         private DatasetFunctionEnum datasetFunction;
+        private UUID ongoingGenerationId;
 
         public String getBusinessId() {
             return businessId;
@@ -97,6 +105,10 @@ public abstract class AbstractDataset extends BaseUuidDomain {
 
         public DatasetFunctionEnum getDatasetFunction() {
             return datasetFunction;
+        }
+
+        public UUID getOngoingGenerationId() {
+            return ongoingGenerationId;
         }
 
         public T withBusinessId(String businessId) {
@@ -127,6 +139,11 @@ public abstract class AbstractDataset extends BaseUuidDomain {
 
         public T withDatasetFunction(DatasetFunctionEnum datasetFunction) {
             this.datasetFunction = datasetFunction;
+            return self();
+        }
+
+        public T withOngoingGenerationId(UUID ongoingGenerationId) {
+            this.ongoingGenerationId = ongoingGenerationId;
             return self();
         }
     }

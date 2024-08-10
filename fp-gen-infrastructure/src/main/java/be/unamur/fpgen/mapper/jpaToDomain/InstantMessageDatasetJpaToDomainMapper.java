@@ -2,10 +2,12 @@ package be.unamur.fpgen.mapper.jpaToDomain;
 
 import be.unamur.fpgen.dataset.ConversationDataset;
 import be.unamur.fpgen.dataset.InstantMessageDataset;
+import be.unamur.fpgen.entity.base.BaseUuidEntity;
 import be.unamur.fpgen.entity.dataset.InstantMessageDatasetEntity;
 import be.unamur.fpgen.utils.MapperUtil;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class InstantMessageDatasetJpaToDomainMapper {
 
@@ -25,6 +27,7 @@ public class InstantMessageDatasetJpaToDomainMapper {
                 .withAuthor(AuthorJpaToDomainMapper.map(entity.getAuthor()))
                 .withDatasetFunction(entity.getFunction())
                 .withInstantMessageGenerationList(MapperUtil.mapSet(entity.getInstantMessageGenerationList(), InstantMessageGenerationJpaToDomainMapper::mapInstantMessageGeneration))
+                .withOngoingGenerationId(Optional.ofNullable(entity.getOngoingGeneration()).map(BaseUuidEntity::getId).orElse(null))
                 .build();
     }
 
@@ -44,6 +47,7 @@ public class InstantMessageDatasetJpaToDomainMapper {
                 .withComment(entity.getComment())
                 .withAuthor(AuthorJpaToDomainMapper.map(entity.getAuthor()))
                 .withDatasetFunction(entity.getFunction())
+                .withOngoingGenerationId(Optional.ofNullable(entity.getOngoingGeneration()).map(BaseUuidEntity::getId).orElse(null))
                 .build();
     }
 }

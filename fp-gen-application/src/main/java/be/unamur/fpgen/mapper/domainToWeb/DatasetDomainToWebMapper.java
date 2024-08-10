@@ -43,6 +43,7 @@ public class DatasetDomainToWebMapper {
                 .description(domain.getDescription())
                 .version(BigDecimal.valueOf(domain.getVersion()))
                 .name(domain.getName())
-                .type(datasetType);
+                .type(datasetType)
+                .ongoingGenerationId(domain.getOngoingGenerationId());
     }
 }
