@@ -3,6 +3,7 @@ package be.unamur.fpgen.entity.dataset;
 import be.unamur.fpgen.dataset.DatasetFunctionEnum;
 import be.unamur.fpgen.entity.author.AuthorEntity;
 import be.unamur.fpgen.entity.base.BaseUuidEntity;
+import be.unamur.fpgen.entity.generation.ongoing_generation.OngoingGenerationEntity;
 import be.unamur.fpgen.entity.project.ProjectEntity;
 
 import javax.persistence.*;
@@ -22,6 +23,7 @@ public class DatasetEntity extends BaseUuidEntity {
     private AuthorEntity author;
     private DatasetFunctionEnum function;
     private ProjectEntity project;
+    private OngoingGenerationEntity ongoingGeneration;
 
     // getters and setters
     @Column(name = "business_id", nullable = false)
@@ -97,5 +99,15 @@ public class DatasetEntity extends BaseUuidEntity {
 
     public void setProject(ProjectEntity project) {
         this.project = project;
+    }
+
+    @OneToOne
+    @JoinColumn(name = "ongoing_generation_id")
+    public OngoingGenerationEntity getOngoingGeneration() {
+        return ongoingGeneration;
+    }
+
+    public void setOngoingGeneration(OngoingGenerationEntity ongoingGeneration) {
+        this.ongoingGeneration = ongoingGeneration;
     }
 }

@@ -1,0 +1,55 @@
+package be.unamur.fpgen.entity.generation.ongoing_generation;
+
+import be.unamur.fpgen.entity.base.BaseUuidEntity;
+import be.unamur.fpgen.message.MessageTopicEnum;
+import be.unamur.fpgen.message.MessageTypeEnum;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "ongoing_generation_item")
+public class OngoingGenerationItemEntity extends BaseUuidEntity {
+    private OngoingGenerationEntity ongoingGeneration;
+    private MessageTypeEnum messageType;
+    private MessageTopicEnum messageTopic;
+    private Integer quantity;
+
+    @ManyToOne
+    @JoinColumn(name = "ongoing_generation_id")
+    public OngoingGenerationEntity getOngoingGeneration() {
+        return ongoingGeneration;
+    }
+
+    public void setOngoingGeneration(OngoingGenerationEntity ongoingGeneration) {
+        this.ongoingGeneration = ongoingGeneration;
+    }
+
+    @Column(name = "message_type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    public MessageTypeEnum getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(MessageTypeEnum type) {
+        this.messageType = type;
+    }
+
+    @Column(name = "message_topic", nullable = false)
+    @Enumerated(EnumType.STRING)
+    public MessageTopicEnum getMessageTopic() {
+        return messageTopic;
+    }
+
+    public void setMessageTopic(MessageTopicEnum topic) {
+        this.messageTopic = topic;
+    }
+
+    @Column(name = "quantity", nullable = false)
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+}

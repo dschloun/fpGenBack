@@ -448,3 +448,107 @@ databaseChangeLog:
             constraints:
               - nullable: false
               - unique: false
+
+  - changeSet:
+      id: add-ongoing-generation-table
+      author: dsc
+      changes:
+        - createTable:
+            tableName: ongoing_generation
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    - primaryKey: true
+                    - primaryKeyName: pk_ongoing_generation
+                    - nullable: false
+                    - unique: true
+              - column:
+                  name: creation_date
+                  type: datetime
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: modification_date
+                  type: datetime
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: type
+                  type: varchar(30)
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: author_trigram
+                  type: varchar(6)
+                  constraints:
+                    - nullable: true
+                    - unique: false
+
+        - createTable:
+            tableName: ongoing_generation_item
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    - primaryKey: true
+                    - primaryKeyName: pk_ongoing_generation_summary
+                    - nullable: false
+                    - unique: true
+              - column:
+                  name: creation_date
+                  type: datetime
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: modification_date
+                  type: datetime
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: message_type
+                  type: varchar(30)
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: message_topic
+                  type: varchar(30)
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: quantity
+                  type: integer
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: ongoing_generation_id
+                  type: uuid
+                  constraints:
+                    - nullable: false
+                    - unique: false
+                    - foreignKeyName: fk_ongoing_generation_summary_ongoing_generation
+                    - references: ongoing_generation(id)
+                    - onDelete: CASCADE
+
+        - addColumn:
+            tableName: dataset
+            columns:
+              - column:
+                  name: ongoing_generation_id
+                  type: uuid
+                  constraints:
+                    - nullable: true
+                    - unique: true
+                    - foreignKeyName: fk_dataset_ongoing_generation
+                    - references: ongoing_generation(id)
+                    - onDelete: CASCADE
