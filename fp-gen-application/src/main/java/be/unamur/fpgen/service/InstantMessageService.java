@@ -54,7 +54,7 @@ public class InstantMessageService {
 
             // 5. add generation to dataset if needed
             if (Objects.nonNull(command.getDatasetId())) {
-                instantMessageDatasetService.addInstantMessageGenerationListToDataset(generation.getId(), List.of(command.getDatasetId()));
+                instantMessageDatasetService.addInstantMessageGenerationListToDataset(command.getDatasetId(), List.of(generation.getId()));
             }
         });
     }

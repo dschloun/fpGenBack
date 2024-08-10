@@ -84,7 +84,7 @@ public class ConversationService {
 
                 // 4. add generation to dataset if needed
                 if (Objects.nonNull(command.getDatasetId())) {
-                    conversationDatasetService.addConversationGenerationListToDataset(generation.getId(), List.of(command.getDatasetId()));
+                    conversationDatasetService.addConversationGenerationListToDataset(command.getDatasetId(), List.of(generation.getId()));
                 }
             }
         });
