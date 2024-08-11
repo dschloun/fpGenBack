@@ -25,4 +25,6 @@ public interface InstantMessageDatasetRepository {
     DatasetsPage findPagination(String version, String name, String description, String comment, String authorTrigram, OffsetDateTime startDate, OffsetDateTime endDate, Pageable pageable);
 
     void addOngoingGenerationToDataset(InstantMessageDataset dataset, OngoingGeneration generation);
+
+    void removeOngoingGenerationToDataset(InstantMessageDataset dataset, OngoingGeneration generation);
 }

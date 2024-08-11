@@ -131,4 +131,10 @@ public class InstantMessageDatasetService {
         final InstantMessageDataset dataset = getDatasetById(datasetId);
         instantMessageDatasetRepository.addOngoingGenerationToDataset(dataset, generation);
     }
+
+    @Transactional
+    public void removeOngoingGenerationToDataset(UUID datasetId, OngoingGeneration generation) {
+        final InstantMessageDataset dataset = getDatasetById(datasetId);
+        instantMessageDatasetRepository.removeOngoingGenerationToDataset(dataset, generation);
+    }
 }

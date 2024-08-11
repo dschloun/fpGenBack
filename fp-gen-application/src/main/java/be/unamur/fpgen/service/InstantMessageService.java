@@ -54,7 +54,7 @@ public class InstantMessageService {
             instantMessageDatasetService.addOngoingGenerationToDataset(command.getDatasetId(), ongoingGeneration);
         }
 
-        // 3. generation stage
+        // 2. generation stage
         final List<CompletableFuture<OngoingGenerationItem>> futures = new ArrayList<>();
 
         command.getInstantMessageCreationList().forEach(imc -> {
@@ -65,58 +65,60 @@ public class InstantMessageService {
                         System.out.println("Error while generating instant messages");
                         return Collections.emptyList();
                     }).thenApply(result -> {
-                if (result.isEmpty()) {
-                    // Failure during generation
-                    // 1. update ongoing generation status
-                    ongoingGenerationService.updateStatus(ongoingGeneration, OngoingGenerationStatus.PARTIALLY_FAILED);
-                    // 2. return failure item
-                    return OngoingGenerationItem.newBuilder()
-                            .withMessageType(MessageTypeWebToDomainMapper.map(imc.getType()))
-                            .withMessageTopic(MessageTopicWebToDomainMapper.map(imc.getTopic()))
-                            .withQuantity(imc.getQuantity())
-                            .withStatus(OngoingGenerationItemStatus.FAILURE)
-                            .build();
-                } else {
-                    // Generation successful
-                    // 1. create generation data
-                    final InstantMessageGeneration generation = instantMessageGenerationService.createInstantMessageGeneration(imc, command.getAuthorId());
-                    // 2. prepare a list of instant messages
-                    final List<InstantMessage> instantMessageList = new ArrayList<>();
-                    // 3. generate instant messages
-                    for (String s : result) {
-                        instantMessageList.add(InstantMessageWebToDomainMapper.mapForCreate(imc, s));
-                    }
-                    // 4. save the instant messages
-                    List<InstantMessage> saved = instantMessageRepository.saveInstantMessageList(instantMessageList, generation);
-                    // 5. add generation to dataset if needed
-                    if (Objects.nonNull(command.getDatasetId())) {
-                        instantMessageDatasetService.addInstantMessageGenerationListToDataset(command.getDatasetId(), List.of(generation.getId()));
-                    }
-                    // 6. return success item
-                    return OngoingGenerationItem.newBuilder()
-                            .withMessageType(MessageTypeWebToDomainMapper.map(imc.getType()))
-                            .withMessageTopic(MessageTopicWebToDomainMapper.map(imc.getTopic()))
-                            .withQuantity(imc.getQuantity())
-                            .withStatus(OngoingGenerationItemStatus.SUCCESS)
-                            .build();
-                }
-            });
+                        if (result.isEmpty()) {
+                            // Failure during generation
+                            // 1. update ongoing generation status
+                            ongoingGenerationService.updateStatus(ongoingGeneration, OngoingGenerationStatus.PARTIALLY_FAILED);
+                            // 2. return failure item
+                            return OngoingGenerationItem.newBuilder()
+                                    .withMessageType(MessageTypeWebToDomainMapper.map(imc.getType()))
+                                    .withMessageTopic(MessageTopicWebToDomainMapper.map(imc.getTopic()))
+                                    .withQuantity(imc.getQuantity())
+                                    .withStatus(OngoingGenerationItemStatus.FAILURE)
+                                    .build();
+                        } else {
+                            // Generation successful
+                            // 1. create generation data
+                            final InstantMessageGeneration generation = instantMessageGenerationService.createInstantMessageGeneration(imc, command.getAuthorId());
+                            // 2. prepare a list of instant messages
+                            final List<InstantMessage> instantMessageList = new ArrayList<>();
+                            // 3. generate instant messages
+                            for (String s : result) {
+                                instantMessageList.add(InstantMessageWebToDomainMapper.mapForCreate(imc, s));
+                            }
+                            // 4. save the instant messages
+                            List<InstantMessage> saved = instantMessageRepository.saveInstantMessageList(instantMessageList, generation);
+                            // 5. add generation to dataset if needed
+                            if (Objects.nonNull(command.getDatasetId())) {
+                                instantMessageDatasetService.addInstantMessageGenerationListToDataset(command.getDatasetId(), List.of(generation.getId()));
+                            }
+                            // 6. return success item
+                            return OngoingGenerationItem.newBuilder()
+                                    .withMessageType(MessageTypeWebToDomainMapper.map(imc.getType()))
+                                    .withMessageTopic(MessageTopicWebToDomainMapper.map(imc.getTopic()))
+                                    .withQuantity(imc.getQuantity())
+                                    .withStatus(OngoingGenerationItemStatus.SUCCESS)
+                                    .build();
+                        }
+                    });
 
             // collect futures
             futures.add(future);
         });
 
-        // Wait for all futures to complete
+        // 3. Wait for all futures to complete
         final CompletableFuture<Void> allOf = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
 
-        // Process the results once all futures are complete
+        // 4. Process the results once all futures are complete
         allOf.thenRun(() -> {
-            final List<OngoingGenerationItem> results = futures.stream()
-                    .map(CompletableFuture::join) // Block and get result of each future
-                    .toList();
-            // Handle the accumulated results
-            ongoingGenerationService.addItemList(ongoingGeneration, results);
-        }).join(); // Block until all futures are done
+                    final List<OngoingGenerationItem> results = futures.stream()
+                            .map(CompletableFuture::join) // Block and get result of each future
+                            .toList();
+                    // 4.1 Handle the accumulated results
+                    ongoingGenerationService.addItemList(ongoingGeneration, results);
+                    instantMessageDatasetService.removeOngoingGenerationToDataset(command.getDatasetId(), ongoingGeneration);
+                })
+                .join(); // Block until all futures are done
     }
 
     @Transactional
