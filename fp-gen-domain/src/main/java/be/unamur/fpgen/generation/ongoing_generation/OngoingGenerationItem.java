@@ -4,13 +4,14 @@ import be.unamur.fpgen.BaseUuidDomain;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
 
-public class OngoingItem extends BaseUuidDomain {
+public class OngoingGenerationItem extends BaseUuidDomain {
 
-    private MessageTypeEnum messageType;
-    private MessageTopicEnum messageTopic;
-    private Integer quantity;
+    private final MessageTypeEnum messageType;
+    private final MessageTopicEnum messageTopic;
+    private final Integer quantity;
+    private OngoingItemStatus status;
 
-    private OngoingItem(Builder builder) {
+    private OngoingGenerationItem(Builder builder) {
         super(builder.getId(), builder.getCreationDate(), builder.getModificationDate());
         messageType = builder.messageType;
         messageTopic = builder.messageTopic;
@@ -29,6 +30,14 @@ public class OngoingItem extends BaseUuidDomain {
         return quantity;
     }
 
+    public OngoingItemStatus getStatus() {
+        return status;
+    }
+
+    public void updateStatus(OngoingItemStatus status) {
+        this.status = status;
+    }
+
     public static Builder newBuilder() {
         return new Builder();
     }
@@ -37,6 +46,7 @@ public class OngoingItem extends BaseUuidDomain {
         private MessageTypeEnum messageType;
         private MessageTopicEnum messageTopic;
         private Integer quantity;
+        private OngoingItemStatus status;
 
         private Builder() {
         }
@@ -57,8 +67,13 @@ public class OngoingItem extends BaseUuidDomain {
             return this;
         }
 
-        public OngoingItem build() {
-            return new OngoingItem(this);
+        public Builder withStatus(OngoingItemStatus val) {
+            status = val;
+            return this;
+        }
+
+        public OngoingGenerationItem build() {
+            return new OngoingGenerationItem(this);
         }
 
         @Override
