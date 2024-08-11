@@ -120,7 +120,7 @@ public class OngoingGenerationListener {
                 i++;
                 result.add(String.format("message %s %s: %s of %s", type, topic, i, quantity));
             }
-            Thread.sleep(3000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
