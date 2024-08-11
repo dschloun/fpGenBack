@@ -21,3 +21,12 @@ databaseChangeLog:
             tableName: generation
             columnName: generation_id
             newDataType: varchar(35)
+
+  - changeSet:
+      id: increase-generation-id-limit-bis
+      author: dsc
+      changes:
+        - modifyDataType:
+            tableName: generation
+            columnName: generation_id
+            newDataType: varchar(60)
