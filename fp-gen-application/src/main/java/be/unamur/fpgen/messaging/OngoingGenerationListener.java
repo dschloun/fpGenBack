@@ -89,6 +89,7 @@ public class OngoingGenerationListener {
                                     .withMessageTopic(MessageTopicWebToDomainMapper.map(imc.getTopic()))
                                     .withQuantity(imc.getQuantity())
                                     .withStatus(OngoingGenerationItemStatus.SUCCESS)
+                                    .withGenerationId(generation.getId())
                                     .build();
                         }
                     });
@@ -107,7 +108,14 @@ public class OngoingGenerationListener {
                             .toList();
                     // 4.1 Handle the accumulated results
                     ongoingGenerationService.addItemList(ongoingGeneration, results);
-                    instantMessageDatasetService.removeOngoingGenerationToDataset(command.getDatasetId(), ongoingGeneration);
+                    // 4.2 dataset case
+                    if (Objects.nonNull(command.getDatasetId())) {
+                        instantMessageDatasetService.removeOngoingGenerationToDataset(command.getDatasetId(), ongoingGeneration);
+                        instantMessageDatasetService.addInstantMessageGenerationListToDataset(command.getDatasetId(), results.stream()
+                                .filter(ogi -> OngoingGenerationItemStatus.SUCCESS.equals(ogi.getStatus()))
+                                .map(OngoingGenerationItem::getGenerationId)
+                                .toList());
+                    }
                 });
     }
 

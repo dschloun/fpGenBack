@@ -4,12 +4,15 @@ import be.unamur.fpgen.BaseUuidDomain;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
 
+import java.util.UUID;
+
 public class OngoingGenerationItem extends BaseUuidDomain {
 
     private final MessageTypeEnum messageType;
     private final MessageTopicEnum messageTopic;
     private final Integer quantity;
     private OngoingGenerationItemStatus status;
+    private final UUID generationId;
 
     private OngoingGenerationItem(Builder builder) {
         super(builder.getId(), builder.getCreationDate(), builder.getModificationDate());
@@ -17,6 +20,7 @@ public class OngoingGenerationItem extends BaseUuidDomain {
         messageTopic = builder.messageTopic;
         quantity = builder.quantity;
         status = builder.status;
+        generationId = builder.generationId;
     }
 
     public MessageTypeEnum getMessageType() {
@@ -39,6 +43,10 @@ public class OngoingGenerationItem extends BaseUuidDomain {
         this.status = status;
     }
 
+    public UUID getGenerationId() {
+        return generationId;
+    }
+
     public static Builder newBuilder() {
         return new Builder();
     }
@@ -48,6 +56,7 @@ public class OngoingGenerationItem extends BaseUuidDomain {
         private MessageTopicEnum messageTopic;
         private Integer quantity;
         private OngoingGenerationItemStatus status;
+        private UUID generationId;
 
         private Builder() {
         }
@@ -70,6 +79,11 @@ public class OngoingGenerationItem extends BaseUuidDomain {
 
         public Builder withStatus(OngoingGenerationItemStatus val) {
             status = val;
+            return this;
+        }
+
+        public Builder withGenerationId(UUID val) {
+            generationId = val;
             return this;
         }
 
