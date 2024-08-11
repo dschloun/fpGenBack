@@ -6,7 +6,9 @@ import be.unamur.fpgen.dataset.pagination.DatasetsPage;
 import be.unamur.fpgen.entity.author.AuthorEntity;
 import be.unamur.fpgen.entity.dataset.InstantMessageDatasetEntity;
 import be.unamur.fpgen.entity.generation.InstantMessageGenerationEntity;
+import be.unamur.fpgen.entity.generation.ongoing_generation.OngoingGenerationEntity;
 import be.unamur.fpgen.generation.InstantMessageGeneration;
+import be.unamur.fpgen.generation.ongoing_generation.OngoingGeneration;
 import be.unamur.fpgen.mapper.domainToJpa.InstantMessageDataSetDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.InstantMessageDatasetJpaToDomainMapper;
 import be.unamur.fpgen.pagination.Pagination;
@@ -24,11 +26,13 @@ public class JpaInstantMessageDatasetRepository implements InstantMessageDataset
     private final JpaInstantMessageDatasetRepositoryCRUD jpaInstantMessageDatasetRepositoryCRUD;
     private final JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD;
     private final JpaInstantMessageGenerationRepositoryCRUD jpaInstantMessageGenerationRepositoryCRUD;
+    private final JpaOngoingGenerationRepositoryCRUD jpaOngoingGenerationRepositoryCRUD;
 
-    public JpaInstantMessageDatasetRepository(JpaInstantMessageDatasetRepositoryCRUD jpaInstantMessageDatasetRepositoryCRUD, JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD, JpaInstantMessageGenerationRepositoryCRUD jpaInstantMessageGenerationRepositoryCRUD) {
+    public JpaInstantMessageDatasetRepository(JpaInstantMessageDatasetRepositoryCRUD jpaInstantMessageDatasetRepositoryCRUD, JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD, JpaInstantMessageGenerationRepositoryCRUD jpaInstantMessageGenerationRepositoryCRUD, JpaOngoingGenerationRepositoryCRUD jpaOngoingGenerationRepositoryCRUD) {
         this.jpaInstantMessageDatasetRepositoryCRUD = jpaInstantMessageDatasetRepositoryCRUD;
         this.jpaAuthorRepositoryCRUD = jpaAuthorRepositoryCRUD;
         this.jpaInstantMessageGenerationRepositoryCRUD = jpaInstantMessageGenerationRepositoryCRUD;
+        this.jpaOngoingGenerationRepositoryCRUD = jpaOngoingGenerationRepositoryCRUD;
     }
 
     @Override
@@ -88,6 +92,14 @@ public class JpaInstantMessageDatasetRepository implements InstantMessageDataset
                 .build();
 
         return datasetsPage;
+    }
+
+    @Override
+    public void addOngoingGenerationToDataset(InstantMessageDataset dataset, OngoingGeneration generation) {
+        final OngoingGenerationEntity ongoingGeneration = jpaOngoingGenerationRepositoryCRUD.getReferenceById(generation.getId());
+        final InstantMessageDatasetEntity datasetEntity = jpaInstantMessageDatasetRepositoryCRUD.getReferenceById(dataset.getId());
+        datasetEntity.setOngoingGeneration(ongoingGeneration);
+        jpaInstantMessageDatasetRepositoryCRUD.save(datasetEntity);
     }
 
     private Set<InstantMessageGenerationEntity> getGenerationList(Set<InstantMessageGeneration> generations){

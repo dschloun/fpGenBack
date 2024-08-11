@@ -8,11 +8,13 @@ import be.unamur.fpgen.generation.ongoing_generation.OngoingGenerationStatus;
 import be.unamur.fpgen.mapper.domainToJpa.OngoingGenerationDomainToJpaMapper;
 import be.unamur.fpgen.mapper.domainToJpa.OngoingGenerationItemDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.OngoingGenerationJpaToDomainMapper;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Repository
 public class JpaOngoingGenerationRepository implements OngoingGenerationRepository {
 
     private final JpaOngoingGenerationRepositoryCRUD jpaOngoingGenerationRepositoryCRUD;
@@ -26,7 +28,7 @@ public class JpaOngoingGenerationRepository implements OngoingGenerationReposito
 
     @Override
     public OngoingGeneration save(OngoingGeneration ongoingGeneration) {
-        final AuthorEntity authorEntity = jpaAuthorRepositoryCRUD.findById(ongoingGeneration.getAuthor().getId()).orElseThrow();
+        final AuthorEntity authorEntity = jpaAuthorRepositoryCRUD.getReferenceById(ongoingGeneration.getAuthor().getId());
         return OngoingGenerationJpaToDomainMapper.map(
                 jpaOngoingGenerationRepositoryCRUD.save(OngoingGenerationDomainToJpaMapper.mapForCreate(ongoingGeneration, authorEntity))
         );
@@ -41,6 +43,13 @@ public class JpaOngoingGenerationRepository implements OngoingGenerationReposito
     public void addItemList(OngoingGeneration ongoingGeneration, List<OngoingGenerationItem> itemList) {
         final OngoingGenerationEntity ongoingGenerationEntity = jpaOngoingGenerationRepositoryCRUD.findById(ongoingGeneration.getId()).orElseThrow();
         itemList.forEach(item -> ongoingGenerationEntity.getItemList().add(OngoingGenerationItemDomainToJpaMapper.mapForCreate(item, ongoingGenerationEntity)));
+        jpaOngoingGenerationRepositoryCRUD.save(ongoingGenerationEntity);
+    }
+
+    @Override
+    public void updateStatus(OngoingGeneration ongoingGeneration, OngoingGenerationStatus status) {
+        final OngoingGenerationEntity ongoingGenerationEntity = jpaOngoingGenerationRepositoryCRUD.findById(ongoingGeneration.getId()).orElseThrow();
+        ongoingGenerationEntity.setStatus(status);
         jpaOngoingGenerationRepositoryCRUD.save(ongoingGenerationEntity);
     }
 

@@ -7,6 +7,7 @@ import be.unamur.fpgen.dataset.pagination.PagedDatasetsQuery;
 import be.unamur.fpgen.exception.DatasetNotFoundException;
 import be.unamur.fpgen.exception.GenerationNotFoundException;
 import be.unamur.fpgen.generation.InstantMessageGeneration;
+import be.unamur.fpgen.generation.ongoing_generation.OngoingGeneration;
 import be.unamur.fpgen.mapper.webToDomain.DatasetWebToDomainMapper;
 import be.unamur.fpgen.repository.InstantMessageDatasetRepository;
 import be.unamur.fpgen.utils.DateUtil;
@@ -123,5 +124,11 @@ public class InstantMessageDatasetService {
             throw new IllegalArgumentException("No instant message generation found");
         }
         return instantMessageGenerationList;
+    }
+
+    @Transactional
+    public void addOngoingGenerationToDataset(UUID datasetId, OngoingGeneration generation) {
+        final InstantMessageDataset dataset = getDatasetById(datasetId);
+        instantMessageDatasetRepository.addOngoingGenerationToDataset(dataset, generation);
     }
 }

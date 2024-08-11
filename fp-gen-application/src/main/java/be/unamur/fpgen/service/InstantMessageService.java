@@ -1,12 +1,17 @@
 package be.unamur.fpgen.service;
 
+import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.exception.InstantMessageNotFoundException;
+import be.unamur.fpgen.generation.GenerationTypeEnum;
 import be.unamur.fpgen.generation.InstantMessageGeneration;
+import be.unamur.fpgen.generation.ongoing_generation.OngoingGeneration;
+import be.unamur.fpgen.generation.ongoing_generation.OngoingGenerationStatus;
 import be.unamur.fpgen.message.InstantMessage;
 import be.unamur.fpgen.message.pagination.InstantMessage.InstantMessagesPage;
 import be.unamur.fpgen.message.pagination.InstantMessage.PagedInstantMessagesQuery;
 import be.unamur.fpgen.mapper.webToDomain.InstantMessageWebToDomainMapper;
 import be.unamur.fpgen.repository.InstantMessageRepository;
+import be.unamur.fpgen.repository.OngoingGenerationRepository;
 import be.unamur.fpgen.utils.DateUtil;
 import be.unamur.model.InstantMessageBatchCreation;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class InstantMessageService {
@@ -25,21 +31,46 @@ public class InstantMessageService {
     private final InstantMessageRepository instantMessageRepository;
     private final InstantMessageGenerationService instantMessageGenerationService;
     private final InstantMessageDatasetService instantMessageDatasetService;
+    private final OngoingGenerationService ongoingGenerationService;
 
     public InstantMessageService(final InstantMessageRepository instantMessageRepository,
                                  final InstantMessageGenerationService instantMessageGenerationService,
-                                 final InstantMessageDatasetService instantMessageDatasetService) {
+                                 final InstantMessageDatasetService instantMessageDatasetService,
+                                 OngoingGenerationService ongoingGenerationService) {
         this.instantMessageRepository = instantMessageRepository;
         this.instantMessageGenerationService = instantMessageGenerationService;
         this.instantMessageDatasetService = instantMessageDatasetService;
+        this.ongoingGenerationService = ongoingGenerationService;
     }
 
     @Transactional
     public void generateInstantMessages(final InstantMessageBatchCreation command) {
+        // 0. create ongoing generation
+        final OngoingGeneration ongoingGeneration = ongoingGenerationService.createOngoingGeneration(
+                GenerationTypeEnum.INSTANT_MESSAGE, command.getAuthorId());
+
+        // 1. if the generation refer to a dataset, then inform the dataset that a generation is pending for him
+        if (Objects.nonNull(command.getDatasetId())) {
+            instantMessageDatasetService.addOngoingGenerationToDataset(command.getDatasetId(), ongoingGeneration);
+        }
+
         // 0. for each
         command.getInstantMessageCreationList().forEach(imc -> {
-            // 1. create generation data
-            final InstantMessageGeneration generation = instantMessageGenerationService.createInstantMessageGeneration(imc, command.getAuthorId());
+            // 1. call to chatgpt
+            CompletableFuture<List<String>> future = CompletableFuture.supplyAsync(() -> simulateChatGptCall(imc.getType().name(), imc.getTopic().name(), imc.getQuantity()))
+                            .exceptionally(() -> {
+                                // 1.1. update ongoing generation status
+                               ongoingGenerationRepository.se
+                            });
+
+
+
+            future.thenApply(result -> {
+                // 2. create generation data
+                final InstantMessageGeneration generation = instantMessageGenerationService.createInstantMessageGeneration(imc, command.getAuthorId());
+
+            });
+
 
             // 2. prepare a list of instant messages
             final List<InstantMessage> instantMessageList = new ArrayList<>();
@@ -88,6 +119,22 @@ public class InstantMessageService {
     @Transactional
     public List<InstantMessage> findAllByGenerationId(UUID generationId) {
         return instantMessageRepository.findInstantMessageByGenerationId(generationId);
+    }
+
+    // chatgpt method
+    private List<String> simulateChatGptCall(String type, String topic, int quantity){
+        final List<String> result = new ArrayList<>();
+        int i = 0;
+        try {
+            while(i < quantity){
+                i++;
+                result.add(String.format("message %s %s: %s of %s", type, topic, i, quantity));
+            }
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return result;
     }
 
 }
