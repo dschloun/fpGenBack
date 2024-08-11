@@ -16,6 +16,7 @@ public class OngoingGenerationItem extends BaseUuidDomain {
         messageType = builder.messageType;
         messageTopic = builder.messageTopic;
         quantity = builder.quantity;
+        status = builder.status;
     }
 
     public MessageTypeEnum getMessageType() {

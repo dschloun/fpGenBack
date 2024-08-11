@@ -41,4 +41,9 @@ public class OngoingGenerationService {
     public void updateStatus(OngoingGeneration ongoingGeneration, OngoingGenerationStatus status) {
         ongoingGenerationRepository.updateStatus(ongoingGeneration, status);
     }
+
+    @Transactional
+    public OngoingGeneration getOngoingGenerationById(UUID id) {
+        return ongoingGenerationRepository.findById(id).orElseThrow();
+    }
 }
