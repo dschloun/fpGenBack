@@ -6,13 +6,14 @@ import be.unamur.fpgen.generation.GenerationTypeEnum;
 import be.unamur.fpgen.generation.ongoing_generation.OngoingGenerationStatus;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "ongoing_generation")
 public class OngoingGenerationEntity extends BaseUuidEntity {
     private GenerationTypeEnum type;
-    private Set<OngoingGenerationItemEntity> itemList;
+    private Set<OngoingGenerationItemEntity> itemList = new HashSet<>();
     private AuthorEntity author;
     private OngoingGenerationStatus status;
 
@@ -26,7 +27,7 @@ public class OngoingGenerationEntity extends BaseUuidEntity {
         this.type = type;
     }
 
-    @OneToMany(mappedBy = "ongoingGeneration")
+    @OneToMany(mappedBy = "ongoingGeneration", cascade = CascadeType.ALL, orphanRemoval = true)
     public Set<OngoingGenerationItemEntity> getItemList() {
         return itemList;
     }
