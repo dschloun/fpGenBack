@@ -1,7 +1,9 @@
 package be.unamur.fpgen.entity.generation.ongoing_generation;
 
+import be.unamur.fpgen.entity.author.AuthorEntity;
 import be.unamur.fpgen.entity.base.BaseUuidEntity;
 import be.unamur.fpgen.generation.GenerationTypeEnum;
+import be.unamur.fpgen.generation.ongoing_generation.OngoingGenerationStatus;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -11,7 +13,8 @@ import java.util.Set;
 public class OngoingGenerationEntity extends BaseUuidEntity {
     private GenerationTypeEnum type;
     private Set<OngoingGenerationItemEntity> itemList;
-    private String author_trigram;
+    private AuthorEntity author;
+    private OngoingGenerationStatus status;
 
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -32,12 +35,23 @@ public class OngoingGenerationEntity extends BaseUuidEntity {
         this.itemList = itemList;
     }
 
-    @Column(name = "author_trigram", nullable = false)
-    public String getAuthor_trigram() {
-        return author_trigram;
+    @ManyToOne
+    @JoinColumn(name = "author_id", nullable = false)
+    public AuthorEntity getAuthor() {
+        return author;
     }
 
-    public void setAuthor_trigram(String author_trigram) {
-        this.author_trigram = author_trigram;
+    public void setAuthor(AuthorEntity author) {
+        this.author = author;
+    }
+
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    public OngoingGenerationStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OngoingGenerationStatus status) {
+        this.status = status;
     }
 }

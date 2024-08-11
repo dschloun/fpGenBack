@@ -3,6 +3,7 @@ package be.unamur.fpgen.entity.author;
 import be.unamur.fpgen.entity.base.BaseUuidEntity;
 import be.unamur.fpgen.entity.dataset.DatasetEntity;
 import be.unamur.fpgen.entity.generation.GenerationEntity;
+import be.unamur.fpgen.entity.generation.ongoing_generation.OngoingGenerationEntity;
 import be.unamur.fpgen.entity.project.ProjectEntity;
 
 import javax.persistence.Column;
@@ -26,6 +27,7 @@ public class AuthorEntity extends BaseUuidEntity {
     private Set<GenerationEntity> generationList;
     private Set<DatasetEntity> datasetList;
     private Set<ProjectEntity> projectList;
+    private Set<OngoingGenerationEntity> ongoingGenerationList;
 
     // getters and setters
 
@@ -117,5 +119,14 @@ public class AuthorEntity extends BaseUuidEntity {
 
     public void setProjectList(Set<ProjectEntity> projectList) {
         this.projectList = projectList;
+    }
+
+    @OneToMany(mappedBy = "author")
+    public Set<OngoingGenerationEntity> getOngoingGenerationList() {
+        return ongoingGenerationList;
+    }
+
+    public void setOngoingGenerationList(Set<OngoingGenerationEntity> ongoingGenerationList) {
+        this.ongoingGenerationList = ongoingGenerationList;
     }
 }
