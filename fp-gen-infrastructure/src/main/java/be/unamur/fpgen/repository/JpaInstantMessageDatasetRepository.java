@@ -97,14 +97,14 @@ public class JpaInstantMessageDatasetRepository implements InstantMessageDataset
     @Override
     public void addOngoingGenerationToDataset(InstantMessageDataset dataset, OngoingGeneration generation) {
         final OngoingGenerationEntity ongoingGeneration = jpaOngoingGenerationRepositoryCRUD.getReferenceById(generation.getId());
-        final InstantMessageDatasetEntity datasetEntity = jpaInstantMessageDatasetRepositoryCRUD.getReferenceById(dataset.getId());
+        final InstantMessageDatasetEntity datasetEntity = jpaInstantMessageDatasetRepositoryCRUD.findById(dataset.getId()).orElseThrow();
         datasetEntity.setOngoingGeneration(ongoingGeneration);
         jpaInstantMessageDatasetRepositoryCRUD.save(datasetEntity);
     }
 
     @Override
     public void removeOngoingGenerationToDataset(InstantMessageDataset dataset, OngoingGeneration generation) {
-        final InstantMessageDatasetEntity datasetEntity = jpaInstantMessageDatasetRepositoryCRUD.getReferenceById(dataset.getId());
+        final InstantMessageDatasetEntity datasetEntity = jpaInstantMessageDatasetRepositoryCRUD.findById(dataset.getId()).orElseThrow();
         datasetEntity.setOngoingGeneration(null);
         jpaInstantMessageDatasetRepositoryCRUD.save(datasetEntity);
     }
