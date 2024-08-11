@@ -108,8 +108,7 @@ public class OngoingGenerationListener {
                     // 4.1 Handle the accumulated results
                     ongoingGenerationService.addItemList(ongoingGeneration, results);
                     instantMessageDatasetService.removeOngoingGenerationToDataset(command.getDatasetId(), ongoingGeneration);
-                })
-                .join(); // Block until all futures are done
+                });
     }
 
     // chatgpt method
