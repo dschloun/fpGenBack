@@ -9,7 +9,7 @@ public class OngoingGenerationItem extends BaseUuidDomain {
     private final MessageTypeEnum messageType;
     private final MessageTopicEnum messageTopic;
     private final Integer quantity;
-    private OngoingItemStatus status;
+    private OngoingGenerationItemStatus status;
 
     private OngoingGenerationItem(Builder builder) {
         super(builder.getId(), builder.getCreationDate(), builder.getModificationDate());
@@ -30,11 +30,11 @@ public class OngoingGenerationItem extends BaseUuidDomain {
         return quantity;
     }
 
-    public OngoingItemStatus getStatus() {
+    public OngoingGenerationItemStatus getStatus() {
         return status;
     }
 
-    public void updateStatus(OngoingItemStatus status) {
+    public void updateStatus(OngoingGenerationItemStatus status) {
         this.status = status;
     }
 
@@ -46,7 +46,7 @@ public class OngoingGenerationItem extends BaseUuidDomain {
         private MessageTypeEnum messageType;
         private MessageTopicEnum messageTopic;
         private Integer quantity;
-        private OngoingItemStatus status;
+        private OngoingGenerationItemStatus status;
 
         private Builder() {
         }
@@ -67,7 +67,7 @@ public class OngoingGenerationItem extends BaseUuidDomain {
             return this;
         }
 
-        public Builder withStatus(OngoingItemStatus val) {
+        public Builder withStatus(OngoingGenerationItemStatus val) {
             status = val;
             return this;
         }

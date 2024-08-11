@@ -1,5 +1,5 @@
 package be.unamur.fpgen.generation.ongoing_generation;
 
-public enum OngoingItemStatus {
+public enum OngoingGenerationItemStatus {
     SUCCESS, FAILURE
 }

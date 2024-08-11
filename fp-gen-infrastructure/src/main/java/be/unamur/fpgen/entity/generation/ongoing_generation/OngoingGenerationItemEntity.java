@@ -1,7 +1,7 @@
 package be.unamur.fpgen.entity.generation.ongoing_generation;
 
 import be.unamur.fpgen.entity.base.BaseUuidEntity;
-import be.unamur.fpgen.generation.ongoing_generation.OngoingItemStatus;
+import be.unamur.fpgen.generation.ongoing_generation.OngoingGenerationItemStatus;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
 
@@ -14,7 +14,7 @@ public class OngoingGenerationItemEntity extends BaseUuidEntity {
     private MessageTypeEnum messageType;
     private MessageTopicEnum messageTopic;
     private Integer quantity;
-    private OngoingItemStatus status;
+    private OngoingGenerationItemStatus status;
 
     @ManyToOne
     @JoinColumn(name = "ongoing_generation_id")
@@ -57,11 +57,11 @@ public class OngoingGenerationItemEntity extends BaseUuidEntity {
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
-    public OngoingItemStatus getStatus() {
+    public OngoingGenerationItemStatus getStatus() {
         return status;
     }
 
-    public void setStatus(OngoingItemStatus status) {
+    public void setStatus(OngoingGenerationItemStatus status) {
         this.status = status;
     }
 }
