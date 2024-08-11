@@ -21,6 +21,12 @@ public class DateUtil {
         return date.format(DateTimeFormatter.ofPattern("yyyy/MM/dd_HH:mm"));
     }
 
+    public static String convertOffsetDateTimeMillisToString(final OffsetDateTime date) {
+        // Utilisation du pattern avec secondes et fractions de seconde
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd_HH:mm:ss.SSS");
+        return date.format(formatter);
+    }
+
     /**
      * Converts a LocalDate to OffsetDateTime using the ZoneId for Brussels.
      *

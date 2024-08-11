@@ -56,7 +56,7 @@ public class InstantMessageGeneration extends AbstractGeneration {
 
         @Override
         public String generateGenerationId() {
-            return String.format("%s-%s-%s-%s", "IM", this.returnBatchOrSingle(), this.getAuthor().getTrigram(), DateUtil.convertOffsetDateTimeToString(OffsetDateTime.now()));
+            return String.format("%s-%s-%s-%s", "IM", this.returnBatchOrSingle(), this.getAuthor().getTrigram(), DateUtil.convertOffsetDateTimeMillisToString(OffsetDateTime.now()));
         }
     }
 }
