@@ -93,14 +93,14 @@ databaseChangeLog:
                     - nullable: false
                     - unique: false
               - column:
-                name: statistic_id
-                type: uuid
-                constraints:
-                  - nullable: false
-                  - unique: false
-                  - foreignKeyName: fk_message_topic_statistic_statistic
-                  - references: statistic(id)
-                  - onDelete: CASCADE
+                  name: statistic_id
+                  type: uuid
+                  constraints:
+                    - nullable: false
+                    - unique: false
+                    - foreignKeyName: fk_message_topic_statistic_statistic
+                    - references: statistic(id)
+                    - onDelete: CASCADE
 
         - addColumn:
             tableName: dataset
