@@ -5,6 +5,7 @@ import be.unamur.fpgen.entity.author.AuthorEntity;
 import be.unamur.fpgen.entity.base.BaseUuidEntity;
 import be.unamur.fpgen.entity.generation.ongoing_generation.OngoingGenerationEntity;
 import be.unamur.fpgen.entity.project.ProjectEntity;
+import be.unamur.fpgen.entity.statistic.StatisticEntity;
 
 import javax.persistence.*;
 
@@ -24,6 +25,7 @@ public class DatasetEntity extends BaseUuidEntity {
     private DatasetFunctionEnum function;
     private ProjectEntity project;
     private OngoingGenerationEntity ongoingGeneration;
+    private StatisticEntity statistic;
 
     // getters and setters
     @Column(name = "business_id", nullable = false)
@@ -109,5 +111,15 @@ public class DatasetEntity extends BaseUuidEntity {
 
     public void setOngoingGeneration(OngoingGenerationEntity ongoingGeneration) {
         this.ongoingGeneration = ongoingGeneration;
+    }
+
+    @OneToOne
+    @JoinColumn(name = "statistic_id")
+    public StatisticEntity getStatistic() {
+        return statistic;
+    }
+
+    public void setStatistic(StatisticEntity statistic) {
+        this.statistic = statistic;
     }
 }
