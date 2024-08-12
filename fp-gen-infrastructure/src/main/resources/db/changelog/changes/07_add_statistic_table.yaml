@@ -81,8 +81,8 @@ databaseChangeLog:
                     - nullable: false
                     - unique: false
               - column:
-                  name: topic_name
-                  type: varchar(255)
+                  name: message_topic
+                  type: varchar(30)
                   constraints:
                     - nullable: false
                     - unique: false

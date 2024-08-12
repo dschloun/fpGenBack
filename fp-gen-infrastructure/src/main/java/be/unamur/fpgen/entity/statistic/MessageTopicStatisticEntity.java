@@ -1,6 +1,7 @@
 package be.unamur.fpgen.entity.statistic;
 
 import be.unamur.fpgen.entity.base.BaseUuidEntity;
+import be.unamur.fpgen.message.MessageTopicEnum;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -9,17 +10,18 @@ import java.math.BigDecimal;
 @Table(name = "message_topic_statistic")
 public class MessageTopicStatisticEntity extends BaseUuidEntity {
 
-    private String topicName;
+    private MessageTopicEnum messageTopic;
     private BigDecimal ratio;
     private StatisticEntity statistic;
 
-    @Column(name = "topic_name", nullable = false)
-    public String getTopicName() {
-        return topicName;
+    @Column(name = "message_topic", nullable = false)
+    @Enumerated(EnumType.STRING)
+    public MessageTopicEnum getMessageTopic() {
+        return messageTopic;
     }
 
-    public void setTopicName(String topicName) {
-        this.topicName = topicName;
+    public void setMessageTopic(MessageTopicEnum topic) {
+        this.messageTopic = topic;
     }
 
     @Column(name = "ratio", nullable = false)
