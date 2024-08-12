@@ -1,6 +1,7 @@
 package be.unamur.fpgen.statistic;
 
 import be.unamur.fpgen.BaseUuidDomain;
+import be.unamur.fpgen.dataset.AbstractDataset;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -13,6 +14,7 @@ public class Statistic extends BaseUuidDomain {
     private final BigDecimal socialEngineerRatio;
     private final BigDecimal trollRatio;
     private final Set<MessageTopicStatistic> messageTopicStatisticList = new HashSet<>();
+    private final AbstractDataset dataset;
 
     private Statistic(Builder builder) {
         total = builder.total;
@@ -47,6 +49,10 @@ public class Statistic extends BaseUuidDomain {
         return messageTopicStatisticList;
     }
 
+    public AbstractDataset getDataset() {
+        return dataset;
+    }
+
     public static Builder newBuilder() {
         return new Builder();
     }
@@ -58,6 +64,7 @@ public class Statistic extends BaseUuidDomain {
         private BigDecimal socialEngineerRatio;
         private BigDecimal trollRatio;
         private Set<MessageTopicStatistic> messageTopicStatisticList = new HashSet<>();
+        private AbstractDataset dataset;
 
         private Builder() {
         }
@@ -92,6 +99,10 @@ public class Statistic extends BaseUuidDomain {
             return this;
         }
 
+        public Builder withDataset(AbstractDataset val) {
+            dataset = val;
+            return this;
+        }
 
         public Statistic build() {
             return new Statistic(this);

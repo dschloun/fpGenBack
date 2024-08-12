@@ -3,12 +3,11 @@ package be.unamur.fpgen.statistic;
 import be.unamur.fpgen.BaseUuidDomain;
 import be.unamur.fpgen.message.MessageTopicEnum;
 
-import java.time.OffsetDateTime;
-import java.util.UUID;
+import java.math.BigDecimal;
 
 public class MessageTopicStatistic extends BaseUuidDomain {
      private final MessageTopicEnum messageTopic;
-     private final double ratio;
+     private final BigDecimal ratio;
 
     private MessageTopicStatistic(Builder builder) {
         super(builder.getId(), builder.getCreationDate(), builder.getModificationDate());
@@ -20,7 +19,7 @@ public class MessageTopicStatistic extends BaseUuidDomain {
         return messageTopic;
     }
 
-    public double getRatio() {
+    public BigDecimal getRatio() {
         return ratio;
     }
 
@@ -30,7 +29,7 @@ public class MessageTopicStatistic extends BaseUuidDomain {
 
     public static final class Builder extends AbstractBaseUuidDomainBuilder<Builder>{
         private MessageTopicEnum messageTopic;
-        private double ratio;
+        private BigDecimal ratio;
 
         private Builder() {
         }
@@ -41,7 +40,7 @@ public class MessageTopicStatistic extends BaseUuidDomain {
             return this;
         }
 
-        public Builder withRatio(double val) {
+        public Builder withRatio(BigDecimal val) {
             ratio = val;
             return this;
         }
