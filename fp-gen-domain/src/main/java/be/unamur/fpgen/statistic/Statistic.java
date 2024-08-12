@@ -23,6 +23,7 @@ public class Statistic extends BaseUuidDomain {
         socialEngineerRatio = builder.socialEngineerRatio;
         trollRatio = builder.trollRatio;
         messageTopicStatisticList.addAll(builder.messageTopicStatisticList);
+        dataset = builder.dataset;
     }
 
     public Integer getTotal() {
