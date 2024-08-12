@@ -1,0 +1,116 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-statistic-table
+      author: dsc
+      changes:
+        - createTable:
+            tableName: statistic
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    - primaryKey: true
+                    - primaryKeyName: pk_statistic
+                    - nullable: false
+                    - unique: true
+              - column:
+                  name: creation_date
+                  type: datetime
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: modification_date
+                  type: datetime
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: total
+                  type: integer
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: fake_ratio
+                  type: numeric
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: real_ratio
+                  type: numeric
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: social_engineer_ratio
+                  type: numeric
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: troll_ratio
+                  type: numeric
+                  constraints:
+                    - nullable: false
+                    - unique: false
+
+        - createTable:
+            tableName: message_topic_statistic
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    - primaryKey: true
+                    - primaryKeyName: pk_message_topic_statistic
+                    - nullable: false
+                    - unique: true
+              - column:
+                  name: creation_date
+                  type: datetime
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: modification_date
+                  type: datetime
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: topic_name
+                  type: varchar(255)
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: ratio
+                  type: numeric
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                name: statistic_id
+                type: uuid
+                constraints:
+                  - nullable: false
+                  - unique: false
+                  - foreignKeyName: fk_message_topic_statistic_statistic
+                  - references: statistic(id)
+                  - onDelete: CASCADE
+
+        - addColumn:
+            tableName: dataset
+            columns:
+              - column:
+                  name: statistic_id
+                  type: uuid
+                  constraints:
+                    - nullable: true
+                    - unique: true
+                    - foreignKeyName: fk_dataset_statistic
+                    - references: statistic(id)
+                    - onDelete: CASCADE
