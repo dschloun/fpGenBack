@@ -24,3 +24,23 @@ databaseChangeLog:
               on g.id = gdj.generation_id
               inner join author a
               on g.author_id = a.id;
+
+  - changeSet:
+      id: create_statistic_helper_view
+      author: dsc
+      changes:
+        - createView:
+            viewName: statistic_helper_view
+            replaceIfExists: true
+            encoding: UTF-8
+            selectQuery: select
+              CAST(d.id as varchar) as dataset_id,
+              CAST(g.id as varchar) as generation_id,
+              g.type as message_type,
+              g.topic as message_topic,
+              g.quantity as message_quantity
+              from dataset d
+              inner join dataset_generation_join_table dgj
+              on d.id = dgj.dataset_id
+              inner join generation g
+              on dgj.generation_id = g.id;
