@@ -2,6 +2,7 @@ package be.unamur.fpgen.dataset;
 
 import be.unamur.fpgen.BaseUuidDomain;
 import be.unamur.fpgen.author.Author;
+import be.unamur.fpgen.statistic.Statistic;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -15,6 +16,7 @@ public abstract class AbstractDataset extends BaseUuidDomain {
     private final Author author;
     private final DatasetFunctionEnum datasetFunction;
     private final UUID ongoingGenerationId;
+    private final Statistic statistic;
 
     protected AbstractDataset (final UUID id,
                                final OffsetDateTime creationDate,
@@ -26,7 +28,8 @@ public abstract class AbstractDataset extends BaseUuidDomain {
                                final String comment,
                                final Author author,
                                final DatasetFunctionEnum datasetFunction,
-                               final UUID ongoingGenerationId) {
+                               final UUID ongoingGenerationId,
+                               final Statistic statistic) {
         super(id, creationDate, modificationDate);
         this.businessId = businessId;
         this.version = version;
@@ -36,6 +39,7 @@ public abstract class AbstractDataset extends BaseUuidDomain {
         this.author = author;
         this.datasetFunction = datasetFunction;
         this.ongoingGenerationId = ongoingGenerationId;
+        this.statistic = statistic;
     }
     public String getBusinessId() {
         return businessId;
@@ -69,6 +73,10 @@ public abstract class AbstractDataset extends BaseUuidDomain {
         return ongoingGenerationId;
     }
 
+    public Statistic getStatistic() {
+        return statistic;
+    }
+
     protected abstract static class AbstractDatasetBuilder<T> extends AbstractBaseUuidDomainBuilder<T> implements GenerationId {
         protected String businessId;
         private Integer version;
@@ -78,6 +86,7 @@ public abstract class AbstractDataset extends BaseUuidDomain {
         private Author author;
         private DatasetFunctionEnum datasetFunction;
         private UUID ongoingGenerationId;
+        private Statistic statistic;
 
         public String getBusinessId() {
             return businessId;
@@ -109,6 +118,10 @@ public abstract class AbstractDataset extends BaseUuidDomain {
 
         public UUID getOngoingGenerationId() {
             return ongoingGenerationId;
+        }
+
+        public Statistic getStatistic() {
+            return statistic;
         }
 
         public T withBusinessId(String businessId) {
@@ -144,6 +157,11 @@ public abstract class AbstractDataset extends BaseUuidDomain {
 
         public T withOngoingGenerationId(UUID ongoingGenerationId) {
             this.ongoingGenerationId = ongoingGenerationId;
+            return self();
+        }
+
+        public T withStatistic(Statistic statistic) {
+            this.statistic = statistic;
             return self();
         }
     }
