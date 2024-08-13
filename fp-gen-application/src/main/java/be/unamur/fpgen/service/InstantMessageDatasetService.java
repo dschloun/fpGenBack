@@ -1,6 +1,7 @@
 package be.unamur.fpgen.service;
 
 import be.unamur.fpgen.author.Author;
+import be.unamur.fpgen.dataset.DatasetTypeEnum;
 import be.unamur.fpgen.dataset.InstantMessageDataset;
 import be.unamur.fpgen.dataset.pagination.DatasetsPage;
 import be.unamur.fpgen.dataset.pagination.PagedDatasetsQuery;
@@ -9,9 +10,11 @@ import be.unamur.fpgen.exception.GenerationNotFoundException;
 import be.unamur.fpgen.generation.InstantMessageGeneration;
 import be.unamur.fpgen.generation.ongoing_generation.OngoingGeneration;
 import be.unamur.fpgen.mapper.webToDomain.DatasetWebToDomainMapper;
+import be.unamur.fpgen.messaging.StatisticComputationEvent;
 import be.unamur.fpgen.repository.InstantMessageDatasetRepository;
 import be.unamur.fpgen.utils.DateUtil;
 import be.unamur.model.DatasetCreation;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,11 +30,13 @@ public class InstantMessageDatasetService {
     private final AuthorService authorService;
     private final InstantMessageDatasetRepository instantMessageDatasetRepository;
     private final InstantMessageGenerationService instantMessageGenerationService;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public InstantMessageDatasetService(AuthorService authorService, InstantMessageDatasetRepository instantMessageDatasetRepository, InstantMessageGenerationService instantMessageGenerationService) {
+    public InstantMessageDatasetService(AuthorService authorService, InstantMessageDatasetRepository instantMessageDatasetRepository, InstantMessageGenerationService instantMessageGenerationService, ApplicationEventPublisher eventPublisher) {
         this.authorService = authorService;
         this.instantMessageDatasetRepository = instantMessageDatasetRepository;
         this.instantMessageGenerationService = instantMessageGenerationService;
+        this.eventPublisher = eventPublisher;
     }
 
     @Transactional
@@ -71,7 +76,10 @@ public class InstantMessageDatasetService {
         dataset.getInstantMessageGenerationList().addAll(instantMessageGenerationList);
         instantMessageDatasetRepository.addInstantMessageListToDataset(dataset, instantMessageGenerationList);
 
+        // 4. send event to compute statistic
+        eventPublisher.publishEvent(new StatisticComputationEvent(this, datasetId, DatasetTypeEnum.INSTANT_MESSAGE));
     }
+
     @Transactional
     public void removeInstantMessageListFromDataset(UUID datasetId, List<UUID> instantMessageGenerationIdsList) {
         // 1. get dataset
@@ -83,6 +91,9 @@ public class InstantMessageDatasetService {
         // 3. remove instant message generations from dataset
         dataset.getInstantMessageGenerationList().removeAll(getInstantMessageGenerationList(instantMessageGenerationIdsList));
         instantMessageDatasetRepository.removeInstantMessageListFromDataset(dataset, instantMessageGenerationList);
+
+        // 4. send event to compute statistic
+        eventPublisher.publishEvent(new StatisticComputationEvent(this, datasetId, DatasetTypeEnum.INSTANT_MESSAGE));
     }
 
 

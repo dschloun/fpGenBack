@@ -1,36 +1,40 @@
-package be.unamur.fpgen.service;
+package be.unamur.fpgen.messaging;
 
 import be.unamur.fpgen.dataset.AbstractDataset;
 import be.unamur.fpgen.dataset.DatasetTypeEnum;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.repository.StatisticRepository;
+import be.unamur.fpgen.service.ConversationDatasetService;
+import be.unamur.fpgen.service.InstantMessageDatasetService;
 import be.unamur.fpgen.statistic.MessageTypeTopicTransformer;
 import be.unamur.fpgen.statistic.Statistic;
-import be.unamur.fpgen.utils.MapperUtil;
 import org.apache.commons.lang3.tuple.Triple;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Service
-public class StatisticService {
+@Component
+public class StatisticComputationListener {
 
     private final StatisticRepository statisticRepository;
     private final InstantMessageDatasetService instantMessageDatasetService;
     private final ConversationDatasetService conversationDatasetService;
 
-    public StatisticService(StatisticRepository statisticRepository, InstantMessageDatasetService instantMessageDatasetService, ConversationDatasetService conversationDatasetService) {
+    public StatisticComputationListener(StatisticRepository statisticRepository, InstantMessageDatasetService instantMessageDatasetService, ConversationDatasetService conversationDatasetService) {
         this.statisticRepository = statisticRepository;
         this.instantMessageDatasetService = instantMessageDatasetService;
         this.conversationDatasetService = conversationDatasetService;
     }
 
-    @Async
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @TransactionalEventListener
     public void computeStatistic(final UUID datasetId, final DatasetTypeEnum datasetType) {
         // 1. get dataset
         AbstractDataset dataset;
@@ -62,7 +66,7 @@ public class StatisticService {
                 .build();
 
         // 8. save
-        statisticRepository
+        statisticRepository.save(statistic, dataset);
     }
 
 }

@@ -1,0 +1,25 @@
+package be.unamur.fpgen.messaging;
+
+import be.unamur.fpgen.dataset.DatasetTypeEnum;
+import org.springframework.context.ApplicationEvent;
+
+import java.util.UUID;
+
+public class StatisticComputationEvent extends ApplicationEvent {
+    private final UUID datasetId;
+    private final DatasetTypeEnum datasetType;
+
+    public UUID getDatasetId() {
+        return datasetId;
+    }
+
+    public DatasetTypeEnum getDatasetType() {
+        return datasetType;
+    }
+
+    public StatisticComputationEvent(Object source, UUID datasetId, DatasetTypeEnum datasetType) {
+        super(source);
+        this.datasetId = datasetId;
+        this.datasetType = datasetType;
+    }
+}
