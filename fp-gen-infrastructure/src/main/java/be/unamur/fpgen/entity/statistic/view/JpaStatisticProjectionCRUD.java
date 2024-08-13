@@ -1,42 +1,54 @@
 package be.unamur.fpgen.entity.statistic.view;
 
 import be.unamur.fpgen.entity.statistic.StatisticEntity;
+import be.unamur.fpgen.message.MessageTopicEnum;
+import be.unamur.fpgen.message.MessageTypeEnum;
+import liquibase.repackaged.org.apache.commons.lang3.tuple.Pair;
+import liquibase.repackaged.org.apache.commons.lang3.tuple.Triple;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface JpaStatisticProjectionCRUD extends JpaRepository<StatisticEntity, UUID> {
 
-    @Query(nativeQuery = true, value = "SELECT count(*)" +
+    @Query(nativeQuery = true, value = "SELECT sum(message_quantity)" +
             " FROM statistic_helper_view" +
             " WHERE dataset_id = :datasetId")
     Integer findTotalByDatasetId(@Param("datasetId") String datasetId);
 
-    @Query(nativeQuery = true, value = "SELECT count(*)" +
+    @Query(nativeQuery = true, value = "SELECT sum(message_quantity)" +
             " FROM statistic_helper_view" +
             " WHERE dataset_id = :datasetId" +
-            " AND type = 'GENUINE'")
+            " AND message_type = 'GENUINE'")
     Integer findGenuineTotalByDatasetId(@Param("datasetId") String datasetId);
 
-    @Query(nativeQuery = true, value = "SELECT count(*)" +
+    @Query(nativeQuery = true, value = "SELECT sum(message_quantity)" +
             " FROM statistic_helper_view" +
             " WHERE dataset_id = :datasetId" +
-            " AND type = 'TROLLING'")
+            " AND message_type = 'TROLLING'")
     Integer findTrollingTotalByDatasetId(@Param("datasetId") String datasetId);
 
-    @Query(nativeQuery = true, value = "SELECT count(*)" +
+    @Query(nativeQuery = true, value = "SELECT sum(message_quantity)" +
             " FROM statistic_helper_view" +
             " WHERE dataset_id = :datasetId" +
-            " AND type = 'SOCIAL_ENGINEERING'")
+            " AND message_type = 'SOCIAL_ENGINEERING'")
     Integer findSocialEngineeringTotalByDatasetId(@Param("datasetId") String datasetId);
 
-    @Query(nativeQuery = true, value = "SELECT topic, count(*)" +
+    @Query(nativeQuery = true, value = "SELECT topic, sum(message_quantity)" +
             " FROM statistic_helper_view" +
-            " GROUP BY topic" +
+            " GROUP BY message_topic" +
             " HAVING dataset_id = :datasetId")
-    Integer findTopicTotalByDatasetId(@Param("datasetId") String datasetId);
+    List<Pair<MessageTopicEnum, Integer>> findTopicTotalByDatasetId(@Param("datasetId") String datasetId);
+
+    @Query(nativeQuery = true, value = "SELECT type, topic, sum(message_quantity)" +
+            " FROM statistic_helper_view" +
+            " GROUP BY message_type, message_topic" +
+            " HAVING dataset_id = :datasetId")
+    List<Triple<MessageTypeEnum, MessageTopicEnum, Integer>>  findTypeTopicTotalByDatasetId(@Param("datasetId") String datasetId);
+
 
 
 }
