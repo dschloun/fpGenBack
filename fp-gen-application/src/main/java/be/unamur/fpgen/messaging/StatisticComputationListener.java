@@ -17,7 +17,6 @@ import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -35,24 +34,24 @@ public class StatisticComputationListener {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener
-    public void computeStatistic(final UUID datasetId, final DatasetTypeEnum datasetType) {
+    public void computeStatistic(final StatisticComputationEvent event) {
         // 1. get dataset
         AbstractDataset dataset;
-        if (DatasetTypeEnum.INSTANT_MESSAGE.equals(datasetType)) {
-            dataset = instantMessageDatasetService.getDatasetById(datasetId);
+        if (DatasetTypeEnum.INSTANT_MESSAGE.equals(event.getDatasetType())) {
+            dataset = instantMessageDatasetService.getDatasetById(event.getDatasetId());
         } else {
-            dataset = conversationDatasetService.getDatasetById(datasetId);
+            dataset = conversationDatasetService.getDatasetById(event.getDatasetId());
         }
         // 2. get total
-        final Integer total = statisticRepository.findTotal(datasetId);
+        final Integer total = statisticRepository.findTotal(event.getDatasetId());
         // 3. get genuine total
-        final Integer genuineTotal = statisticRepository.findGenuineTotal(datasetId);
+        final Integer genuineTotal = statisticRepository.findGenuineTotal(event.getDatasetId());
         // 4. get social engineering total
-        final Integer socialEngineeringTotal = statisticRepository.findSocialEngineeringTotal(datasetId);
+        final Integer socialEngineeringTotal = statisticRepository.findSocialEngineeringTotal(event.getDatasetId());
         // 5. get trolling total
-        final Integer trollingTotal = statisticRepository.findTrollingTotal(datasetId);
+        final Integer trollingTotal = statisticRepository.findTrollingTotal(event.getDatasetId());
         // 6. get type topic distribution
-        final List<Triple<MessageTypeEnum, MessageTopicEnum, Integer>> distribution = statisticRepository.findTypeTopicDistribution(datasetId);
+        final List<Triple<MessageTypeEnum, MessageTopicEnum, Integer>> distribution = statisticRepository.findTypeTopicDistribution(event.getDatasetId());
 
         // 7. build statistic
         final Statistic statistic = Statistic.newBuilder()
