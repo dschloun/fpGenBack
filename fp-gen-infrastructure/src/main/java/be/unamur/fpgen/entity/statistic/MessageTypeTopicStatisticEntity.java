@@ -2,17 +2,29 @@ package be.unamur.fpgen.entity.statistic;
 
 import be.unamur.fpgen.entity.base.BaseUuidEntity;
 import be.unamur.fpgen.message.MessageTopicEnum;
+import be.unamur.fpgen.message.MessageTypeEnum;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "message_topic_statistic")
-public class MessageTopicStatisticEntity extends BaseUuidEntity {
+@Table(name = "message_type_topic_statistic")
+public class MessageTypeTopicStatisticEntity extends BaseUuidEntity {
 
+    private MessageTypeEnum messageType;
     private MessageTopicEnum messageTopic;
     private BigDecimal ratio;
     private StatisticEntity statistic;
+
+    @Column(name = "message_type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    public MessageTypeEnum getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(MessageTypeEnum messageType) {
+        this.messageType = messageType;
+    }
 
     @Column(name = "message_topic", nullable = false)
     @Enumerated(EnumType.STRING)

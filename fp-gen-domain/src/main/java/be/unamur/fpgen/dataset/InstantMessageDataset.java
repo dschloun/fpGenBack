@@ -22,7 +22,8 @@ public class InstantMessageDataset extends AbstractDataset {
                 builder.getComment(),
                 builder.getAuthor(),
                 builder.getDatasetFunction(),
-                builder.getOngoingGenerationId());
+                builder.getOngoingGenerationId(),
+                builder.getStatistic());
         instantMessageGenerationList.addAll(builder.instantMessageGenerationList);
     }
 

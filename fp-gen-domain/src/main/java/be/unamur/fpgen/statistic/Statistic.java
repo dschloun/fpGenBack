@@ -13,7 +13,7 @@ public class Statistic extends BaseUuidDomain {
     private final BigDecimal realRatio;
     private final BigDecimal socialEngineerRatio;
     private final BigDecimal trollRatio;
-    private final Set<MessageTopicStatistic> messageTopicStatisticList = new HashSet<>();
+    private final Set<MessageTypeTopicStatistic> messageTypeTopicStatisticList = new HashSet<>();
     private final AbstractDataset dataset;
 
     private Statistic(Builder builder) {
@@ -22,7 +22,7 @@ public class Statistic extends BaseUuidDomain {
         realRatio = builder.realRatio;
         socialEngineerRatio = builder.socialEngineerRatio;
         trollRatio = builder.trollRatio;
-        messageTopicStatisticList.addAll(builder.messageTopicStatisticList);
+        messageTypeTopicStatisticList.addAll(builder.messageTypeTopicStatisticList);
         dataset = builder.dataset;
     }
 
@@ -46,8 +46,8 @@ public class Statistic extends BaseUuidDomain {
         return trollRatio;
     }
 
-    public Set<MessageTopicStatistic> getMessageTopicStatisticList() {
-        return messageTopicStatisticList;
+    public Set<MessageTypeTopicStatistic> getMessageTopicStatisticList() {
+        return messageTypeTopicStatisticList;
     }
 
     public AbstractDataset getDataset() {
@@ -64,7 +64,7 @@ public class Statistic extends BaseUuidDomain {
         private BigDecimal realRatio;
         private BigDecimal socialEngineerRatio;
         private BigDecimal trollRatio;
-        private Set<MessageTopicStatistic> messageTopicStatisticList = new HashSet<>();
+        private Set<MessageTypeTopicStatistic> messageTypeTopicStatisticList = new HashSet<>();
         private AbstractDataset dataset;
 
         private Builder() {
@@ -95,8 +95,8 @@ public class Statistic extends BaseUuidDomain {
             return this;
         }
 
-        public Builder withMessageTopicStatisticList(Set<MessageTopicStatistic> val) {
-            messageTopicStatisticList = val;
+        public Builder withMessageTopicStatisticList(Set<MessageTypeTopicStatistic> val) {
+            messageTypeTopicStatisticList = val;
             return this;
         }
 

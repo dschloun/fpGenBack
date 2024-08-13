@@ -58,7 +58,7 @@ databaseChangeLog:
                     - unique: false
 
         - createTable:
-            tableName: message_topic_statistic
+            tableName: message_type_topic_statistic
             columns:
               - column:
                   name: id
@@ -81,6 +81,12 @@ databaseChangeLog:
                     - nullable: false
                     - unique: false
               - column:
+                  name: message_type
+                  type: varchar(30)
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
                   name: message_topic
                   type: varchar(30)
                   constraints:
@@ -98,7 +104,7 @@ databaseChangeLog:
                   constraints:
                     - nullable: false
                     - unique: false
-                    - foreignKeyName: fk_message_topic_statistic_statistic
+                    - foreignKeyName: fk_message_type_topic_statistic_statistic
                     - references: statistic(id)
                     - onDelete: CASCADE
 

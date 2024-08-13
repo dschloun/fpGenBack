@@ -17,7 +17,7 @@ public class StatisticEntity extends BaseUuidEntity {
     private BigDecimal socialEngineerRatio;
     private BigDecimal trollRatio;
     private DatasetEntity dataset;
-    private Set<MessageTopicStatisticEntity> messageTopicStatisticList = new HashSet<>();
+    private Set<MessageTypeTopicStatisticEntity> messageTopicStatisticList = new HashSet<>();
 
     @Column(name = "total", nullable = false)
     public Integer getTotal() {
@@ -74,11 +74,11 @@ public class StatisticEntity extends BaseUuidEntity {
     }
 
     @OneToMany(mappedBy = "statistic", cascade = CascadeType.ALL, orphanRemoval = true)
-    public Set<MessageTopicStatisticEntity> getMessageTopicStatisticList() {
+    public Set<MessageTypeTopicStatisticEntity> getMessageTopicStatisticList() {
         return messageTopicStatisticList;
     }
 
-    public void setMessageTopicStatisticList(Set<MessageTopicStatisticEntity> messageTopicStatisticList) {
+    public void setMessageTopicStatisticList(Set<MessageTypeTopicStatisticEntity> messageTopicStatisticList) {
         this.messageTopicStatisticList = messageTopicStatisticList;
     }
 }
