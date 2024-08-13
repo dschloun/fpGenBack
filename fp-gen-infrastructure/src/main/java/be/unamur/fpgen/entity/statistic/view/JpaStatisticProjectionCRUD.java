@@ -39,13 +39,13 @@ public interface JpaStatisticProjectionCRUD extends JpaRepository<StatisticEntit
 
     @Query(nativeQuery = true, value = "SELECT topic, sum(message_quantity)" +
             " FROM statistic_helper_view" +
-            " GROUP BY message_topic" +
+            " GROUP BY dataset_id, message_topic" +
             " HAVING dataset_id = :datasetId")
     List<Pair<MessageTopicEnum, Integer>> findTopicTotalByDatasetId(@Param("datasetId") String datasetId);
 
     @Query(nativeQuery = true, value = "SELECT type, topic, sum(message_quantity)" +
             " FROM statistic_helper_view" +
-            " GROUP BY message_type, message_topic" +
+            " GROUP BY dataset_id, message_type, message_topic" +
             " HAVING dataset_id = :datasetId")
     List<Triple<MessageTypeEnum, MessageTopicEnum, Integer>>  findTypeTopicTotalByDatasetId(@Param("datasetId") String datasetId);
 
