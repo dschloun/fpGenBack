@@ -1,11 +1,13 @@
 package be.unamur.fpgen.mapper.domainToJpa;
 
 import be.unamur.fpgen.entity.statistic.MessageTypeTopicStatisticEntity;
+import be.unamur.fpgen.entity.statistic.StatisticEntity;
 import be.unamur.fpgen.statistic.MessageTypeTopicStatistic;
 
 public class MessageTopicStatisticDomainToJpaMapper {
-    public static MessageTypeTopicStatisticEntity mapForCreate(MessageTypeTopicStatistic domain) {
+    public static MessageTypeTopicStatisticEntity mapForCreate(MessageTypeTopicStatistic domain, StatisticEntity statistic) {
         final MessageTypeTopicStatisticEntity entity = new MessageTypeTopicStatisticEntity();
+        entity.setStatistic(statistic);
         entity.setMessageType(domain.getMessageType());
         entity.setMessageTopic(domain.getMessageTopic());
         entity.setRatio(domain.getRatio());

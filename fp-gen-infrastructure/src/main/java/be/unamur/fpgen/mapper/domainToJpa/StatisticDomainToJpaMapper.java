@@ -15,7 +15,7 @@ public class StatisticDomainToJpaMapper {
         entity.setTrollRatio(domain.getTrollRatio());
         entity.setMessageTopicStatisticList(MapperUtil
                 .mapSet(domain.getMessageTopicStatisticList(),
-                        MessageTopicStatisticDomainToJpaMapper::mapForCreate));
+                        d -> MessageTopicStatisticDomainToJpaMapper.mapForCreate(d, entity)));
         entity.setDataset(dataset);
         return entity;
     }

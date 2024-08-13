@@ -11,7 +11,7 @@ public interface StatisticProjection {
 
     MessageTypeEnum getType();
 
-    MessageTopicEnum getMessageTopicEnum();
+    MessageTopicEnum getTopic();
 
     Integer getQuantity();
 }
