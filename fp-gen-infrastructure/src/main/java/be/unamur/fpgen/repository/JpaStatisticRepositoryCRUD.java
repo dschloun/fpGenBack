@@ -1,4 +1,4 @@
-package be.unamur.fpgen.entity.statistic.view;
+package be.unamur.fpgen.repository;
 
 import be.unamur.fpgen.entity.statistic.StatisticEntity;
 import be.unamur.fpgen.message.MessageTopicEnum;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface JpaStatisticProjectionRepositoryCRUD extends JpaRepository<StatisticEntity, UUID> {
+public interface JpaStatisticRepositoryCRUD extends JpaRepository<StatisticEntity, UUID> {
 
     Optional<StatisticEntity> findByDatasetId(UUID datasetId);
 
