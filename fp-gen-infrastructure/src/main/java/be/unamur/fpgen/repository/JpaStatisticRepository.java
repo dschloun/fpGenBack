@@ -3,13 +3,10 @@ package be.unamur.fpgen.repository;
 import be.unamur.fpgen.dataset.AbstractDataset;
 import be.unamur.fpgen.dataset.InstantMessageDataset;
 import be.unamur.fpgen.entity.dataset.DatasetEntity;
+import be.unamur.fpgen.statistic.TypeTopicDistributionProjection;
 import be.unamur.fpgen.mapper.domainToJpa.StatisticDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.StatisticJpaToDomainMapper;
-import be.unamur.fpgen.message.MessageTopicEnum;
-import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.statistic.Statistic;
-import be.unamur.fpgen.statistic.TypeTopicDistributionProjection;
-import org.apache.commons.lang3.tuple.Triple;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
