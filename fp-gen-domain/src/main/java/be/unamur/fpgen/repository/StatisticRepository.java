@@ -4,6 +4,7 @@ import be.unamur.fpgen.dataset.AbstractDataset;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.statistic.Statistic;
+import be.unamur.fpgen.statistic.TypeTopicDistributionProjection;
 import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public interface StatisticRepository {
 
     Integer findGenuineTotal(UUID datasetId);
 
-    List<Triple<MessageTypeEnum, MessageTopicEnum, Integer>> findTypeTopicDistribution(UUID datasetId);
+    List<TypeTopicDistributionProjection> findTypeTopicDistribution(UUID datasetId);
 
     void save(Statistic statistic, AbstractDataset dataset);
 

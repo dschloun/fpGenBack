@@ -2,9 +2,8 @@ package be.unamur.fpgen.repository;
 
 import be.unamur.fpgen.entity.statistic.StatisticEntity;
 import be.unamur.fpgen.message.MessageTopicEnum;
-import be.unamur.fpgen.message.MessageTypeEnum;
+import be.unamur.fpgen.statistic.TypeTopicDistributionProjection;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.commons.lang3.tuple.Triple;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -50,5 +49,5 @@ public interface JpaStatisticRepositoryCRUD extends JpaRepository<StatisticEntit
             " FROM statistic_helper_view" +
             " GROUP BY dataset_id, message_type, message_topic" +
             " HAVING dataset_id = :datasetId")
-    List<Triple<MessageTypeEnum, MessageTopicEnum, Integer>> findTypeTopicDistributionByDatasetId(@Param("datasetId") String datasetId);
+    List<TypeTopicDistributionProjection> findTypeTopicDistributionByDatasetId(@Param("datasetId") String datasetId);
 }
