@@ -46,7 +46,7 @@ public interface JpaStatisticRepositoryCRUD extends JpaRepository<StatisticEntit
             " HAVING dataset_id = :datasetId")
     List<Pair<MessageTopicEnum, Integer>> findTopicDistributionByDatasetId(@Param("datasetId") String datasetId);
 
-    @Query(nativeQuery = true, value = "SELECT type, topic, sum(message_quantity)" +
+    @Query(nativeQuery = true, value = "SELECT message_type, message_topic, sum(message_quantity)" +
             " FROM statistic_helper_view" +
             " GROUP BY dataset_id, message_type, message_topic" +
             " HAVING dataset_id = :datasetId")
