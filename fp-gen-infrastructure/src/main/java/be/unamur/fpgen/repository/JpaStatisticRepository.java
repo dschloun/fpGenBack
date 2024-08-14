@@ -8,6 +8,7 @@ import be.unamur.fpgen.mapper.jpaToDomain.StatisticJpaToDomainMapper;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.statistic.Statistic;
+import be.unamur.fpgen.statistic.TypeTopicDistributionProjection;
 import org.apache.commons.lang3.tuple.Triple;
 import org.springframework.stereotype.Repository;
 
@@ -48,7 +49,7 @@ public class JpaStatisticRepository implements StatisticRepository {
     }
 
     @Override
-    public List<Triple<MessageTypeEnum, MessageTopicEnum, Integer>> findTypeTopicDistribution(UUID datasetId) {
+    public List<TypeTopicDistributionProjection> findTypeTopicDistribution(UUID datasetId) {
         return jpaStatisticRepositoryCRUD.findTypeTopicDistributionByDatasetId(datasetId.toString());
     }
 

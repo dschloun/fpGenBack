@@ -1,13 +1,13 @@
-package be.unamur.fpgen.entity.statistic.view;
+package be.unamur.fpgen.statistic;
 
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
 
-public interface StatisticProjection {
+public interface TypeTopicDistributionProjection {
 
-    String getDatasetId();
-
-    String getGenerationId();
+//    String getDatasetId();
+//
+//    String getGenerationId();
 
     MessageTypeEnum getType();
 

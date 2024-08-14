@@ -9,6 +9,7 @@ import be.unamur.fpgen.service.ConversationDatasetService;
 import be.unamur.fpgen.service.InstantMessageDatasetService;
 import be.unamur.fpgen.statistic.MessageTypeTopicTransformer;
 import be.unamur.fpgen.statistic.Statistic;
+import be.unamur.fpgen.statistic.TypeTopicDistributionProjection;
 import org.apache.commons.lang3.tuple.Triple;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
@@ -51,7 +52,7 @@ public class StatisticComputationListener {
         // 5. get trolling total
         final Integer trollingTotal = statisticRepository.findTrollingTotal(event.getDatasetId());
         // 6. get type topic distribution
-        final List<Triple<MessageTypeEnum, MessageTopicEnum, Integer>> distribution = statisticRepository.findTypeTopicDistribution(event.getDatasetId());
+        final List<TypeTopicDistributionProjection> distribution = statisticRepository.findTypeTopicDistribution(event.getDatasetId());
 
         // 7. build statistic
         final Statistic statistic = Statistic.newBuilder()
