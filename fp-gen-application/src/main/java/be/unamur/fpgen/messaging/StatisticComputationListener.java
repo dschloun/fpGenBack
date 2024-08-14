@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,10 +59,10 @@ public class StatisticComputationListener {
         final Statistic statistic = Statistic.newBuilder()
                 .withDataset(dataset)
                 .withTotal(total)
-                .withFakeRatio(BigDecimal.valueOf((trollingTotal + socialEngineeringTotal) / total))
-                .withRealRatio(BigDecimal.valueOf(genuineTotal / total))
-                .withSocialEngineerRatio(BigDecimal.valueOf(socialEngineeringTotal / total))
-                .withTrollRatio(BigDecimal.valueOf(trollingTotal / total))
+                .withFakeRatio(BigDecimal.valueOf(trollingTotal).add(BigDecimal.valueOf(socialEngineeringTotal)).divide(BigDecimal.valueOf(total), 2, RoundingMode.HALF_UP))
+                .withRealRatio(BigDecimal.valueOf(genuineTotal).divide(BigDecimal.valueOf(total), 2, RoundingMode.HALF_UP))
+                .withSocialEngineerRatio(BigDecimal.valueOf(socialEngineeringTotal).divide(BigDecimal.valueOf(total), 2, RoundingMode.HALF_UP))
+                .withTrollRatio(BigDecimal.valueOf(trollingTotal).divide(BigDecimal.valueOf(total), 2, RoundingMode.HALF_UP))
                 .withMessageTopicStatisticList(distribution.stream().map(d -> MessageTypeTopicTransformer.transform(d, total)).collect(Collectors.toSet()))
                 .build();
 

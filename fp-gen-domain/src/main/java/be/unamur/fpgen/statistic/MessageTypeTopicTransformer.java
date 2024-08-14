@@ -1,6 +1,7 @@
 package be.unamur.fpgen.statistic;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class MessageTypeTopicTransformer {
 
@@ -8,7 +9,7 @@ public class MessageTypeTopicTransformer {
         return MessageTypeTopicStatistic.newBuilder()
                 .withMessageType(projection.getType())
                 .withMessageTopic(projection.getTopic())
-                .withRatio(BigDecimal.valueOf(projection.getQuantity() / total))
+                .withRatio(BigDecimal.valueOf(projection.getQuantity()).divide(BigDecimal.valueOf(total), 2, RoundingMode.HALF_UP))
                 .build();
     }
 }
