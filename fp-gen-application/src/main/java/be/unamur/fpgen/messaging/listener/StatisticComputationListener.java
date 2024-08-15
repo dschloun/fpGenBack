@@ -1,16 +1,14 @@
-package be.unamur.fpgen.messaging;
+package be.unamur.fpgen.messaging.listener;
 
 import be.unamur.fpgen.dataset.AbstractDataset;
 import be.unamur.fpgen.dataset.DatasetTypeEnum;
-import be.unamur.fpgen.message.MessageTopicEnum;
-import be.unamur.fpgen.message.MessageTypeEnum;
+import be.unamur.fpgen.messaging.event.StatisticComputationEvent;
 import be.unamur.fpgen.repository.StatisticRepository;
 import be.unamur.fpgen.service.ConversationDatasetService;
 import be.unamur.fpgen.service.InstantMessageDatasetService;
 import be.unamur.fpgen.statistic.MessageTypeTopicTransformer;
 import be.unamur.fpgen.statistic.Statistic;
 import be.unamur.fpgen.statistic.TypeTopicDistributionProjection;
-import org.apache.commons.lang3.tuple.Triple;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;

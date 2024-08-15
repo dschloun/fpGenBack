@@ -10,7 +10,7 @@ import be.unamur.fpgen.exception.GenerationNotFoundException;
 import be.unamur.fpgen.generation.InstantMessageGeneration;
 import be.unamur.fpgen.generation.ongoing_generation.OngoingGeneration;
 import be.unamur.fpgen.mapper.webToDomain.DatasetWebToDomainMapper;
-import be.unamur.fpgen.messaging.StatisticComputationEvent;
+import be.unamur.fpgen.messaging.event.StatisticComputationEvent;
 import be.unamur.fpgen.repository.InstantMessageDatasetRepository;
 import be.unamur.fpgen.utils.DateUtil;
 import be.unamur.model.DatasetCreation;

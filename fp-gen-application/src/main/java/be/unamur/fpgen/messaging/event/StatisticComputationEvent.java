@@ -1,4 +1,4 @@
-package be.unamur.fpgen.messaging;
+package be.unamur.fpgen.messaging.event;
 
 import be.unamur.fpgen.dataset.DatasetTypeEnum;
 import org.springframework.context.ApplicationEvent;

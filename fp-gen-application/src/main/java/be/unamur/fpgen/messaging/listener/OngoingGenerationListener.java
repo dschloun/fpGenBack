@@ -1,4 +1,4 @@
-package be.unamur.fpgen.messaging;
+package be.unamur.fpgen.messaging.listener;
 
 import be.unamur.fpgen.generation.InstantMessageGeneration;
 import be.unamur.fpgen.generation.ongoing_generation.OngoingGeneration;
@@ -9,12 +9,12 @@ import be.unamur.fpgen.mapper.webToDomain.InstantMessageWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.MessageTopicWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.MessageTypeWebToDomainMapper;
 import be.unamur.fpgen.message.InstantMessage;
+import be.unamur.fpgen.messaging.event.OngoingGenerationEvent;
 import be.unamur.fpgen.repository.InstantMessageRepository;
 import be.unamur.fpgen.service.InstantMessageDatasetService;
 import be.unamur.fpgen.service.InstantMessageGenerationService;
 import be.unamur.fpgen.service.OngoingGenerationService;
 import be.unamur.model.InstantMessageBatchCreation;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;

@@ -2,31 +2,21 @@ package be.unamur.fpgen.service;
 
 import be.unamur.fpgen.exception.InstantMessageNotFoundException;
 import be.unamur.fpgen.generation.GenerationTypeEnum;
-import be.unamur.fpgen.generation.InstantMessageGeneration;
 import be.unamur.fpgen.generation.ongoing_generation.OngoingGeneration;
-import be.unamur.fpgen.generation.ongoing_generation.OngoingGenerationItem;
-import be.unamur.fpgen.generation.ongoing_generation.OngoingGenerationItemStatus;
-import be.unamur.fpgen.generation.ongoing_generation.OngoingGenerationStatus;
-import be.unamur.fpgen.mapper.webToDomain.MessageTopicWebToDomainMapper;
-import be.unamur.fpgen.mapper.webToDomain.MessageTypeWebToDomainMapper;
 import be.unamur.fpgen.message.InstantMessage;
 import be.unamur.fpgen.message.pagination.InstantMessage.InstantMessagesPage;
 import be.unamur.fpgen.message.pagination.InstantMessage.PagedInstantMessagesQuery;
-import be.unamur.fpgen.mapper.webToDomain.InstantMessageWebToDomainMapper;
-import be.unamur.fpgen.messaging.OngoingGenerationEvent;
+import be.unamur.fpgen.messaging.event.OngoingGenerationEvent;
 import be.unamur.fpgen.repository.InstantMessageRepository;
 import be.unamur.fpgen.utils.DateUtil;
 import be.unamur.model.InstantMessageBatchCreation;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 @Service
 public class InstantMessageService {
