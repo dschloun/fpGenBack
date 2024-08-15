@@ -19,25 +19,25 @@ public interface JpaStatisticRepositoryCRUD extends JpaRepository<StatisticEntit
     @Query(nativeQuery = true, value = "SELECT sum(message_quantity)" +
             " FROM statistic_helper_view" +
             " WHERE dataset_id = :datasetId")
-    Integer findTotalByDatasetId(@Param("datasetId") String datasetId);
+    Optional<Integer> findTotalByDatasetId(@Param("datasetId") String datasetId);
 
     @Query(nativeQuery = true, value = "SELECT sum(message_quantity)" +
             " FROM statistic_helper_view" +
             " WHERE dataset_id = :datasetId" +
             " AND message_type = 'GENUINE'")
-    Integer findGenuineTotalByDatasetId(@Param("datasetId") String datasetId);
+    Optional<Integer> findGenuineTotalByDatasetId(@Param("datasetId") String datasetId);
 
     @Query(nativeQuery = true, value = "SELECT sum(message_quantity)" +
             " FROM statistic_helper_view" +
             " WHERE dataset_id = :datasetId" +
             " AND message_type = 'TROLLING'")
-    Integer findTrollingTotalByDatasetId(@Param("datasetId") String datasetId);
+    Optional<Integer> findTrollingTotalByDatasetId(@Param("datasetId") String datasetId);
 
     @Query(nativeQuery = true, value = "SELECT sum(message_quantity)" +
             " FROM statistic_helper_view" +
             " WHERE dataset_id = :datasetId" +
             " AND message_type = 'SOCIAL_ENGINEERING'")
-    Integer findSocialEngineeringTotalByDatasetId(@Param("datasetId") String datasetId);
+    Optional<Integer> findSocialEngineeringTotalByDatasetId(@Param("datasetId") String datasetId);
 
     @Query(nativeQuery = true, value = "SELECT topic, sum(message_quantity)" +
             " FROM statistic_helper_view" +

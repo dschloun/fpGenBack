@@ -29,22 +29,22 @@ public class JpaStatisticRepository implements StatisticRepository {
 
     @Override
     public Integer findTotal(UUID datasetId) {
-        return jpaStatisticRepositoryCRUD.findTotalByDatasetId(datasetId.toString());
+        return jpaStatisticRepositoryCRUD.findTotalByDatasetId(datasetId.toString()).orElse(0);
     }
 
     @Override
     public Integer findTrollingTotal(UUID datasetId) {
-        return jpaStatisticRepositoryCRUD.findTrollingTotalByDatasetId(datasetId.toString());
+        return jpaStatisticRepositoryCRUD.findTrollingTotalByDatasetId(datasetId.toString()).orElse(0);
     }
 
     @Override
     public Integer findSocialEngineeringTotal(UUID datasetId) {
-        return jpaStatisticRepositoryCRUD.findSocialEngineeringTotalByDatasetId(datasetId.toString());
+        return jpaStatisticRepositoryCRUD.findSocialEngineeringTotalByDatasetId(datasetId.toString()).orElse(0);
     }
 
     @Override
     public Integer findGenuineTotal(UUID datasetId) {
-        return jpaStatisticRepositoryCRUD.findGenuineTotalByDatasetId(datasetId.toString());
+        return jpaStatisticRepositoryCRUD.findGenuineTotalByDatasetId(datasetId.toString()).orElse(0);
     }
 
     @Override
