@@ -17,6 +17,7 @@ public class Statistic extends BaseUuidDomain {
     private final AbstractDataset dataset;
 
     private Statistic(Builder builder) {
+        super(builder.getId(), builder.getCreationDate(), builder.getModificationDate());
         total = builder.total;
         fakeRatio = builder.fakeRatio;
         realRatio = builder.realRatio;
@@ -111,7 +112,7 @@ public class Statistic extends BaseUuidDomain {
 
         @Override
         protected Builder self() {
-            return null;
+            return this;
         }
     }
 }

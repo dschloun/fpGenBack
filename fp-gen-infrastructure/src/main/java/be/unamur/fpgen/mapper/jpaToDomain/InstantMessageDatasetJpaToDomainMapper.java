@@ -28,6 +28,7 @@ public class InstantMessageDatasetJpaToDomainMapper {
                 .withDatasetFunction(entity.getFunction())
                 .withInstantMessageGenerationList(MapperUtil.mapSet(entity.getInstantMessageGenerationList(), InstantMessageGenerationJpaToDomainMapper::mapInstantMessageGeneration))
                 .withOngoingGenerationId(Optional.ofNullable(entity.getOngoingGeneration()).map(BaseUuidEntity::getId).orElse(null))
+                .withStatistic(StatisticJpaToDomainMapper.map(entity.getStatistic()))
                 .build();
     }
 

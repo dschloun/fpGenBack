@@ -113,8 +113,8 @@ public class DatasetEntity extends BaseUuidEntity {
         this.ongoingGeneration = ongoingGeneration;
     }
 
-    @OneToOne
-    @JoinColumn(name = "statistic_id")
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "statistic_id", referencedColumnName = "id")
     public StatisticEntity getStatistic() {
         return statistic;
     }

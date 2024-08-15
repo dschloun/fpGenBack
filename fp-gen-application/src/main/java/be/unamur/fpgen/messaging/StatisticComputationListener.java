@@ -44,18 +44,20 @@ public class StatisticComputationListener {
         } else {
             dataset = conversationDatasetService.getDatasetById(event.getDatasetId());
         }
-        // 2. get total
+        // 2. delete existing statistic if present
+        statisticRepository.findStatisticByDatasetId(event.getDatasetId()).ifPresent(s -> statisticRepository.deleteById(s.getId()));
+        // 3. get total
         final Integer total = statisticRepository.findTotal(event.getDatasetId());
-        // 3. get genuine total
+        // 4. get genuine total
         final Integer genuineTotal = statisticRepository.findGenuineTotal(event.getDatasetId());
-        // 4. get social engineering total
+        // 5. get social engineering total
         final Integer socialEngineeringTotal = statisticRepository.findSocialEngineeringTotal(event.getDatasetId());
-        // 5. get trolling total
+        // 6. get trolling total
         final Integer trollingTotal = statisticRepository.findTrollingTotal(event.getDatasetId());
-        // 6. get type topic distribution
+        // 7. get type topic distribution
         final List<TypeTopicDistributionProjection> distribution = statisticRepository.findTypeTopicDistribution(event.getDatasetId());
 
-        // 7. build statistic
+        // 8. build statistic
         final Statistic statistic = Statistic.newBuilder()
                 .withDataset(dataset)
                 .withTotal(total)
@@ -66,7 +68,7 @@ public class StatisticComputationListener {
                 .withMessageTopicStatisticList(distribution.stream().map(d -> MessageTypeTopicTransformer.transform(d, total)).collect(Collectors.toSet()))
                 .build();
 
-        // 8. save
+        // 9. save
         statisticRepository.save(statistic, dataset);
     }
 

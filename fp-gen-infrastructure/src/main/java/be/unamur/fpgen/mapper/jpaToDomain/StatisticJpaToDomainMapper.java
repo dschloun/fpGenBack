@@ -4,8 +4,13 @@ import be.unamur.fpgen.entity.statistic.StatisticEntity;
 import be.unamur.fpgen.statistic.Statistic;
 import be.unamur.fpgen.utils.MapperUtil;
 
+import java.util.Objects;
+
 public class StatisticJpaToDomainMapper {
     public static Statistic map(StatisticEntity entity) {
+        if(Objects.isNull(entity)) {
+            return null;
+        }
         return Statistic.newBuilder()
                 .withId(entity.getId())
                 .withCreationDate(entity.getCreationDate())
