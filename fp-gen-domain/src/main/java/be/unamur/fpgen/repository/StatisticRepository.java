@@ -24,5 +24,5 @@ public interface StatisticRepository {
 
     Optional<Statistic> findStatisticByDatasetId(UUID datasetId);
 
-    void deleteById(UUID statisticId);
+    void deleteByDataset(AbstractDataset dataset);
 }

@@ -45,7 +45,7 @@ public class StatisticComputationListener {
             dataset = conversationDatasetService.getDatasetById(event.getDatasetId());
         }
         // 2. delete existing statistic if present
-        statisticRepository.findStatisticByDatasetId(event.getDatasetId()).ifPresent(s -> statisticRepository.deleteById(s.getId()));
+        statisticRepository.findStatisticByDatasetId(event.getDatasetId()).ifPresent(s -> statisticRepository.deleteByDataset(dataset));
         // 3. get total
         final Integer total = statisticRepository.findTotal(event.getDatasetId());
         // 4. get genuine total

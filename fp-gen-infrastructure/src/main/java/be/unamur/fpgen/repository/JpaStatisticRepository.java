@@ -72,7 +72,15 @@ public class JpaStatisticRepository implements StatisticRepository {
     }
 
     @Override
-    public void deleteById(UUID statisticId) {
-        jpaStatisticRepositoryCRUD.deleteById(statisticId);
+    public void deleteByDataset(AbstractDataset dataset) {
+        if (dataset instanceof InstantMessageDataset){
+            final InstantMessageDatasetEntity datasetEntity = jpaInstantMessageDatasetRepositoryCRUD.findById(dataset.getId()).orElseThrow();
+            datasetEntity.setStatistic(null);
+            jpaInstantMessageDatasetRepositoryCRUD.save(datasetEntity);
+        } else {
+            final ConversationDatasetEntity datasetEntity = jpaConversationDatasetRepositoryCRUD.findById(dataset.getId()).orElseThrow();
+            datasetEntity.setStatistic(null);
+            jpaConversationDatasetRepositoryCRUD.save(datasetEntity);
+        }
     }
 }
