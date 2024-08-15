@@ -49,6 +49,7 @@ public class InstantMessageDatasetJpaToDomainMapper {
                 .withAuthor(AuthorJpaToDomainMapper.map(entity.getAuthor()))
                 .withDatasetFunction(entity.getFunction())
                 .withOngoingGenerationId(Optional.ofNullable(entity.getOngoingGeneration()).map(BaseUuidEntity::getId).orElse(null))
+                .withStatistic(StatisticJpaToDomainMapper.map(entity.getStatistic()))
                 .build();
     }
 }
