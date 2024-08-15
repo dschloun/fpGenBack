@@ -33,8 +33,8 @@ public class StatisticDomainToWebMapper {
                         .socialEngineeringRatio(domain.getSocialEngineerRatio().doubleValue())
                         .trollingRatio(domain.getTrollRatio().doubleValue())
                         .genuineRatio(domain.getRealRatio().doubleValue()))
-                .genuineTopicRatios(map(domain.getMessageTopicStatisticList(), MessageTypeEnum.GENUINE))
-                .socialEngineeringTopicRatios(map(domain.getMessageTopicStatisticList(), MessageTypeEnum.SOCIAL_ENGINEERING))
-                .trollingTopicRatios(map(domain.getMessageTopicStatisticList(), MessageTypeEnum.TROLLING));
+                .genuineTopicRatios(map(domain.getGenuineTopicStatisticList(), MessageTypeEnum.GENUINE))
+                .socialEngineeringTopicRatios(map(domain.getSocialEngineeringTopicStatisticList(), MessageTypeEnum.SOCIAL_ENGINEERING))
+                .trollingTopicRatios(map(domain.getTrollingTopicStatisticList(), MessageTypeEnum.TROLLING));
     }
 }

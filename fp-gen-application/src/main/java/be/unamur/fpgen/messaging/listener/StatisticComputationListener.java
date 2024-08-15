@@ -2,6 +2,7 @@ package be.unamur.fpgen.messaging.listener;
 
 import be.unamur.fpgen.dataset.AbstractDataset;
 import be.unamur.fpgen.dataset.DatasetTypeEnum;
+import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.messaging.event.StatisticComputationEvent;
 import be.unamur.fpgen.repository.StatisticRepository;
 import be.unamur.fpgen.service.ConversationDatasetService;
@@ -63,7 +64,9 @@ public class StatisticComputationListener {
                 .withRealRatio(BigDecimal.valueOf(genuineTotal).divide(BigDecimal.valueOf(total), 2, RoundingMode.HALF_UP))
                 .withSocialEngineerRatio(BigDecimal.valueOf(socialEngineeringTotal).divide(BigDecimal.valueOf(total), 2, RoundingMode.HALF_UP))
                 .withTrollRatio(BigDecimal.valueOf(trollingTotal).divide(BigDecimal.valueOf(total), 2, RoundingMode.HALF_UP))
-                .withMessageTopicStatisticList(distribution.stream().map(d -> MessageTypeTopicTransformer.transform(d, total)).collect(Collectors.toSet()))
+                .withGenuineTopicStatisticList(distribution.stream().filter(d -> MessageTypeEnum.GENUINE.equals(d.getType())).map(d -> MessageTypeTopicTransformer.transform(d, genuineTotal)).collect(Collectors.toSet()))
+                .withSocialEngineeringTopicStatisticList(distribution.stream().filter(d -> MessageTypeEnum.SOCIAL_ENGINEERING.equals(d.getType())).map(d -> MessageTypeTopicTransformer.transform(d, socialEngineeringTotal)).collect(Collectors.toSet()))
+                .withTrollingTopicStatisticList(distribution.stream().filter(d -> MessageTypeEnum.TROLLING.equals(d.getType())).map(d -> MessageTypeTopicTransformer.transform(d, trollingTotal)).collect(Collectors.toSet()))
                 .build();
 
         // 9. save

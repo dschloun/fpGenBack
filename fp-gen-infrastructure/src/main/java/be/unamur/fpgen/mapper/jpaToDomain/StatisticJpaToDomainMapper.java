@@ -1,10 +1,12 @@
 package be.unamur.fpgen.mapper.jpaToDomain;
 
 import be.unamur.fpgen.entity.statistic.StatisticEntity;
+import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.statistic.Statistic;
 import be.unamur.fpgen.utils.MapperUtil;
 
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class StatisticJpaToDomainMapper {
     public static Statistic map(StatisticEntity entity) {
@@ -20,8 +22,14 @@ public class StatisticJpaToDomainMapper {
                 .withRealRatio(entity.getRealRatio())
                 .withSocialEngineerRatio(entity.getSocialEngineerRatio())
                 .withTrollRatio(entity.getTrollRatio())
-                .withMessageTopicStatisticList(MapperUtil
-                        .mapSet(entity.getMessageTopicStatisticList(),
+                .withGenuineTopicStatisticList(MapperUtil
+                        .mapSet(entity.getMessageTopicStatisticList().stream().filter(e -> MessageTypeEnum.GENUINE.equals(e.getMessageType())).collect(Collectors.toSet()),
+                                MessageTopicStatisticJpaToDomainMapper::map))
+                .withSocialEngineeringTopicStatisticList(MapperUtil
+                        .mapSet(entity.getMessageTopicStatisticList().stream().filter(e -> MessageTypeEnum.SOCIAL_ENGINEERING.equals(e.getMessageType())).collect(Collectors.toSet()),
+                                MessageTopicStatisticJpaToDomainMapper::map))
+                .withTrollingTopicStatisticList(MapperUtil
+                        .mapSet(entity.getMessageTopicStatisticList().stream().filter(e -> MessageTypeEnum.TROLLING.equals(e.getMessageType())).collect(Collectors.toSet()),
                                 MessageTopicStatisticJpaToDomainMapper::map))
                 .build();
     }
