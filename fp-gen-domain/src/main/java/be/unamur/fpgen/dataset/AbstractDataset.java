@@ -19,6 +19,7 @@ public abstract class AbstractDataset extends BaseUuidDomain {
     private final Statistic statistic;
     private boolean validated;
     private boolean lastVersion;
+    private final UUID originalDatasetId;
 
     protected AbstractDataset (final UUID id,
                                final OffsetDateTime creationDate,
@@ -33,7 +34,8 @@ public abstract class AbstractDataset extends BaseUuidDomain {
                                final UUID ongoingGenerationId,
                                final Statistic statistic,
                                final boolean validated,
-                               final boolean lastVersion) {
+                               final boolean lastVersion,
+                               final UUID originalDatasetId) {
         super(id, creationDate, modificationDate);
         this.businessId = businessId;
         this.version = version;
@@ -46,6 +48,7 @@ public abstract class AbstractDataset extends BaseUuidDomain {
         this.statistic = statistic;
         this.validated = validated;
         this.lastVersion = lastVersion;
+        this.originalDatasetId = originalDatasetId;
     }
     public String getBusinessId() {
         return businessId;
@@ -99,6 +102,10 @@ public abstract class AbstractDataset extends BaseUuidDomain {
         this.lastVersion = false;
     }
 
+    public UUID getOriginalDatasetId() {
+        return originalDatasetId;
+    }
+
     protected abstract static class AbstractDatasetBuilder<T> extends AbstractBaseUuidDomainBuilder<T> implements GenerationId {
         protected String businessId;
         private Integer version;
@@ -111,6 +118,7 @@ public abstract class AbstractDataset extends BaseUuidDomain {
         private Statistic statistic;
         private boolean validated;
         private boolean lastVersion;
+        private UUID originalDatasetId;
 
         public String getBusinessId() {
             return businessId;
@@ -154,6 +162,10 @@ public abstract class AbstractDataset extends BaseUuidDomain {
 
         public boolean isLastVersion() {
             return lastVersion;
+        }
+
+        public UUID getOriginalDatasetId() {
+            return originalDatasetId;
         }
 
         public T withBusinessId(String businessId) {
@@ -204,6 +216,11 @@ public abstract class AbstractDataset extends BaseUuidDomain {
 
         public T withLastVersion(boolean lastVersion) {
             this.lastVersion = lastVersion;
+            return self();
+        }
+
+        public T withOriginalDatasetId(UUID originalDatasetId) {
+            this.originalDatasetId = originalDatasetId;
             return self();
         }
     }

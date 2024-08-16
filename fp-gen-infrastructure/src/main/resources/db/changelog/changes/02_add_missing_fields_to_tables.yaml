@@ -77,3 +77,16 @@ databaseChangeLog:
             tableName: dataset
             columnName: last_version
 
+  - changeSet:
+      id: add-original-dataset-id
+      author: dsc
+      changes:
+        - addColumn:
+            tableName: dataset
+            columns:
+              - column:
+                  name: original_dataset_id
+                  type: uuid
+                  constraints:
+                    nullable: true
+                    unique: false

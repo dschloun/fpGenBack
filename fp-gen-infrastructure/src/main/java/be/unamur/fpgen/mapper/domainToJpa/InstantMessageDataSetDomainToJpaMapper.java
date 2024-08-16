@@ -21,6 +21,7 @@ public class InstantMessageDataSetDomainToJpaMapper {
         entity.setAuthor(author);
         entity.setValidated(domain.isValidated());
         entity.setLastVersion(domain.isLastVersion());
+        entity.setOriginalDatasetId(domain.getOriginalDatasetId());
         return entity;
     }
 
@@ -36,6 +37,7 @@ public class InstantMessageDataSetDomainToJpaMapper {
         entity.setInstantMessageGenerationList(oldVersionEntity.getInstantMessageGenerationList());
         entity.setValidated(newVersion.isValidated());
         entity.setLastVersion(newVersion.isLastVersion());
+        entity.setOriginalDatasetId(newVersion.getOriginalDatasetId());
         return entity;
     }
 
@@ -51,6 +53,7 @@ public class InstantMessageDataSetDomainToJpaMapper {
         entity.setAuthor(author);
         entity.setValidated(domain.isValidated());
         entity.setLastVersion(domain.isLastVersion());
+        entity.setOriginalDatasetId(domain.getOriginalDatasetId());
         return entity;
     }
 

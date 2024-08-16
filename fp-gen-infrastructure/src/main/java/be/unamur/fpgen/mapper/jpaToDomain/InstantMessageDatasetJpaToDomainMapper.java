@@ -31,6 +31,7 @@ public class InstantMessageDatasetJpaToDomainMapper {
                 .withStatistic(StatisticJpaToDomainMapper.map(entity.getStatistic()))
                 .withValidated(entity.isValidated())
                 .withLastVersion(entity.isLastVersion())
+                .withOriginalDatasetId(entity.getOriginalDatasetId())
                 .build();
     }
 
@@ -54,6 +55,7 @@ public class InstantMessageDatasetJpaToDomainMapper {
                 .withStatistic(StatisticJpaToDomainMapper.map(entity.getStatistic()))
                 .withValidated(entity.isValidated())
                 .withLastVersion(entity.isLastVersion())
+                .withOriginalDatasetId(entity.getOriginalDatasetId())
                 .build();
     }
 }

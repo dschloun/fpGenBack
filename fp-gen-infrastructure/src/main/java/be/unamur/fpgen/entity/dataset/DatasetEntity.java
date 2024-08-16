@@ -8,6 +8,7 @@ import be.unamur.fpgen.entity.project.ProjectEntity;
 import be.unamur.fpgen.entity.statistic.StatisticEntity;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 @Table(name = "dataset")
@@ -28,6 +29,7 @@ public class DatasetEntity extends BaseUuidEntity {
     private StatisticEntity statistic;
     private boolean validated;
     private boolean lastVersion;
+    private UUID originalDatasetId;
 
     // getters and setters
     @Column(name = "business_id", nullable = false)
@@ -141,5 +143,14 @@ public class DatasetEntity extends BaseUuidEntity {
 
     public void setLastVersion(boolean lastVersion) {
         this.lastVersion = lastVersion;
+    }
+
+    @Column(name = "original_dataset_id")
+    public UUID getOriginalDatasetId() {
+        return originalDatasetId;
+    }
+
+    public void setOriginalDatasetId(UUID originalDatasetId) {
+        this.originalDatasetId = originalDatasetId;
     }
 }
