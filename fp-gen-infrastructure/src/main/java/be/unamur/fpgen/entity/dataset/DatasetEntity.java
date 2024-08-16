@@ -5,9 +5,12 @@ import be.unamur.fpgen.entity.author.AuthorEntity;
 import be.unamur.fpgen.entity.base.BaseUuidEntity;
 import be.unamur.fpgen.entity.generation.ongoing_generation.OngoingGenerationEntity;
 import be.unamur.fpgen.entity.project.ProjectEntity;
+import be.unamur.fpgen.entity.result.ResultEntity;
 import be.unamur.fpgen.entity.statistic.StatisticEntity;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -30,6 +33,7 @@ public class DatasetEntity extends BaseUuidEntity {
     private boolean validated;
     private boolean lastVersion;
     private UUID originalDatasetId;
+    private Set<ResultEntity> resultList = new HashSet<>();
 
     // getters and setters
     @Column(name = "business_id", nullable = false)
@@ -152,5 +156,14 @@ public class DatasetEntity extends BaseUuidEntity {
 
     public void setOriginalDatasetId(UUID originalDatasetId) {
         this.originalDatasetId = originalDatasetId;
+    }
+
+    @OneToMany(mappedBy = "dataset", cascade = CascadeType.ALL, orphanRemoval = true)
+    public Set<ResultEntity> getResultList() {
+        return resultList;
+    }
+
+    public void setResultList(Set<ResultEntity> resultList) {
+        this.resultList = resultList;
     }
 }

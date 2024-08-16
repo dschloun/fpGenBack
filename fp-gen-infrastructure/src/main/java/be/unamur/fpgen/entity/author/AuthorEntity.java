@@ -5,11 +5,13 @@ import be.unamur.fpgen.entity.dataset.DatasetEntity;
 import be.unamur.fpgen.entity.generation.GenerationEntity;
 import be.unamur.fpgen.entity.generation.ongoing_generation.OngoingGenerationEntity;
 import be.unamur.fpgen.entity.project.ProjectEntity;
+import be.unamur.fpgen.entity.result.ResultEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -28,6 +30,7 @@ public class AuthorEntity extends BaseUuidEntity {
     private Set<DatasetEntity> datasetList;
     private Set<ProjectEntity> projectList;
     private Set<OngoingGenerationEntity> ongoingGenerationList;
+    private Set<ResultEntity> resultList = new HashSet<>();
 
     // getters and setters
 
@@ -128,5 +131,14 @@ public class AuthorEntity extends BaseUuidEntity {
 
     public void setOngoingGenerationList(Set<OngoingGenerationEntity> ongoingGenerationList) {
         this.ongoingGenerationList = ongoingGenerationList;
+    }
+
+    @OneToMany(mappedBy = "authorId", orphanRemoval = true)
+    public Set<ResultEntity> getResultList() {
+        return resultList;
+    }
+
+    public void setResultList(Set<ResultEntity> resultList) {
+        this.resultList = resultList;
     }
 }

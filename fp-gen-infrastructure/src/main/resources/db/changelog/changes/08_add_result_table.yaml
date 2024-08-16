@@ -47,13 +47,13 @@ databaseChangeLog:
                   name: experiment_date
                   type: datetime
                   constraints:
-                    - nullable: false
+                    - nullable: true
                     - unique: false
               - column:
                   name: machine_details
                   type: varchar(255)
                   constraints:
-                    - nullable: false
+                    - nullable: true
                     - unique: false
               - column:
                   name: algorithm_type
@@ -65,73 +65,73 @@ databaseChangeLog:
                   name: other_setting_details
                   type: varchar(255)
                   constraints:
-                    - nullable: false
+                    - nullable: true
                     - unique: false
               - column:
                   name: accuracy
                   type: numeric
                   constraints:
-                    - nullable: false
+                    - nullable: true
                     - unique: false
               - column:
                   name: precision
                   type: numeric
                   constraints:
-                    - nullable: false
+                    - nullable: true
                     - unique: false
               - column:
                   name: recall
                   type: numeric
                   constraints:
-                    - nullable: false
+                    - nullable: true
                     - unique: false
               - column:
                   name: f1_score
                   type: numeric
                   constraints:
-                    - nullable: false
+                    - nullable: true
                     - unique: false
               - column:
                   name: pr_auc
                   type: numeric
                   constraints:
-                    - nullable: false
+                    - nullable: true
                     - unique: false
               - column:
                   name: fp_rate
                   type: numeric
                   constraints:
-                    - nullable: false
+                    - nullable: true
                     - unique: false
               - column:
                   name: fn_rate
                   type: numeric
                   constraints:
-                    - nullable: false
+                    - nullable: true
                     - unique: false
               - column:
                   name: tp_rate
                   type: numeric
                   constraints:
-                    - nullable: false
+                    - nullable: true
                     - unique: false
               - column:
                   name: tn_rate
                   type: numeric
                   constraints:
-                    - nullable: false
+                    - nullable: true
                     - unique: false
               - column:
                   name: appreciation
                   type: varchar(255)
                   constraints:
-                    - nullable: false
+                    - nullable: true
                     - unique: false
               - column:
                   name: comment
                   type: text
                   constraints:
-                    - nullable: false
+                    - nullable: true
                     - unique: false
 
         - createTable:
