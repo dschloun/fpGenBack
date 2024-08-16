@@ -38,6 +38,7 @@ public class InstantMessageDataSetDomainToJpaMapper {
         entity.setValidated(newVersion.isValidated());
         entity.setLastVersion(newVersion.isLastVersion());
         entity.setOriginalDatasetId(newVersion.getOriginalDatasetId());
+        entity.setProject(oldVersionEntity.getProject());
         return entity;
     }
 
