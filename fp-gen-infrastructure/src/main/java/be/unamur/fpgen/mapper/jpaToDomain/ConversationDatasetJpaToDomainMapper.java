@@ -26,6 +26,7 @@ public class ConversationDatasetJpaToDomainMapper {
                 .withDatasetFunction(entity.getFunction())
                 .withConversationGenerationList(MapperUtil.mapSet(entity.getConversationGenerationList(), ConversationGenerationJpaToDomainMapper::map))
                 .withOngoingGenerationId(Optional.ofNullable(entity.getOngoingGeneration()).map(BaseUuidEntity::getId).orElse(null))
+                .withValidated(entity.isValidated())
                 .build();
     }
 }

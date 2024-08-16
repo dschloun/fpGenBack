@@ -20,6 +20,7 @@ public class InstantMessageDataSetDomainToJpaMapper {
         entity.setAuthor(AuthorDomainToJpaMapper.mapForCreate(domain.getAuthor()));
         entity.setFunction(domain.getDatasetFunction());
         entity.setAuthor(author);
+        entity.setValidated(domain.isValidated());
         return entity;
     }
 
@@ -34,11 +35,12 @@ public class InstantMessageDataSetDomainToJpaMapper {
         entity.setAuthor(AuthorDomainToJpaMapper.mapForCreate(domain.getAuthor()));
         entity.setFunction(domain.getDatasetFunction());
         entity.setAuthor(author);
+        entity.setValidated(domain.isValidated());
         return entity;
     }
 
-    public static InstantMessageDatasetEntity mapForUpdate(final InstantMessageDatasetEntity entity, final Set<InstantMessageGenerationEntity> generationList){
-        entity.getInstantMessageGenerationList().addAll(generationList);
+    public static InstantMessageDatasetEntity mapForUpdate(final InstantMessageDatasetEntity entity, final InstantMessageDataset domain){
+        entity.setValidated(domain.isValidated());
         return entity;
     }
 }

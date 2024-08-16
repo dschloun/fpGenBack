@@ -2,7 +2,6 @@ package be.unamur.fpgen.mapper.domainToWeb;
 
 import be.unamur.fpgen.dataset.AbstractDataset;
 import be.unamur.fpgen.dataset.DatasetFunctionEnum;
-import be.unamur.fpgen.dataset.InstantMessageDataset;
 import be.unamur.model.Dataset;
 import be.unamur.model.DatasetType;
 
@@ -18,20 +17,6 @@ public class DatasetDomainToWebMapper {
                 .orElseThrow();
     }
 
-    public static Dataset mapInstantMessageDataset(final InstantMessageDataset domain){
-        return new Dataset()
-                .id(domain.getId())
-                .creationDate(domain.getCreationDate())
-                .modificationDate(domain.getModificationDate())
-                .author(AuthorDomainToWebMapper.map(domain.getAuthor()))
-                .datasetFunction(mapFunction(domain.getDatasetFunction()))
-                .comment(domain.getComment())
-                .description(domain.getDescription())
-                .version(BigDecimal.valueOf(domain.getVersion()))
-                .name(domain.getName())
-                .type(DatasetType.INSTANT_MESSAGE);
-    }
-
     public static Dataset map(final AbstractDataset domain, final DatasetType datasetType){
         return new Dataset()
                 .id(domain.getId())
@@ -45,6 +30,7 @@ public class DatasetDomainToWebMapper {
                 .name(domain.getName())
                 .type(datasetType)
                 .ongoingGenerationId(domain.getOngoingGenerationId())
-                .statistic(StatisticDomainToWebMapper.map(domain.getStatistic()));
+                .statistic(StatisticDomainToWebMapper.map(domain.getStatistic()))
+                .validated(domain.isValidated());
     }
 }
