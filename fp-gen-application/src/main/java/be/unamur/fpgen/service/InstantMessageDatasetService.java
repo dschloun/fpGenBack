@@ -22,10 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class InstantMessageDatasetService {
@@ -178,8 +175,15 @@ public class InstantMessageDatasetService {
 
     @Transactional
     public InstantMessageDataset createNewVersion(UUID oldDatasetId) {
-        // 1. get old dataset
+        // 0. get author
+        //todo: later allow to pass a new author in the query payload
+
+        // 1. get old dataset and original dataset if exist
         final InstantMessageDataset oldDataset = getDatasetById(oldDatasetId);
+        InstantMessageDataset originalDataset = null;
+        if (Objects.nonNull(oldDataset.getOriginalDatasetId())) {
+            originalDataset = getDatasetById(oldDataset.getOriginalDatasetId());
+        }
 
         // 2. check if old dataset is already validated and is last version
         checkDatasetValidationState(oldDataset, true);
@@ -187,12 +191,12 @@ public class InstantMessageDatasetService {
 
         // 3. create new version
         final InstantMessageDataset newVersion = InstantMessageDataset.newBuilder()
-                .withName(String.format("%s%s%s",oldDataset.getName(), " | V-", oldDataset.getVersion() + 1))
+                .withName(Objects.nonNull(originalDataset) ? getNewName(originalDataset, getNewVersion(oldDataset)) : getNewName(oldDataset, getNewVersion(oldDataset)))
                 .withDatasetFunction(oldDataset.getDatasetFunction())
                 .withAuthor(oldDataset.getAuthor()) //fixme: later allow to pass a new author in the query payload
-                .withVersion(oldDataset.getVersion() + 1)
+                .withVersion(getNewVersion(oldDataset))
                 .withLastVersion(true)
-                .withOriginalDatasetId(oldDataset.getId())
+                .withOriginalDatasetId(Objects.nonNull(oldDataset.getOriginalDatasetId()) ? oldDataset.getOriginalDatasetId() : oldDataset.getId()) // case if first new version (in the original dataset there is no originalDatasetId
                 .build();
 
         // 4. update old version
@@ -208,9 +212,18 @@ public class InstantMessageDatasetService {
             throw DatasetValidatedException.withId(dataset.getId());
         }
     }
+
     private void checkIfDatasetIsLastVersion(InstantMessageDataset dataset, boolean requiredStatus) {
         if (dataset.isLastVersion() != requiredStatus){
             throw DatasetLastVersionException.withId(dataset.getId());
         }
+    }
+
+    private int getNewVersion(InstantMessageDataset oldDataset) {
+        return oldDataset.getVersion() + 1;
+    }
+
+    private String getNewName(InstantMessageDataset oldDataset, int version) {
+        return String.format("%s%s%s",oldDataset.getName(), " | V-", version);
     }
 }
