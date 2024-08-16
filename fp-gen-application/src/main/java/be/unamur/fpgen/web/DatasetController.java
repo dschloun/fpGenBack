@@ -101,4 +101,39 @@ public class DatasetController implements DatasetApi {
         }
         return new ResponseEntity<>(datasetsPage, HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<Result> addResultOnDataset(UUID datasetId, @NotNull @Valid DatasetType datasetType, @Valid ResultCreation resultCreation) {
+        return DatasetApi.super.addResultOnDataset(datasetId, datasetType, resultCreation);
+    }
+
+    @Override
+    public ResponseEntity<Void> createNewDatasetVersion(UUID datasetId, @NotNull @Valid DatasetType datasetType) {
+        return DatasetApi.super.createNewDatasetVersion(datasetId, datasetType);
+    }
+
+    @Override
+    public ResponseEntity<Void> deleteResultOnDataset(UUID datasetId, @NotNull @Valid DatasetType datasetType, UUID resultId) {
+        return DatasetApi.super.deleteResultOnDataset(datasetId, datasetType, resultId);
+    }
+
+    @Override
+    public ResponseEntity<List<Result>> getResultListDataset(UUID datasetId, @NotNull @Valid DatasetType datasetType) {
+        return DatasetApi.super.getResultListDataset(datasetId, datasetType);
+    }
+
+    @Override
+    public ResponseEntity<Result> getResultOnDataset(UUID datasetId, @NotNull @Valid DatasetType datasetType, UUID resultId) {
+        return DatasetApi.super.getResultOnDataset(datasetId, datasetType, resultId);
+    }
+
+    @Override
+    public ResponseEntity<Result> updateResultOnDataset(UUID datasetId, @NotNull @Valid DatasetType datasetType, UUID resultId, @Valid ResultUpdate resultUpdate) {
+        return DatasetApi.super.updateResultOnDataset(datasetId, datasetType, resultId, resultUpdate);
+    }
+
+    @Override
+    public ResponseEntity<Void> validateDataset(UUID datasetId, @NotNull @Valid DatasetType datasetType) {
+        return DatasetApi.super.validateDataset(datasetId, datasetType);
+    }
 }

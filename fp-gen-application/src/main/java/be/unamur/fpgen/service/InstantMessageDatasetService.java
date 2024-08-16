@@ -99,7 +99,7 @@ public class InstantMessageDatasetService {
 
     @Transactional
     public DatasetsPage searchDatasetPaginate(final PagedDatasetsQuery query) {
-        //0. get author
+        //0. get author (check if author exists)
         final Author author = query.getDatasetQuery().getAuthorTrigram() != null ? authorService.getAuthorByTrigram(query.getDatasetQuery().getAuthorTrigram()) : null;
 
         //1. get pageable

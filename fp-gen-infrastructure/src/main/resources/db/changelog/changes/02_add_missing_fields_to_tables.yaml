@@ -30,3 +30,26 @@ databaseChangeLog:
             tableName: generation
             columnName: generation_id
             newDataType: varchar(60)
+
+  - changeSet:
+      id: add-validated-field-to-dataset
+      author: dsc
+      changes:
+        - addColumn:
+            tableName: dataset
+            columns:
+            - column:
+                name: validated
+                type: boolean
+                constraints:
+                  nullable: true
+                  unique: false
+        - update:
+            tableName: dataset
+            columns:
+            - column:
+                name: validated
+                value: 'false'
+        - addNotNullConstraint:
+            tableName: dataset
+            columnName: validated

@@ -26,6 +26,7 @@ public class DatasetEntity extends BaseUuidEntity {
     private ProjectEntity project;
     private OngoingGenerationEntity ongoingGeneration;
     private StatisticEntity statistic;
+    private boolean validated;
 
     // getters and setters
     @Column(name = "business_id", nullable = false)
@@ -121,5 +122,14 @@ public class DatasetEntity extends BaseUuidEntity {
 
     public void setStatistic(StatisticEntity statistic) {
         this.statistic = statistic;
+    }
+
+    @Column(name = "validated", nullable = false)
+    public boolean isValidated() {
+        return validated;
+    }
+
+    public void setValidated(boolean validated) {
+        this.validated = validated;
     }
 }
