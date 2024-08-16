@@ -187,6 +187,8 @@ public class InstantMessageDatasetService {
 
         // 3. create new version
         final InstantMessageDataset newVersion = InstantMessageDataset.newBuilder()
+                .withDatasetFunction(oldDataset.getDatasetFunction())
+                .withAuthor(oldDataset.getAuthor()) //fixme: later allow to pass a new author in the query payload
                 .withVersion(oldDataset.getVersion() + 1)
                 .withLastVersion(true)
                 .withOriginalDatasetId(oldDataset.getId())
