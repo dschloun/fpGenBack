@@ -108,9 +108,9 @@ public class DatasetController implements DatasetApi {
     }
 
     @Override
-    public ResponseEntity<Dataset> createNewDatasetVersion(UUID datasetId, @NotNull @Valid DatasetType datasetType) {
+    public ResponseEntity<Dataset> createNewDatasetVersion(UUID datasetId, @NotNull @Valid DatasetType datasetType, @Valid UUID authorId) {
         if (DatasetType.INSTANT_MESSAGE.equals(datasetType)) {
-            instantMessageDatasetService.createNewVersion(datasetId);
+            instantMessageDatasetService.createNewVersion(datasetId, authorId);
         } else if (DatasetType.CONVERSATION.equals(datasetType)) {
             //todo
         } else {

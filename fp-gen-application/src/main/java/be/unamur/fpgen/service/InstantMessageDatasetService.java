@@ -172,9 +172,12 @@ public class InstantMessageDatasetService {
     }
 
     @Transactional
-    public InstantMessageDataset createNewVersion(UUID oldDatasetId) {
+    public InstantMessageDataset createNewVersion(UUID oldDatasetId, UUID authorId) {
         // 0. get author
-        //todo: later allow to pass a new author in the query payload
+        Author author = null;
+        if (Objects.nonNull(authorId)) {
+            author = authorService.getAuthorById(authorId);
+        }
 
         // 1. get old dataset and original dataset if exist
         final InstantMessageDataset oldDataset = getDatasetById(oldDatasetId);
@@ -192,7 +195,7 @@ public class InstantMessageDatasetService {
         final InstantMessageDataset newVersion = InstantMessageDataset.newBuilder()
                 .withName(Objects.nonNull(originalDataset) ? getNewName(originalDataset, getNewVersion(oldDataset)) : getNewName(oldDataset, getNewVersion(oldDataset)))
                 .withDatasetFunction(oldDataset.getDatasetFunction())
-                .withAuthor(oldDataset.getAuthor()) //fixme: later allow to pass a new author in the query payload
+                .withAuthor(Objects.nonNull(author) ? author : oldDataset.getAuthor())
                 .withVersion(getNewVersion(oldDataset))
                 .withLastVersion(true)
                 .withOriginalDatasetId(Objects.nonNull(oldDataset.getOriginalDatasetId()) ? oldDataset.getOriginalDatasetId() : oldDataset.getId()) // case if first new version (in the original dataset there is no originalDatasetId

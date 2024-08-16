@@ -50,7 +50,7 @@ public class JpaInstantMessageDatasetRepository implements InstantMessageDataset
     @Override
     public InstantMessageDataset saveNewVersion(InstantMessageDataset oldVersion, InstantMessageDataset newVersion) {
         // maybe it's not the old version author
-        final AuthorEntity author = jpaAuthorRepositoryCRUD.getReferenceById(oldVersion.getAuthor().getId());
+        final AuthorEntity author = jpaAuthorRepositoryCRUD.getReferenceById(newVersion.getAuthor().getId());
 
         final InstantMessageDatasetEntity entity = jpaInstantMessageDatasetRepositoryCRUD.findById(oldVersion.getId()).orElseThrow();
 
