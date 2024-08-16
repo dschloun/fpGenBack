@@ -5,10 +5,7 @@ import be.unamur.fpgen.dataset.DatasetTypeEnum;
 import be.unamur.fpgen.dataset.InstantMessageDataset;
 import be.unamur.fpgen.dataset.pagination.DatasetsPage;
 import be.unamur.fpgen.dataset.pagination.PagedDatasetsQuery;
-import be.unamur.fpgen.exception.DatasetLastVersionException;
-import be.unamur.fpgen.exception.DatasetNotFoundException;
-import be.unamur.fpgen.exception.DatasetValidatedException;
-import be.unamur.fpgen.exception.GenerationNotFoundException;
+import be.unamur.fpgen.exception.*;
 import be.unamur.fpgen.generation.InstantMessageGeneration;
 import be.unamur.fpgen.generation.ongoing_generation.OngoingGeneration;
 import be.unamur.fpgen.mapper.webToDomain.DatasetWebToDomainMapper;
@@ -169,6 +166,7 @@ public class InstantMessageDatasetService {
     @Transactional
     public void validateDataset(UUID datasetId) {
         final InstantMessageDataset dataset = getDatasetById(datasetId);
+        checkIfDatasetIsEmpty(dataset);
         dataset.validateDataset();
         instantMessageDatasetRepository.updateInstantMessageDataset(dataset);
     }
@@ -188,6 +186,7 @@ public class InstantMessageDatasetService {
         // 2. check if old dataset is already validated and is last version
         checkDatasetValidationState(oldDataset, true);
         checkIfDatasetIsLastVersion(oldDataset, true);
+        checkIfDatasetIsEmpty(oldDataset);
 
         // 3. create new version
         final InstantMessageDataset newVersion = InstantMessageDataset.newBuilder()
@@ -216,6 +215,12 @@ public class InstantMessageDatasetService {
     private void checkIfDatasetIsLastVersion(InstantMessageDataset dataset, boolean requiredStatus) {
         if (dataset.isLastVersion() != requiredStatus){
             throw DatasetLastVersionException.withId(dataset.getId());
+        }
+    }
+
+    private void checkIfDatasetIsEmpty(InstantMessageDataset dataset) {
+        if (dataset.getInstantMessageGenerationList().isEmpty()){
+            throw EmptyDatasetException.withId(dataset.getId());
         }
     }
 
