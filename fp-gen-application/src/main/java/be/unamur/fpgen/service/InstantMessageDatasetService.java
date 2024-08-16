@@ -238,6 +238,6 @@ public class InstantMessageDatasetService {
         final InstantMessageDataset dataset = getDatasetById(datasetId);
 
         // 2. return all dataset version older and newer
-        return instantMessageDatasetRepository.findAllDatasetVersions(dataset.getOriginalDatasetId());
+        return instantMessageDatasetRepository.findAllDatasetVersions(Objects.nonNull(dataset.getOriginalDatasetId()) ? dataset.getOriginalDatasetId() : datasetId);
     }
 }
