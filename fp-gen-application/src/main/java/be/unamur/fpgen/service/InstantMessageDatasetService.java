@@ -189,6 +189,7 @@ public class InstantMessageDatasetService {
         final InstantMessageDataset newVersion = InstantMessageDataset.newBuilder()
                 .withVersion(oldDataset.getVersion() + 1)
                 .withLastVersion(true)
+                .withOriginalDatasetId(oldDataset.getId())
                 .build();
 
         // 4. update old version
