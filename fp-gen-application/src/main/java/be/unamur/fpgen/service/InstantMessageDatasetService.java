@@ -170,6 +170,7 @@ public class InstantMessageDatasetService {
     @Transactional
     public void validateDataset(UUID datasetId) {
         final InstantMessageDataset dataset = getDatasetById(datasetId);
+        dataset.validateDataset();
         instantMessageDatasetRepository.updateInstantMessageDataset(dataset);
     }
 
