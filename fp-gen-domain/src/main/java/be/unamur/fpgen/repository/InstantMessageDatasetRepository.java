@@ -15,7 +15,7 @@ public interface InstantMessageDatasetRepository {
 
     InstantMessageDataset saveInstantMessageDataset(InstantMessageDataset instantMessageDataset);
 
-    InstantMessageDataset saveNewVersion(InstantMessageDataset instantMessageDataset, int newVersionNumber);
+    InstantMessageDataset saveNewVersion(InstantMessageDataset oldVersion, InstantMessageDataset newVersion);
 
     InstantMessageDataset updateInstantMessageDataset(InstantMessageDataset instantMessageDataset);
 

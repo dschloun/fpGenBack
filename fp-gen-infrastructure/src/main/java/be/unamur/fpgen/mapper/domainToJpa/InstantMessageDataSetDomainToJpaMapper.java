@@ -24,18 +24,18 @@ public class InstantMessageDataSetDomainToJpaMapper {
         return entity;
     }
 
-    public static InstantMessageDatasetEntity mapForCreateNewVersion(final InstantMessageDatasetEntity formerVersionEntity, final AuthorEntity author, final int newVersionNumber){
+    public static InstantMessageDatasetEntity mapForCreateNewVersion(final InstantMessageDatasetEntity oldVersionEntity, final AuthorEntity author, final InstantMessageDataset newVersion){
         final InstantMessageDatasetEntity entity = new InstantMessageDatasetEntity();
-        entity.setBusinessId(formerVersionEntity.getBusinessId());
-        entity.setVersion(newVersionNumber);
-        entity.setName(formerVersionEntity.getName());
-        entity.setDescription(formerVersionEntity.getDescription());
-        entity.setComment(formerVersionEntity.getComment());
-        entity.setFunction(formerVersionEntity.getFunction());
+        entity.setBusinessId(oldVersionEntity.getBusinessId());
+        entity.setVersion(newVersion.getVersion());
+        entity.setName(oldVersionEntity.getName());
+        entity.setDescription(oldVersionEntity.getDescription());
+        entity.setComment(oldVersionEntity.getComment());
+        entity.setFunction(oldVersionEntity.getFunction());
         entity.setAuthor(author);
-        entity.setInstantMessageGenerationList(formerVersionEntity.getInstantMessageGenerationList());
-        entity.setValidated(false);
-        entity.setLastVersion(true);
+        entity.setInstantMessageGenerationList(oldVersionEntity.getInstantMessageGenerationList());
+        entity.setValidated(newVersion.isValidated());
+        entity.setLastVersion(newVersion.isLastVersion());
         return entity;
     }
 

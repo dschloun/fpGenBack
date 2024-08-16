@@ -95,6 +95,10 @@ public abstract class AbstractDataset extends BaseUuidDomain {
         return lastVersion;
     }
 
+    public void isNotLastVersionAnymore(){
+        this.lastVersion = false;
+    }
+
     protected abstract static class AbstractDatasetBuilder<T> extends AbstractBaseUuidDomainBuilder<T> implements GenerationId {
         protected String businessId;
         private Integer version;

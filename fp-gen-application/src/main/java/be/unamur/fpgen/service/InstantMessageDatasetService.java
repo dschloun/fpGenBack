@@ -52,6 +52,7 @@ public class InstantMessageDatasetService {
                         .withDescription(datasetCreation.getDescription())
                         .withVersion(0)
                         .withName(datasetCreation.getName())
+                        .withLastVersion(true)
                         .build());
     }
 
@@ -176,13 +177,26 @@ public class InstantMessageDatasetService {
     }
 
     @Transactional
-    public InstantMessageDataset createNewVersion(UUID datasetId) {
-        final InstantMessageDataset dataset = getDatasetById(datasetId);
-        // check if dataset is already validated and is last version
-        checkIfDatasetValidation(dataset);
-        checkIfDatasetIsLastVersion(dataset);
+    public InstantMessageDataset createNewVersion(UUID oldDatasetId) {
+        // 1. get old dataset
+        final InstantMessageDataset oldDataset = getDatasetById(oldDatasetId);
 
-        return instantMessageDatasetRepository.saveNewVersion(dataset, dataset.getVersion() + 1);
+        // 2. check if old dataset is already validated and is last version
+        checkIfDatasetValidation(oldDataset);
+        checkIfDatasetIsLastVersion(oldDataset);
+
+        // 3. create new version
+        final InstantMessageDataset newVersion = InstantMessageDataset.newBuilder()
+                .withVersion(oldDataset.getVersion() + 1)
+                .withLastVersion(true)
+                .build();
+
+        // 4. update old version
+        oldDataset.isNotLastVersionAnymore();
+        instantMessageDatasetRepository.updateInstantMessageDataset(oldDataset);
+
+        // 5. save new version
+        return instantMessageDatasetRepository.saveNewVersion(oldDataset, newVersion);
     }
 
     private void checkIfDatasetValidation(InstantMessageDataset dataset) {
