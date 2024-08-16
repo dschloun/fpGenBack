@@ -10,6 +10,7 @@ import be.unamur.model.DatasetType;
 import be.unamur.model.Project;
 import be.unamur.model.ProjectType;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -48,9 +49,14 @@ public class ProjectDomainToWebMapper {
     }
 
     private static Dataset mapAndGetLastVersion(Set<AbstractDataset> datasetList, DatasetFunctionEnum datasetFunction) {
-        return datasetList.stream()
+        final List<Dataset> datasetListTemp = datasetList.stream()
                 .filter(d -> datasetFunction.equals(d.getDatasetFunction()) && d.isLastVersion())
                 .map(d -> DatasetDomainToWebMapper.map(d, getType(d)))
-                .toList().get(0);
+                .toList();
+        if(datasetListTemp.isEmpty()){
+            return null;
+        } else {
+            return datasetListTemp.get(0);
+        }
     }
 }
