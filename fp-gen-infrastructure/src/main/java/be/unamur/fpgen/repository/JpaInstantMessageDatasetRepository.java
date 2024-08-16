@@ -12,6 +12,7 @@ import be.unamur.fpgen.generation.ongoing_generation.OngoingGeneration;
 import be.unamur.fpgen.mapper.domainToJpa.InstantMessageDataSetDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.InstantMessageDatasetJpaToDomainMapper;
 import be.unamur.fpgen.pagination.Pagination;
+import be.unamur.fpgen.utils.MapperUtil;
 import be.unamur.fpgen.utils.StringUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -77,6 +78,13 @@ public class JpaInstantMessageDatasetRepository implements InstantMessageDataset
     public Optional<InstantMessageDataset> findInstantMessageDatasetById(UUID instantMessageDatasetId) {
         return jpaInstantMessageDatasetRepositoryCRUD.findById(instantMessageDatasetId)
                 .map(InstantMessageDatasetJpaToDomainMapper::mapInstantMessageDataset);
+    }
+
+    @Override
+    public List<InstantMessageDataset> findAllDatasetVersions(UUID origineDatasetId) {
+        return MapperUtil.mapList(jpaInstantMessageDatasetRepositoryCRUD
+                        .findAllByIdOrOriginalDatasetId(origineDatasetId, origineDatasetId),
+                InstantMessageDatasetJpaToDomainMapper::mapInstantMessageDataset);
     }
 
     @Override

@@ -231,4 +231,13 @@ public class InstantMessageDatasetService {
     private String getNewName(InstantMessageDataset oldDataset, int version) {
         return String.format("%s%s%s",oldDataset.getName(), " | V-", version);
     }
+
+    @Transactional
+    public List<InstantMessageDataset> getAllDatasetVersions(UUID datasetId) {
+        // 1. get the reference dataset
+        final InstantMessageDataset dataset = getDatasetById(datasetId);
+
+        // 2. return all dataset version older and newer
+        return instantMessageDatasetRepository.findAllDatasetVersions(dataset.getOriginalDatasetId());
+    }
 }

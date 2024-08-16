@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 
 public interface JpaInstantMessageDatasetRepositoryCRUD extends JpaRepository<InstantMessageDatasetEntity, UUID> {
@@ -28,4 +29,6 @@ public interface JpaInstantMessageDatasetRepositoryCRUD extends JpaRepository<In
                                                       @Param("startDate") OffsetDateTime startDate,
                                                       @Param("endDate") OffsetDateTime endDate,
                                                       Pageable pageable);
+
+    List<InstantMessageDatasetEntity> findAllByIdOrOriginalDatasetId(UUID id, UUID originalDatasetId);
 }

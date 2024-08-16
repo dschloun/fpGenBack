@@ -7,6 +7,7 @@ import be.unamur.fpgen.generation.ongoing_generation.OngoingGeneration;
 import org.springframework.data.domain.Pageable;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -20,6 +21,8 @@ public interface InstantMessageDatasetRepository {
     InstantMessageDataset updateInstantMessageDataset(InstantMessageDataset instantMessageDataset);
 
     Optional<InstantMessageDataset> findInstantMessageDatasetById(UUID instantMessageDatasetId);
+
+    List<InstantMessageDataset> findAllDatasetVersions(UUID origineDatasetId);
 
     default void deleteInstantMessageDatasetById(UUID instantMessageDatasetId) {    }
 
