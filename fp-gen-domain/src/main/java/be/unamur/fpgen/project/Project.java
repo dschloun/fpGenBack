@@ -72,6 +72,7 @@ public class Project extends BaseUuidDomain {
                     .withDatasetFunction(datasetFunctionEnum)
                     .withName(generateDatasetName(datasetFunctionEnum))
                     .withVersion(0)
+                    .withLastVersion(true)
                     .build();
         } else {
             return ConversationDataset.newBuilder()
@@ -79,6 +80,7 @@ public class Project extends BaseUuidDomain {
                     .withDatasetFunction(datasetFunctionEnum)
                     .withName(generateDatasetName(datasetFunctionEnum))
                     .withVersion(0)
+                    .withLastVersion(true)
                     .build();
         }
     }
