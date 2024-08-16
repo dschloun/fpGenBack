@@ -13,6 +13,7 @@ import be.unamur.fpgen.statistic.TypeTopicDistributionProjection;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.math.BigDecimal;
@@ -34,7 +35,7 @@ public class StatisticComputationListener {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    @TransactionalEventListener
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void computeStatistic(final StatisticComputationEvent event) {
         // 1. get dataset
         AbstractDataset dataset;

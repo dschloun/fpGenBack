@@ -18,6 +18,7 @@ import be.unamur.model.InstantMessageBatchCreation;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class OngoingGenerationListener {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    @TransactionalEventListener
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void generateInstantMessages(final OngoingGenerationEvent event) {
         final InstantMessageBatchCreation command = event.getCommand();
         final OngoingGeneration ongoingGeneration = ongoingGenerationService.getOngoingGenerationById(event.getOngoingGenerationId());
