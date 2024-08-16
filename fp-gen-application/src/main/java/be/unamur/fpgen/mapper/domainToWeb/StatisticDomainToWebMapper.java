@@ -4,6 +4,7 @@ import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.statistic.MessageTypeTopicStatistic;
 import be.unamur.model.*;
 
+import java.util.Objects;
 import java.util.Set;
 
 public class StatisticDomainToWebMapper {
@@ -24,6 +25,9 @@ public class StatisticDomainToWebMapper {
     }
 
     public static Statistic map(be.unamur.fpgen.statistic.Statistic domain) {
+        if (Objects.isNull(domain)){
+            return null;
+        }
         return new Statistic()
                 .id(domain.getId())
                 .fakeRealRatios(new FakeRealRatios()

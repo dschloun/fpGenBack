@@ -30,5 +30,5 @@ public interface JpaInstantMessageDatasetRepositoryCRUD extends JpaRepository<In
                                                       @Param("endDate") OffsetDateTime endDate,
                                                       Pageable pageable);
 
-    List<InstantMessageDatasetEntity> findAllByIdOrOriginalDatasetId(UUID id, UUID originalDatasetId);
+    List<InstantMessageDatasetEntity> findAllByIdOrOriginalDatasetIdOrderByVersionDesc(UUID id, UUID originalDatasetId);
 }

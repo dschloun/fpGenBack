@@ -83,7 +83,7 @@ public class JpaInstantMessageDatasetRepository implements InstantMessageDataset
     @Override
     public List<InstantMessageDataset> findAllDatasetVersions(UUID origineDatasetId) {
         return MapperUtil.mapList(jpaInstantMessageDatasetRepositoryCRUD
-                        .findAllByIdOrOriginalDatasetId(origineDatasetId, origineDatasetId),
+                        .findAllByIdOrOriginalDatasetIdOrderByVersionDesc(origineDatasetId, origineDatasetId),
                 InstantMessageDatasetJpaToDomainMapper::mapInstantMessageDataset);
     }
 
