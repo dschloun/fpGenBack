@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public class DatasetValidatedException extends ConflictException {
     private static final String FPGEN_CODE = "FP_GEN_DATASET_VALIDATED";
-    private static final String DATASET_VALIDATED_WITH_ID = "Could not execute any operation on validated dataset with id: %s";
+    private static final String DATASET_VALIDATED_WITH_ID = "Dataset with id: %s is not in the required validation status";
 
     public DatasetValidatedException(String code, String message) {
         super(code, message);

@@ -5,7 +5,7 @@ import be.unamur.fpgen.dataset.DatasetTypeEnum;
 import be.unamur.fpgen.dataset.InstantMessageDataset;
 import be.unamur.fpgen.dataset.pagination.DatasetsPage;
 import be.unamur.fpgen.dataset.pagination.PagedDatasetsQuery;
-import be.unamur.fpgen.exception.DatasetIsNotLastVersionException;
+import be.unamur.fpgen.exception.DatasetLastVersionException;
 import be.unamur.fpgen.exception.DatasetNotFoundException;
 import be.unamur.fpgen.exception.DatasetValidatedException;
 import be.unamur.fpgen.exception.GenerationNotFoundException;
@@ -68,7 +68,7 @@ public class InstantMessageDatasetService {
         final InstantMessageDataset dataset = getDatasetById(datasetId);
 
         // 2. check if dataset is already validated
-        checkIfDatasetValidation(dataset);
+        checkDatasetValidationState(dataset, false);
 
         // 3. delete
         instantMessageDatasetRepository.deleteInstantMessageDatasetById(datasetId);
@@ -80,7 +80,7 @@ public class InstantMessageDatasetService {
         final InstantMessageDataset dataset = getDatasetById(datasetId);
 
         // 2. check if dataset is already validated
-        checkIfDatasetValidation(dataset);
+        checkDatasetValidationState(dataset, false);
 
         // 3. get instant message generations
         final Set<InstantMessageGeneration> instantMessageGenerationList = getInstantMessageGenerationList(instantMessageGenerationIdsList);
@@ -99,7 +99,7 @@ public class InstantMessageDatasetService {
         final InstantMessageDataset dataset = getDatasetById(datasetId);
 
         // 2. check if dataset is already validated
-        checkIfDatasetValidation(dataset);
+        checkDatasetValidationState(dataset, false);
 
         // 3. get instant message generations
         final Set<InstantMessageGeneration> instantMessageGenerationList = getInstantMessageGenerationList(instantMessageGenerationIdsList);
@@ -157,7 +157,7 @@ public class InstantMessageDatasetService {
     public void addOngoingGenerationToDataset(UUID datasetId, OngoingGeneration generation) {
         final InstantMessageDataset dataset = getDatasetById(datasetId);
         // check if dataset is already validated
-        checkIfDatasetValidation(dataset);
+        checkDatasetValidationState(dataset, false);
         instantMessageDatasetRepository.addOngoingGenerationToDataset(dataset, generation);
     }
 
@@ -165,7 +165,7 @@ public class InstantMessageDatasetService {
     public void removeOngoingGenerationToDataset(UUID datasetId, OngoingGeneration generation) {
         final InstantMessageDataset dataset = getDatasetById(datasetId);
         // check if dataset is already validated
-        checkIfDatasetValidation(dataset);
+        checkDatasetValidationState(dataset, false);
         instantMessageDatasetRepository.removeOngoingGenerationToDataset(dataset, generation);
     }
 
@@ -182,8 +182,8 @@ public class InstantMessageDatasetService {
         final InstantMessageDataset oldDataset = getDatasetById(oldDatasetId);
 
         // 2. check if old dataset is already validated and is last version
-        checkIfDatasetValidation(oldDataset);
-        checkIfDatasetIsLastVersion(oldDataset);
+        checkDatasetValidationState(oldDataset, true);
+        checkIfDatasetIsLastVersion(oldDataset, true);
 
         // 3. create new version
         final InstantMessageDataset newVersion = InstantMessageDataset.newBuilder()
@@ -199,14 +199,14 @@ public class InstantMessageDatasetService {
         return instantMessageDatasetRepository.saveNewVersion(oldDataset, newVersion);
     }
 
-    private void checkIfDatasetValidation(InstantMessageDataset dataset) {
-        if (dataset.isValidated()){
+    private void checkDatasetValidationState(InstantMessageDataset dataset, boolean requiredStatus) {
+        if (dataset.isValidated() != requiredStatus){
             throw DatasetValidatedException.withId(dataset.getId());
         }
     }
-    private void checkIfDatasetIsLastVersion(InstantMessageDataset dataset) {
-        if (dataset.isLastVersion()){
-            throw DatasetIsNotLastVersionException.withId(dataset.getId());
+    private void checkIfDatasetIsLastVersion(InstantMessageDataset dataset, boolean requiredStatus) {
+        if (dataset.isLastVersion() != requiredStatus){
+            throw DatasetLastVersionException.withId(dataset.getId());
         }
     }
 }

@@ -109,7 +109,14 @@ public class DatasetController implements DatasetApi {
 
     @Override
     public ResponseEntity<Dataset> createNewDatasetVersion(UUID datasetId, @NotNull @Valid DatasetType datasetType) {
-        return DatasetApi.super.createNewDatasetVersion(datasetId, datasetType);
+        if (DatasetType.INSTANT_MESSAGE.equals(datasetType)){
+            instantMessageDatasetService.createNewVersion(datasetId);
+        } else if(DatasetType.CONVERSATION.equals(datasetType)){
+            //todo
+        } else {
+            throw new IllegalArgumentException("Unsupported dataset type");
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
