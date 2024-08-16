@@ -2,16 +2,16 @@ package be.unamur.fpgen.mapper.domainToWeb;
 
 import be.unamur.fpgen.dataset.AbstractDataset;
 import be.unamur.fpgen.dataset.ConversationDataset;
+import be.unamur.fpgen.dataset.DatasetFunctionEnum;
 import be.unamur.fpgen.dataset.InstantMessageDataset;
-import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.project.ProjectTypeEnum;
-import be.unamur.fpgen.utils.MapperUtil;
+import be.unamur.model.Dataset;
 import be.unamur.model.DatasetType;
-import be.unamur.model.MessageType;
 import be.unamur.model.Project;
 import be.unamur.model.ProjectType;
 
 import java.util.Optional;
+import java.util.Set;
 
 public class ProjectDomainToWebMapper {
 
@@ -25,12 +25,9 @@ public class ProjectDomainToWebMapper {
                 .organization(domain.getOrganisation())
                 .type(map(domain.getType()))
                 .author(AuthorDomainToWebMapper.map(domain.getAuthor()))
-                .datasets(domain.getDatasetList()
-                        .stream()
-                        .map(d ->
-                                DatasetDomainToWebMapper.map(d, getType(d)))
-                        .toList());
-
+                .trainingDataset(mapAndGetLastVersion(domain.getDatasetList(), DatasetFunctionEnum.TRAINING))
+                .testDataset(mapAndGetLastVersion(domain.getDatasetList(), DatasetFunctionEnum.TEST))
+                .validationDataset(mapAndGetLastVersion(domain.getDatasetList(), DatasetFunctionEnum.VALIDATION));
     }
 
     public static ProjectType map(final ProjectTypeEnum domain) {
@@ -48,6 +45,12 @@ public class ProjectDomainToWebMapper {
         } else {
             return null;
         }
+    }
 
+    private static Dataset mapAndGetLastVersion(Set<AbstractDataset> datasetList, DatasetFunctionEnum datasetFunction) {
+        return datasetList.stream()
+                .filter(d -> datasetFunction.equals(d.getDatasetFunction()) && d.isLastVersion())
+                .map(d -> DatasetDomainToWebMapper.map(d, getType(d)))
+                .toList().get(0);
     }
 }
