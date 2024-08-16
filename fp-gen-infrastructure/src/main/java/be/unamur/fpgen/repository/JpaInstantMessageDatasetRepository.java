@@ -44,6 +44,13 @@ public class JpaInstantMessageDatasetRepository implements InstantMessageDataset
     }
 
     @Override
+    public InstantMessageDataset updateInstantMessageDataset(InstantMessageDataset instantMessageDataset) {
+        final InstantMessageDatasetEntity entity = jpaInstantMessageDatasetRepositoryCRUD.findById(instantMessageDataset.getId()).orElseThrow();
+        return InstantMessageDatasetJpaToDomainMapper.mapInstantMessageDataset(jpaInstantMessageDatasetRepositoryCRUD.save(InstantMessageDataSetDomainToJpaMapper
+                .mapForUpdate(entity, instantMessageDataset)));
+    }
+
+    @Override
     public Optional<InstantMessageDataset> findInstantMessageDatasetById(UUID instantMessageDatasetId) {
         return jpaInstantMessageDatasetRepositoryCRUD.findById(instantMessageDatasetId)
                 .map(InstantMessageDatasetJpaToDomainMapper::mapInstantMessageDataset);

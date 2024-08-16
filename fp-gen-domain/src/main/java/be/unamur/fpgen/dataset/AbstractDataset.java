@@ -17,7 +17,7 @@ public abstract class AbstractDataset extends BaseUuidDomain {
     private final DatasetFunctionEnum datasetFunction;
     private final UUID ongoingGenerationId;
     private final Statistic statistic;
-    private final boolean validated;
+    private boolean validated;
 
     protected AbstractDataset (final UUID id,
                                final OffsetDateTime creationDate,
@@ -82,6 +82,10 @@ public abstract class AbstractDataset extends BaseUuidDomain {
 
     public boolean isValidated() {
         return validated;
+    }
+
+    public void validateDataset() {
+        this.validated = true;
     }
 
     protected abstract static class AbstractDatasetBuilder<T> extends AbstractBaseUuidDomainBuilder<T> implements GenerationId {

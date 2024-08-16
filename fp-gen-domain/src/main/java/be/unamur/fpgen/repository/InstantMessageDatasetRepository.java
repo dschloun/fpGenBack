@@ -15,6 +15,8 @@ public interface InstantMessageDatasetRepository {
 
     InstantMessageDataset saveInstantMessageDataset(InstantMessageDataset instantMessageDataset);
 
+    InstantMessageDataset updateInstantMessageDataset(InstantMessageDataset instantMessageDataset);
+
     Optional<InstantMessageDataset> findInstantMessageDatasetById(UUID instantMessageDatasetId);
 
     default void deleteInstantMessageDatasetById(UUID instantMessageDatasetId) {    }
