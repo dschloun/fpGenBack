@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
 import java.time.OffsetDateTime;
 import java.util.*;
 
@@ -27,12 +28,14 @@ public class JpaInstantMessageDatasetRepository implements InstantMessageDataset
     private final JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD;
     private final JpaInstantMessageGenerationRepositoryCRUD jpaInstantMessageGenerationRepositoryCRUD;
     private final JpaOngoingGenerationRepositoryCRUD jpaOngoingGenerationRepositoryCRUD;
+    private final EntityManager entityManager;
 
-    public JpaInstantMessageDatasetRepository(JpaInstantMessageDatasetRepositoryCRUD jpaInstantMessageDatasetRepositoryCRUD, JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD, JpaInstantMessageGenerationRepositoryCRUD jpaInstantMessageGenerationRepositoryCRUD, JpaOngoingGenerationRepositoryCRUD jpaOngoingGenerationRepositoryCRUD) {
+    public JpaInstantMessageDatasetRepository(JpaInstantMessageDatasetRepositoryCRUD jpaInstantMessageDatasetRepositoryCRUD, JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD, JpaInstantMessageGenerationRepositoryCRUD jpaInstantMessageGenerationRepositoryCRUD, JpaOngoingGenerationRepositoryCRUD jpaOngoingGenerationRepositoryCRUD, EntityManager entityManager) {
         this.jpaInstantMessageDatasetRepositoryCRUD = jpaInstantMessageDatasetRepositoryCRUD;
         this.jpaAuthorRepositoryCRUD = jpaAuthorRepositoryCRUD;
         this.jpaInstantMessageGenerationRepositoryCRUD = jpaInstantMessageGenerationRepositoryCRUD;
         this.jpaOngoingGenerationRepositoryCRUD = jpaOngoingGenerationRepositoryCRUD;
+        this.entityManager = entityManager;
     }
 
     @Override
@@ -50,10 +53,17 @@ public class JpaInstantMessageDatasetRepository implements InstantMessageDataset
 
         final InstantMessageDatasetEntity entity = jpaInstantMessageDatasetRepositoryCRUD.findById(oldVersion.getId()).orElseThrow();
 
+        // detach old generations in order to copy them
+        final Set<InstantMessageGenerationEntity> detachedGenerations = new HashSet<>();
+        for (InstantMessageGenerationEntity generation : entity.getInstantMessageGenerationList()) {
+            entityManager.detach(generation);
+            detachedGenerations.add(generation);
+        }
+
         return InstantMessageDatasetJpaToDomainMapper.mapInstantMessageDataset(
                 jpaInstantMessageDatasetRepositoryCRUD.save(
                         InstantMessageDataSetDomainToJpaMapper
-                                .mapForCreateNewVersion(entity, author, newVersion)));
+                                .mapForCreateNewVersion(entity, detachedGenerations, author, newVersion)));
     }
 
     @Override
