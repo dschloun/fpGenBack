@@ -21,7 +21,7 @@ import java.time.OffsetDateTime;
 import java.util.*;
 
 @Repository
-public class JpaInstantMessageDatasetRepository implements InstantMessageDatasetRepository{
+public class JpaInstantMessageDatasetRepository implements InstantMessageDatasetRepository {
 
     private final JpaInstantMessageDatasetRepositoryCRUD jpaInstantMessageDatasetRepositoryCRUD;
     private final JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD;
@@ -41,6 +41,19 @@ public class JpaInstantMessageDatasetRepository implements InstantMessageDataset
 
         return InstantMessageDatasetJpaToDomainMapper.mapInstantMessageDataset(jpaInstantMessageDatasetRepositoryCRUD.save(InstantMessageDataSetDomainToJpaMapper
                 .mapForCreate(instantMessageDataset, author)));
+    }
+
+    @Override
+    public InstantMessageDataset saveNewVersion(InstantMessageDataset instantMessageDataset, int newVersionNumber) {
+        // maybe it's not the original author
+        final AuthorEntity author = jpaAuthorRepositoryCRUD.getReferenceById(instantMessageDataset.getAuthor().getId());
+
+        final InstantMessageDatasetEntity entity = jpaInstantMessageDatasetRepositoryCRUD.findById(instantMessageDataset.getId()).orElseThrow();
+
+        return InstantMessageDatasetJpaToDomainMapper.mapInstantMessageDataset(
+                jpaInstantMessageDatasetRepositoryCRUD.save(
+                        InstantMessageDataSetDomainToJpaMapper
+                                .mapForCreateNewVersion(entity, author, newVersionNumber)));
     }
 
     @Override
@@ -116,9 +129,9 @@ public class JpaInstantMessageDatasetRepository implements InstantMessageDataset
         jpaInstantMessageDatasetRepositoryCRUD.save(datasetEntity);
     }
 
-    private Set<InstantMessageGenerationEntity> getGenerationList(Set<InstantMessageGeneration> generations){
+    private Set<InstantMessageGenerationEntity> getGenerationList(Set<InstantMessageGeneration> generations) {
         final HashSet<InstantMessageGenerationEntity> instantMessageGenerations = new HashSet<>();
-        generations.forEach(g ->{
+        generations.forEach(g -> {
             instantMessageGenerations.add(jpaInstantMessageGenerationRepositoryCRUD.getReferenceById(g.getId()));
         });
         return instantMessageGenerations;

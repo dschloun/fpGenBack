@@ -108,8 +108,13 @@ public class DatasetController implements DatasetApi {
     }
 
     @Override
-    public ResponseEntity<Void> createNewDatasetVersion(UUID datasetId, @NotNull @Valid DatasetType datasetType) {
+    public ResponseEntity<Dataset> createNewDatasetVersion(UUID datasetId, @NotNull @Valid DatasetType datasetType) {
         return DatasetApi.super.createNewDatasetVersion(datasetId, datasetType);
+    }
+
+    @Override
+    public ResponseEntity<List<Dataset>> getDatasetAllVersions(UUID datasetId, @NotNull @Valid DatasetType datasetType) {
+        return DatasetApi.super.getDatasetAllVersions(datasetId, datasetType);
     }
 
     @Override

@@ -53,3 +53,27 @@ databaseChangeLog:
         - addNotNullConstraint:
             tableName: dataset
             columnName: validated
+
+  - changeSet:
+      id: add-last-version-field-to-dataset
+      author: dsc
+      changes:
+        - addColumn:
+            tableName: dataset
+            columns:
+              - column:
+                  name: last_version
+                  type: boolean
+                  constraints:
+                    nullable: true
+                    unique: false
+        - update:
+            tableName: dataset
+            columns:
+              - column:
+                  name: last_version
+                  value: 'true'
+        - addNotNullConstraint:
+            tableName: dataset
+            columnName: last_version
+

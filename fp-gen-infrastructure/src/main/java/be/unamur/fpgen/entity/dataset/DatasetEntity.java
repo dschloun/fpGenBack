@@ -27,6 +27,7 @@ public class DatasetEntity extends BaseUuidEntity {
     private OngoingGenerationEntity ongoingGeneration;
     private StatisticEntity statistic;
     private boolean validated;
+    private boolean lastVersion;
 
     // getters and setters
     @Column(name = "business_id", nullable = false)
@@ -131,5 +132,14 @@ public class DatasetEntity extends BaseUuidEntity {
 
     public void setValidated(boolean validated) {
         this.validated = validated;
+    }
+
+    @Column(name = "last_version", nullable = false)
+    public boolean isLastVersion() {
+        return lastVersion;
+    }
+
+    public void setLastVersion(boolean lastVersion) {
+        this.lastVersion = lastVersion;
     }
 }

@@ -17,6 +17,7 @@ public class ConversationDatasetDomainToJpaMapper {
         entity.setVersion(domain.getVersion());
         entity.setFunction(domain.getDatasetFunction());
         entity.setValidated(domain.isValidated());
+        entity.setLastVersion(domain.isLastVersion());
         return entity;
     }
 
@@ -31,6 +32,7 @@ public class ConversationDatasetDomainToJpaMapper {
         entity.setVersion(domain.getVersion());
         entity.setFunction(domain.getDatasetFunction());
         entity.setValidated(domain.isValidated());
+        entity.setLastVersion(domain.isLastVersion());
         return entity;
     }
 }

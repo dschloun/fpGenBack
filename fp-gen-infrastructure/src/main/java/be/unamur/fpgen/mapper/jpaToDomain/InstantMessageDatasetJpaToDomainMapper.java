@@ -30,6 +30,7 @@ public class InstantMessageDatasetJpaToDomainMapper {
                 .withOngoingGenerationId(Optional.ofNullable(entity.getOngoingGeneration()).map(BaseUuidEntity::getId).orElse(null))
                 .withStatistic(StatisticJpaToDomainMapper.map(entity.getStatistic()))
                 .withValidated(entity.isValidated())
+                .withLastVersion(entity.isLastVersion())
                 .build();
     }
 
@@ -52,6 +53,7 @@ public class InstantMessageDatasetJpaToDomainMapper {
                 .withOngoingGenerationId(Optional.ofNullable(entity.getOngoingGeneration()).map(BaseUuidEntity::getId).orElse(null))
                 .withStatistic(StatisticJpaToDomainMapper.map(entity.getStatistic()))
                 .withValidated(entity.isValidated())
+                .withLastVersion(entity.isLastVersion())
                 .build();
     }
 }

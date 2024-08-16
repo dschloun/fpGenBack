@@ -27,7 +27,8 @@ public class ConversationDataset extends AbstractDataset {
                 builder.getDatasetFunction(),
                 builder.getOngoingGenerationId(),
                 builder.getStatistic(),
-                builder.isValidated());
+                builder.isValidated(),
+                builder.isLastVersion());
         this.conversationGenerationList.addAll(builder.conversationGenerationList);
     }
 

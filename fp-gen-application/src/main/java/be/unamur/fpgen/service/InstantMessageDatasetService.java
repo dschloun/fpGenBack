@@ -5,6 +5,7 @@ import be.unamur.fpgen.dataset.DatasetTypeEnum;
 import be.unamur.fpgen.dataset.InstantMessageDataset;
 import be.unamur.fpgen.dataset.pagination.DatasetsPage;
 import be.unamur.fpgen.dataset.pagination.PagedDatasetsQuery;
+import be.unamur.fpgen.exception.DatasetIsNotLastVersionException;
 import be.unamur.fpgen.exception.DatasetNotFoundException;
 import be.unamur.fpgen.exception.DatasetValidatedException;
 import be.unamur.fpgen.exception.GenerationNotFoundException;
@@ -174,9 +175,24 @@ public class InstantMessageDatasetService {
         instantMessageDatasetRepository.updateInstantMessageDataset(dataset);
     }
 
+    @Transactional
+    public InstantMessageDataset createNewVersion(UUID datasetId) {
+        final InstantMessageDataset dataset = getDatasetById(datasetId);
+        // check if dataset is already validated and is last version
+        checkIfDatasetValidation(dataset);
+        checkIfDatasetIsLastVersion(dataset);
+
+        return instantMessageDatasetRepository.saveNewVersion(dataset, dataset.getVersion() + 1);
+    }
+
     private void checkIfDatasetValidation(InstantMessageDataset dataset) {
         if (dataset.isValidated()){
             throw DatasetValidatedException.withId(dataset.getId());
+        }
+    }
+    private void checkIfDatasetIsLastVersion(InstantMessageDataset dataset) {
+        if (dataset.isLastVersion()){
+            throw DatasetIsNotLastVersionException.withId(dataset.getId());
         }
     }
 }

@@ -17,10 +17,25 @@ public class InstantMessageDataSetDomainToJpaMapper {
         entity.setName(domain.getName());
         entity.setDescription(domain.getDescription());
         entity.setComment(domain.getComment());
-        entity.setAuthor(AuthorDomainToJpaMapper.mapForCreate(domain.getAuthor()));
         entity.setFunction(domain.getDatasetFunction());
         entity.setAuthor(author);
         entity.setValidated(domain.isValidated());
+        entity.setLastVersion(domain.isLastVersion());
+        return entity;
+    }
+
+    public static InstantMessageDatasetEntity mapForCreateNewVersion(final InstantMessageDatasetEntity formerVersionEntity, final AuthorEntity author, final int newVersionNumber){
+        final InstantMessageDatasetEntity entity = new InstantMessageDatasetEntity();
+        entity.setBusinessId(formerVersionEntity.getBusinessId());
+        entity.setVersion(newVersionNumber);
+        entity.setName(formerVersionEntity.getName());
+        entity.setDescription(formerVersionEntity.getDescription());
+        entity.setComment(formerVersionEntity.getComment());
+        entity.setFunction(formerVersionEntity.getFunction());
+        entity.setAuthor(author);
+        entity.setInstantMessageGenerationList(formerVersionEntity.getInstantMessageGenerationList());
+        entity.setValidated(false);
+        entity.setLastVersion(true);
         return entity;
     }
 
@@ -32,15 +47,16 @@ public class InstantMessageDataSetDomainToJpaMapper {
         entity.setName(domain.getName());
         entity.setDescription(domain.getDescription());
         entity.setComment(domain.getComment());
-        entity.setAuthor(AuthorDomainToJpaMapper.mapForCreate(domain.getAuthor()));
         entity.setFunction(domain.getDatasetFunction());
         entity.setAuthor(author);
         entity.setValidated(domain.isValidated());
+        entity.setLastVersion(domain.isLastVersion());
         return entity;
     }
 
     public static InstantMessageDatasetEntity mapForUpdate(final InstantMessageDatasetEntity entity, final InstantMessageDataset domain){
         entity.setValidated(domain.isValidated());
+        entity.setLastVersion(domain.isLastVersion());
         return entity;
     }
 }
