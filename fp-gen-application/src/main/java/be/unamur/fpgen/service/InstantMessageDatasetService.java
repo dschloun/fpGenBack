@@ -6,6 +6,7 @@ import be.unamur.fpgen.dataset.InstantMessageDataset;
 import be.unamur.fpgen.dataset.pagination.DatasetsPage;
 import be.unamur.fpgen.dataset.pagination.PagedDatasetsQuery;
 import be.unamur.fpgen.exception.DatasetNotFoundException;
+import be.unamur.fpgen.exception.DatasetValidatedException;
 import be.unamur.fpgen.exception.GenerationNotFoundException;
 import be.unamur.fpgen.generation.InstantMessageGeneration;
 import be.unamur.fpgen.generation.ongoing_generation.OngoingGeneration;
@@ -61,6 +62,13 @@ public class InstantMessageDatasetService {
 
     @Transactional
     public void deleteDatasetById(UUID datasetId) {
+        // 1. get dataset
+        final InstantMessageDataset dataset = getDatasetById(datasetId);
+
+        // 2. check if dataset is already validated
+        checkIfDatasetValidation(dataset);
+
+        // 3. delete
         instantMessageDatasetRepository.deleteInstantMessageDatasetById(datasetId);
     }
 
@@ -69,14 +77,17 @@ public class InstantMessageDatasetService {
         // 1. get dataset
         final InstantMessageDataset dataset = getDatasetById(datasetId);
 
-        // 2. get instant message generations
+        // 2. check if dataset is already validated
+        checkIfDatasetValidation(dataset);
+
+        // 3. get instant message generations
         final Set<InstantMessageGeneration> instantMessageGenerationList = getInstantMessageGenerationList(instantMessageGenerationIdsList);
 
-        // 3. add instant message generations to dataset
+        // 4. add instant message generations to dataset
         dataset.getInstantMessageGenerationList().addAll(instantMessageGenerationList);
         instantMessageDatasetRepository.addInstantMessageListToDataset(dataset, instantMessageGenerationList);
 
-        // 4. send event to compute statistic
+        // 5. send event to compute statistic
         eventPublisher.publishEvent(new StatisticComputationEvent(this, datasetId, DatasetTypeEnum.INSTANT_MESSAGE));
     }
 
@@ -85,14 +96,17 @@ public class InstantMessageDatasetService {
         // 1. get dataset
         final InstantMessageDataset dataset = getDatasetById(datasetId);
 
-        // 2. get instant message generations
+        // 2. check if dataset is already validated
+        checkIfDatasetValidation(dataset);
+
+        // 3. get instant message generations
         final Set<InstantMessageGeneration> instantMessageGenerationList = getInstantMessageGenerationList(instantMessageGenerationIdsList);
 
-        // 3. remove instant message generations from dataset
+        // 4. remove instant message generations from dataset
         dataset.getInstantMessageGenerationList().removeAll(getInstantMessageGenerationList(instantMessageGenerationIdsList));
         instantMessageDatasetRepository.removeInstantMessageListFromDataset(dataset, instantMessageGenerationList);
 
-        // 4. send event to compute statistic
+        // 5. send event to compute statistic
         eventPublisher.publishEvent(new StatisticComputationEvent(this, datasetId, DatasetTypeEnum.INSTANT_MESSAGE));
     }
 
@@ -140,19 +154,28 @@ public class InstantMessageDatasetService {
     @Transactional
     public void addOngoingGenerationToDataset(UUID datasetId, OngoingGeneration generation) {
         final InstantMessageDataset dataset = getDatasetById(datasetId);
+        // check if dataset is already validated
+        checkIfDatasetValidation(dataset);
         instantMessageDatasetRepository.addOngoingGenerationToDataset(dataset, generation);
     }
 
     @Transactional
     public void removeOngoingGenerationToDataset(UUID datasetId, OngoingGeneration generation) {
         final InstantMessageDataset dataset = getDatasetById(datasetId);
+        // check if dataset is already validated
+        checkIfDatasetValidation(dataset);
         instantMessageDatasetRepository.removeOngoingGenerationToDataset(dataset, generation);
     }
 
     @Transactional
     public void validateDataset(UUID datasetId) {
         final InstantMessageDataset dataset = getDatasetById(datasetId);
-        dataset.validateDataset();
         instantMessageDatasetRepository.updateInstantMessageDataset(dataset);
+    }
+
+    private void checkIfDatasetValidation(InstantMessageDataset dataset) {
+        if (dataset.isValidated()){
+            throw DatasetValidatedException.withId(dataset.getId());
+        }
     }
 }
