@@ -3,7 +3,6 @@ package be.unamur.fpgen.entity.view;
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.generation.AbstractGeneration;
 import be.unamur.fpgen.generation.ConversationGeneration;
-import be.unamur.fpgen.generation.InstantMessageGeneration;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
 

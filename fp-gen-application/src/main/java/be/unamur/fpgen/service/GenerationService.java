@@ -19,11 +19,11 @@ import javax.transaction.Transactional;
 import java.util.UUID;
 
 @Service
-public class InstantMessageGenerationService {
+public class GenerationService {
     private final GenerationRepository generationRepository;
     private final AuthorService authorService;
 
-    public InstantMessageGenerationService(final GenerationRepository generationRepository, AuthorService authorService) {
+    public GenerationService(final GenerationRepository generationRepository, AuthorService authorService) {
         this.generationRepository = generationRepository;
         this.authorService = authorService;
     }

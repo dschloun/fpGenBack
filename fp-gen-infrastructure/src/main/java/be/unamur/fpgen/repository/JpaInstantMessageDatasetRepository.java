@@ -7,7 +7,6 @@ import be.unamur.fpgen.entity.author.AuthorEntity;
 import be.unamur.fpgen.entity.dataset.InstantMessageDatasetEntity;
 import be.unamur.fpgen.entity.generation.InstantMessageGenerationEntity;
 import be.unamur.fpgen.entity.generation.ongoing_generation.OngoingGenerationEntity;
-import be.unamur.fpgen.generation.InstantMessageGeneration;
 import be.unamur.fpgen.generation.ongoing_generation.OngoingGeneration;
 import be.unamur.fpgen.mapper.domainToJpa.InstantMessageDataSetDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.InstantMessageDatasetJpaToDomainMapper;

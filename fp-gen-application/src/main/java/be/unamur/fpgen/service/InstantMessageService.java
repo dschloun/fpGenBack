@@ -22,17 +22,17 @@ import java.util.*;
 public class InstantMessageService {
 
     private final InstantMessageRepository instantMessageRepository;
-    private final InstantMessageGenerationService instantMessageGenerationService;
+    private final GenerationService generationService;
     private final InstantMessageDatasetService instantMessageDatasetService;
     private final OngoingGenerationService ongoingGenerationService;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     public InstantMessageService(final InstantMessageRepository instantMessageRepository,
-                                 final InstantMessageGenerationService instantMessageGenerationService,
+                                 final GenerationService generationService,
                                  final InstantMessageDatasetService instantMessageDatasetService,
                                  OngoingGenerationService ongoingGenerationService, ApplicationEventPublisher applicationEventPublisher) {
         this.instantMessageRepository = instantMessageRepository;
-        this.instantMessageGenerationService = instantMessageGenerationService;
+        this.generationService = generationService;
         this.instantMessageDatasetService = instantMessageDatasetService;
         this.ongoingGenerationService = ongoingGenerationService;
         this.applicationEventPublisher = applicationEventPublisher;

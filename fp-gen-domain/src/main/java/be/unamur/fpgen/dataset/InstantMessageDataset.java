@@ -1,6 +1,5 @@
 package be.unamur.fpgen.dataset;
 
-import be.unamur.fpgen.generation.InstantMessageGeneration;
 import be.unamur.fpgen.utils.DateUtil;
 
 import java.time.OffsetDateTime;

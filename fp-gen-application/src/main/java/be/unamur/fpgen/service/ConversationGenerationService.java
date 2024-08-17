@@ -3,7 +3,6 @@ package be.unamur.fpgen.service;
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.exception.GenerationNotFoundException;
 import be.unamur.fpgen.generation.ConversationGeneration;
-import be.unamur.fpgen.generation.pagination.ConversationGenerationsPage;
 import be.unamur.fpgen.generation.pagination.PagedGenerationsQuery;
 import be.unamur.fpgen.mapper.webToDomain.MessageTopicWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.MessageTypeWebToDomainMapper;

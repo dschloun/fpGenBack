@@ -1,7 +1,6 @@
 package be.unamur.fpgen.repository;
 
 import be.unamur.fpgen.generation.ConversationGeneration;
-import be.unamur.fpgen.generation.pagination.ConversationGenerationsPage;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
 import org.springframework.data.domain.Pageable;

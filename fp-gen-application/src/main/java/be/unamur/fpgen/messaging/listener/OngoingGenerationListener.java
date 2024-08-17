@@ -1,6 +1,5 @@
 package be.unamur.fpgen.messaging.listener;
 
-import be.unamur.fpgen.generation.InstantMessageGeneration;
 import be.unamur.fpgen.generation.ongoing_generation.OngoingGeneration;
 import be.unamur.fpgen.generation.ongoing_generation.OngoingGenerationItem;
 import be.unamur.fpgen.generation.ongoing_generation.OngoingGenerationItemStatus;
@@ -12,7 +11,7 @@ import be.unamur.fpgen.message.InstantMessage;
 import be.unamur.fpgen.messaging.event.OngoingGenerationEvent;
 import be.unamur.fpgen.repository.InstantMessageRepository;
 import be.unamur.fpgen.service.InstantMessageDatasetService;
-import be.unamur.fpgen.service.InstantMessageGenerationService;
+import be.unamur.fpgen.service.GenerationService;
 import be.unamur.fpgen.service.OngoingGenerationService;
 import be.unamur.model.InstantMessageBatchCreation;
 import org.springframework.stereotype.Component;
@@ -30,13 +29,13 @@ import java.util.concurrent.CompletableFuture;
 @Component
 public class OngoingGenerationListener {
     private final InstantMessageRepository instantMessageRepository;
-    private final InstantMessageGenerationService instantMessageGenerationService;
+    private final GenerationService generationService;
     private final InstantMessageDatasetService instantMessageDatasetService;
     private final OngoingGenerationService ongoingGenerationService;
 
-    public OngoingGenerationListener(InstantMessageRepository instantMessageRepository, InstantMessageGenerationService instantMessageGenerationService, InstantMessageDatasetService instantMessageDatasetService, OngoingGenerationService ongoingGenerationService) {
+    public OngoingGenerationListener(InstantMessageRepository instantMessageRepository, GenerationService generationService, InstantMessageDatasetService instantMessageDatasetService, OngoingGenerationService ongoingGenerationService) {
         this.instantMessageRepository = instantMessageRepository;
-        this.instantMessageGenerationService = instantMessageGenerationService;
+        this.generationService = generationService;
         this.instantMessageDatasetService = instantMessageDatasetService;
         this.ongoingGenerationService = ongoingGenerationService;
     }
@@ -71,7 +70,7 @@ public class OngoingGenerationListener {
                         } else {
                             // Generation successful
                             // 1. create generation data
-                            final InstantMessageGeneration generation = instantMessageGenerationService.createGeneration(imc, command.getAuthorId());
+                            final InstantMessageGeneration generation = generationService.createGeneration(imc, command.getAuthorId());
                             // 2. prepare a list of instant messages
                             final List<InstantMessage> instantMessageList = new ArrayList<>();
                             // 3. generate instant messages

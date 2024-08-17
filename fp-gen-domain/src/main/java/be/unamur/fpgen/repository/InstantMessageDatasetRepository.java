@@ -2,7 +2,6 @@ package be.unamur.fpgen.repository;
 
 import be.unamur.fpgen.dataset.InstantMessageDataset;
 import be.unamur.fpgen.dataset.pagination.DatasetsPage;
-import be.unamur.fpgen.generation.InstantMessageGeneration;
 import be.unamur.fpgen.generation.ongoing_generation.OngoingGeneration;
 import org.springframework.data.domain.Pageable;
 
