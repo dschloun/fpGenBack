@@ -1,6 +1,8 @@
 package be.unamur.fpgen.repository;
 
-import be.unamur.fpgen.generation.InstantMessageGeneration;
+import be.unamur.fpgen.generation.AbstractGeneration;
+import be.unamur.fpgen.generation.GenerationTypeEnum;
+import be.unamur.fpgen.generation.pagination.AbstractGenerationPage;
 import be.unamur.fpgen.generation.pagination.InstantMessageGenerationsPage;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
@@ -13,21 +15,23 @@ import java.util.UUID;
 
 public interface GenerationRepository {
 
-    InstantMessageGeneration saveInstantMessageGeneration(InstantMessageGeneration instantMessageGeneration);
+    AbstractGeneration saveGeneration(AbstractGeneration generation);
 
-    Optional<InstantMessageGeneration> findInstantMessageGenerationById(UUID instantMessageGenerationId);
+    Optional<AbstractGeneration> findGenerationById(UUID generationId);
 
-    void deleteInstantMessageGenerationById(UUID instantMessageGenerationId);
+    void deleteGenerationById(UUID generationId);
 
-    InstantMessageGenerationsPage findPagination(MessageTypeEnum messageType,
-                                                 MessageTopicEnum messageTopic,
-                                                 String userPrompt,
-                                                 String systemPrompt,
-                                                 Integer quantity,
-                                                 String authorTrigram,
-                                                 OffsetDateTime startDate,
-                                                 OffsetDateTime endDate,
-                                                 List<UUID> notInDatasetIdList,
-                                                 List<UUID> inDatasetIdList,
-                                                 Pageable pageable);
+    AbstractGenerationPage findPagination(GenerationTypeEnum type,
+                                          MessageTypeEnum messageType,
+                                          MessageTopicEnum messageTopic,
+                                          String userPrompt,
+                                          String systemPrompt,
+                                          Integer quantity,
+                                          String authorTrigram,
+                                          OffsetDateTime startDate,
+                                          OffsetDateTime endDate,
+                                          List<UUID> notInDatasetIdList,
+                                          List<UUID> inDatasetIdList,
+                                          boolean isIn,
+                                          Pageable pageable);
 }

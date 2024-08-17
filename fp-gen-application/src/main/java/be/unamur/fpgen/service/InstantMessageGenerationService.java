@@ -32,7 +32,7 @@ public class InstantMessageGenerationService {
         // 0. check if author is registered
         final Author author = authorService.getAuthorById(authorId);
         // 1. save the generation
-        return generationRepository.saveInstantMessageGeneration(
+        return generationRepository.saveGeneration(
                 InstantMessageGeneration.newBuilder()
                         .withAuthor(author)
                         .withDetails(getDetail(command, "instant message"))
@@ -46,7 +46,7 @@ public class InstantMessageGenerationService {
 
     @Transactional
     public InstantMessageGeneration findInstantMessageGenerationById(final UUID generationId) {
-        return generationRepository.findInstantMessageGenerationById(generationId)
+        return generationRepository.findGenerationById(generationId)
                 .orElseThrow(() -> GenerationNotFoundException.withId(generationId));
     }
 
@@ -73,7 +73,7 @@ public class InstantMessageGenerationService {
 
     @Transactional
     public void deleteInstantMessageGenerationById(final UUID generationId) {
-        generationRepository.deleteInstantMessageGenerationById(generationId);
+        generationRepository.deleteGenerationById(generationId);
     }
 
     private String getDetail(final GenerationCreation command, final String generationType) {

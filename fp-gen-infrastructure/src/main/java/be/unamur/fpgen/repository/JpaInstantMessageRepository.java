@@ -25,17 +25,17 @@ import java.util.UUID;
 public class JpaInstantMessageRepository implements InstantMessageRepository {
 
     private final JpaInstantMessageRepositoryCRUD jpaInstantMessageRepositoryCRUD;
-    private final JpaInstantMessageGenerationRepositoryCRUD jpaInstantMessageGenerationRepositoryCRUD;
+    private final JpaGenerationRepositoryCRUD jpaGenerationRepositoryCRUD;
 
     public JpaInstantMessageRepository(final JpaInstantMessageRepositoryCRUD jpaInstantMessageRepositoryCRUD,
-                                       final JpaInstantMessageGenerationRepositoryCRUD jpaInstantMessageGenerationRepositoryCRUD) {
+                                       final JpaGenerationRepositoryCRUD jpaGenerationRepositoryCRUD) {
         this.jpaInstantMessageRepositoryCRUD = jpaInstantMessageRepositoryCRUD;
-        this.jpaInstantMessageGenerationRepositoryCRUD = jpaInstantMessageGenerationRepositoryCRUD;
+        this.jpaGenerationRepositoryCRUD = jpaGenerationRepositoryCRUD;
     }
 
     @Override
     public List<InstantMessage> saveInstantMessageList(List<InstantMessage> instantMessageList, InstantMessageGeneration instantMessageGeneration) {
-        final InstantMessageGenerationEntity generationEntity = jpaInstantMessageGenerationRepositoryCRUD.findById(instantMessageGeneration.getId()).orElseThrow();
+        final InstantMessageGenerationEntity generationEntity = jpaGenerationRepositoryCRUD.findById(instantMessageGeneration.getId()).orElseThrow();
         List<InstantMessageEntity> l = jpaInstantMessageRepositoryCRUD.saveAll(ListUtils.emptyIfNull(instantMessageList)
                 .stream()
                 .map(i -> InstantMessageDomainToJpaMapper.mapForCreate(i, generationEntity))

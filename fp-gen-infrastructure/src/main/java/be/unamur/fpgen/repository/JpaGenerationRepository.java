@@ -1,8 +1,12 @@
 package be.unamur.fpgen.repository;
 
+import be.unamur.fpgen.generation.AbstractGeneration;
+import be.unamur.fpgen.generation.GenerationTypeEnum;
 import be.unamur.fpgen.generation.InstantMessageGeneration;
+import be.unamur.fpgen.generation.pagination.AbstractGenerationPage;
 import be.unamur.fpgen.generation.pagination.InstantMessageGenerationsPage;
-import be.unamur.fpgen.mapper.domainToJpa.InstantMessageGenerationDomainToJpaMapper;
+import be.unamur.fpgen.mapper.domainToJpa.GenerationDomainToJpaMapper;
+import be.unamur.fpgen.mapper.jpaToDomain.ConversationGenerationJpaToDomainMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.InstantMessageGenerationJpaToDomainMapper;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
@@ -20,38 +24,39 @@ import java.util.UUID;
 
 @Repository
 public class JpaGenerationRepository implements GenerationRepository {
-    private final JpaInstantMessageGenerationRepositoryCRUD jpaInstantMessageGenerationRepositoryCRUD;
+    private final JpaGenerationRepositoryCRUD jpaGenerationRepositoryCRUD;
     private final JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD;
 
 
-    public JpaGenerationRepository(JpaInstantMessageGenerationRepositoryCRUD jpaInstantMessageGenerationRepositoryCRUD,
+    public JpaGenerationRepository(JpaGenerationRepositoryCRUD jpaGenerationRepositoryCRUD,
                                    JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD) {
-        this.jpaInstantMessageGenerationRepositoryCRUD = jpaInstantMessageGenerationRepositoryCRUD;
+        this.jpaGenerationRepositoryCRUD = jpaGenerationRepositoryCRUD;
         this.jpaAuthorRepositoryCRUD = jpaAuthorRepositoryCRUD;
 
     }
 
     @Override
-    public InstantMessageGeneration saveInstantMessageGeneration(InstantMessageGeneration generation) {
-        return Optional.of(jpaInstantMessageGenerationRepositoryCRUD.save(InstantMessageGenerationDomainToJpaMapper
+    public AbstractGeneration saveGeneration(AbstractGeneration generation) {
+        return Optional.of(jpaGenerationRepositoryCRUD.save(GenerationDomainToJpaMapper
                         .mapForCreate(generation, jpaAuthorRepositoryCRUD.getReferenceById(generation.getAuthor().getId()))))
-                .map(InstantMessageGenerationJpaToDomainMapper::mapInstantMessageGeneration)
+                .map(InstantMessageGenerationJpaToDomainMapper::map)
                 .orElseThrow();
     }
 
     @Override
-    public Optional<InstantMessageGeneration> findInstantMessageGenerationById(UUID instantMessageGenerationId) {
-        return jpaInstantMessageGenerationRepositoryCRUD.findById(instantMessageGenerationId)
-                .map(InstantMessageGenerationJpaToDomainMapper::mapInstantMessageGeneration);
+    public Optional<AbstractGeneration> findGenerationById(UUID generationId) {
+        return jpaGenerationRepositoryCRUD.findById(generationId)
+                .map(InstantMessageGenerationJpaToDomainMapper::map);
     }
 
     @Override
-    public void deleteInstantMessageGenerationById(UUID instantMessageGenerationId) {
-        jpaInstantMessageGenerationRepositoryCRUD.deleteById(instantMessageGenerationId);
+    public void deleteGenerationById(UUID generationId) {
+        jpaGenerationRepositoryCRUD.deleteById(generationId);
     }
 
     @Override
-    public InstantMessageGenerationsPage findPagination(
+    public AbstractGenerationPage findPagination(
+            GenerationTypeEnum type,
             MessageTypeEnum messageType,
             MessageTopicEnum messageTopic,
             String userPrompt,
@@ -62,12 +67,14 @@ public class JpaGenerationRepository implements GenerationRepository {
             OffsetDateTime endDate,
             List<UUID> notInDatasetIdList,
             List<UUID> inDatasetIdList,
+            boolean isIn,
             Pageable pageable) {
-        // 1. get in Page format
-        final Page<InstantMessageGeneration> page;
 
-        if (Objects.nonNull(inDatasetIdList) && !inDatasetIdList.isEmpty() && Objects.isNull(notInDatasetIdList)) {
-            page = jpaInstantMessageGenerationRepositoryCRUD.findPaginationIn(
+        // 1. get in Page format
+        final Page<AbstractGeneration> page;
+
+        if (GenerationTypeEnum.INSTANT_MESSAGE.equals(type)) {
+            page = jpaGenerationRepositoryCRUD.findMessagePagination(
                     messageTopic,
                     messageType,
                     authorTrigram,
@@ -77,10 +84,24 @@ public class JpaGenerationRepository implements GenerationRepository {
                     startDate,
                     endDate,
                     inDatasetIdList,
+                    isIn,
                     pageable
             ).map(InstantMessageGenerationJpaToDomainMapper::map);
+
+            final AbstractGenerationPage generationPage = InstantMessageGenerationsPage.newBuilder()
+                    .withPagination(new Pagination.Builder()
+                            .size(page.getSize())
+                            .totalSize((int) page.getTotalElements())
+                            .page(page.getNumber())
+                            .build())
+                    .withGenerationList(page.getContent())
+                    .build();
+
+            // 3. return
+            return generationPage;
+
         } else if (Objects.isNull(inDatasetIdList)) {
-            page = jpaInstantMessageGenerationRepositoryCRUD.findPaginationNotIn(
+            page = jpaGenerationRepositoryCRUD.findConversationPagination(
                     messageTopic,
                     messageType,
                     authorTrigram,
@@ -90,22 +111,13 @@ public class JpaGenerationRepository implements GenerationRepository {
                     startDate,
                     endDate,
                     Objects.nonNull(notInDatasetIdList) ? notInDatasetIdList : List.of(UUID.fromString("00000000-0000-0000-0000-000000000000")),
+                    isIn,
                     pageable
-            ).map(InstantMessageGenerationJpaToDomainMapper::map);
+            ).map(ConversationGenerationJpaToDomainMapper::map);
         } else {
             throw new IllegalArgumentException("Either inDatasetIdList or notInDatasetIdList must be provided");
         }
 
-        final InstantMessageGenerationsPage instantMessageGenerationsPage = InstantMessageGenerationsPage.newBuilder()
-                .withPagination(new Pagination.Builder()
-                        .size(page.getSize())
-                        .totalSize((int) page.getTotalElements())
-                        .page(page.getNumber())
-                        .build())
-                .withGenerationList(page.getContent())
-                .build();
 
-        // 3. return
-        return instantMessageGenerationsPage;
     }
 }

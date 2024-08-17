@@ -1,6 +1,6 @@
 package be.unamur.fpgen.conversation;
 
-import be.unamur.fpgen.BaseUuidDomain;
+import be.unamur.fpgen.generation.AbstractItem;
 import be.unamur.fpgen.message.ConversationMessage;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class Conversation extends BaseUuidDomain {
+public class Conversation extends AbstractItem {
     private final MessageTypeEnum type;
     private final MessageTopicEnum topic;
     private final Integer maxInteractionNumber;

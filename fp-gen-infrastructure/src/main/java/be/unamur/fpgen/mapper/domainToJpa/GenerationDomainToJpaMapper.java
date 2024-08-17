@@ -1,13 +1,13 @@
 package be.unamur.fpgen.mapper.domainToJpa;
 
 import be.unamur.fpgen.entity.author.AuthorEntity;
-import be.unamur.fpgen.entity.generation.InstantMessageGenerationEntity;
+import be.unamur.fpgen.entity.generation.GenerationEntity;
 import be.unamur.fpgen.generation.AbstractGeneration;
 
-public class InstantMessageGenerationDomainToJpaMapper {
+public class GenerationDomainToJpaMapper {
 
-    public static InstantMessageGenerationEntity mapForCreate(final AbstractGeneration domain, final AuthorEntity author) {
-        final InstantMessageGenerationEntity entity = new InstantMessageGenerationEntity();
+    public static GenerationEntity mapForCreate(final AbstractGeneration domain, final AuthorEntity author) {
+        final GenerationEntity entity = new GenerationEntity();
         entity.setGenerationId(domain.getGenerationId());
         entity.setAuthor(author);
         entity.setDetails(domain.getDetails());
@@ -19,8 +19,8 @@ public class InstantMessageGenerationDomainToJpaMapper {
         return entity;
     }
 
-    public static InstantMessageGenerationEntity map(final AbstractGeneration domain) {
-        final InstantMessageGenerationEntity entity = new InstantMessageGenerationEntity();
+    public static GenerationEntity map(final AbstractGeneration domain) {
+        final GenerationEntity entity = new GenerationEntity();
         entity.setId(domain.getId());
         entity.setModificationDate(domain.getModificationDate());
         entity.setCreationDate(domain.getCreationDate());

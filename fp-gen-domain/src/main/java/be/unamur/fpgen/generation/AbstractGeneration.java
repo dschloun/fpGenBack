@@ -3,10 +3,13 @@ package be.unamur.fpgen.generation;
 import be.unamur.fpgen.BaseUuidDomain;
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.dataset.GenerationId;
+import be.unamur.fpgen.message.AbstractInstantMessage;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
 
 import java.time.OffsetDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -18,9 +21,10 @@ import java.util.UUID;
  * format 'trigram' ex: JDO (John Doe)
  * @specfield details: String // details of the generation
  */
-public abstract class AbstractGeneration extends BaseUuidDomain {
+public class AbstractGeneration extends BaseUuidDomain {
     // members
-    protected String generationId;
+    private final String generationId;
+    private final GenerationTypeEnum generationType;
     private final Author author;
     private final String details;
     private final Integer quantity;
@@ -28,35 +32,26 @@ public abstract class AbstractGeneration extends BaseUuidDomain {
     private final MessageTopicEnum topic;
     private final String systemPrompt;
     private final String userPrompt;
+    private final Set<AbstractItem> itemList = new HashSet<>();
 
-    // constructors
-    protected AbstractGeneration(final UUID id,
-                                 final OffsetDateTime creationDate,
-                                 final OffsetDateTime modificationDate,
-                                 final Author author,
-                                 final String details,
-                                 final Integer quantity,
-                                 final MessageTypeEnum type,
-                                 final MessageTopicEnum topic,
-                                 final String systemPrompt,
-                                 final String userPrompt) {
-        super(id, creationDate, modificationDate);
-        this.author = author;
-        this.details = details;
-        this.quantity = quantity;
-        this.type = type;
-        this.topic = topic;
-        this.systemPrompt = systemPrompt;
-        this.userPrompt = userPrompt;
+    private AbstractGeneration(Builder builder) {
+        generationId = builder.generationId;
+        generationType = builder.generationType;
+        author = builder.author;
+        details = builder.details;
+        quantity = builder.quantity;
+        type = builder.type;
+        topic = builder.topic;
+        systemPrompt = builder.systemPrompt;
+        userPrompt = builder.userPrompt;
     }
 
-    // getters
+    public GenerationTypeEnum getGenerationType() {
+        return generationType;
+    }
+
     public String getGenerationId() {
         return generationId;
-    }
-
-    public OffsetDateTime getGenerationDate() {
-        return creationDate;
     }
 
     public Author getAuthor() {
@@ -87,9 +82,17 @@ public abstract class AbstractGeneration extends BaseUuidDomain {
         return userPrompt;
     }
 
-    // builder
-    protected abstract static class AbstractGenerationBuilder<T> extends AbstractBaseUuidDomainBuilder<T> implements GenerationId {
-        protected String generationId;
+    public Set<AbstractItem> getItemList() {
+        return itemList;
+    }
+
+    public static Builder newBuilder() {
+        return new Builder();
+    }
+
+    public static final class Builder extends AbstractBaseUuidDomainBuilder<Builder> {
+        private String generationId;
+        private GenerationTypeEnum generationType;
         private Author author;
         private String details;
         private Integer quantity;
@@ -97,76 +100,72 @@ public abstract class AbstractGeneration extends BaseUuidDomain {
         private MessageTopicEnum topic;
         private String systemPrompt;
         private String userPrompt;
+        private Set<AbstractItem> itemList = new HashSet<>();
 
-        public String getGenerationId() {
-            return generationId;
+        private Builder() {
         }
 
-        public Author getAuthor() {
-            return author;
+        public Builder withGenerationId(String val) {
+            generationId = val;
+            return this;
         }
 
-        public String getDetails() {
-            return details;
+        public Builder withGenerationType(GenerationTypeEnum val) {
+            generationType = val;
+            return this;
         }
 
-        public Integer getQuantity() {
-            return quantity;
+        public Builder withAuthor(Author val) {
+            author = val;
+            return this;
         }
 
-        public MessageTypeEnum getType() {
-            return type;
+        public Builder withDetails(String val) {
+            details = val;
+            return this;
         }
 
-        public MessageTopicEnum getTopic() {
-            return topic;
+        public Builder withQuantity(Integer val) {
+            quantity = val;
+            return this;
         }
 
-        public String getSystemPrompt() {
-            return systemPrompt;
+        public Builder withType(MessageTypeEnum val) {
+            type = val;
+            return this;
         }
 
-        public String getUserPrompt() {
-            return userPrompt;
+        public Builder withTopic(MessageTopicEnum val) {
+            topic = val;
+            return this;
         }
 
-        public T withAuthor(final Author author) {
-            this.author = author;
-            return self();
+        public Builder withSystemPrompt(String val) {
+            systemPrompt = val;
+            return this;
         }
 
-        public T withDetails(final String details) {
-            this.details = details;
-            return self();
+        public Builder withUserPrompt(String val) {
+            userPrompt = val;
+            return this;
         }
 
-        public T withQuantity(final Integer quantity) {
-            this.quantity = quantity;
-            return self();
+        public Builder withItemList(Set<AbstractItem> val) {
+            itemList.addAll(val);
+            return this;
         }
 
-        public T withType(final MessageTypeEnum type) {
-            this.type = type;
-            return self();
+        public AbstractGeneration build() {
+            return new AbstractGeneration(this);
         }
 
-        public T withTopic(final MessageTopicEnum topic) {
-            this.topic = topic;
-            return self();
-        }
-
-        public T withSystemPrompt(final String systemPrompt) {
-            this.systemPrompt = systemPrompt;
-            return self();
-        }
-
-        public T withUserPrompt(final String userPrompt) {
-            this.userPrompt = userPrompt;
-            return self();
-        }
-
-        protected String returnBatchOrSingle(){
+        public String returnBatchOrSingle(){
             return this.quantity > 1 ? "BATCH" : "SINGLE";
+        }
+
+        @Override
+        protected Builder self() {
+            return this;
         }
     }
 }

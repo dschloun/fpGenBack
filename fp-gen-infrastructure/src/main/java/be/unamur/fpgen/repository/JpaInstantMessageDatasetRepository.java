@@ -27,14 +27,14 @@ public class JpaInstantMessageDatasetRepository implements InstantMessageDataset
 
     private final JpaInstantMessageDatasetRepositoryCRUD jpaInstantMessageDatasetRepositoryCRUD;
     private final JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD;
-    private final JpaInstantMessageGenerationRepositoryCRUD jpaInstantMessageGenerationRepositoryCRUD;
+    private final JpaGenerationRepositoryCRUD jpaGenerationRepositoryCRUD;
     private final JpaOngoingGenerationRepositoryCRUD jpaOngoingGenerationRepositoryCRUD;
     private final EntityManager entityManager;
 
-    public JpaInstantMessageDatasetRepository(JpaInstantMessageDatasetRepositoryCRUD jpaInstantMessageDatasetRepositoryCRUD, JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD, JpaInstantMessageGenerationRepositoryCRUD jpaInstantMessageGenerationRepositoryCRUD, JpaOngoingGenerationRepositoryCRUD jpaOngoingGenerationRepositoryCRUD, EntityManager entityManager) {
+    public JpaInstantMessageDatasetRepository(JpaInstantMessageDatasetRepositoryCRUD jpaInstantMessageDatasetRepositoryCRUD, JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD, JpaGenerationRepositoryCRUD jpaGenerationRepositoryCRUD, JpaOngoingGenerationRepositoryCRUD jpaOngoingGenerationRepositoryCRUD, EntityManager entityManager) {
         this.jpaInstantMessageDatasetRepositoryCRUD = jpaInstantMessageDatasetRepositoryCRUD;
         this.jpaAuthorRepositoryCRUD = jpaAuthorRepositoryCRUD;
-        this.jpaInstantMessageGenerationRepositoryCRUD = jpaInstantMessageGenerationRepositoryCRUD;
+        this.jpaGenerationRepositoryCRUD = jpaGenerationRepositoryCRUD;
         this.jpaOngoingGenerationRepositoryCRUD = jpaOngoingGenerationRepositoryCRUD;
         this.entityManager = entityManager;
     }
@@ -150,7 +150,7 @@ public class JpaInstantMessageDatasetRepository implements InstantMessageDataset
     private Set<InstantMessageGenerationEntity> getGenerationList(Set<InstantMessageGeneration> generations) {
         final HashSet<InstantMessageGenerationEntity> instantMessageGenerations = new HashSet<>();
         generations.forEach(g -> {
-            instantMessageGenerations.add(jpaInstantMessageGenerationRepositoryCRUD.getReferenceById(g.getId()));
+            instantMessageGenerations.add(jpaGenerationRepositoryCRUD.getReferenceById(g.getId()));
         });
         return instantMessageGenerations;
     }
