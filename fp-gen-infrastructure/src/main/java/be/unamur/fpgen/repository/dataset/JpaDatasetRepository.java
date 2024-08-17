@@ -127,14 +127,14 @@ public class JpaDatasetRepository implements DatasetRepository {
     }
 
     @Override
-    public DatasetsPage findPagination(DatasetTypeEnum type, String version, String name, String description, String comment, String authorTrigram, OffsetDateTime startDate, OffsetDateTime endDate, Pageable pageable) {
+    public DatasetsPage findPagination(DatasetTypeEnum type, Integer version, String name, String description, String comment, String authorTrigram, OffsetDateTime startDate, OffsetDateTime endDate, Pageable pageable) {
         // 1. get in Page format
         final Page<Dataset> page;
 
         if(DatasetTypeEnum.INSTANT_MESSAGE.equals(type)) {
             page = jpaDatasetRepositoryCRUD.findInstantMessagePagination(
                     StringUtil.toLowerCaseIfNotNull(name),
-                    StringUtil.toLowerCaseIfNotNull(version),
+                    version,
                     authorTrigram,
                     StringUtil.toLowerCaseIfNotNull(description),
                     StringUtil.toLowerCaseIfNotNull(comment),
@@ -145,7 +145,7 @@ public class JpaDatasetRepository implements DatasetRepository {
         } else {
             page = jpaDatasetRepositoryCRUD.findConversationPagination(
                     StringUtil.toLowerCaseIfNotNull(name),
-                    StringUtil.toLowerCaseIfNotNull(version),
+                    version,
                     authorTrigram,
                     StringUtil.toLowerCaseIfNotNull(description),
                     StringUtil.toLowerCaseIfNotNull(comment),

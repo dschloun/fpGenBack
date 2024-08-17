@@ -16,7 +16,7 @@ import java.util.UUID;
 public interface JpaDatasetRepositoryCRUD extends JpaRepository<DatasetEntity, UUID> {
     String COMMON = " WHERE (:authorTrigram is null or g.author.trigram = :authorTrigram) " +
             "AND (:name is null or lower(g.name) like %:name%) " +
-            "AND (:version is null or lower(g.version) like %:version%) " +
+            "AND (:version is null or g.version = :version) " +
             "AND (:description is null or lower(g.description) like %:description%) " +
             "AND (:comment is null or lower(g.comment) like %:comment%) " +
             "AND g.creationDate >= cast(:startDate as timestamp) " +
@@ -26,7 +26,7 @@ public interface JpaDatasetRepositoryCRUD extends JpaRepository<DatasetEntity, U
             COMMON)
     Page<InstantMessageDatasetEntity> findInstantMessagePagination(
             @Param("name") String name,
-            @Param("version") String version,
+            @Param("version") Integer version,
             @Param("authorTrigram") String authorTrigram,
             @Param("description") String description,
             @Param("comment") String comment,
@@ -38,7 +38,7 @@ public interface JpaDatasetRepositoryCRUD extends JpaRepository<DatasetEntity, U
             COMMON)
     Page<ConversationDatasetEntity> findConversationPagination(
             @Param("name") String name,
-            @Param("version") String version,
+            @Param("version") Integer version,
             @Param("authorTrigram") String authorTrigram,
             @Param("description") String description,
             @Param("comment") String comment,

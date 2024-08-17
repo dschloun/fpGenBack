@@ -31,7 +31,7 @@ public interface DatasetRepository {
 
     void removeItemListFromDataset(Dataset dataset, Set<Generation> generations);
 
-    DatasetsPage findPagination(DatasetTypeEnum type, String version, String name, String description, String comment, String authorTrigram, OffsetDateTime startDate, OffsetDateTime endDate, Pageable pageable);
+    DatasetsPage findPagination(DatasetTypeEnum type, Integer version, String name, String description, String comment, String authorTrigram, OffsetDateTime startDate, OffsetDateTime endDate, Pageable pageable);
 
     void addOngoingGenerationToDataset(Dataset dataset, OngoingGeneration generation);
 

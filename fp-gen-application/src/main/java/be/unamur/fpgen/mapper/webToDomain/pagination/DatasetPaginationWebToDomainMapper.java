@@ -8,6 +8,8 @@ import be.unamur.fpgen.mapper.webToDomain.PaginationWebToDomainMapper;
 import be.unamur.fpgen.utils.DateUtil;
 import be.unamur.model.PagedDatasetQuery;
 
+import java.util.Objects;
+
 public class DatasetPaginationWebToDomainMapper {
 
     public static DatasetQuery map(be.unamur.model.DatasetQuery web) {
@@ -16,7 +18,7 @@ public class DatasetPaginationWebToDomainMapper {
                 .withEndDate(DateUtil.convertLocalDateToOffsetDateTime(web.getEndDate()))
                 .withAuthorTrigram(web.getAuthorTrigram())
                 .withName(web.getName())
-                .withVersion(web.getVersion())
+                .withVersion(Objects.nonNull(web.getVersion()) ? Integer.valueOf(web.getVersion()) : null) //todo correct api put integer instead of string
                 .withComment(web.getComment())
                 .withDescription(web.getDescription())
                 .withType(DatasetTypeWebToDomainMapper.map(web.getDatasetType()))

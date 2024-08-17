@@ -6,7 +6,7 @@ import java.time.OffsetDateTime;
 
 public class DatasetQuery {
 
-    private final String version;
+    private final Integer version;
     private final String name;
     private final String description;
     private final String comment;
@@ -29,7 +29,7 @@ public class DatasetQuery {
         return new Builder();
     }
 
-    public String getVersion() {
+    public Integer getVersion() {
         return version;
     }
 
@@ -62,7 +62,7 @@ public class DatasetQuery {
     }
 
     public static final class Builder {
-        private String version;
+        private Integer version;
         private String name;
         private String description;
         private String comment;
@@ -74,7 +74,7 @@ public class DatasetQuery {
         private Builder() {
         }
 
-        public Builder withVersion(String val) {
+        public Builder withVersion(Integer val) {
             version = val;
             return this;
         }
