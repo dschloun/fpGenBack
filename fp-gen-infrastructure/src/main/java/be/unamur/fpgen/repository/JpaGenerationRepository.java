@@ -19,13 +19,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public class JpaInstantMessageGenerationRepository implements InstantMessageGenerationRepository {
+public class JpaGenerationRepository implements GenerationRepository {
     private final JpaInstantMessageGenerationRepositoryCRUD jpaInstantMessageGenerationRepositoryCRUD;
     private final JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD;
 
 
-    public JpaInstantMessageGenerationRepository(JpaInstantMessageGenerationRepositoryCRUD jpaInstantMessageGenerationRepositoryCRUD,
-                                                 JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD) {
+    public JpaGenerationRepository(JpaInstantMessageGenerationRepositoryCRUD jpaInstantMessageGenerationRepositoryCRUD,
+                                   JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD) {
         this.jpaInstantMessageGenerationRepositoryCRUD = jpaInstantMessageGenerationRepositoryCRUD;
         this.jpaAuthorRepositoryCRUD = jpaAuthorRepositoryCRUD;
 
