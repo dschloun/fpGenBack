@@ -29,8 +29,7 @@ public interface GenerationRepository {
                                   String authorTrigram,
                                   OffsetDateTime startDate,
                                   OffsetDateTime endDate,
-                                  List<UUID> notInDatasetIdList,
-                                  List<UUID> inDatasetIdList,
+                                  List<UUID> datasetIdList,
                                   boolean isIn,
                                   Pageable pageable);
 }

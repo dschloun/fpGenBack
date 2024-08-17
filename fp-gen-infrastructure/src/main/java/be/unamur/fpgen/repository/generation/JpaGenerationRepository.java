@@ -64,8 +64,7 @@ public class JpaGenerationRepository implements GenerationRepository {
             String authorTrigram,
             OffsetDateTime startDate,
             OffsetDateTime endDate,
-            List<UUID> notInDatasetIdList,
-            List<UUID> inDatasetIdList,
+            List<UUID> datasetIdList,
             boolean isIn,
             Pageable pageable) {
 
@@ -82,26 +81,28 @@ public class JpaGenerationRepository implements GenerationRepository {
                     StringUtil.toLowerCaseIfNotNull(systemPrompt),
                     startDate,
                     endDate,
-                    inDatasetIdList,
+                    datasetIdList,
                     isIn,
                     pageable
             ).map(GenerationJpaToDomainMapper::map);
 
-        } else if (Objects.isNull(inDatasetIdList)) {
-            page = jpaGenerationRepositoryCRUD.findConversationPagination(
-                    messageTopic,
-                    messageType,
-                    authorTrigram,
-                    quantity,
-                    StringUtil.toLowerCaseIfNotNull(userPrompt),
-                    StringUtil.toLowerCaseIfNotNull(systemPrompt),
-                    startDate,
-                    endDate,
-                    Objects.nonNull(notInDatasetIdList) ? notInDatasetIdList : List.of(UUID.fromString("00000000-0000-0000-0000-000000000000")),
-                    isIn,
-                    pageable
-            ).map(GenerationJpaToDomainMapper::map);
-        } else {
+        }
+//        else if (GenerationTypeEnum.CONVERSATION.equals(type)) {
+//            page = jpaGenerationRepositoryCRUD.findConversationPagination(
+//                    messageTopic,
+//                    messageType,
+//                    authorTrigram,
+//                    quantity,
+//                    StringUtil.toLowerCaseIfNotNull(userPrompt),
+//                    StringUtil.toLowerCaseIfNotNull(systemPrompt),
+//                    startDate,
+//                    endDate,
+//                    Objects.nonNull(datasetIdList) ? notInDatasetIdList : List.of(UUID.fromString("00000000-0000-0000-0000-000000000000")),
+//                    isIn,
+//                    pageable
+//            ).map(GenerationJpaToDomainMapper::map);
+//        }
+        else {
             throw new IllegalArgumentException("Either inDatasetIdList or notInDatasetIdList must be provided");
         }
 

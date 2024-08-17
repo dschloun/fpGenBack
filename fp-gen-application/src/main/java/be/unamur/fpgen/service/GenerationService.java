@@ -70,9 +70,8 @@ public class GenerationService {
                 query.getGenerationQuery().getAuthorTrigram(),
                 DateUtil.ifNullReturnOldDate(query.getGenerationQuery().getStartDate()),
                 DateUtil.ifNullReturnTomorrow(query.getGenerationQuery().getEndDate()),
-                query.getGenerationQuery().getNotInDatasetIdList(),
-                query.getGenerationQuery().getInDatasetIdList(),
-                Objects.nonNull(query.getGenerationQuery().getInDatasetIdList()),
+                inDatasetSearch(query) ? query.getGenerationQuery().getInDatasetIdList() : query.getGenerationQuery().getNotInDatasetIdList(),
+                inDatasetSearch(query),
                 pageable);
     }
 
@@ -84,5 +83,9 @@ public class GenerationService {
     private String getDetail(final GenerationCreation command, final String generationType) {
         return String.format("generate %s set with Topic: %s, Type: %s, Quantity: %s,}\n System prompt: %s \n User prompt: %s",
                 generationType, command.getTopic(), command.getType(), command.getQuantity(), command.getSystemPrompt(), command.getUserPrompt());
+    }
+
+    private boolean inDatasetSearch(final PagedGenerationsQuery query) {
+        return Objects.nonNull(query.getGenerationQuery().getInDatasetIdList());
     }
 }
