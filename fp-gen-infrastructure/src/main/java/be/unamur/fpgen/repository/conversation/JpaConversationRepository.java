@@ -2,12 +2,13 @@ package be.unamur.fpgen.repository.conversation;
 
 import be.unamur.fpgen.conversation.Conversation;
 import be.unamur.fpgen.conversation.pagination.ConversationsPage;
-import be.unamur.fpgen.message.MessageTopicEnum;
-import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.mapper.domainToJpa.ConversationDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.ConversationJpaToDomainMapper;
+import be.unamur.fpgen.message.MessageTopicEnum;
+import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.pagination.Pagination;
 import be.unamur.fpgen.repository.ConversationRepository;
+import be.unamur.fpgen.repository.generation.JpaConversationGenerationRepositoryCRUD;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -17,12 +18,12 @@ import java.util.UUID;
 
 @Repository
 public class JpaConversationRepository implements ConversationRepository {
-    private final JpaConversationGenerationRepositoryCRUD jpaConversationGenerationRepositoryCRUD;
     private final JpaConversationRepositoryCRUD jpaConversationRepositoryCRUD;
+    private final JpaConversationGenerationRepositoryCRUD jpaConversationGenerationRepositoryCRUD;
 
-    public JpaConversationRepository(JpaConversationGenerationRepositoryCRUD jpaConversationGenerationRepositoryCRUD, JpaConversationRepositoryCRUD jpaConversationRepositoryCRUD) {
-        this.jpaConversationGenerationRepositoryCRUD = jpaConversationGenerationRepositoryCRUD;
+    public JpaConversationRepository(JpaConversationRepositoryCRUD jpaConversationRepositoryCRUD, JpaConversationGenerationRepositoryCRUD jpaConversationGenerationRepositoryCRUD) {
         this.jpaConversationRepositoryCRUD = jpaConversationRepositoryCRUD;
+        this.jpaConversationGenerationRepositoryCRUD = jpaConversationGenerationRepositoryCRUD;
     }
 
     @Override

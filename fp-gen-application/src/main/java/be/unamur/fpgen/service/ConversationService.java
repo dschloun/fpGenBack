@@ -3,12 +3,13 @@ package be.unamur.fpgen.service;
 import be.unamur.fpgen.conversation.Conversation;
 import be.unamur.fpgen.conversation.pagination.ConversationsPage;
 import be.unamur.fpgen.conversation.pagination.PagedConversationsQuery;
-import be.unamur.fpgen.generation.ConversationGeneration;
-import be.unamur.fpgen.message.ConversationMessage;
+import be.unamur.fpgen.generation.Generation;
+import be.unamur.fpgen.generation.GenerationTypeEnum;
 import be.unamur.fpgen.interlocutor.Interlocutor;
 import be.unamur.fpgen.interlocutor.InterlocutorTypeEnum;
 import be.unamur.fpgen.mapper.webToDomain.ConversationCreationWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.ConversationMessageCreationWebToDomainMapper;
+import be.unamur.fpgen.message.ConversationMessage;
 import be.unamur.fpgen.repository.ConversationMessageRepository;
 import be.unamur.fpgen.repository.ConversationRepository;
 import be.unamur.fpgen.utils.Alternator;
@@ -30,22 +31,21 @@ import java.util.UUID;
 public class ConversationService {
 
     private final ConversationRepository conversationRepository;
-    private final ConversationGenerationService conversationGenerationService;
+    private final GenerationService generationService;
     private final InterlocutorService interlocutorService;
     private final ConversationMessageRepository conversationMessageRepository;
-    private final ConversationDatasetService conversationDatasetService;
+    private final DatasetService datasetService;
 
     public ConversationService(ConversationRepository conversationRepository,
-                               ConversationGenerationService conversationGenerationService,
-                               ConversationGenerationRepository conversationGenerationRepository,
+                               GenerationService generationService,
                                InterlocutorService interlocutorService,
                                ConversationMessageRepository conversationMessageRepository,
-                               ConversationDatasetService conversationDatasetService) {
+                               DatasetService datasetService) {
         this.conversationRepository = conversationRepository;
-        this.conversationGenerationService = conversationGenerationService;
+        this.generationService = generationService;
         this.interlocutorService = interlocutorService;
         this.conversationMessageRepository = conversationMessageRepository;
-        this.conversationDatasetService = conversationDatasetService;
+        this.datasetService = datasetService;
     }
 
     @Transactional
@@ -56,7 +56,7 @@ public class ConversationService {
         // 0. for each
         command.getConversationCreationList().forEach(cc -> {
             // 1. create generation data
-            final ConversationGeneration generation = conversationGenerationService.createConversationGeneration(cc, command.getAuthorId());
+            final Generation generation = generationService.createGeneration(GenerationTypeEnum.CONVERSATION, cc, command.getAuthorId());
 
             // 3. generate conversations
             //todo chat gpt api with prompt // return the x messages in json format, unmarshall, ...
@@ -83,7 +83,7 @@ public class ConversationService {
 
                 // 4. add generation to dataset if needed
                 if (Objects.nonNull(command.getDatasetId())) {
-                    conversationDatasetService.addConversationGenerationListToDataset(command.getDatasetId(), List.of(generation.getId()));
+                    datasetService.addGenerationListToDataset(command.getDatasetId(), List.of(generation.getId()));
                 }
             }
         });
@@ -92,7 +92,7 @@ public class ConversationService {
     }
 
     @Transactional
-    public Conversation createConversation(final ConversationGeneration generation, final Conversation conversation) {
+    public Conversation createConversation(final Generation generation, final Conversation conversation) {
         return conversationRepository.saveConversation(
                 Conversation.newBuilder()
                         .withTopic(conversation.getTopic())
