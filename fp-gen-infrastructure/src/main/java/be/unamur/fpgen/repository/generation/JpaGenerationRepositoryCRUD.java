@@ -25,7 +25,7 @@ public interface JpaGenerationRepositoryCRUD extends JpaRepository<GenerationEnt
             "AND (:quantity is null or g.quantity <= :quantity) " +
             "AND g.creationDate >= cast(:startDate as timestamp) " +
             "AND g.creationDate <= cast(:endDate as timestamp) " +
-            "AND ((:isIn = true AND gd.id IN :datasetIdList) OR (:isIn = false AND (gd.id NOT IN :datasetIdList OR gd.id is null)))";
+            "AND ((:isIn = true AND gd.id IN :datasetIdList) OR (:isIn = false AND gd.id NOT IN :datasetIdList ))";
 
     @Query(value = "SELECT DISTINCT g from InstantMessageGenerationEntity g " +
             " LEFT JOIN g.instantMessageDatasetList gd" +

@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -71,7 +72,7 @@ public class GenerationService {
                 DateUtil.ifNullReturnTomorrow(query.getGenerationQuery().getEndDate()),
                 query.getGenerationQuery().getNotInDatasetIdList(),
                 query.getGenerationQuery().getInDatasetIdList(),
-                query.getGenerationQuery().getNotInDatasetIdList().isEmpty(),
+                Objects.nonNull(query.getGenerationQuery().getInDatasetIdList()),
                 pageable);
     }
 
