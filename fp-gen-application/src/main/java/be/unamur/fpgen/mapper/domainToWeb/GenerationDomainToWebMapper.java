@@ -1,7 +1,6 @@
 package be.unamur.fpgen.mapper.domainToWeb;
 
 import be.unamur.fpgen.generation.Generation;
-import be.unamur.model.GenerationType;
 
 public class GenerationDomainToWebMapper {
 
@@ -10,7 +9,7 @@ public class GenerationDomainToWebMapper {
                 .id(domain.getId())
                 .creationDate(domain.getCreationDate())
                 .modificationDate(domain.getModificationDate())
-                .generationType(domain instanceof InstantMessageGeneration ? GenerationType.INSTANT_MESSAGE : GenerationType.CONVERSATION)
+                .generationType(GenerationTypeDomainToWebMapper.map(domain.getGenerationType()))
                 .messageType(MessageTypeDomainToWebMapper.map(domain.getType()))
                 .messageTopic(MessageTopicDomainToWebMapper.map(domain.getTopic()))
                 .systemPrompt(domain.getSystemPrompt())

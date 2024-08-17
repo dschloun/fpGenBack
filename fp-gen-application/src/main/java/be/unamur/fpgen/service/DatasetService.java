@@ -205,7 +205,7 @@ public class DatasetService {
 
         // 4. update old version
         oldDataset.isNotLastVersionAnymore();
-        datasetRepository.updateInstantMessageDataset(oldDataset);
+        datasetRepository.updateDataset(oldDataset);
 
         // 5. save new version
         return datasetRepository.saveNewVersion(oldDataset, newVersion);

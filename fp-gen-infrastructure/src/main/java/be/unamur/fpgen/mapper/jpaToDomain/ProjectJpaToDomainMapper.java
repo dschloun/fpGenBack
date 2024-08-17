@@ -30,13 +30,7 @@ public class ProjectJpaToDomainMapper {
     private static Set<Dataset> mapDatasets(Set<DatasetEntity> datasetEntities) {
         Set<Dataset> datasets = new HashSet<>();
         datasetEntities.forEach(ds -> {
-            if(ds instanceof InstantMessageDatasetEntity imd){
-                datasets.add(InstantMessageDatasetJpaToDomainMapper.mapInstantMessageDataset(imd));
-            } else if (ds instanceof ConversationDatasetEntity cd){
-                datasets.add(ConversationDatasetJpaToDomainMapper.map(cd));
-            } else {
-                throw new IllegalArgumentException("Unknown dataset type");
-            }
+                datasets.add(DatasetJpaToDomainMapper.map(ds));
         });
 
         return datasets;

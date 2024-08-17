@@ -19,7 +19,7 @@ public interface DatasetRepository {
 
     Dataset saveNewVersion(Dataset oldVersion, Dataset newVersion);
 
-    Dataset updateInstantMessageDataset(Dataset dataset);
+    Dataset updateDataset(Dataset dataset);
 
     Optional<Dataset> findInstantMessageDatasetById(UUID dataset);
 

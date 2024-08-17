@@ -1,6 +1,7 @@
 package be.unamur.fpgen.service;
 
 import be.unamur.fpgen.author.Author;
+import be.unamur.fpgen.dataset.DatasetTypeEnum;
 import be.unamur.fpgen.exception.ProjectNotFoundException;
 import be.unamur.fpgen.mapper.webToDomain.ProjectWebToDomainMapper;
 import be.unamur.fpgen.project.Project;
@@ -32,7 +33,7 @@ public class ProjectService {
 
         // 1. generate 3 datasets for the project
         final Project project = ProjectWebToDomainMapper.map(projectCreation, author);
-        project.generateInitialDatasets();
+        project.generateInitialDatasets(getDatasetType(projectCreation));
 
         return projectRepository.save(project, author);
     }
@@ -58,5 +59,13 @@ public class ProjectService {
                 query.getProjectQuery().getStartDate(),
                 query.getProjectQuery().getEndDate(),
                 pageable);
+    }
+
+    private DatasetTypeEnum getDatasetType(final ProjectCreation projectCreation){
+        if (projectCreation.getProjectType().name().equals(DatasetTypeEnum.INSTANT_MESSAGE.name())){
+            return DatasetTypeEnum.INSTANT_MESSAGE;
+        } else {
+            return DatasetTypeEnum.CONVERSATION;
+        }
     }
 }

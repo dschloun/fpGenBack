@@ -7,7 +7,7 @@ import be.unamur.fpgen.message.InstantMessage;
 import be.unamur.fpgen.message.pagination.InstantMessage.InstantMessagesPage;
 import be.unamur.fpgen.message.pagination.InstantMessage.PagedInstantMessagesQuery;
 import be.unamur.fpgen.messaging.event.OngoingGenerationEvent;
-import be.unamur.fpgen.repository.InstantMessageRepository;
+import be.unamur.fpgen.repository.MessageRepository;
 import be.unamur.fpgen.utils.DateUtil;
 import be.unamur.model.InstantMessageBatchCreation;
 import org.springframework.context.ApplicationEventPublisher;
@@ -21,17 +21,17 @@ import java.util.*;
 @Service
 public class InstantMessageService {
 
-    private final InstantMessageRepository instantMessageRepository;
+    private final MessageRepository messageRepository;
     private final GenerationService generationService;
     private final DatasetService datasetService;
     private final OngoingGenerationService ongoingGenerationService;
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    public InstantMessageService(final InstantMessageRepository instantMessageRepository,
+    public InstantMessageService(final MessageRepository messageRepository,
                                  final GenerationService generationService,
                                  final DatasetService datasetService,
                                  OngoingGenerationService ongoingGenerationService, ApplicationEventPublisher applicationEventPublisher) {
-        this.instantMessageRepository = instantMessageRepository;
+        this.messageRepository = messageRepository;
         this.generationService = generationService;
         this.datasetService = datasetService;
         this.ongoingGenerationService = ongoingGenerationService;
@@ -54,7 +54,7 @@ public class InstantMessageService {
 
     @Transactional
     public InstantMessage getInstantMessageById(UUID instantMessageId) {
-        return instantMessageRepository.getInstantMessageById(instantMessageId)
+        return messageRepository.getInstantMessageById(instantMessageId)
                 .orElseThrow(() -> InstantMessageNotFoundException.withId(instantMessageId));
     }
 
@@ -64,7 +64,7 @@ public class InstantMessageService {
                 .of(query.getQueryPage().getPage(),
                         query.getQueryPage().getSize());
 
-        return instantMessageRepository.findPagination(
+        return messageRepository.findPagination(
                 query.getInstantMessageQuery().getMessageTopic(),
                 query.getInstantMessageQuery().getMessageType(),
                 query.getInstantMessageQuery().getContent(),
@@ -75,12 +75,12 @@ public class InstantMessageService {
 
     @Transactional
     public void deleteById(UUID instantMessageId) {
-        instantMessageRepository.deleteInstantMessageById(instantMessageId);
+        messageRepository.deleteInstantMessageById(instantMessageId);
     }
 
     @Transactional
     public List<InstantMessage> findAllByGenerationId(UUID generationId) {
-        return instantMessageRepository.findInstantMessageByGenerationId(generationId);
+        return messageRepository.findInstantMessageByGenerationId(generationId);
     }
 
 }

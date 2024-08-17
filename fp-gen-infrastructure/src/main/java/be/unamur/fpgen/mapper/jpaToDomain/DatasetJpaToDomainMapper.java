@@ -1,19 +1,32 @@
 package be.unamur.fpgen.mapper.jpaToDomain;
 
+import be.unamur.fpgen.dataset.Dataset;
 import be.unamur.fpgen.entity.base.BaseUuidEntity;
+import be.unamur.fpgen.entity.dataset.ConversationDatasetEntity;
+import be.unamur.fpgen.entity.dataset.DatasetEntity;
 import be.unamur.fpgen.entity.dataset.InstantMessageDatasetEntity;
 import be.unamur.fpgen.utils.MapperUtil;
 
 import java.util.Objects;
 import java.util.Optional;
 
-public class InstantMessageDatasetJpaToDomainMapper {
+public class DatasetJpaToDomainMapper {
 
-    public static InstantMessageDataset mapInstantMessageDataset(final InstantMessageDatasetEntity entity){
+    public static Dataset map(final DatasetEntity entity){
+        if (entity instanceof InstantMessageDatasetEntity imd){
+            return map(imd);
+        } else if (entity instanceof ConversationDatasetEntity cd){
+            return map(cd);
+        } else {
+            throw new IllegalArgumentException("Unknown dataset type");
+        }
+    }
+
+    private static Dataset map(final InstantMessageDatasetEntity entity){
         if(Objects.isNull(entity)){
             return null;
         }
-        return InstantMessageDataset.newBuilder()
+        return Dataset.newBuilder()
                 .withId(entity.getId())
                 .withCreationDate(entity.getCreationDate())
                 .withModificationDate(entity.getModificationDate())
@@ -24,7 +37,7 @@ public class InstantMessageDatasetJpaToDomainMapper {
                 .withComment(entity.getComment())
                 .withAuthor(AuthorJpaToDomainMapper.map(entity.getAuthor()))
                 .withDatasetFunction(entity.getFunction())
-                .withInstantMessageGenerationList(MapperUtil.mapSet(entity.getInstantMessageGenerationList(), GenerationJpaToDomainMapper::map))
+                .withItemList(MapperUtil.mapSet(entity.getInstantMessageGenerationList(), GenerationJpaToDomainMapper::map))
                 .withOngoingGenerationId(Optional.ofNullable(entity.getOngoingGeneration()).map(BaseUuidEntity::getId).orElse(null))
                 .withStatistic(StatisticJpaToDomainMapper.map(entity.getStatistic()))
                 .withValidated(entity.isValidated())
@@ -33,12 +46,11 @@ public class InstantMessageDatasetJpaToDomainMapper {
                 .build();
     }
 
-    // strange but on purpose to get back each type in one for pagination in order to use abstract
-    public static ConversationDataset mapForAbstract(final InstantMessageDatasetEntity entity){
-        if(Objects.isNull(entity)){
+    private static Dataset map(final ConversationDatasetEntity entity){
+        if(entity == null){
             return null;
         }
-        return ConversationDataset.newBuilder()
+        return Dataset.newBuilder()
                 .withId(entity.getId())
                 .withCreationDate(entity.getCreationDate())
                 .withModificationDate(entity.getModificationDate())
@@ -49,8 +61,8 @@ public class InstantMessageDatasetJpaToDomainMapper {
                 .withComment(entity.getComment())
                 .withAuthor(AuthorJpaToDomainMapper.map(entity.getAuthor()))
                 .withDatasetFunction(entity.getFunction())
+                .withItemList(MapperUtil.mapSet(entity.getConversationGenerationList(), ConversationGenerationJpaToDomainMapper::map))
                 .withOngoingGenerationId(Optional.ofNullable(entity.getOngoingGeneration()).map(BaseUuidEntity::getId).orElse(null))
-                .withStatistic(StatisticJpaToDomainMapper.map(entity.getStatistic()))
                 .withValidated(entity.isValidated())
                 .withLastVersion(entity.isLastVersion())
                 .withOriginalDatasetId(entity.getOriginalDatasetId())

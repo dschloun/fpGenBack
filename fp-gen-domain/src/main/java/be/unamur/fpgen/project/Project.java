@@ -57,32 +57,23 @@ public class Project extends BaseUuidDomain {
         return datasetList;
     }
 
-    public void generateInitialDatasets(){
+    public void generateInitialDatasets(final DatasetTypeEnum datasetType){
         final Set<Dataset> datasets = new HashSet<>();
-        datasets.add(this.generateDataset(this.getAuthor(), DatasetFunctionEnum.TRAINING));
-        datasets.add(this.generateDataset(this.getAuthor(), DatasetFunctionEnum.TEST));
-        datasets.add(this.generateDataset(this.getAuthor(), DatasetFunctionEnum.VALIDATION));
+        datasets.add(this.generateDataset(this.getAuthor(), datasetType, DatasetFunctionEnum.TRAINING));
+        datasets.add(this.generateDataset(this.getAuthor(), datasetType, DatasetFunctionEnum.TEST));
+        datasets.add(this.generateDataset(this.getAuthor(), datasetType, DatasetFunctionEnum.VALIDATION));
         this.datasetList.addAll(datasets);
     }
 
-    private Dataset generateDataset(Author author, DatasetFunctionEnum datasetFunctionEnum){
-        if(ProjectTypeEnum.INSTANT_MESSAGE.equals(this.getType())){
-            return InstantMessageDataset.newBuilder()
+    private Dataset generateDataset(Author author, DatasetTypeEnum datasetType, DatasetFunctionEnum datasetFunctionEnum){
+            return Dataset.newBuilder()
+                    .withType(datasetType)
                     .withAuthor(author)
                     .withDatasetFunction(datasetFunctionEnum)
                     .withName(generateDatasetName(datasetFunctionEnum))
                     .withVersion(0)
                     .withLastVersion(true)
                     .build();
-        } else {
-            return ConversationDataset.newBuilder()
-                    .withAuthor(author)
-                    .withDatasetFunction(datasetFunctionEnum)
-                    .withName(generateDatasetName(datasetFunctionEnum))
-                    .withVersion(0)
-                    .withLastVersion(true)
-                    .build();
-        }
     }
 
     private String generateDatasetName(DatasetFunctionEnum datasetFunctionEnum){

@@ -17,7 +17,7 @@ import java.util.UUID;
  * The SingleInstantMessageRepository interface provides a contract for SingleInstantMessage,
  * defining methods to manage SingleInstantMessage.
  */
-public interface InstantMessageRepository {
+public interface MessageRepository {
 
     /**
      * Save a SingleInstantMessage.

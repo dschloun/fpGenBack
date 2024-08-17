@@ -26,13 +26,7 @@ public class ProjectDomainToJpaMapper {
     private static Set<DatasetEntity> mapDatasets(Set<Dataset> dataset, AuthorEntity author, ProjectEntity projectEntity) {
         Set<DatasetEntity> datasets = new HashSet<>();
         dataset.forEach(ds -> {
-            if (ds instanceof InstantMessageDataset imd) {
-                datasets.add(InstantMessageDataSetDomainToJpaMapper.mapForCreate(imd, author, projectEntity));
-            } else if (ds instanceof ConversationDataset cd) {
-                datasets.add(ConversationDatasetDomainToJpaMapper.mapForCreate(cd, author, projectEntity));
-            } else {
-                throw new IllegalArgumentException("Unknown dataset type");
-            }
+                datasets.add(DataSetDomainToJpaMapper.mapForCreate(ds, author, projectEntity));
         });
 
         return datasets;

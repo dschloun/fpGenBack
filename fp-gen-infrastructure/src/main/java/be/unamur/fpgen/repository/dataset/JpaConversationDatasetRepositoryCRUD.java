@@ -1,4 +1,4 @@
-package be.unamur.fpgen.repository;
+package be.unamur.fpgen.repository.dataset;
 
 import be.unamur.fpgen.entity.dataset.ConversationDatasetEntity;
 import org.springframework.data.domain.Page;

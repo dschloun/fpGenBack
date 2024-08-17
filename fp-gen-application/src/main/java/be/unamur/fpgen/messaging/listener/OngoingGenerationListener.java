@@ -10,7 +10,7 @@ import be.unamur.fpgen.mapper.webToDomain.MessageTopicWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.MessageTypeWebToDomainMapper;
 import be.unamur.fpgen.message.InstantMessage;
 import be.unamur.fpgen.messaging.event.OngoingGenerationEvent;
-import be.unamur.fpgen.repository.InstantMessageRepository;
+import be.unamur.fpgen.repository.MessageRepository;
 import be.unamur.fpgen.service.DatasetService;
 import be.unamur.fpgen.service.GenerationService;
 import be.unamur.fpgen.service.OngoingGenerationService;
@@ -29,13 +29,13 @@ import java.util.concurrent.CompletableFuture;
 
 @Component
 public class OngoingGenerationListener {
-    private final InstantMessageRepository instantMessageRepository;
+    private final MessageRepository messageRepository;
     private final GenerationService generationService;
     private final DatasetService datasetService;
     private final OngoingGenerationService ongoingGenerationService;
 
-    public OngoingGenerationListener(InstantMessageRepository instantMessageRepository, GenerationService generationService, DatasetService datasetService, OngoingGenerationService ongoingGenerationService) {
-        this.instantMessageRepository = instantMessageRepository;
+    public OngoingGenerationListener(MessageRepository messageRepository, GenerationService generationService, DatasetService datasetService, OngoingGenerationService ongoingGenerationService) {
+        this.messageRepository = messageRepository;
         this.generationService = generationService;
         this.datasetService = datasetService;
         this.ongoingGenerationService = ongoingGenerationService;
@@ -79,7 +79,7 @@ public class OngoingGenerationListener {
                                 instantMessageList.add(InstantMessageWebToDomainMapper.mapForCreate(imc, s));
                             }
                             // 4. save the instant messages
-                            List<InstantMessage> saved = instantMessageRepository.saveInstantMessageList(instantMessageList, generation);
+                            List<InstantMessage> saved = messageRepository.saveInstantMessageList(instantMessageList, generation);
                             // 5. add generation to dataset if needed
                             if (Objects.nonNull(command.getDatasetId())) {
                                 datasetService.addGenerationListToDataset(command.getDatasetId(), List.of(generation.getId()));

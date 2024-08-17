@@ -1,4 +1,4 @@
-package be.unamur.fpgen.repository;
+package be.unamur.fpgen.repository.generation;
 
 import be.unamur.fpgen.generation.Generation;
 import be.unamur.fpgen.generation.GenerationTypeEnum;
@@ -9,6 +9,9 @@ import be.unamur.fpgen.mapper.jpaToDomain.GenerationJpaToDomainMapper;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.pagination.Pagination;
+import be.unamur.fpgen.repository.GenerationRepository;
+import be.unamur.fpgen.repository.JpaAuthorRepositoryCRUD;
+import be.unamur.fpgen.repository.JpaGenerationRepositoryCRUD;
 import be.unamur.fpgen.utils.StringUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

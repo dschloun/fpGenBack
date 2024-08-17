@@ -9,7 +9,6 @@ import be.unamur.fpgen.interlocutor.Interlocutor;
 import be.unamur.fpgen.interlocutor.InterlocutorTypeEnum;
 import be.unamur.fpgen.mapper.webToDomain.ConversationCreationWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.ConversationMessageCreationWebToDomainMapper;
-import be.unamur.fpgen.repository.ConversationGenerationRepository;
 import be.unamur.fpgen.repository.ConversationMessageRepository;
 import be.unamur.fpgen.repository.ConversationRepository;
 import be.unamur.fpgen.utils.Alternator;
