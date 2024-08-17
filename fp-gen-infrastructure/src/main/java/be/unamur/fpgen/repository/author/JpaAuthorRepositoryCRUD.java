@@ -1,4 +1,4 @@
-package be.unamur.fpgen.repository;
+package be.unamur.fpgen.repository.author;
 
 import be.unamur.fpgen.entity.author.AuthorEntity;
 import org.springframework.data.domain.Page;

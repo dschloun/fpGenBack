@@ -1,4 +1,4 @@
-package be.unamur.fpgen.repository;
+package be.unamur.fpgen.repository.project;
 
 import be.unamur.fpgen.entity.project.ProjectEntity;
 import be.unamur.fpgen.project.ProjectTypeEnum;

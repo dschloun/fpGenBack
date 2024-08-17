@@ -1,9 +1,10 @@
-package be.unamur.fpgen.repository;
+package be.unamur.fpgen.repository.statistic;
 
 import be.unamur.fpgen.dataset.Dataset;
 import be.unamur.fpgen.entity.dataset.DatasetEntity;
 import be.unamur.fpgen.mapper.domainToJpa.StatisticDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.StatisticJpaToDomainMapper;
+import be.unamur.fpgen.repository.StatisticRepository;
 import be.unamur.fpgen.repository.dataset.JpaDatasetRepositoryCRUD;
 import be.unamur.fpgen.statistic.Statistic;
 import be.unamur.fpgen.statistic.TypeTopicDistributionProjection;

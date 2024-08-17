@@ -1,6 +1,5 @@
-package be.unamur.fpgen.repository;
+package be.unamur.fpgen.repository.message;
 
-import be.unamur.fpgen.entity.instant_message.ConversationInstantMessageEntity;
 import be.unamur.fpgen.entity.instant_message.InstantMessageEntity;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
@@ -11,17 +10,21 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 
-public interface JpaConversationMessageRepositoryCRUD extends JpaRepository<ConversationInstantMessageEntity, UUID>{
-    @Query(value = "SELECT DISTINCT i from ConversationInstantMessageEntity i" +
+public interface JpaInstantMessageRepositoryCRUD extends JpaRepository<InstantMessageEntity, UUID> {
+
+    List<InstantMessageEntity> findAllByInstantMessageGenerationId(UUID generationId);
+
+    @Query(value = "SELECT DISTINCT i from InstantMessageEntity i" +
             " WHERE (:topic is null or i.topic = :topic)" +
             " AND (:type is null or i.type = :type)" +
             " AND (:content is null or lower(i.content) like %:content%)" +
             " AND i.creationDate >= cast(:startDate as timestamp)" +
             " AND i.creationDate <= cast(:endDate as timestamp)"
     )
-    Page<ConversationInstantMessageEntity> findPagination(@Param("topic") MessageTopicEnum topic,
+    Page<InstantMessageEntity> findPagination(@Param("topic") MessageTopicEnum topic,
                                               @Param("type") MessageTypeEnum type,
                                               @Param("content") String content,
                                               @Param("startDate") OffsetDateTime startDate,

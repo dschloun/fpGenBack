@@ -1,4 +1,4 @@
-package be.unamur.fpgen.repository;
+package be.unamur.fpgen.repository.message;
 
 import be.unamur.fpgen.conversation.Conversation;
 import be.unamur.fpgen.entity.conversation.ConversationEntity;
@@ -10,6 +10,9 @@ import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.message.pagination.conversation_message.ConversationMessagesPage;
 import be.unamur.fpgen.pagination.Pagination;
+import be.unamur.fpgen.repository.ConversationMessageRepository;
+import be.unamur.fpgen.repository.conversation.JpaConversationRepositoryCRUD;
+import be.unamur.fpgen.repository.interclocutor.JpaInterlocutorRepositoryCRUD;
 import be.unamur.fpgen.utils.StringUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +22,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 @Repository
-public class JpaConversationMessageRepository implements ConversationMessageRepository{
+public class JpaConversationMessageRepository implements ConversationMessageRepository {
 
     private final JpaConversationRepositoryCRUD jpaConversationRepositoryCRUD;
     private final JpaConversationMessageRepositoryCRUD jpaConversationMessageRepositoryCRUD;

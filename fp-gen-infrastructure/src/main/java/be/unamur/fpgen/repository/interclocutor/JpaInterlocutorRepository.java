@@ -1,13 +1,13 @@
-package be.unamur.fpgen.repository;
+package be.unamur.fpgen.repository.interclocutor;
 
 import be.unamur.fpgen.interlocutor.Interlocutor;
 import be.unamur.fpgen.interlocutor.InterlocutorTypeEnum;
 import be.unamur.fpgen.mapper.domainToJpa.InterlocutorDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.InterlocutorJpaToDomainMapper;
+import be.unamur.fpgen.repository.InterlocutorRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 @Repository

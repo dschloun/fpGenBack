@@ -1,7 +1,8 @@
-package be.unamur.fpgen.repository;
+package be.unamur.fpgen.repository.message;
 
 import be.unamur.fpgen.entity.generation.InstantMessageGenerationEntity;
 import be.unamur.fpgen.entity.instant_message.InstantMessageEntity;
+import be.unamur.fpgen.generation.Generation;
 import be.unamur.fpgen.message.InstantMessage;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
@@ -9,6 +10,8 @@ import be.unamur.fpgen.message.pagination.InstantMessage.InstantMessagesPage;
 import be.unamur.fpgen.mapper.domainToJpa.InstantMessageDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.InstantMessageJpaToDomainMapper;
 import be.unamur.fpgen.pagination.Pagination;
+import be.unamur.fpgen.repository.MessageRepository;
+import be.unamur.fpgen.repository.generation.JpaInstantMessageGenerationRepositoryCRUD;
 import be.unamur.fpgen.utils.StringUtil;
 import liquibase.repackaged.org.apache.commons.collections4.ListUtils;
 import org.springframework.data.domain.Page;
@@ -21,20 +24,21 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public class JpaMessageRepository implements MessageRepository {
+public class JpaInstantMessageRepository implements MessageRepository {
 
     private final JpaInstantMessageRepositoryCRUD jpaInstantMessageRepositoryCRUD;
-    private final JpaGenerationRepositoryCRUD jpaGenerationRepositoryCRUD;
+    private final JpaInstantMessageGenerationRepositoryCRUD jpaInstantMessageGenerationRepositoryCRUD;
 
-    public JpaMessageRepository(final JpaInstantMessageRepositoryCRUD jpaInstantMessageRepositoryCRUD,
-                                final JpaGenerationRepositoryCRUD jpaGenerationRepositoryCRUD) {
+    public JpaInstantMessageRepository(final JpaInstantMessageRepositoryCRUD jpaInstantMessageRepositoryCRUD,
+                                       JpaInstantMessageGenerationRepositoryCRUD jpaInstantMessageGenerationRepositoryCRUD) {
+        this.jpaInstantMessageGenerationRepositoryCRUD = jpaInstantMessageGenerationRepositoryCRUD;
         this.jpaInstantMessageRepositoryCRUD = jpaInstantMessageRepositoryCRUD;
-        this.jpaGenerationRepositoryCRUD = jpaGenerationRepositoryCRUD;
+
     }
 
     @Override
-    public List<InstantMessage> saveInstantMessageList(List<InstantMessage> instantMessageList, InstantMessageGeneration instantMessageGeneration) {
-        final InstantMessageGenerationEntity generationEntity = jpaGenerationRepositoryCRUD.findById(instantMessageGeneration.getId()).orElseThrow();
+    public List<InstantMessage> saveInstantMessageList(List<InstantMessage> instantMessageList, Generation instantMessageGeneration) {
+        final InstantMessageGenerationEntity generationEntity = jpaInstantMessageGenerationRepositoryCRUD.findById(instantMessageGeneration.getId()).orElseThrow();
         List<InstantMessageEntity> l = jpaInstantMessageRepositoryCRUD.saveAll(ListUtils.emptyIfNull(instantMessageList)
                 .stream()
                 .map(i -> InstantMessageDomainToJpaMapper.mapForCreate(i, generationEntity))

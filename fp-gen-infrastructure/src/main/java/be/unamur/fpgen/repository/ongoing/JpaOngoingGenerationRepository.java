@@ -1,4 +1,4 @@
-package be.unamur.fpgen.repository;
+package be.unamur.fpgen.repository.ongoing;
 
 import be.unamur.fpgen.entity.author.AuthorEntity;
 import be.unamur.fpgen.entity.generation.ongoing_generation.OngoingGenerationEntity;
@@ -8,6 +8,8 @@ import be.unamur.fpgen.generation.ongoing_generation.OngoingGenerationStatus;
 import be.unamur.fpgen.mapper.domainToJpa.OngoingGenerationDomainToJpaMapper;
 import be.unamur.fpgen.mapper.domainToJpa.OngoingGenerationItemDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.OngoingGenerationJpaToDomainMapper;
+import be.unamur.fpgen.repository.author.JpaAuthorRepositoryCRUD;
+import be.unamur.fpgen.repository.OngoingGenerationRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

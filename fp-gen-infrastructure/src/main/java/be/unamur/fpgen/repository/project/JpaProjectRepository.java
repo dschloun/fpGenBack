@@ -1,4 +1,4 @@
-package be.unamur.fpgen.repository;
+package be.unamur.fpgen.repository.project;
 
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.entity.author.AuthorEntity;
@@ -8,6 +8,8 @@ import be.unamur.fpgen.pagination.Pagination;
 import be.unamur.fpgen.project.Project;
 import be.unamur.fpgen.project.ProjectTypeEnum;
 import be.unamur.fpgen.project.pagination.ProjectsPage;
+import be.unamur.fpgen.repository.author.JpaAuthorRepositoryCRUD;
+import be.unamur.fpgen.repository.ProjectRepository;
 import be.unamur.fpgen.utils.MapperUtil;
 import be.unamur.fpgen.utils.StringUtil;
 import org.springframework.data.domain.Page;

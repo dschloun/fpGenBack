@@ -1,4 +1,4 @@
-package be.unamur.fpgen.repository;
+package be.unamur.fpgen.repository.conversation;
 
 
 import be.unamur.fpgen.entity.conversation.ConversationEntity;

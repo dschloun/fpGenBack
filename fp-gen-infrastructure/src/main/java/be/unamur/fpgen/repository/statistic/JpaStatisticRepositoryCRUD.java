@@ -1,4 +1,4 @@
-package be.unamur.fpgen.repository;
+package be.unamur.fpgen.repository.statistic;
 
 import be.unamur.fpgen.entity.statistic.StatisticEntity;
 import be.unamur.fpgen.statistic.TypeTopicDistributionProjection;

@@ -170,7 +170,7 @@ public class DatasetService {
         final Dataset dataset = getDatasetById(datasetId);
         checkIfDatasetIsEmpty(dataset);
         dataset.validateDataset();
-        datasetRepository.updateInstantMessageDataset(dataset);
+        datasetRepository.updateDataset(dataset);
     }
 
     @Transactional

@@ -1,4 +1,4 @@
-package be.unamur.fpgen.repository;
+package be.unamur.fpgen.repository.ongoing;
 
 import be.unamur.fpgen.entity.generation.ongoing_generation.OngoingGenerationEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

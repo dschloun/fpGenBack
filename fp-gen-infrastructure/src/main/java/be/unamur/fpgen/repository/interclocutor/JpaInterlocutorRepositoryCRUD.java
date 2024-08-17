@@ -1,4 +1,4 @@
-package be.unamur.fpgen.repository;
+package be.unamur.fpgen.repository.interclocutor;
 
 import be.unamur.fpgen.entity.interlocutor.InterlocutorEntity;
 import be.unamur.fpgen.interlocutor.InterlocutorTypeEnum;
