@@ -1,16 +1,16 @@
 package be.unamur.fpgen.mapper.jpaToDomain;
 
 import be.unamur.fpgen.entity.generation.ConversationGenerationEntity;
-import be.unamur.fpgen.generation.AbstractGeneration;
+import be.unamur.fpgen.generation.Generation;
 import be.unamur.fpgen.utils.MapperUtil;
 
 public class ConversationGenerationJpaToDomainMapper {
 
-    public static AbstractGeneration map(final ConversationGenerationEntity entity){
+    public static Generation map(final ConversationGenerationEntity entity){
         if (entity == null){
             return null;
         }
-        return AbstractGeneration.newBuilder()
+        return Generation.newBuilder()
                 .withId(entity.getId())
                 .withCreationDate(entity.getCreationDate())
                 .withModificationDate(entity.getModificationDate())

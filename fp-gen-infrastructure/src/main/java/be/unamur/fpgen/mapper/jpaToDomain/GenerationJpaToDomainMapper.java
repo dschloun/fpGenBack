@@ -3,12 +3,12 @@ package be.unamur.fpgen.mapper.jpaToDomain;
 import be.unamur.fpgen.entity.generation.ConversationGenerationEntity;
 import be.unamur.fpgen.entity.generation.GenerationEntity;
 import be.unamur.fpgen.entity.generation.InstantMessageGenerationEntity;
-import be.unamur.fpgen.generation.AbstractGeneration;
+import be.unamur.fpgen.generation.Generation;
 import be.unamur.fpgen.utils.MapperUtil;
 
 public class GenerationJpaToDomainMapper {
 
-    public static AbstractGeneration map(final GenerationEntity entity){
+    public static Generation map(final GenerationEntity entity){
         if (entity == null){
             return null;
         }
@@ -21,11 +21,11 @@ public class GenerationJpaToDomainMapper {
         }
     }
 
-    public static AbstractGeneration map(final InstantMessageGenerationEntity entity){
+    public static Generation map(final InstantMessageGenerationEntity entity){
         if (entity == null){
             return null;
         }
-        return AbstractGeneration.newBuilder()
+        return Generation.newBuilder()
                 .withId(entity.getId())
                 .withCreationDate(entity.getCreationDate())
                 .withModificationDate(entity.getModificationDate())
@@ -41,11 +41,11 @@ public class GenerationJpaToDomainMapper {
                 .build();
     }
 
-    public static AbstractGeneration map(final ConversationGenerationEntity entity){
+    public static Generation map(final ConversationGenerationEntity entity){
         if (entity == null){
             return null;
         }
-        return AbstractGeneration.newBuilder()
+        return Generation.newBuilder()
                 .withId(entity.getId())
                 .withCreationDate(entity.getCreationDate())
                 .withModificationDate(entity.getModificationDate())

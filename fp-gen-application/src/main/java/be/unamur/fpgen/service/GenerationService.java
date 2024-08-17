@@ -2,9 +2,9 @@ package be.unamur.fpgen.service;
 
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.exception.GenerationNotFoundException;
-import be.unamur.fpgen.generation.AbstractGeneration;
+import be.unamur.fpgen.generation.Generation;
 import be.unamur.fpgen.generation.GenerationTypeEnum;
-import be.unamur.fpgen.generation.pagination.AbstractGenerationPage;
+import be.unamur.fpgen.generation.pagination.GenerationPage;
 import be.unamur.fpgen.generation.pagination.PagedGenerationsQuery;
 import be.unamur.fpgen.mapper.webToDomain.MessageTopicWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.MessageTypeWebToDomainMapper;
@@ -29,12 +29,12 @@ public class GenerationService {
     }
 
     @Transactional
-    public AbstractGeneration createGeneration(final GenerationTypeEnum type, final GenerationCreation command, final UUID authorId) {
+    public Generation createGeneration(final GenerationTypeEnum type, final GenerationCreation command, final UUID authorId) {
         // 0. check if author is registered
         final Author author = authorService.getAuthorById(authorId);
         // 1. save the generation
         return generationRepository.saveGeneration(
-                AbstractGeneration.newBuilder()
+                Generation.newBuilder()
                         .withGenerationType(type)
                         .withAuthor(author)
                         .withDetails(getDetail(command, type.toString()))
@@ -47,13 +47,13 @@ public class GenerationService {
     }
 
     @Transactional
-    public AbstractGeneration findGenerationById(final UUID generationId) {
+    public Generation findGenerationById(final UUID generationId) {
         return generationRepository.findGenerationById(generationId)
                 .orElseThrow(() -> GenerationNotFoundException.withId(generationId));
     }
 
     @Transactional
-    public AbstractGenerationPage searchGenerationsPaginate(PagedGenerationsQuery query) {
+    public GenerationPage searchGenerationsPaginate(PagedGenerationsQuery query) {
        //1. get pageable
         final Pageable pageable = PageRequest
                 .of(query.getQueryPage().getPage(),

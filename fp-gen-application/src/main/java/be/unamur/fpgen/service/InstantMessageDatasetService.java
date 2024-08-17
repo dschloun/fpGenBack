@@ -6,7 +6,7 @@ import be.unamur.fpgen.dataset.InstantMessageDataset;
 import be.unamur.fpgen.dataset.pagination.DatasetsPage;
 import be.unamur.fpgen.dataset.pagination.PagedDatasetsQuery;
 import be.unamur.fpgen.exception.*;
-import be.unamur.fpgen.generation.AbstractGeneration;
+import be.unamur.fpgen.generation.Generation;
 import be.unamur.fpgen.generation.ongoing_generation.OngoingGeneration;
 import be.unamur.fpgen.mapper.webToDomain.DatasetWebToDomainMapper;
 import be.unamur.fpgen.messaging.event.StatisticComputationEvent;
@@ -96,7 +96,7 @@ public class InstantMessageDatasetService {
         checkDatasetValidationState(dataset, false);
 
         // 3. get instant message generations
-        final Set<AbstractGeneration> instantMessageGenerationList = getInstantMessageGenerationList(instantMessageGenerationIdsList);
+        final Set<Generation> instantMessageGenerationList = getInstantMessageGenerationList(instantMessageGenerationIdsList);
 
         // 4. remove instant message generations from dataset
         dataset.getInstantMessageGenerationList().removeAll(getInstantMessageGenerationList(instantMessageGenerationIdsList));
@@ -129,9 +129,9 @@ public class InstantMessageDatasetService {
                 pageable);
     }
 
-    private Set<AbstractGeneration> getInstantMessageGenerationList(List<UUID> instantMessageGenerationIdsList) {
+    private Set<Generation> getInstantMessageGenerationList(List<UUID> instantMessageGenerationIdsList) {
         // 1. get instant message generations
-        final Set<AbstractGeneration> instantMessageGenerationList = new HashSet<>();
+        final Set<Generation> instantMessageGenerationList = new HashSet<>();
         instantMessageGenerationIdsList.forEach(i -> {
             try {
                 final InstantMessageGeneration instantMessageGeneration = generationService.findGenerationById(i);

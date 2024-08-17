@@ -2,15 +2,11 @@ package be.unamur.fpgen.generation;
 
 import be.unamur.fpgen.BaseUuidDomain;
 import be.unamur.fpgen.author.Author;
-import be.unamur.fpgen.dataset.GenerationId;
-import be.unamur.fpgen.message.AbstractInstantMessage;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
 
-import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * @overview: generation is a class that represents the generation of a message, message batch, conversation or conversation batch
@@ -21,7 +17,7 @@ import java.util.UUID;
  * format 'trigram' ex: JDO (John Doe)
  * @specfield details: String // details of the generation
  */
-public class AbstractGeneration extends BaseUuidDomain {
+public class Generation extends BaseUuidDomain {
     // members
     private final String generationId;
     private final GenerationTypeEnum generationType;
@@ -34,7 +30,7 @@ public class AbstractGeneration extends BaseUuidDomain {
     private final String userPrompt;
     private final Set<AbstractItem> itemList = new HashSet<>();
 
-    private AbstractGeneration(Builder builder) {
+    private Generation(Builder builder) {
         generationId = builder.generationId;
         generationType = builder.generationType;
         author = builder.author;
@@ -155,8 +151,8 @@ public class AbstractGeneration extends BaseUuidDomain {
             return this;
         }
 
-        public AbstractGeneration build() {
-            return new AbstractGeneration(this);
+        public Generation build() {
+            return new Generation(this);
         }
 
         public String returnBatchOrSingle(){

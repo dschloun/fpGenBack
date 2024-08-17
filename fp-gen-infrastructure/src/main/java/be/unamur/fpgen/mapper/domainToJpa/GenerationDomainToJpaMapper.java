@@ -2,11 +2,11 @@ package be.unamur.fpgen.mapper.domainToJpa;
 
 import be.unamur.fpgen.entity.author.AuthorEntity;
 import be.unamur.fpgen.entity.generation.GenerationEntity;
-import be.unamur.fpgen.generation.AbstractGeneration;
+import be.unamur.fpgen.generation.Generation;
 
 public class GenerationDomainToJpaMapper {
 
-    public static GenerationEntity mapForCreate(final AbstractGeneration domain, final AuthorEntity author) {
+    public static GenerationEntity mapForCreate(final Generation domain, final AuthorEntity author) {
         final GenerationEntity entity = new GenerationEntity();
         entity.setGenerationId(domain.getGenerationId());
         entity.setAuthor(author);
@@ -19,7 +19,7 @@ public class GenerationDomainToJpaMapper {
         return entity;
     }
 
-    public static GenerationEntity map(final AbstractGeneration domain) {
+    public static GenerationEntity map(final Generation domain) {
         final GenerationEntity entity = new GenerationEntity();
         entity.setId(domain.getId());
         entity.setModificationDate(domain.getModificationDate());

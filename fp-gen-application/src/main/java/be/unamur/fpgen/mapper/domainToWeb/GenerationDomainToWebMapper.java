@@ -1,13 +1,12 @@
 package be.unamur.fpgen.mapper.domainToWeb;
 
-import be.unamur.fpgen.generation.AbstractGeneration;
-import be.unamur.model.Generation;
+import be.unamur.fpgen.generation.Generation;
 import be.unamur.model.GenerationType;
 
 public class GenerationDomainToWebMapper {
 
-    public static Generation map(final AbstractGeneration domain){
-        return new Generation()
+    public static be.unamur.model.Generation map(final Generation domain){
+        return new be.unamur.model.Generation()
                 .id(domain.getId())
                 .creationDate(domain.getCreationDate())
                 .modificationDate(domain.getModificationDate())

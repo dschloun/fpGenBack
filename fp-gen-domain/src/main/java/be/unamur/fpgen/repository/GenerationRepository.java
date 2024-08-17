@@ -1,8 +1,8 @@
 package be.unamur.fpgen.repository;
 
-import be.unamur.fpgen.generation.AbstractGeneration;
+import be.unamur.fpgen.generation.Generation;
 import be.unamur.fpgen.generation.GenerationTypeEnum;
-import be.unamur.fpgen.generation.pagination.AbstractGenerationPage;
+import be.unamur.fpgen.generation.pagination.GenerationPage;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
 import org.springframework.data.domain.Pageable;
@@ -14,23 +14,23 @@ import java.util.UUID;
 
 public interface GenerationRepository {
 
-    AbstractGeneration saveGeneration(AbstractGeneration generation);
+    Generation saveGeneration(Generation generation);
 
-    Optional<AbstractGeneration> findGenerationById(UUID generationId);
+    Optional<Generation> findGenerationById(UUID generationId);
 
     void deleteGenerationById(UUID generationId);
 
-    AbstractGenerationPage findPagination(GenerationTypeEnum type,
-                                          MessageTypeEnum messageType,
-                                          MessageTopicEnum messageTopic,
-                                          String userPrompt,
-                                          String systemPrompt,
-                                          Integer quantity,
-                                          String authorTrigram,
-                                          OffsetDateTime startDate,
-                                          OffsetDateTime endDate,
-                                          List<UUID> notInDatasetIdList,
-                                          List<UUID> inDatasetIdList,
-                                          boolean isIn,
-                                          Pageable pageable);
+    GenerationPage findPagination(GenerationTypeEnum type,
+                                  MessageTypeEnum messageType,
+                                  MessageTopicEnum messageTopic,
+                                  String userPrompt,
+                                  String systemPrompt,
+                                  Integer quantity,
+                                  String authorTrigram,
+                                  OffsetDateTime startDate,
+                                  OffsetDateTime endDate,
+                                  List<UUID> notInDatasetIdList,
+                                  List<UUID> inDatasetIdList,
+                                  boolean isIn,
+                                  Pageable pageable);
 }

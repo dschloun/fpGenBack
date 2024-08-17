@@ -1,8 +1,8 @@
 package be.unamur.fpgen.repository;
 
-import be.unamur.fpgen.generation.AbstractGeneration;
+import be.unamur.fpgen.generation.Generation;
 import be.unamur.fpgen.generation.GenerationTypeEnum;
-import be.unamur.fpgen.generation.pagination.AbstractGenerationPage;
+import be.unamur.fpgen.generation.pagination.GenerationPage;
 import be.unamur.fpgen.mapper.domainToJpa.GenerationDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.ConversationGenerationJpaToDomainMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.GenerationJpaToDomainMapper;
@@ -33,7 +33,7 @@ public class JpaGenerationRepository implements GenerationRepository {
     }
 
     @Override
-    public AbstractGeneration saveGeneration(AbstractGeneration generation) {
+    public Generation saveGeneration(Generation generation) {
         return Optional.of(jpaGenerationRepositoryCRUD.save(GenerationDomainToJpaMapper
                         .mapForCreate(generation, jpaAuthorRepositoryCRUD.getReferenceById(generation.getAuthor().getId()))))
                 .map(GenerationJpaToDomainMapper::map)
@@ -41,7 +41,7 @@ public class JpaGenerationRepository implements GenerationRepository {
     }
 
     @Override
-    public Optional<AbstractGeneration> findGenerationById(UUID generationId) {
+    public Optional<Generation> findGenerationById(UUID generationId) {
         return jpaGenerationRepositoryCRUD.findById(generationId)
                 .map(GenerationJpaToDomainMapper::map);
     }
@@ -52,7 +52,7 @@ public class JpaGenerationRepository implements GenerationRepository {
     }
 
     @Override
-    public AbstractGenerationPage findPagination(
+    public GenerationPage findPagination(
             GenerationTypeEnum type,
             MessageTypeEnum messageType,
             MessageTopicEnum messageTopic,
@@ -68,7 +68,7 @@ public class JpaGenerationRepository implements GenerationRepository {
             Pageable pageable) {
 
         // 1. get in Page format
-        final Page<AbstractGeneration> page;
+        final Page<Generation> page;
 
         if (GenerationTypeEnum.INSTANT_MESSAGE.equals(type)) {
             page = jpaGenerationRepositoryCRUD.findMessagePagination(
@@ -103,7 +103,7 @@ public class JpaGenerationRepository implements GenerationRepository {
             throw new IllegalArgumentException("Either inDatasetIdList or notInDatasetIdList must be provided");
         }
 
-        final AbstractGenerationPage generationPage = AbstractGenerationPage.newBuilder()
+        final GenerationPage generationPage = GenerationPage.newBuilder()
                 .withPagination(new Pagination.Builder()
                         .size(page.getSize())
                         .totalSize((int) page.getTotalElements())
