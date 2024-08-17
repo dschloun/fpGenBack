@@ -62,7 +62,16 @@ public class JpaDatasetRepository implements DatasetRepository {
         // maybe it's not the old version author
         final AuthorEntity author = jpaAuthorRepositoryCRUD.getReferenceById(newVersion.getAuthor().getId());
 
-        final InstantMessageDatasetEntity entity = jpaDatasetRepositoryCRUD.findById(oldVersion.getId()).orElseThrow();
+        if(DatasetTypeEnum.INSTANT_MESSAGE.equals(oldVersion.getType())) {
+            return createInstantMessageDatasetNewVersion(oldVersion, newVersion, author);
+        } else {
+            //todo
+        }
+        return createInstantMessageDatasetNewVersion(oldVersion, newVersion, author); // remove when both are made
+    }
+
+    private Dataset createInstantMessageDatasetNewVersion(Dataset oldVersion, Dataset newVersion, AuthorEntity author) {
+        final InstantMessageDatasetEntity entity = jpaInstantMessageDatasetRepositoryCRUD.findById(oldVersion.getId()).orElseThrow();
 
         // detach old generations in order to copy them
         final Set<InstantMessageGenerationEntity> detachedGenerations = new HashSet<>();
@@ -74,8 +83,9 @@ public class JpaDatasetRepository implements DatasetRepository {
         return DatasetJpaToDomainMapper.map(
                 jpaDatasetRepositoryCRUD.save(
                         DataSetDomainToJpaMapper
-                                .mapForCreateNewVersion(entity, detachedGenerations, author, newVersion)));
+                                .mapForCreateNewVersionMessageDataset(entity, detachedGenerations, author, newVersion)));
     }
+
 
     @Override
     public Dataset updateDataset(Dataset dataset) {
@@ -104,7 +114,7 @@ public class JpaDatasetRepository implements DatasetRepository {
 
     @Override
     public void addItemListToDataset(Dataset datasetId, Set<Generation> generations) {
-        if(DatasetTypeEnum.INSTANT_MESSAGE.equals(datasetId.getType()) {
+        if(DatasetTypeEnum.INSTANT_MESSAGE.equals(datasetId.getType())) {
             addInstantMessageGenerationListToDataset(datasetId, generations);
         }
     }

@@ -1,14 +1,12 @@
 package be.unamur.fpgen.repository;
 
 import be.unamur.fpgen.dataset.Dataset;
-import be.unamur.fpgen.entity.dataset.ConversationDatasetEntity;
-import be.unamur.fpgen.entity.dataset.InstantMessageDatasetEntity;
-import be.unamur.fpgen.repository.dataset.JpaConversationDatasetRepositoryCRUD;
-import be.unamur.fpgen.repository.dataset.JpaDatasetRepositoryCRUD;
-import be.unamur.fpgen.statistic.TypeTopicDistributionProjection;
+import be.unamur.fpgen.entity.dataset.DatasetEntity;
 import be.unamur.fpgen.mapper.domainToJpa.StatisticDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.StatisticJpaToDomainMapper;
+import be.unamur.fpgen.repository.dataset.JpaDatasetRepositoryCRUD;
 import be.unamur.fpgen.statistic.Statistic;
+import be.unamur.fpgen.statistic.TypeTopicDistributionProjection;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,12 +17,10 @@ import java.util.UUID;
 public class JpaStatisticRepository implements StatisticRepository {
     private final JpaStatisticRepositoryCRUD jpaStatisticRepositoryCRUD;
     private final JpaDatasetRepositoryCRUD jpaDatasetRepositoryCRUD;
-    private final JpaConversationDatasetRepositoryCRUD jpaConversationDatasetRepositoryCRUD;
 
-    public JpaStatisticRepository(JpaStatisticRepositoryCRUD jpaStatisticRepositoryCRUD, JpaDatasetRepositoryCRUD jpaDatasetRepositoryCRUD, JpaConversationDatasetRepositoryCRUD jpaConversationDatasetRepositoryCRUD) {
+    public JpaStatisticRepository(JpaStatisticRepositoryCRUD jpaStatisticRepositoryCRUD, JpaDatasetRepositoryCRUD jpaDatasetRepositoryCRUD) {
         this.jpaStatisticRepositoryCRUD = jpaStatisticRepositoryCRUD;
         this.jpaDatasetRepositoryCRUD = jpaDatasetRepositoryCRUD;
-        this.jpaConversationDatasetRepositoryCRUD = jpaConversationDatasetRepositoryCRUD;
     }
 
     @Override
@@ -54,15 +50,9 @@ public class JpaStatisticRepository implements StatisticRepository {
 
     @Override
     public void save(Statistic statistic, Dataset dataset) {
-        if (dataset instanceof InstantMessageDataset){
-            final InstantMessageDatasetEntity datasetEntity = jpaDatasetRepositoryCRUD.findById(dataset.getId()).orElseThrow();
-            datasetEntity.setStatistic(StatisticDomainToJpaMapper.mapForCreate(statistic, datasetEntity));
-            jpaDatasetRepositoryCRUD.save(datasetEntity);
-        } else {
-            final ConversationDatasetEntity datasetEntity = jpaConversationDatasetRepositoryCRUD.findById(dataset.getId()).orElseThrow();
-            datasetEntity.setStatistic(StatisticDomainToJpaMapper.mapForCreate(statistic, datasetEntity));
-            jpaConversationDatasetRepositoryCRUD.save(datasetEntity);
-        }
+        final DatasetEntity datasetEntity = jpaDatasetRepositoryCRUD.findById(dataset.getId()).orElseThrow();
+        datasetEntity.setStatistic(StatisticDomainToJpaMapper.mapForCreate(statistic, datasetEntity));
+        jpaDatasetRepositoryCRUD.save(datasetEntity);
     }
 
     @Override
@@ -73,14 +63,9 @@ public class JpaStatisticRepository implements StatisticRepository {
 
     @Override
     public void deleteByDataset(Dataset dataset) {
-        if (dataset instanceof InstantMessageDataset){
-            final InstantMessageDatasetEntity datasetEntity = jpaDatasetRepositoryCRUD.findById(dataset.getId()).orElseThrow();
-            datasetEntity.setStatistic(null);
-            jpaDatasetRepositoryCRUD.save(datasetEntity);
-        } else {
-            final ConversationDatasetEntity datasetEntity = jpaConversationDatasetRepositoryCRUD.findById(dataset.getId()).orElseThrow();
-            datasetEntity.setStatistic(null);
-            jpaConversationDatasetRepositoryCRUD.save(datasetEntity);
-        }
+        final DatasetEntity datasetEntity = jpaDatasetRepositoryCRUD.findById(dataset.getId()).orElseThrow();
+        datasetEntity.setStatistic(null);
+        jpaDatasetRepositoryCRUD.save(datasetEntity);
+
     }
 }

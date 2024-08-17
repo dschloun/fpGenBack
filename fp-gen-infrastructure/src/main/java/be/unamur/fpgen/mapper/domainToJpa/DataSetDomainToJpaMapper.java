@@ -54,15 +54,8 @@ public class DataSetDomainToJpaMapper {
         return entity;
     }
 
-    public static DatasetEntity mapForCreateNewVersion(final DatasetEntity oldVersionEntity, final Set<GenerationEntity> generations, final AuthorEntity author, final Dataset newVersion){
-        if (DatasetTypeEnum.INSTANT_MESSAGE.equals(newVersion.getType())){
-            return mapForCreateNewVersionMessageDataset(oldVersionEntity, generations, author, newVersion);
-        } else {
-            return mapForCreateNewVersionConversationDataset(oldVersionEntity, generations, author, newVersion);
-        }
-    }
 
-    public static InstantMessageDatasetEntity mapForCreateNewVersionMessageDataset(final DatasetEntity oldVersionEntity, final Set<InstantMessageGenerationEntity> generations, final AuthorEntity author, final Dataset newVersion){
+    public static InstantMessageDatasetEntity mapForCreateNewVersionMessageDataset(final InstantMessageDatasetEntity oldVersionEntity, final Set<InstantMessageGenerationEntity> generations, final AuthorEntity author, final Dataset newVersion){
         final InstantMessageDatasetEntity entity = new InstantMessageDatasetEntity();
         entity.setBusinessId(newVersion.getBusinessId());
         entity.setVersion(newVersion.getVersion());
