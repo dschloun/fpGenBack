@@ -195,6 +195,7 @@ public class DatasetService {
 
         // 3. create new version
         final Dataset newVersion = Dataset.newBuilder()
+                .withType(oldDataset.getType())
                 .withName(Objects.nonNull(originalDataset) ? getNewName(originalDataset, getNewVersion(oldDataset)) : getNewName(oldDataset, getNewVersion(oldDataset)))
                 .withDatasetFunction(oldDataset.getDatasetFunction())
                 .withAuthor(Objects.nonNull(author) ? author : oldDataset.getAuthor())
