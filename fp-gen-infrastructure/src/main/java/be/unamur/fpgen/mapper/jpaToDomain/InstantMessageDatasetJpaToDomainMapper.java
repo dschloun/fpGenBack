@@ -26,7 +26,7 @@ public class InstantMessageDatasetJpaToDomainMapper {
                 .withComment(entity.getComment())
                 .withAuthor(AuthorJpaToDomainMapper.map(entity.getAuthor()))
                 .withDatasetFunction(entity.getFunction())
-                .withInstantMessageGenerationList(MapperUtil.mapSet(entity.getInstantMessageGenerationList(), InstantMessageGenerationJpaToDomainMapper::map))
+                .withInstantMessageGenerationList(MapperUtil.mapSet(entity.getInstantMessageGenerationList(), GenerationJpaToDomainMapper::map))
                 .withOngoingGenerationId(Optional.ofNullable(entity.getOngoingGeneration()).map(BaseUuidEntity::getId).orElse(null))
                 .withStatistic(StatisticJpaToDomainMapper.map(entity.getStatistic()))
                 .withValidated(entity.isValidated())

@@ -2,12 +2,10 @@ package be.unamur.fpgen.repository;
 
 import be.unamur.fpgen.generation.AbstractGeneration;
 import be.unamur.fpgen.generation.GenerationTypeEnum;
-import be.unamur.fpgen.generation.InstantMessageGeneration;
 import be.unamur.fpgen.generation.pagination.AbstractGenerationPage;
-import be.unamur.fpgen.generation.pagination.InstantMessageGenerationsPage;
 import be.unamur.fpgen.mapper.domainToJpa.GenerationDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.ConversationGenerationJpaToDomainMapper;
-import be.unamur.fpgen.mapper.jpaToDomain.InstantMessageGenerationJpaToDomainMapper;
+import be.unamur.fpgen.mapper.jpaToDomain.GenerationJpaToDomainMapper;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.pagination.Pagination;
@@ -27,7 +25,6 @@ public class JpaGenerationRepository implements GenerationRepository {
     private final JpaGenerationRepositoryCRUD jpaGenerationRepositoryCRUD;
     private final JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD;
 
-
     public JpaGenerationRepository(JpaGenerationRepositoryCRUD jpaGenerationRepositoryCRUD,
                                    JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD) {
         this.jpaGenerationRepositoryCRUD = jpaGenerationRepositoryCRUD;
@@ -39,14 +36,14 @@ public class JpaGenerationRepository implements GenerationRepository {
     public AbstractGeneration saveGeneration(AbstractGeneration generation) {
         return Optional.of(jpaGenerationRepositoryCRUD.save(GenerationDomainToJpaMapper
                         .mapForCreate(generation, jpaAuthorRepositoryCRUD.getReferenceById(generation.getAuthor().getId()))))
-                .map(InstantMessageGenerationJpaToDomainMapper::map)
+                .map(GenerationJpaToDomainMapper::map)
                 .orElseThrow();
     }
 
     @Override
     public Optional<AbstractGeneration> findGenerationById(UUID generationId) {
         return jpaGenerationRepositoryCRUD.findById(generationId)
-                .map(InstantMessageGenerationJpaToDomainMapper::map);
+                .map(GenerationJpaToDomainMapper::map);
     }
 
     @Override
@@ -86,19 +83,7 @@ public class JpaGenerationRepository implements GenerationRepository {
                     inDatasetIdList,
                     isIn,
                     pageable
-            ).map(InstantMessageGenerationJpaToDomainMapper::map);
-
-            final AbstractGenerationPage generationPage = InstantMessageGenerationsPage.newBuilder()
-                    .withPagination(new Pagination.Builder()
-                            .size(page.getSize())
-                            .totalSize((int) page.getTotalElements())
-                            .page(page.getNumber())
-                            .build())
-                    .withGenerationList(page.getContent())
-                    .build();
-
-            // 3. return
-            return generationPage;
+            ).map(GenerationJpaToDomainMapper::map);
 
         } else if (Objects.isNull(inDatasetIdList)) {
             page = jpaGenerationRepositoryCRUD.findConversationPagination(
@@ -118,6 +103,16 @@ public class JpaGenerationRepository implements GenerationRepository {
             throw new IllegalArgumentException("Either inDatasetIdList or notInDatasetIdList must be provided");
         }
 
+        final AbstractGenerationPage generationPage = AbstractGenerationPage.newBuilder()
+                .withPagination(new Pagination.Builder()
+                        .size(page.getSize())
+                        .totalSize((int) page.getTotalElements())
+                        .page(page.getNumber())
+                        .build())
+                .withGenerationList(page.getContent())
+                .build();
 
+        // 3. return
+        return generationPage;
     }
 }

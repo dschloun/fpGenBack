@@ -1,12 +1,10 @@
 package be.unamur.fpgen.web;
 
 import be.unamur.api.GenerationApi;
-import be.unamur.fpgen.mapper.domainToWeb.GenerationDomainToWebMapper;
 import be.unamur.fpgen.mapper.domainToWeb.pagination.GenerationPaginationDomainToWebMapper;
 import be.unamur.fpgen.mapper.webToDomain.pagination.GenerationPaginationWebToDomainMapper;
 import be.unamur.fpgen.service.ConversationGenerationService;
 import be.unamur.fpgen.service.InstantMessageGenerationService;
-import be.unamur.model.Generation;
 import be.unamur.model.GenerationType;
 import be.unamur.model.GenerationsPage;
 import be.unamur.model.PagedGenerationQuery;
@@ -53,7 +51,7 @@ public class GenerationController implements GenerationApi {
     @Override
     public ResponseEntity<Void> deleteGenerationById(UUID generationId, @NotNull @Valid GenerationType generationType) {
         if (GenerationType.INSTANT_MESSAGE.equals(generationType)){
-            instantMessageGenerationService.deleteInstantMessageGenerationById(generationId);
+            instantMessageGenerationService.deleteGenerationById(generationId);
         } else if (GenerationType.CONVERSATION.equals(generationType)){
             conversationGenerationService.deleteConversationGenerationById(generationId);
         } else {

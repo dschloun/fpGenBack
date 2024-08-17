@@ -134,7 +134,7 @@ public class InstantMessageDatasetService {
         final Set<InstantMessageGeneration> instantMessageGenerationList = new HashSet<>();
         instantMessageGenerationIdsList.forEach(i -> {
             try {
-                final InstantMessageGeneration instantMessageGeneration = instantMessageGenerationService.findInstantMessageGenerationById(i);
+                final InstantMessageGeneration instantMessageGeneration = instantMessageGenerationService.findGenerationById(i);
                 instantMessageGenerationList.add(instantMessageGeneration);
             } catch (GenerationNotFoundException e) {
                 System.out.println("generation does not exist");

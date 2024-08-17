@@ -2,8 +2,9 @@ package be.unamur.fpgen.service;
 
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.exception.GenerationNotFoundException;
-import be.unamur.fpgen.generation.InstantMessageGeneration;
-import be.unamur.fpgen.generation.pagination.InstantMessageGenerationsPage;
+import be.unamur.fpgen.generation.AbstractGeneration;
+import be.unamur.fpgen.generation.GenerationTypeEnum;
+import be.unamur.fpgen.generation.pagination.AbstractGenerationPage;
 import be.unamur.fpgen.generation.pagination.PagedGenerationsQuery;
 import be.unamur.fpgen.mapper.webToDomain.MessageTopicWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.MessageTypeWebToDomainMapper;
@@ -28,14 +29,15 @@ public class InstantMessageGenerationService {
     }
 
     @Transactional
-    public InstantMessageGeneration createInstantMessageGeneration(final GenerationCreation command, final UUID authorId) {
+    public AbstractGeneration createGeneration(final GenerationTypeEnum type, final GenerationCreation command, final UUID authorId) {
         // 0. check if author is registered
         final Author author = authorService.getAuthorById(authorId);
         // 1. save the generation
         return generationRepository.saveGeneration(
-                InstantMessageGeneration.newBuilder()
+                AbstractGeneration.newBuilder()
+                        .withGenerationType(type)
                         .withAuthor(author)
-                        .withDetails(getDetail(command, "instant message"))
+                        .withDetails(getDetail(command, type.toString()))
                         .withQuantity(command.getQuantity())
                         .withTopic(MessageTopicWebToDomainMapper.map(command.getTopic()))
                         .withType(MessageTypeWebToDomainMapper.map(command.getType()))
@@ -45,19 +47,20 @@ public class InstantMessageGenerationService {
     }
 
     @Transactional
-    public InstantMessageGeneration findInstantMessageGenerationById(final UUID generationId) {
+    public AbstractGeneration findGenerationById(final UUID generationId) {
         return generationRepository.findGenerationById(generationId)
                 .orElseThrow(() -> GenerationNotFoundException.withId(generationId));
     }
 
     @Transactional
-    public InstantMessageGenerationsPage searchGenerationsPaginate(PagedGenerationsQuery query) {
+    public AbstractGenerationPage searchGenerationsPaginate(PagedGenerationsQuery query) {
        //1. get pageable
         final Pageable pageable = PageRequest
                 .of(query.getQueryPage().getPage(),
                         query.getQueryPage().getSize());
         //2. search generations
         return generationRepository.findPagination(
+                query.getGenerationQuery().getGenerationType(),
                 query.getGenerationQuery().getMessageType(),
                 query.getGenerationQuery().getMessageTopic(),
                 query.getGenerationQuery().getUserPrompt(),
@@ -68,11 +71,12 @@ public class InstantMessageGenerationService {
                 DateUtil.ifNullReturnTomorrow(query.getGenerationQuery().getEndDate()),
                 query.getGenerationQuery().getNotInDatasetIdList(),
                 query.getGenerationQuery().getInDatasetIdList(),
+                query.getGenerationQuery().getNotInDatasetIdList().isEmpty(),
                 pageable);
     }
 
     @Transactional
-    public void deleteInstantMessageGenerationById(final UUID generationId) {
+    public void deleteGenerationById(final UUID generationId) {
         generationRepository.deleteGenerationById(generationId);
     }
 

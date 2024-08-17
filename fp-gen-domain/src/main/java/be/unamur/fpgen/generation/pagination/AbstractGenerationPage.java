@@ -1,30 +1,50 @@
 package be.unamur.fpgen.generation.pagination;
 
+import be.unamur.fpgen.generation.AbstractGeneration;
 import be.unamur.fpgen.pagination.Pagination;
 
-public abstract class AbstractGenerationPage {
-    private final Pagination pagination;
+import java.util.List;
 
-    protected AbstractGenerationPage(Pagination pagination) {
-        this.pagination = pagination;
+public class AbstractGenerationPage {
+    private final Pagination pagination;
+    private final List<AbstractGeneration> generationList;
+
+    private AbstractGenerationPage(Builder builder) {
+        pagination = builder.pagination;
+        generationList = builder.generationList;
     }
 
     public Pagination getPagination() {
         return pagination;
     }
 
-    protected abstract static class AbstractGenerationPageBuilder<T> {
+    public List<AbstractGeneration> getGenerationList() {
+        return generationList;
+    }
+
+    public static Builder newBuilder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
         private Pagination pagination;
+        private List<AbstractGeneration> generationList;
 
-        public Pagination getPagination() {
-            return pagination;
+        private Builder() {
         }
 
-        public T withPagination(Pagination val) {
+        public Builder withPagination(Pagination val) {
             pagination = val;
-            return self();
+            return this;
         }
 
-        protected abstract T self();
+        public Builder withGenerationList(List<AbstractGeneration> val) {
+            generationList = val;
+            return this;
+        }
+
+        public AbstractGenerationPage build() {
+            return new AbstractGenerationPage(this);
+        }
     }
 }

@@ -71,7 +71,7 @@ public class OngoingGenerationListener {
                         } else {
                             // Generation successful
                             // 1. create generation data
-                            final InstantMessageGeneration generation = instantMessageGenerationService.createInstantMessageGeneration(imc, command.getAuthorId());
+                            final InstantMessageGeneration generation = instantMessageGenerationService.createGeneration(imc, command.getAuthorId());
                             // 2. prepare a list of instant messages
                             final List<InstantMessage> instantMessageList = new ArrayList<>();
                             // 3. generate instant messages

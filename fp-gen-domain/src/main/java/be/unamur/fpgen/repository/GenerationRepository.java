@@ -3,7 +3,6 @@ package be.unamur.fpgen.repository;
 import be.unamur.fpgen.generation.AbstractGeneration;
 import be.unamur.fpgen.generation.GenerationTypeEnum;
 import be.unamur.fpgen.generation.pagination.AbstractGenerationPage;
-import be.unamur.fpgen.generation.pagination.InstantMessageGenerationsPage;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
 import org.springframework.data.domain.Pageable;
