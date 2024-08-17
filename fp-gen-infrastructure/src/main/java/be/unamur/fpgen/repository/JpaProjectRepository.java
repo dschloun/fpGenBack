@@ -9,6 +9,7 @@ import be.unamur.fpgen.project.Project;
 import be.unamur.fpgen.project.ProjectTypeEnum;
 import be.unamur.fpgen.project.pagination.ProjectsPage;
 import be.unamur.fpgen.utils.MapperUtil;
+import be.unamur.fpgen.utils.StringUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -64,10 +65,10 @@ public class JpaProjectRepository implements ProjectRepository {
         Page<Project> page = jpaProjectRepositoryCRUD.
                 findPagination(
                         projectType,
-                        name,
-                        description,
-                        organization,
-                        authorTrigram,
+                        StringUtil.toLowerCaseIfNotNull(name),
+                        StringUtil.toLowerCaseIfNotNull(description),
+                        StringUtil.toLowerCaseIfNotNull(organization),
+                        StringUtil.toLowerCaseIfNotNull(authorTrigram),
                         startDate,
                         endDate,
                         pageable)
