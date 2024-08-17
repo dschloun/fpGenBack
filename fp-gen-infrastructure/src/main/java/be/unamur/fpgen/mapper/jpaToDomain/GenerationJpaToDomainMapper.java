@@ -4,6 +4,7 @@ import be.unamur.fpgen.entity.generation.ConversationGenerationEntity;
 import be.unamur.fpgen.entity.generation.GenerationEntity;
 import be.unamur.fpgen.entity.generation.InstantMessageGenerationEntity;
 import be.unamur.fpgen.generation.Generation;
+import be.unamur.fpgen.generation.GenerationTypeEnum;
 import be.unamur.fpgen.utils.MapperUtil;
 
 public class GenerationJpaToDomainMapper {
@@ -29,6 +30,7 @@ public class GenerationJpaToDomainMapper {
                 .withId(entity.getId())
                 .withCreationDate(entity.getCreationDate())
                 .withModificationDate(entity.getModificationDate())
+                .withGenerationType(GenerationTypeEnum.INSTANT_MESSAGE)
                 .withAuthor(AuthorJpaToDomainMapper.map(entity.getAuthor()))
                 .withDetails(entity.getDetails())
                 .withQuantity(entity.getQuantity())
@@ -49,6 +51,7 @@ public class GenerationJpaToDomainMapper {
                 .withId(entity.getId())
                 .withCreationDate(entity.getCreationDate())
                 .withModificationDate(entity.getModificationDate())
+                .withGenerationType(GenerationTypeEnum.CONVERSATION)
                 .withAuthor(AuthorJpaToDomainMapper.map(entity.getAuthor()))
                 .withDetails(entity.getDetails())
                 .withQuantity(entity.getQuantity())

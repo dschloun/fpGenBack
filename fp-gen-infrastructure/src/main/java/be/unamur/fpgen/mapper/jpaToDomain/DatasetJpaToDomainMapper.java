@@ -1,6 +1,7 @@
 package be.unamur.fpgen.mapper.jpaToDomain;
 
 import be.unamur.fpgen.dataset.Dataset;
+import be.unamur.fpgen.dataset.DatasetTypeEnum;
 import be.unamur.fpgen.entity.base.BaseUuidEntity;
 import be.unamur.fpgen.entity.dataset.ConversationDatasetEntity;
 import be.unamur.fpgen.entity.dataset.DatasetEntity;
@@ -30,6 +31,7 @@ public class DatasetJpaToDomainMapper {
                 .withId(entity.getId())
                 .withCreationDate(entity.getCreationDate())
                 .withModificationDate(entity.getModificationDate())
+                .withType(DatasetTypeEnum.INSTANT_MESSAGE)
                 .withBusinessId(entity.getBusinessId())
                 .withVersion(entity.getVersion())
                 .withName(entity.getName())
@@ -54,6 +56,7 @@ public class DatasetJpaToDomainMapper {
                 .withId(entity.getId())
                 .withCreationDate(entity.getCreationDate())
                 .withModificationDate(entity.getModificationDate())
+                .withType(DatasetTypeEnum.CONVERSATION)
                 .withBusinessId(entity.getBusinessId())
                 .withVersion(entity.getVersion())
                 .withName(entity.getName())

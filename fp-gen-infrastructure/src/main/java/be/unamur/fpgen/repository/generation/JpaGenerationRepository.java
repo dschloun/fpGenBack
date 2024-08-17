@@ -100,7 +100,7 @@ public class JpaGenerationRepository implements GenerationRepository {
                     Objects.nonNull(notInDatasetIdList) ? notInDatasetIdList : List.of(UUID.fromString("00000000-0000-0000-0000-000000000000")),
                     isIn,
                     pageable
-            ).map(ConversationGenerationJpaToDomainMapper::map);
+            ).map(GenerationJpaToDomainMapper::map);
         } else {
             throw new IllegalArgumentException("Either inDatasetIdList or notInDatasetIdList must be provided");
         }
