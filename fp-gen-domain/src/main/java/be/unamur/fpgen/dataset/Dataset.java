@@ -25,7 +25,7 @@ public class Dataset extends BaseUuidDomain {
     private boolean validated;
     private boolean lastVersion;
     private final UUID originalDatasetId;
-    private Set<AbstractItem> itemList = new HashSet<>();
+    private final Set<AbstractItem> itemList = new HashSet<>();
 
     private Dataset(Builder builder) {
         super(builder.getId(), builder.getCreationDate(), builder.getModificationDate());
@@ -127,7 +127,7 @@ public class Dataset extends BaseUuidDomain {
         private boolean validated;
         private boolean lastVersion;
         private UUID originalDatasetId;
-        private Set<AbstractItem> itemList;
+        private Set<AbstractItem> itemList = new HashSet<>();
 
         private Builder() {
         }

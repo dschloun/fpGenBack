@@ -150,7 +150,7 @@ public class Generation extends AbstractItem {
         }
 
         public Builder withItemList(Set<AbstractItem> val) {
-            itemList.addAll(val);
+            itemList = val;
             return this;
         }
 
