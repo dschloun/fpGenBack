@@ -1,6 +1,5 @@
 package be.unamur.fpgen.mapper.jpaToDomain;
 
-import be.unamur.fpgen.dataset.ConversationDataset;
 import be.unamur.fpgen.entity.base.BaseUuidEntity;
 import be.unamur.fpgen.entity.dataset.ConversationDatasetEntity;
 import be.unamur.fpgen.utils.MapperUtil;

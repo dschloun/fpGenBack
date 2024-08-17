@@ -1,8 +1,6 @@
 package be.unamur.fpgen.service;
 
 import be.unamur.fpgen.author.Author;
-import be.unamur.fpgen.dataset.AbstractDataset;
-import be.unamur.fpgen.dataset.DatasetFunctionEnum;
 import be.unamur.fpgen.exception.ProjectNotFoundException;
 import be.unamur.fpgen.mapper.webToDomain.ProjectWebToDomainMapper;
 import be.unamur.fpgen.project.Project;

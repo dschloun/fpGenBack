@@ -1,8 +1,7 @@
 package be.unamur.fpgen.mapper.domainToWeb;
 
-import be.unamur.fpgen.dataset.AbstractDataset;
+import be.unamur.fpgen.dataset.Dataset;
 import be.unamur.fpgen.dataset.DatasetFunctionEnum;
-import be.unamur.model.Dataset;
 import be.unamur.model.DatasetType;
 
 import java.math.BigDecimal;
@@ -17,8 +16,8 @@ public class DatasetDomainToWebMapper {
                 .orElseThrow();
     }
 
-    public static Dataset map(final AbstractDataset domain, final DatasetType datasetType){
-        return new Dataset()
+    public static be.unamur.model.Dataset map(final Dataset domain, final DatasetType datasetType){
+        return new be.unamur.model.Dataset()
                 .id(domain.getId())
                 .creationDate(domain.getCreationDate())
                 .modificationDate(domain.getModificationDate())

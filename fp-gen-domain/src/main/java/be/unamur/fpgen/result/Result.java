@@ -2,7 +2,7 @@ package be.unamur.fpgen.result;
 
 import be.unamur.fpgen.BaseUuidDomain;
 import be.unamur.fpgen.author.Author;
-import be.unamur.fpgen.dataset.AbstractDataset;
+import be.unamur.fpgen.dataset.Dataset;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Result extends BaseUuidDomain {
-    private final AbstractDataset dataset;
+    private final Dataset dataset;
     private final Author author;
     private final OffsetDateTime experimentDate;
     private final String machineDetails;
@@ -50,7 +50,7 @@ public class Result extends BaseUuidDomain {
         comment = builder.comment;
     }
 
-    public AbstractDataset getDataset() {
+    public Dataset getDataset() {
         return dataset;
     }
 
@@ -127,7 +127,7 @@ public class Result extends BaseUuidDomain {
     }
 
     public static final class Builder extends AbstractBaseUuidDomainBuilder<Builder> {
-        private AbstractDataset dataset;
+        private Dataset dataset;
         private Author author;
         private OffsetDateTime experimentDate;
         private String machineDetails;
@@ -148,7 +148,7 @@ public class Result extends BaseUuidDomain {
         private Builder() {
         }
 
-        public Builder withDataset(AbstractDataset val) {
+        public Builder withDataset(Dataset val) {
             dataset = val;
             return this;
         }

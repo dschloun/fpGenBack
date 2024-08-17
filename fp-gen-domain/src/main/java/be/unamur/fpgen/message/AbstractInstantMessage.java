@@ -1,6 +1,6 @@
 package be.unamur.fpgen.message;
 
-import be.unamur.fpgen.generation.AbstractItem;
+import be.unamur.fpgen.AbstractItem;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;

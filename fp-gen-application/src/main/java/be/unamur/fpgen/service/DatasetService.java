@@ -1,8 +1,8 @@
 package be.unamur.fpgen.service;
 
 import be.unamur.fpgen.author.Author;
+import be.unamur.fpgen.dataset.Dataset;
 import be.unamur.fpgen.dataset.DatasetTypeEnum;
-import be.unamur.fpgen.dataset.InstantMessageDataset;
 import be.unamur.fpgen.dataset.pagination.DatasetsPage;
 import be.unamur.fpgen.dataset.pagination.PagedDatasetsQuery;
 import be.unamur.fpgen.exception.*;
@@ -10,7 +10,7 @@ import be.unamur.fpgen.generation.Generation;
 import be.unamur.fpgen.generation.ongoing_generation.OngoingGeneration;
 import be.unamur.fpgen.mapper.webToDomain.DatasetWebToDomainMapper;
 import be.unamur.fpgen.messaging.event.StatisticComputationEvent;
-import be.unamur.fpgen.repository.InstantMessageDatasetRepository;
+import be.unamur.fpgen.repository.DatasetRepository;
 import be.unamur.fpgen.utils.DateUtil;
 import be.unamur.model.DatasetCreation;
 import org.springframework.context.ApplicationEventPublisher;
@@ -22,24 +22,25 @@ import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
-public class InstantMessageDatasetService {
+public class DatasetService {
     private final AuthorService authorService;
-    private final InstantMessageDatasetRepository instantMessageDatasetRepository;
+    private final DatasetRepository datasetRepository;
     private final GenerationService generationService;
     private final ApplicationEventPublisher eventPublisher;
 
-    public InstantMessageDatasetService(AuthorService authorService, InstantMessageDatasetRepository instantMessageDatasetRepository, GenerationService generationService, ApplicationEventPublisher eventPublisher) {
+    public DatasetService(AuthorService authorService, DatasetRepository datasetRepository, GenerationService generationService, ApplicationEventPublisher eventPublisher) {
         this.authorService = authorService;
-        this.instantMessageDatasetRepository = instantMessageDatasetRepository;
+        this.datasetRepository = datasetRepository;
         this.generationService = generationService;
         this.eventPublisher = eventPublisher;
     }
 
     @Transactional
-    public InstantMessageDataset createDataset(DatasetCreation datasetCreation) {
+    public Dataset createDataset(DatasetCreation datasetCreation, DatasetTypeEnum type) {
         final Author author = authorService.getAuthorById(datasetCreation.getAuthorId());
-        return instantMessageDatasetRepository.saveInstantMessageDataset(
-                InstantMessageDataset.newBuilder()
+        return datasetRepository.saveDataset(
+                Dataset.newBuilder()
+                        .withType(type)
                         .withAuthor(author)
                         .withDatasetFunction(DatasetWebToDomainMapper.mapFunction(datasetCreation.getDatasetFunction()))
                         .withComment(datasetCreation.getComment())
@@ -51,56 +52,56 @@ public class InstantMessageDatasetService {
     }
 
     @Transactional
-    public InstantMessageDataset getDatasetById(UUID datasetId) {
-        return instantMessageDatasetRepository.findInstantMessageDatasetById(datasetId)
+    public Dataset getDatasetById(UUID datasetId) {
+        return datasetRepository.findInstantMessageDatasetById(datasetId)
                 .orElseThrow(() -> DatasetNotFoundException.withId(datasetId));
     }
 
     @Transactional
     public void deleteDatasetById(UUID datasetId) {
         // 1. get dataset
-        final InstantMessageDataset dataset = getDatasetById(datasetId);
+        final Dataset dataset = getDatasetById(datasetId);
 
         // 2. check if dataset is already validated
         checkDatasetValidationState(dataset, false);
 
         // 3. delete
-        instantMessageDatasetRepository.deleteInstantMessageDatasetById(datasetId);
+        datasetRepository.deleteDatasetById(datasetId);
     }
 
     @Transactional
-    public void addInstantMessageGenerationListToDataset(UUID datasetId, List<UUID> instantMessageGenerationIdsList) {
+    public void addGenerationListToDataset(UUID datasetId, List<UUID> generationIdsList) {
         // 1. get dataset
-        final InstantMessageDataset dataset = getDatasetById(datasetId);
+        final Dataset dataset = getDatasetById(datasetId);
 
         // 2. check if dataset is already validated
         checkDatasetValidationState(dataset, false);
 
         // 3. get instant message generations
-        final Set<InstantMessageGeneration> instantMessageGenerationList = getInstantMessageGenerationList(instantMessageGenerationIdsList);
+        final Set<Generation> generationList = getGenerationList(generationIdsList);
 
         // 4. add instant message generations to dataset
-        dataset.getInstantMessageGenerationList().addAll(instantMessageGenerationList);
-        instantMessageDatasetRepository.addInstantMessageListToDataset(dataset, instantMessageGenerationList);
+        dataset.getItemList().addAll(generationList);
+        datasetRepository.addItemListToDataset(dataset, generationList);
 
         // 5. send event to compute statistic
         eventPublisher.publishEvent(new StatisticComputationEvent(this, datasetId, DatasetTypeEnum.INSTANT_MESSAGE));
     }
 
     @Transactional
-    public void removeInstantMessageListFromDataset(UUID datasetId, List<UUID> instantMessageGenerationIdsList) {
+    public void removeGenerationListFromDataset(UUID datasetId, List<UUID> generationIdsList) {
         // 1. get dataset
-        final InstantMessageDataset dataset = getDatasetById(datasetId);
+        final Dataset dataset = getDatasetById(datasetId);
 
         // 2. check if dataset is already validated
         checkDatasetValidationState(dataset, false);
 
         // 3. get instant message generations
-        final Set<Generation> instantMessageGenerationList = getInstantMessageGenerationList(instantMessageGenerationIdsList);
+        final Set<Generation> instantMessageGenerationList = getGenerationList(generationIdsList);
 
         // 4. remove instant message generations from dataset
-        dataset.getInstantMessageGenerationList().removeAll(getInstantMessageGenerationList(instantMessageGenerationIdsList));
-        instantMessageDatasetRepository.removeInstantMessageListFromDataset(dataset, instantMessageGenerationList);
+        dataset.getItemList().removeAll(getGenerationList(generationIdsList));
+        datasetRepository.removeItemListFromDataset(dataset, instantMessageGenerationList);
 
         // 5. send event to compute statistic
         eventPublisher.publishEvent(new StatisticComputationEvent(this, datasetId, DatasetTypeEnum.INSTANT_MESSAGE));
@@ -108,7 +109,7 @@ public class InstantMessageDatasetService {
 
 
     @Transactional
-    public DatasetsPage searchDatasetPaginate(final PagedDatasetsQuery query) {
+    public DatasetsPage searchDatasetPaginate(final PagedDatasetsQuery query, DatasetTypeEnum type) {
         //0. get author (check if author exists)
         final Author author = query.getDatasetQuery().getAuthorTrigram() != null ? authorService.getAuthorByTrigram(query.getDatasetQuery().getAuthorTrigram()) : null;
 
@@ -118,7 +119,8 @@ public class InstantMessageDatasetService {
                         query.getQueryPage().getSize());
 
         //2. search datasets
-        return instantMessageDatasetRepository.findPagination(
+        return datasetRepository.findPagination(
+                type,
                 query.getDatasetQuery().getVersion(),
                 query.getDatasetQuery().getName(),
                 query.getDatasetQuery().getDescription(),
@@ -129,50 +131,50 @@ public class InstantMessageDatasetService {
                 pageable);
     }
 
-    private Set<Generation> getInstantMessageGenerationList(List<UUID> instantMessageGenerationIdsList) {
+    private Set<Generation> getGenerationList(List<UUID> generationIdsList) {
         // 1. get instant message generations
-        final Set<Generation> instantMessageGenerationList = new HashSet<>();
-        instantMessageGenerationIdsList.forEach(i -> {
+        final Set<Generation> generationList = new HashSet<>();
+        generationIdsList.forEach(i -> {
             try {
-                final InstantMessageGeneration instantMessageGeneration = generationService.findGenerationById(i);
-                instantMessageGenerationList.add(instantMessageGeneration);
+                final Generation generation = generationService.findGenerationById(i);
+                generationList.add(generation);
             } catch (GenerationNotFoundException e) {
                 System.out.println("generation does not exist");
             }
         });
         // 2. check if list is not empty
-        if (instantMessageGenerationList.isEmpty()) {
+        if (generationList.isEmpty()) {
             throw new IllegalArgumentException("No instant message generation found");
         }
-        return instantMessageGenerationList;
+        return generationList;
     }
 
     @Transactional
     public void addOngoingGenerationToDataset(UUID datasetId, OngoingGeneration generation) {
-        final InstantMessageDataset dataset = getDatasetById(datasetId);
+        final Dataset dataset = getDatasetById(datasetId);
         // check if dataset is already validated
         checkDatasetValidationState(dataset, false);
-        instantMessageDatasetRepository.addOngoingGenerationToDataset(dataset, generation);
+        datasetRepository.addOngoingGenerationToDataset(dataset, generation);
     }
 
     @Transactional
     public void removeOngoingGenerationToDataset(UUID datasetId, OngoingGeneration generation) {
-        final InstantMessageDataset dataset = getDatasetById(datasetId);
+        final Dataset dataset = getDatasetById(datasetId);
         // check if dataset is already validated
         checkDatasetValidationState(dataset, false);
-        instantMessageDatasetRepository.removeOngoingGenerationToDataset(dataset, generation);
+        datasetRepository.removeOngoingGenerationToDataset(dataset, generation);
     }
 
     @Transactional
     public void validateDataset(UUID datasetId) {
-        final InstantMessageDataset dataset = getDatasetById(datasetId);
+        final Dataset dataset = getDatasetById(datasetId);
         checkIfDatasetIsEmpty(dataset);
         dataset.validateDataset();
-        instantMessageDatasetRepository.updateInstantMessageDataset(dataset);
+        datasetRepository.updateInstantMessageDataset(dataset);
     }
 
     @Transactional
-    public InstantMessageDataset createNewVersion(UUID oldDatasetId, UUID authorId) {
+    public Dataset createNewVersion(UUID oldDatasetId, UUID authorId) {
         // 0. get author
         Author author = null;
         if (Objects.nonNull(authorId)) {
@@ -180,8 +182,8 @@ public class InstantMessageDatasetService {
         }
 
         // 1. get old dataset and original dataset if exist
-        final InstantMessageDataset oldDataset = getDatasetById(oldDatasetId);
-        InstantMessageDataset originalDataset = null;
+        final Dataset oldDataset = getDatasetById(oldDatasetId);
+        Dataset originalDataset = null;
         if (Objects.nonNull(oldDataset.getOriginalDatasetId())) {
             originalDataset = getDatasetById(oldDataset.getOriginalDatasetId());
         }
@@ -192,7 +194,7 @@ public class InstantMessageDatasetService {
         checkIfDatasetIsEmpty(oldDataset);
 
         // 3. create new version
-        final InstantMessageDataset newVersion = InstantMessageDataset.newBuilder()
+        final Dataset newVersion = Dataset.newBuilder()
                 .withName(Objects.nonNull(originalDataset) ? getNewName(originalDataset, getNewVersion(oldDataset)) : getNewName(oldDataset, getNewVersion(oldDataset)))
                 .withDatasetFunction(oldDataset.getDatasetFunction())
                 .withAuthor(Objects.nonNull(author) ? author : oldDataset.getAuthor())
@@ -203,44 +205,44 @@ public class InstantMessageDatasetService {
 
         // 4. update old version
         oldDataset.isNotLastVersionAnymore();
-        instantMessageDatasetRepository.updateInstantMessageDataset(oldDataset);
+        datasetRepository.updateInstantMessageDataset(oldDataset);
 
         // 5. save new version
-        return instantMessageDatasetRepository.saveNewVersion(oldDataset, newVersion);
+        return datasetRepository.saveNewVersion(oldDataset, newVersion);
     }
 
-    private void checkDatasetValidationState(InstantMessageDataset dataset, boolean requiredStatus) {
+    private void checkDatasetValidationState(Dataset dataset, boolean requiredStatus) {
         if (dataset.isValidated() != requiredStatus){
             throw DatasetValidatedException.withId(dataset.getId());
         }
     }
 
-    private void checkIfDatasetIsLastVersion(InstantMessageDataset dataset, boolean requiredStatus) {
+    private void checkIfDatasetIsLastVersion(Dataset dataset, boolean requiredStatus) {
         if (dataset.isLastVersion() != requiredStatus){
             throw DatasetLastVersionException.withId(dataset.getId());
         }
     }
 
-    private void checkIfDatasetIsEmpty(InstantMessageDataset dataset) {
-        if (dataset.getInstantMessageGenerationList().isEmpty()){
+    private void checkIfDatasetIsEmpty(Dataset dataset) {
+        if (dataset.getItemList().isEmpty()){
             throw EmptyDatasetException.withId(dataset.getId());
         }
     }
 
-    private int getNewVersion(InstantMessageDataset oldDataset) {
+    private int getNewVersion(Dataset oldDataset) {
         return oldDataset.getVersion() + 1;
     }
 
-    private String getNewName(InstantMessageDataset oldDataset, int version) {
+    private String getNewName(Dataset oldDataset, int version) {
         return String.format("%s%s%s",oldDataset.getName(), " | V-", version);
     }
 
     @Transactional
-    public List<InstantMessageDataset> getAllDatasetVersions(UUID datasetId) {
+    public List<Dataset> getAllDatasetVersions(UUID datasetId) {
         // 1. get the reference dataset
-        final InstantMessageDataset dataset = getDatasetById(datasetId);
+        final Dataset dataset = getDatasetById(datasetId);
 
         // 2. return all dataset version older and newer
-        return instantMessageDatasetRepository.findAllDatasetVersions(Objects.nonNull(dataset.getOriginalDatasetId()) ? dataset.getOriginalDatasetId() : datasetId);
+        return datasetRepository.findAllDatasetVersions(Objects.nonNull(dataset.getOriginalDatasetId()) ? dataset.getOriginalDatasetId() : datasetId);
     }
 }

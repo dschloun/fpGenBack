@@ -1,5 +1,6 @@
 package be.unamur.fpgen.messaging.listener;
 
+import be.unamur.fpgen.generation.Generation;
 import be.unamur.fpgen.generation.ongoing_generation.OngoingGeneration;
 import be.unamur.fpgen.generation.ongoing_generation.OngoingGenerationItem;
 import be.unamur.fpgen.generation.ongoing_generation.OngoingGenerationItemStatus;
@@ -10,7 +11,7 @@ import be.unamur.fpgen.mapper.webToDomain.MessageTypeWebToDomainMapper;
 import be.unamur.fpgen.message.InstantMessage;
 import be.unamur.fpgen.messaging.event.OngoingGenerationEvent;
 import be.unamur.fpgen.repository.InstantMessageRepository;
-import be.unamur.fpgen.service.InstantMessageDatasetService;
+import be.unamur.fpgen.service.DatasetService;
 import be.unamur.fpgen.service.GenerationService;
 import be.unamur.fpgen.service.OngoingGenerationService;
 import be.unamur.model.InstantMessageBatchCreation;
@@ -30,13 +31,13 @@ import java.util.concurrent.CompletableFuture;
 public class OngoingGenerationListener {
     private final InstantMessageRepository instantMessageRepository;
     private final GenerationService generationService;
-    private final InstantMessageDatasetService instantMessageDatasetService;
+    private final DatasetService datasetService;
     private final OngoingGenerationService ongoingGenerationService;
 
-    public OngoingGenerationListener(InstantMessageRepository instantMessageRepository, GenerationService generationService, InstantMessageDatasetService instantMessageDatasetService, OngoingGenerationService ongoingGenerationService) {
+    public OngoingGenerationListener(InstantMessageRepository instantMessageRepository, GenerationService generationService, DatasetService datasetService, OngoingGenerationService ongoingGenerationService) {
         this.instantMessageRepository = instantMessageRepository;
         this.generationService = generationService;
-        this.instantMessageDatasetService = instantMessageDatasetService;
+        this.datasetService = datasetService;
         this.ongoingGenerationService = ongoingGenerationService;
     }
 
@@ -70,7 +71,7 @@ public class OngoingGenerationListener {
                         } else {
                             // Generation successful
                             // 1. create generation data
-                            final InstantMessageGeneration generation = generationService.createGeneration(imc, command.getAuthorId());
+                            final Generation generation = generationService.createGeneration(event.getType(), imc, command.getAuthorId());
                             // 2. prepare a list of instant messages
                             final List<InstantMessage> instantMessageList = new ArrayList<>();
                             // 3. generate instant messages
@@ -81,7 +82,7 @@ public class OngoingGenerationListener {
                             List<InstantMessage> saved = instantMessageRepository.saveInstantMessageList(instantMessageList, generation);
                             // 5. add generation to dataset if needed
                             if (Objects.nonNull(command.getDatasetId())) {
-                                instantMessageDatasetService.addInstantMessageGenerationListToDataset(command.getDatasetId(), List.of(generation.getId()));
+                                datasetService.addGenerationListToDataset(command.getDatasetId(), List.of(generation.getId()));
                             }
                             // 6. return success item
                             return OngoingGenerationItem.newBuilder()
@@ -110,8 +111,8 @@ public class OngoingGenerationListener {
                     ongoingGenerationService.addItemList(ongoingGeneration, results);
                     // 4.2 dataset case
                     if (Objects.nonNull(command.getDatasetId())) {
-                        instantMessageDatasetService.removeOngoingGenerationToDataset(command.getDatasetId(), ongoingGeneration);
-                        instantMessageDatasetService.addInstantMessageGenerationListToDataset(command.getDatasetId(), results.stream()
+                        datasetService.removeOngoingGenerationToDataset(command.getDatasetId(), ongoingGeneration);
+                        datasetService.addGenerationListToDataset(command.getDatasetId(), results.stream()
                                 .filter(ogi -> OngoingGenerationItemStatus.SUCCESS.equals(ogi.getStatus()))
                                 .map(OngoingGenerationItem::getGenerationId)
                                 .toList());

@@ -1,12 +1,10 @@
 package be.unamur.fpgen.messaging.listener;
 
-import be.unamur.fpgen.dataset.AbstractDataset;
-import be.unamur.fpgen.dataset.DatasetTypeEnum;
+import be.unamur.fpgen.dataset.Dataset;
 import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.messaging.event.StatisticComputationEvent;
 import be.unamur.fpgen.repository.StatisticRepository;
-import be.unamur.fpgen.service.ConversationDatasetService;
-import be.unamur.fpgen.service.InstantMessageDatasetService;
+import be.unamur.fpgen.service.DatasetService;
 import be.unamur.fpgen.statistic.MessageTypeTopicTransformer;
 import be.unamur.fpgen.statistic.Statistic;
 import be.unamur.fpgen.statistic.TypeTopicDistributionProjection;
@@ -25,25 +23,18 @@ import java.util.stream.Collectors;
 public class StatisticComputationListener {
 
     private final StatisticRepository statisticRepository;
-    private final InstantMessageDatasetService instantMessageDatasetService;
-    private final ConversationDatasetService conversationDatasetService;
+    private final DatasetService datasetService;
 
-    public StatisticComputationListener(StatisticRepository statisticRepository, InstantMessageDatasetService instantMessageDatasetService, ConversationDatasetService conversationDatasetService) {
+    public StatisticComputationListener(StatisticRepository statisticRepository, DatasetService datasetService) {
         this.statisticRepository = statisticRepository;
-        this.instantMessageDatasetService = instantMessageDatasetService;
-        this.conversationDatasetService = conversationDatasetService;
+        this.datasetService = datasetService;
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void computeStatistic(final StatisticComputationEvent event) {
         // 1. get dataset
-        AbstractDataset dataset;
-        if (DatasetTypeEnum.INSTANT_MESSAGE.equals(event.getDatasetType())) {
-            dataset = instantMessageDatasetService.getDatasetById(event.getDatasetId());
-        } else {
-            dataset = conversationDatasetService.getDatasetById(event.getDatasetId());
-        }
+        Dataset dataset = datasetService.getDatasetById(event.getDatasetId());
         // 2. delete existing statistic if present
         statisticRepository.findStatisticByDatasetId(event.getDatasetId()).ifPresent(s -> statisticRepository.deleteByDataset(dataset));
         // 3. get total

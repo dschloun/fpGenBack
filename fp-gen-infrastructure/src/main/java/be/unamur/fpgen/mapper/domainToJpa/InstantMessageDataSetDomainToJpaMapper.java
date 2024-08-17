@@ -1,6 +1,5 @@
 package be.unamur.fpgen.mapper.domainToJpa;
 
-import be.unamur.fpgen.dataset.InstantMessageDataset;
 import be.unamur.fpgen.entity.author.AuthorEntity;
 import be.unamur.fpgen.entity.dataset.InstantMessageDatasetEntity;
 import be.unamur.fpgen.entity.generation.InstantMessageGenerationEntity;

@@ -1,6 +1,6 @@
 package be.unamur.fpgen.conversation;
 
-import be.unamur.fpgen.generation.AbstractItem;
+import be.unamur.fpgen.AbstractItem;
 import be.unamur.fpgen.message.ConversationMessage;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
@@ -55,7 +55,7 @@ public class Conversation extends AbstractItem {
         return generationId;
     }
 
-    public static final class Builder extends AbstractBaseUuidDomainBuilder<Builder> {
+    public static final class Builder extends AbstractItemBuilder<Builder> {
         private MessageTypeEnum type;
         private MessageTopicEnum topic;
         private Integer maxInteractionNumber;

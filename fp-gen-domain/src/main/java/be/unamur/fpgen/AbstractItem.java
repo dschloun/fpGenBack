@@ -1,4 +1,4 @@
-package be.unamur.fpgen.generation;
+package be.unamur.fpgen;
 
 import be.unamur.fpgen.BaseUuidDomain;
 

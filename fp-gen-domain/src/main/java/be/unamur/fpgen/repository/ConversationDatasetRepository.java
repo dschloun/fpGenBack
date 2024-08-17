@@ -1,6 +1,5 @@
 package be.unamur.fpgen.repository;
 
-import be.unamur.fpgen.dataset.ConversationDataset;
 import be.unamur.fpgen.dataset.pagination.DatasetsPage;
 import be.unamur.fpgen.generation.ConversationGeneration;
 import org.springframework.data.domain.Pageable;

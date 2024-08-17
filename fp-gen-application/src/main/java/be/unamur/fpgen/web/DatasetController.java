@@ -3,9 +3,9 @@ package be.unamur.fpgen.web;
 import be.unamur.api.DatasetApi;
 import be.unamur.fpgen.mapper.domainToWeb.DatasetDomainToWebMapper;
 import be.unamur.fpgen.mapper.domainToWeb.pagination.DatasetPaginationDomainToWebMapper;
+import be.unamur.fpgen.mapper.webToDomain.DatasetTypeWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.pagination.DatasetPaginationWebToDomainMapper;
-import be.unamur.fpgen.service.ConversationDatasetService;
-import be.unamur.fpgen.service.InstantMessageDatasetService;
+import be.unamur.fpgen.service.DatasetService;
 import be.unamur.fpgen.utils.MapperUtil;
 import be.unamur.model.*;
 import org.springframework.http.HttpStatus;
@@ -19,86 +19,46 @@ import java.util.UUID;
 
 @Controller
 public class DatasetController implements DatasetApi {
-    private final InstantMessageDatasetService instantMessageDatasetService;
-    private final ConversationDatasetService conversationDatasetService;
+    private final DatasetService datasetService;
 
-    public DatasetController(InstantMessageDatasetService instantMessageDatasetService, ConversationDatasetService conversationDatasetService) {
-        this.instantMessageDatasetService = instantMessageDatasetService;
-        this.conversationDatasetService = conversationDatasetService;
+    public DatasetController(DatasetService datasetService) {
+        this.datasetService = datasetService;
     }
 
     @Override
     public ResponseEntity<Void> addGenerationListToDataset(UUID datasetId, @NotNull @Valid DatasetType datasetType, @Valid List<UUID> UUID) {
-        if (DatasetType.INSTANT_MESSAGE.equals(datasetType)) {
-            instantMessageDatasetService.addInstantMessageGenerationListToDataset(datasetId, UUID);
-        } else if (DatasetType.CONVERSATION.equals(datasetType)) {
-            conversationDatasetService.addConversationGenerationListToDataset(datasetId, UUID);
-        } else {
-            throw new IllegalArgumentException("Unsupported dataset type");
-        }
+        datasetService.addGenerationListToDataset(datasetId, UUID);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
     public ResponseEntity<Void> removeGenerationFromDataset(UUID datasetId, @NotNull @Valid DatasetType datasetType, @Valid List<UUID> UUID) {
-        if (DatasetType.INSTANT_MESSAGE.equals(datasetType)) {
-            instantMessageDatasetService.removeInstantMessageListFromDataset(datasetId, UUID);
-        } else if (DatasetType.CONVERSATION.equals(datasetType)) {
-            conversationDatasetService.removeConversationListFromDataset(datasetId, UUID);
-        } else {
-            throw new IllegalArgumentException("Unsupported dataset type");
-        }
+        datasetService.removeGenerationListFromDataset(datasetId, UUID);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
     public ResponseEntity<Dataset> createDataset(@NotNull @Valid DatasetType datasetType, @Valid DatasetCreation datasetCreation) {
-        Dataset dataset;
-        if (DatasetType.INSTANT_MESSAGE.equals(datasetType)) {
-            dataset = DatasetDomainToWebMapper.map(instantMessageDatasetService.createDataset(datasetCreation), DatasetType.INSTANT_MESSAGE);
-        } else if (DatasetType.CONVERSATION.equals(datasetType)) {
-            dataset = DatasetDomainToWebMapper.map(conversationDatasetService.createDataset(datasetCreation), DatasetType.CONVERSATION);
-        } else {
-            throw new IllegalArgumentException("Unsupported dataset type");
-        }
+        Dataset dataset = DatasetDomainToWebMapper.map(datasetService.createDataset(datasetCreation, DatasetTypeWebToDomainMapper.map(datasetType)), DatasetType.INSTANT_MESSAGE);
         return new ResponseEntity<>(dataset, HttpStatus.CREATED);
     }
 
     @Override
     public ResponseEntity<Void> deleteDataset(UUID datasetId, @NotNull @Valid DatasetType datasetType) {
-        if (DatasetType.INSTANT_MESSAGE.equals(datasetType)) {
-            instantMessageDatasetService.deleteDatasetById(datasetId);
-        } else if (DatasetType.CONVERSATION.equals(datasetType)) {
-            conversationDatasetService.deleteDatasetById(datasetId);
-        } else {
-            throw new IllegalArgumentException("Unsupported dataset type");
-        }
+        datasetService.deleteDatasetById(datasetId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
     public ResponseEntity<Dataset> getDatasetById(UUID datasetId, @NotNull @Valid DatasetType datasetType) {
-        Dataset dataset;
-        if (DatasetType.INSTANT_MESSAGE.equals(datasetType)) {
-            dataset = DatasetDomainToWebMapper.map(instantMessageDatasetService.getDatasetById(datasetId), DatasetType.INSTANT_MESSAGE);
-        } else if (DatasetType.CONVERSATION.equals(datasetType)) {
-            dataset = DatasetDomainToWebMapper.map(conversationDatasetService.getDatasetById(datasetId), DatasetType.CONVERSATION);
-        } else {
-            throw new IllegalArgumentException("Unsupported dataset type");
-        }
+        Dataset dataset = DatasetDomainToWebMapper.map(datasetService.getDatasetById(datasetId), DatasetType.INSTANT_MESSAGE);
+
         return new ResponseEntity<>(dataset, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<DatasetsPage> searchDatasetsPaginate(@NotNull @Valid DatasetType datasetType, @Valid PagedDatasetQuery pagedDatasetQuery) {
-        DatasetsPage datasetsPage;
-        if (DatasetType.INSTANT_MESSAGE.equals(datasetType)) {
-            datasetsPage = DatasetPaginationDomainToWebMapper.map(instantMessageDatasetService.searchDatasetPaginate(DatasetPaginationWebToDomainMapper.map(pagedDatasetQuery)), DatasetType.INSTANT_MESSAGE);
-        } else if (DatasetType.CONVERSATION.equals(datasetType)) {
-            datasetsPage = DatasetPaginationDomainToWebMapper.map(conversationDatasetService.searchDatasetPaginate(DatasetPaginationWebToDomainMapper.map(pagedDatasetQuery)), DatasetType.CONVERSATION);
-        } else {
-            throw new IllegalArgumentException("Unsupported dataset type");
-        }
+        DatasetsPage datasetsPage = DatasetPaginationDomainToWebMapper.map(datasetService.searchDatasetPaginate(DatasetPaginationWebToDomainMapper.map(pagedDatasetQuery), DatasetTypeWebToDomainMapper.map(datasetType)), DatasetType.INSTANT_MESSAGE);
         return new ResponseEntity<>(datasetsPage, HttpStatus.OK);
     }
 
@@ -109,20 +69,14 @@ public class DatasetController implements DatasetApi {
 
     @Override
     public ResponseEntity<Dataset> createNewDatasetVersion(UUID datasetId, @NotNull @Valid DatasetType datasetType, @Valid UUID authorId) {
-        if (DatasetType.INSTANT_MESSAGE.equals(datasetType)) {
-            instantMessageDatasetService.createNewVersion(datasetId, authorId);
-        } else if (DatasetType.CONVERSATION.equals(datasetType)) {
-            //todo
-        } else {
-            throw new IllegalArgumentException("Unsupported dataset type");
-        }
+        datasetService.createNewVersion(datasetId, authorId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
     public ResponseEntity<List<Dataset>> getDatasetAllVersions(UUID datasetId, @NotNull @Valid DatasetType datasetType) {
         return new ResponseEntity<>(
-                MapperUtil.mapList(instantMessageDatasetService.getAllDatasetVersions(datasetId),
+                MapperUtil.mapList(datasetService.getAllDatasetVersions(datasetId),
                         d -> DatasetDomainToWebMapper.map(d, DatasetType.INSTANT_MESSAGE)),
                 HttpStatus.OK);
     }
@@ -149,13 +103,7 @@ public class DatasetController implements DatasetApi {
 
     @Override
     public ResponseEntity<Void> validateDataset(UUID datasetId, @NotNull @Valid DatasetType datasetType) {
-        if (DatasetType.INSTANT_MESSAGE.equals(datasetType)) {
-            instantMessageDatasetService.validateDataset(datasetId);
-        } else if (DatasetType.CONVERSATION.equals(datasetType)) {
-            //todo
-        } else {
-            throw new IllegalArgumentException("Unsupported dataset type");
-        }
+        datasetService.validateDataset(datasetId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

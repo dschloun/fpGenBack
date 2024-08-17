@@ -1,7 +1,5 @@
 package be.unamur.fpgen.repository;
 
-import be.unamur.fpgen.dataset.ConversationDataset;
-import be.unamur.fpgen.dataset.InstantMessageDataset;
 import be.unamur.fpgen.dataset.pagination.DatasetsPage;
 import be.unamur.fpgen.entity.author.AuthorEntity;
 import be.unamur.fpgen.entity.dataset.InstantMessageDatasetEntity;
@@ -22,7 +20,7 @@ import java.time.OffsetDateTime;
 import java.util.*;
 
 @Repository
-public class JpaInstantMessageDatasetRepository implements InstantMessageDatasetRepository {
+public class JpaDatasetRepository implements DatasetRepository {
 
     private final JpaInstantMessageDatasetRepositoryCRUD jpaInstantMessageDatasetRepositoryCRUD;
     private final JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD;
@@ -30,7 +28,7 @@ public class JpaInstantMessageDatasetRepository implements InstantMessageDataset
     private final JpaOngoingGenerationRepositoryCRUD jpaOngoingGenerationRepositoryCRUD;
     private final EntityManager entityManager;
 
-    public JpaInstantMessageDatasetRepository(JpaInstantMessageDatasetRepositoryCRUD jpaInstantMessageDatasetRepositoryCRUD, JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD, JpaGenerationRepositoryCRUD jpaGenerationRepositoryCRUD, JpaOngoingGenerationRepositoryCRUD jpaOngoingGenerationRepositoryCRUD, EntityManager entityManager) {
+    public JpaDatasetRepository(JpaInstantMessageDatasetRepositoryCRUD jpaInstantMessageDatasetRepositoryCRUD, JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD, JpaGenerationRepositoryCRUD jpaGenerationRepositoryCRUD, JpaOngoingGenerationRepositoryCRUD jpaOngoingGenerationRepositoryCRUD, EntityManager entityManager) {
         this.jpaInstantMessageDatasetRepositoryCRUD = jpaInstantMessageDatasetRepositoryCRUD;
         this.jpaAuthorRepositoryCRUD = jpaAuthorRepositoryCRUD;
         this.jpaGenerationRepositoryCRUD = jpaGenerationRepositoryCRUD;
@@ -87,8 +85,8 @@ public class JpaInstantMessageDatasetRepository implements InstantMessageDataset
     }
 
     @Override
-    public void deleteInstantMessageDatasetById(UUID instantMessageDatasetId) {
-        jpaInstantMessageDatasetRepositoryCRUD.deleteById(instantMessageDatasetId);
+    public void deleteDatasetById(UUID datasetId) {
+        jpaInstantMessageDatasetRepositoryCRUD.deleteById(datasetId);
     }
 
     @Override

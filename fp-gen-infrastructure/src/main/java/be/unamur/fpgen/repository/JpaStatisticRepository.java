@@ -1,9 +1,7 @@
 package be.unamur.fpgen.repository;
 
-import be.unamur.fpgen.dataset.AbstractDataset;
-import be.unamur.fpgen.dataset.InstantMessageDataset;
+import be.unamur.fpgen.dataset.Dataset;
 import be.unamur.fpgen.entity.dataset.ConversationDatasetEntity;
-import be.unamur.fpgen.entity.dataset.DatasetEntity;
 import be.unamur.fpgen.entity.dataset.InstantMessageDatasetEntity;
 import be.unamur.fpgen.statistic.TypeTopicDistributionProjection;
 import be.unamur.fpgen.mapper.domainToJpa.StatisticDomainToJpaMapper;
@@ -53,7 +51,7 @@ public class JpaStatisticRepository implements StatisticRepository {
     }
 
     @Override
-    public void save(Statistic statistic, AbstractDataset dataset) {
+    public void save(Statistic statistic, Dataset dataset) {
         if (dataset instanceof InstantMessageDataset){
             final InstantMessageDatasetEntity datasetEntity = jpaInstantMessageDatasetRepositoryCRUD.findById(dataset.getId()).orElseThrow();
             datasetEntity.setStatistic(StatisticDomainToJpaMapper.mapForCreate(statistic, datasetEntity));
@@ -72,7 +70,7 @@ public class JpaStatisticRepository implements StatisticRepository {
     }
 
     @Override
-    public void deleteByDataset(AbstractDataset dataset) {
+    public void deleteByDataset(Dataset dataset) {
         if (dataset instanceof InstantMessageDataset){
             final InstantMessageDatasetEntity datasetEntity = jpaInstantMessageDatasetRepositoryCRUD.findById(dataset.getId()).orElseThrow();
             datasetEntity.setStatistic(null);

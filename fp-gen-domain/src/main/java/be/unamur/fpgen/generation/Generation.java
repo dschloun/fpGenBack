@@ -1,5 +1,6 @@
 package be.unamur.fpgen.generation;
 
+import be.unamur.fpgen.AbstractItem;
 import be.unamur.fpgen.BaseUuidDomain;
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.message.MessageTopicEnum;
@@ -17,7 +18,7 @@ import java.util.Set;
  * format 'trigram' ex: JDO (John Doe)
  * @specfield details: String // details of the generation
  */
-public class Generation extends BaseUuidDomain {
+public class Generation extends AbstractItem {
     // members
     private final String generationId;
     private final GenerationTypeEnum generationType;
@@ -31,6 +32,7 @@ public class Generation extends BaseUuidDomain {
     private final Set<AbstractItem> itemList = new HashSet<>();
 
     private Generation(Builder builder) {
+        super(builder.getId(), builder.getCreationDate(), builder.getModificationDate());
         generationId = builder.generationId;
         generationType = builder.generationType;
         author = builder.author;
@@ -40,6 +42,7 @@ public class Generation extends BaseUuidDomain {
         topic = builder.topic;
         systemPrompt = builder.systemPrompt;
         userPrompt = builder.userPrompt;
+        itemList.addAll(builder.itemList);
     }
 
     public GenerationTypeEnum getGenerationType() {
@@ -86,7 +89,7 @@ public class Generation extends BaseUuidDomain {
         return new Builder();
     }
 
-    public static final class Builder extends AbstractBaseUuidDomainBuilder<Builder> {
+    public static final class Builder extends AbstractItemBuilder<Builder> {
         private String generationId;
         private GenerationTypeEnum generationType;
         private Author author;

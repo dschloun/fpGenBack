@@ -1,6 +1,5 @@
 package be.unamur.fpgen.mapper.domainToJpa;
 
-import be.unamur.fpgen.dataset.ConversationDataset;
 import be.unamur.fpgen.entity.author.AuthorEntity;
 import be.unamur.fpgen.entity.dataset.ConversationDatasetEntity;
 import be.unamur.fpgen.entity.project.ProjectEntity;

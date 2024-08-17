@@ -1,11 +1,8 @@
 package be.unamur.fpgen.mapper.domainToWeb;
 
-import be.unamur.fpgen.dataset.AbstractDataset;
-import be.unamur.fpgen.dataset.ConversationDataset;
+import be.unamur.fpgen.dataset.Dataset;
 import be.unamur.fpgen.dataset.DatasetFunctionEnum;
-import be.unamur.fpgen.dataset.InstantMessageDataset;
 import be.unamur.fpgen.project.ProjectTypeEnum;
-import be.unamur.model.Dataset;
 import be.unamur.model.DatasetType;
 import be.unamur.model.Project;
 import be.unamur.model.ProjectType;
@@ -38,7 +35,7 @@ public class ProjectDomainToWebMapper {
                 .orElse(null);
     }
 
-    private static DatasetType getType(AbstractDataset dataset) {
+    private static DatasetType getType(Dataset dataset) {
         if (dataset instanceof InstantMessageDataset) {
             return DatasetType.INSTANT_MESSAGE;
         } else if (dataset instanceof ConversationDataset) {
@@ -48,8 +45,8 @@ public class ProjectDomainToWebMapper {
         }
     }
 
-    private static Dataset mapAndGetLastVersion(Set<AbstractDataset> datasetList, DatasetFunctionEnum datasetFunction) {
-        final List<Dataset> datasetListTemp = datasetList.stream()
+    private static be.unamur.model.Dataset mapAndGetLastVersion(Set<Dataset> datasetList, DatasetFunctionEnum datasetFunction) {
+        final List<be.unamur.model.Dataset> datasetListTemp = datasetList.stream()
                 .filter(d -> datasetFunction.equals(d.getDatasetFunction()) && d.isLastVersion())
                 .map(d -> DatasetDomainToWebMapper.map(d, getType(d)))
                 .toList();

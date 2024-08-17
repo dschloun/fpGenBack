@@ -23,17 +23,17 @@ public class InstantMessageService {
 
     private final InstantMessageRepository instantMessageRepository;
     private final GenerationService generationService;
-    private final InstantMessageDatasetService instantMessageDatasetService;
+    private final DatasetService datasetService;
     private final OngoingGenerationService ongoingGenerationService;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     public InstantMessageService(final InstantMessageRepository instantMessageRepository,
                                  final GenerationService generationService,
-                                 final InstantMessageDatasetService instantMessageDatasetService,
+                                 final DatasetService datasetService,
                                  OngoingGenerationService ongoingGenerationService, ApplicationEventPublisher applicationEventPublisher) {
         this.instantMessageRepository = instantMessageRepository;
         this.generationService = generationService;
-        this.instantMessageDatasetService = instantMessageDatasetService;
+        this.datasetService = datasetService;
         this.ongoingGenerationService = ongoingGenerationService;
         this.applicationEventPublisher = applicationEventPublisher;
     }
@@ -46,10 +46,10 @@ public class InstantMessageService {
 
         // 1. if the generation refer to a dataset, then inform the dataset that a generation is pending for him
         if (Objects.nonNull(command.getDatasetId())) {
-            instantMessageDatasetService.addOngoingGenerationToDataset(command.getDatasetId(), ongoingGeneration);
+            datasetService.addOngoingGenerationToDataset(command.getDatasetId(), ongoingGeneration);
         }
 
-        applicationEventPublisher.publishEvent(new OngoingGenerationEvent(this, ongoingGeneration.getId(), command));
+        applicationEventPublisher.publishEvent(new OngoingGenerationEvent(this, GenerationTypeEnum.INSTANT_MESSAGE, ongoingGeneration.getId(), command));
     }
 
     @Transactional

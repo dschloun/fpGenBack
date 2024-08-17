@@ -1,15 +1,11 @@
 package be.unamur.fpgen.repository;
 
-import be.unamur.fpgen.dataset.ConversationDataset;
 import be.unamur.fpgen.dataset.pagination.DatasetsPage;
 import be.unamur.fpgen.entity.author.AuthorEntity;
 import be.unamur.fpgen.entity.dataset.ConversationDatasetEntity;
 import be.unamur.fpgen.entity.generation.ConversationGenerationEntity;
-import be.unamur.fpgen.entity.generation.ConversationGenerationEntity;
-import be.unamur.fpgen.generation.ConversationGeneration;
 import be.unamur.fpgen.generation.ConversationGeneration;
 import be.unamur.fpgen.mapper.domainToJpa.ConversationDatasetDomainToJpaMapper;
-import be.unamur.fpgen.mapper.jpaToDomain.ConversationDatasetJpaToDomainMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.ConversationDatasetJpaToDomainMapper;
 import be.unamur.fpgen.pagination.Pagination;
 import be.unamur.fpgen.utils.StringUtil;

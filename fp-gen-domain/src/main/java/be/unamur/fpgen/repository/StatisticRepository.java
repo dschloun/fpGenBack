@@ -1,6 +1,6 @@
 package be.unamur.fpgen.repository;
 
-import be.unamur.fpgen.dataset.AbstractDataset;
+import be.unamur.fpgen.dataset.Dataset;
 import be.unamur.fpgen.statistic.Statistic;
 import be.unamur.fpgen.statistic.TypeTopicDistributionProjection;
 
@@ -20,9 +20,9 @@ public interface StatisticRepository {
 
     List<TypeTopicDistributionProjection> findTypeTopicDistribution(UUID datasetId);
 
-    void save(Statistic statistic, AbstractDataset dataset);
+    void save(Statistic statistic, Dataset dataset);
 
     Optional<Statistic> findStatisticByDatasetId(UUID datasetId);
 
-    void deleteByDataset(AbstractDataset dataset);
+    void deleteByDataset(Dataset dataset);
 }

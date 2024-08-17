@@ -16,7 +16,7 @@ public class Project extends BaseUuidDomain {
     private final String organisation;
     private final String businessId;
     private final Author author;
-    private Set<AbstractDataset> datasetList = new HashSet<>();
+    private Set<Dataset> datasetList = new HashSet<>();
 
     private Project(Builder builder) {
         super(builder.getId(), builder.getCreationDate(), builder.getModificationDate());
@@ -53,19 +53,19 @@ public class Project extends BaseUuidDomain {
         return author;
     }
 
-    public Set<AbstractDataset> getDatasetList() {
+    public Set<Dataset> getDatasetList() {
         return datasetList;
     }
 
     public void generateInitialDatasets(){
-        final Set<AbstractDataset> datasets = new HashSet<>();
+        final Set<Dataset> datasets = new HashSet<>();
         datasets.add(this.generateDataset(this.getAuthor(), DatasetFunctionEnum.TRAINING));
         datasets.add(this.generateDataset(this.getAuthor(), DatasetFunctionEnum.TEST));
         datasets.add(this.generateDataset(this.getAuthor(), DatasetFunctionEnum.VALIDATION));
         this.datasetList.addAll(datasets);
     }
 
-    private AbstractDataset generateDataset(Author author, DatasetFunctionEnum datasetFunctionEnum){
+    private Dataset generateDataset(Author author, DatasetFunctionEnum datasetFunctionEnum){
         if(ProjectTypeEnum.INSTANT_MESSAGE.equals(this.getType())){
             return InstantMessageDataset.newBuilder()
                     .withAuthor(author)
@@ -100,7 +100,7 @@ public class Project extends BaseUuidDomain {
         private String organisation;
         private String businessId;
         private Author author;
-        private Set<AbstractDataset> datasetList= new HashSet<>();
+        private Set<Dataset> datasetList= new HashSet<>();
 
         private Builder() {
         }
@@ -135,7 +135,7 @@ public class Project extends BaseUuidDomain {
             return this;
         }
 
-        public Builder withDatasetList(Set<AbstractDataset> val) {
+        public Builder withDatasetList(Set<Dataset> val) {
             datasetList = val;
             return this;
         }
