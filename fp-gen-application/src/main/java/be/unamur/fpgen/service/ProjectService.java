@@ -6,8 +6,12 @@ import be.unamur.fpgen.dataset.DatasetFunctionEnum;
 import be.unamur.fpgen.exception.ProjectNotFoundException;
 import be.unamur.fpgen.mapper.webToDomain.ProjectWebToDomainMapper;
 import be.unamur.fpgen.project.Project;
+import be.unamur.fpgen.project.pagination.PagedProjectsQuery;
+import be.unamur.fpgen.project.pagination.ProjectsPage;
 import be.unamur.fpgen.repository.ProjectRepository;
 import be.unamur.model.ProjectCreation;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -39,5 +43,22 @@ public class ProjectService {
     public Project findById(UUID projectId) {
         return projectRepository.findById(projectId)
                 .orElseThrow(() -> ProjectNotFoundException.withId(projectId));
+    }
+
+    @Transactional
+    public ProjectsPage searchProjectPaginate(final PagedProjectsQuery query){
+        final Pageable pageable = PageRequest
+                .of(query.getQueryPage().getPage(),
+                        query.getQueryPage().getSize());
+
+        return projectRepository.findPagination(
+                query.getProjectQuery().getType(),
+                query.getProjectQuery().getName(),
+                query.getProjectQuery().getDescription(),
+                query.getProjectQuery().getOrganization(),
+                query.getProjectQuery().getAuthorTrigram(),
+                query.getProjectQuery().getStartDate(),
+                query.getProjectQuery().getEndDate(),
+                pageable);
     }
 }

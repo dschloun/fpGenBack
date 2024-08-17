@@ -1,8 +1,11 @@
 package be.unamur.fpgen.project.pagination;
 
+import be.unamur.fpgen.project.ProjectTypeEnum;
+
 import java.time.OffsetDateTime;
 
 public class ProjectQuery {
+    private final ProjectTypeEnum type;
     private final String name;
     private final String description;
     private final String organization;
@@ -11,12 +14,17 @@ public class ProjectQuery {
     private final OffsetDateTime endDate;
 
     private ProjectQuery(Builder builder) {
+        type = builder.type;
         name = builder.name;
         description = builder.description;
         organization = builder.organization;
         authorTrigram = builder.authorTrigram;
         startDate = builder.startDate;
         endDate = builder.endDate;
+    }
+
+    public ProjectTypeEnum getType() {
+        return type;
     }
 
     public String getName() {
@@ -48,6 +56,7 @@ public class ProjectQuery {
     }
 
     public static final class Builder {
+        private ProjectTypeEnum type;
         private String name;
         private String description;
         private String organization;
@@ -56,6 +65,11 @@ public class ProjectQuery {
         private OffsetDateTime endDate;
 
         private Builder() {
+        }
+
+        public Builder withType(ProjectTypeEnum val) {
+            type = val;
+            return this;
         }
 
         public Builder withName(String val) {
@@ -93,17 +107,3 @@ public class ProjectQuery {
         }
     }
 }
-
-//properties:
-//name:
-//type: string
-//description:
-//type: string
-//organization:
-//type: string
-//authorTrigram:
-//type: string
-//startDate:
-//$ref: 'common.yaml#/components/schemas/Date'
-//endDate:
-//$ref: 'common.yaml#/components/schemas/Date'

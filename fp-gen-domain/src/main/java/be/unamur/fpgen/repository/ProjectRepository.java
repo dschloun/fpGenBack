@@ -2,6 +2,7 @@ package be.unamur.fpgen.repository;
 
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.project.Project;
+import be.unamur.fpgen.project.ProjectTypeEnum;
 import be.unamur.fpgen.project.pagination.ProjectsPage;
 import org.springframework.data.domain.Pageable;
 
@@ -21,5 +22,5 @@ public interface ProjectRepository {
 
     void deleteById(UUID id);
 
-    ProjectsPage findPagination(String name, String description, String organization, String authorTrigram, OffsetDateTime startDate, OffsetDateTime endDate, Pageable pageable);
+    ProjectsPage findPagination(ProjectTypeEnum projectType, String name, String description, String organization, String authorTrigram, OffsetDateTime startDate, OffsetDateTime endDate, Pageable pageable);
 }

@@ -2,7 +2,9 @@ package be.unamur.fpgen.web;
 
 import be.unamur.api.ProjectApi;
 import be.unamur.fpgen.mapper.domainToWeb.ProjectDomainToWebMapper;
+import be.unamur.fpgen.mapper.domainToWeb.pagination.ProjectPaginationDomainToWebMapper;
 import be.unamur.fpgen.mapper.webToDomain.ProjectWebToDomainMapper;
+import be.unamur.fpgen.mapper.webToDomain.pagination.ProjectPaginationWebToDomainMapper;
 import be.unamur.fpgen.service.ProjectService;
 import be.unamur.model.*;
 import org.springframework.http.HttpStatus;
@@ -43,7 +45,12 @@ public class ProjectController implements ProjectApi {
 
     @Override
     public ResponseEntity<ProjectsPage> searchProjectsPaginate(@NotNull @Valid ProjectType projectType, @Valid PagedProjectQuery pagedProjectQuery) {
-        return ProjectApi.super.searchProjectsPaginate(projectType, pagedProjectQuery);
+        return new ResponseEntity<>(ProjectPaginationDomainToWebMapper.map(
+                projectService.searchProjectPaginate(
+                        ProjectPaginationWebToDomainMapper.map(
+                                pagedProjectQuery,
+                                projectType))
+        ), HttpStatus.OK);
     }
 
     @Override
