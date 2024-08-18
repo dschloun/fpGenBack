@@ -24,7 +24,7 @@ public class GenerationController implements GenerationApi {
     }
 
     @Override
-    public ResponseEntity<GenerationsPage> searchGenerationsPaginate(@NotNull @Valid GenerationType generationType, @Valid PagedGenerationQuery pagedGenerationQuery) {
+    public ResponseEntity<GenerationsPage> searchGenerationsPaginate(@Valid PagedGenerationQuery pagedGenerationQuery) {
         GenerationsPage generationsPage = GenerationPaginationDomainToWebMapper.map(
                 generationService.searchGenerationsPaginate(GenerationPaginationWebToDomainMapper.map(
                         pagedGenerationQuery

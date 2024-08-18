@@ -109,7 +109,7 @@ public class DatasetService {
 
 
     @Transactional
-    public DatasetsPage searchDatasetPaginate(final PagedDatasetsQuery query, DatasetTypeEnum type) {
+    public DatasetsPage searchDatasetPaginate(final PagedDatasetsQuery query) {
         //0. get author (check if author exists)
         final Author author = query.getDatasetQuery().getAuthorTrigram() != null ? authorService.getAuthorByTrigram(query.getDatasetQuery().getAuthorTrigram()) : null;
 
@@ -120,7 +120,7 @@ public class DatasetService {
 
         //2. search datasets
         return datasetRepository.findPagination(
-                type,
+                query.getDatasetQuery().getType(),
                 query.getDatasetQuery().getVersion(),
                 query.getDatasetQuery().getName(),
                 query.getDatasetQuery().getDescription(),

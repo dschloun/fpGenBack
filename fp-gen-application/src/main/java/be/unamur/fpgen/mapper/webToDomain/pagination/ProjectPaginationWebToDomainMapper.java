@@ -9,9 +9,9 @@ import be.unamur.model.ProjectType;
 
 public class ProjectPaginationWebToDomainMapper {
 
-    public static ProjectQuery map(be.unamur.model.ProjectQuery web, ProjectType type){
+    public static ProjectQuery map(be.unamur.model.ProjectQuery web){
         return ProjectQuery.newBuilder()
-                .withType(ProjectTypeWebToDomainMapper.map(type))
+                .withType(ProjectTypeWebToDomainMapper.map(web.getProjectType()))
                 .withName(web.getName())
                 .withDescription(web.getDescription())
                 .withAuthorTrigram(web.getAuthorTrigram())
@@ -21,9 +21,9 @@ public class ProjectPaginationWebToDomainMapper {
                 .build();
     }
 
-    public static PagedProjectsQuery map(be.unamur.model.PagedProjectQuery web, ProjectType type){
+    public static PagedProjectsQuery map(be.unamur.model.PagedProjectQuery web){
         return PagedProjectsQuery.newBuilder()
-                .withProjectQuery(map(web.getQuery(), type))
+                .withProjectQuery(map(web.getQuery()))
                 .withQueryPage(PaginationWebToDomainMapper.map(web.getPage()))
                 .build();
     }

@@ -57,8 +57,8 @@ public class DatasetController implements DatasetApi {
     }
 
     @Override
-    public ResponseEntity<DatasetsPage> searchDatasetsPaginate(@NotNull @Valid DatasetType datasetType, @Valid PagedDatasetQuery pagedDatasetQuery) {
-        DatasetsPage datasetsPage = DatasetPaginationDomainToWebMapper.map(datasetService.searchDatasetPaginate(DatasetPaginationWebToDomainMapper.map(pagedDatasetQuery), DatasetTypeWebToDomainMapper.map(datasetType)), DatasetType.INSTANT_MESSAGE);
+    public ResponseEntity<DatasetsPage> searchDatasetsPaginate(@Valid PagedDatasetQuery pagedDatasetQuery) {
+        DatasetsPage datasetsPage = DatasetPaginationDomainToWebMapper.map(datasetService.searchDatasetPaginate(DatasetPaginationWebToDomainMapper.map(pagedDatasetQuery)), DatasetType.INSTANT_MESSAGE);
         return new ResponseEntity<>(datasetsPage, HttpStatus.OK);
     }
 

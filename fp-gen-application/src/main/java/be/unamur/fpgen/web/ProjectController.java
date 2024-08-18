@@ -44,12 +44,11 @@ public class ProjectController implements ProjectApi {
     }
 
     @Override
-    public ResponseEntity<ProjectsPage> searchProjectsPaginate(@NotNull @Valid ProjectType projectType, @Valid PagedProjectQuery pagedProjectQuery) {
+    public ResponseEntity<ProjectsPage> searchProjectsPaginate(@Valid PagedProjectQuery pagedProjectQuery) {
         return new ResponseEntity<>(ProjectPaginationDomainToWebMapper.map(
                 projectService.searchProjectPaginate(
                         ProjectPaginationWebToDomainMapper.map(
-                                pagedProjectQuery,
-                                projectType))
+                                pagedProjectQuery))
         ), HttpStatus.OK);
     }
 
