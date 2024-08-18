@@ -5,7 +5,9 @@ import be.unamur.fpgen.BaseUuidDomain;
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
+import be.unamur.fpgen.utils.DateUtil;
 
+import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -155,11 +157,16 @@ public class Generation extends AbstractItem {
         }
 
         public Generation build() {
+            generationId = generateGenerationId();
             return new Generation(this);
         }
 
         public String returnBatchOrSingle(){
             return this.quantity > 1 ? "BATCH" : "SINGLE";
+        }
+
+        public String generateGenerationId() {
+            return String.format("%s-%s-%s-%s", "IM", this.returnBatchOrSingle(), this.author.getTrigram(), DateUtil.convertOffsetDateTimeMillisToString(OffsetDateTime.now()));
         }
 
         @Override
