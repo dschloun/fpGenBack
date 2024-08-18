@@ -2,6 +2,7 @@ package be.unamur.fpgen.web;
 
 import be.unamur.api.DatasetApi;
 import be.unamur.fpgen.mapper.domainToWeb.DatasetDomainToWebMapper;
+import be.unamur.fpgen.mapper.domainToWeb.DatasetTypeDomainToWebMapper;
 import be.unamur.fpgen.mapper.domainToWeb.pagination.DatasetPaginationDomainToWebMapper;
 import be.unamur.fpgen.mapper.webToDomain.DatasetTypeWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.pagination.DatasetPaginationWebToDomainMapper;
@@ -69,8 +70,8 @@ public class DatasetController implements DatasetApi {
 
     @Override
     public ResponseEntity<Dataset> createNewDatasetVersion(UUID datasetId, @NotNull @Valid DatasetType datasetType, @Valid UUID authorId) {
-        datasetService.createNewVersion(datasetId, authorId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        final be.unamur.fpgen.dataset.Dataset dataset = datasetService.createNewVersion(datasetId, authorId);
+        return new ResponseEntity<>(DatasetDomainToWebMapper.map(dataset, DatasetTypeDomainToWebMapper.map(dataset.getType())), HttpStatus.CREATED);
     }
 
     @Override
