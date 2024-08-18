@@ -6,6 +6,8 @@ import be.unamur.fpgen.generation.GenerationTypeEnum;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
 
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -16,7 +18,7 @@ public class GenerationProjectionJpaToDomainMapper {
         }
         return Generation.newBuilder()
                 .withId(UUID.fromString(entity.getId()))
-                .withCreationDate(entity.getCreationDate())
+                .withCreationDate(OffsetDateTime.ofInstant(entity.getCreationDate().toInstant(), ZoneOffset.UTC))
                 .withGenerationType(convertKindToGenerationType(entity.getKind()))
                 .withType(MessageTypeEnum.valueOf(entity.getType()))
                 .withTopic(MessageTopicEnum.valueOf(entity.getTopic()))
