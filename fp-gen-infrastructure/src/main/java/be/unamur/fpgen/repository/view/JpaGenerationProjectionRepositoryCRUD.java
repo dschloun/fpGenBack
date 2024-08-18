@@ -34,7 +34,8 @@ public interface JpaGenerationProjectionRepositoryCRUD extends JpaRepository <Ge
             "AND (:quantity is null or quantity <= :quantity) " +
             "AND creation_date >= cast(:startDate as timestamp) " +
             "AND creation_date <= cast(:endDate as timestamp) " +
-            "AND ((:isIn = true AND dataset_id IN :datasetIdList) OR (:isIn = false AND dataset_id NOT IN :datasetIdList OR dataset_id is null)) "
+            "AND ((:isIn = true AND dataset_id IN :datasetIdList) OR (:isIn = false AND id NOT IN ( " +
+                "SELECT DISTINCT id FROM generation_search_view WHERE dataset_id IN :datasetIdList ))) "
     )
     Page<GenerationProjection> search(@Param("kind") String kind,
                                       @Param("topic") String topic,
