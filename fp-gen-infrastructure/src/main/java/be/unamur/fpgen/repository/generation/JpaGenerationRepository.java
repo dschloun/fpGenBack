@@ -1,16 +1,18 @@
 package be.unamur.fpgen.repository.generation;
 
+import be.unamur.fpgen.entity.view.GenerationProjectionJpaToDomainMapper;
+import be.unamur.fpgen.repository.view.JpaGenerationProjectionRepositoryCRUD;
 import be.unamur.fpgen.generation.Generation;
 import be.unamur.fpgen.generation.GenerationTypeEnum;
 import be.unamur.fpgen.generation.pagination.GenerationPage;
 import be.unamur.fpgen.mapper.domainToJpa.GenerationDomainToJpaMapper;
-import be.unamur.fpgen.mapper.jpaToDomain.ConversationGenerationJpaToDomainMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.GenerationJpaToDomainMapper;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.pagination.Pagination;
 import be.unamur.fpgen.repository.GenerationRepository;
 import be.unamur.fpgen.repository.author.JpaAuthorRepositoryCRUD;
+import be.unamur.fpgen.utils.MapperUtil;
 import be.unamur.fpgen.utils.StringUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,12 +28,14 @@ import java.util.UUID;
 public class JpaGenerationRepository implements GenerationRepository {
     private final JpaGenerationRepositoryCRUD jpaGenerationRepositoryCRUD;
     private final JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD;
+    private final JpaGenerationProjectionRepositoryCRUD jpaGenerationProjectionRepositoryCRUD;
 
     public JpaGenerationRepository(JpaGenerationRepositoryCRUD jpaGenerationRepositoryCRUD,
-                                   JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD) {
+                                   JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD,
+                                   JpaGenerationProjectionRepositoryCRUD jpaGenerationProjectionRepositoryCRUD) {
         this.jpaGenerationRepositoryCRUD = jpaGenerationRepositoryCRUD;
         this.jpaAuthorRepositoryCRUD = jpaAuthorRepositoryCRUD;
-
+        this.jpaGenerationProjectionRepositoryCRUD = jpaGenerationProjectionRepositoryCRUD;
     }
 
     @Override
@@ -71,22 +75,35 @@ public class JpaGenerationRepository implements GenerationRepository {
         // 1. get in Page format
         final Page<Generation> page;
 
-        if (GenerationTypeEnum.INSTANT_MESSAGE.equals(type)) {
-            page = jpaGenerationRepositoryCRUD.findMessagePagination(
-                    messageTopic,
-                    messageType,
+        page = jpaGenerationProjectionRepositoryCRUD.search(
+                    Objects.nonNull(messageTopic) ? messageTopic.name() : null,
+                    Objects.nonNull(messageType) ? messageType.name() : null,
                     authorTrigram,
                     quantity,
                     StringUtil.toLowerCaseIfNotNull(userPrompt),
-                    StringUtil.toLowerCaseIfNotNull(systemPrompt),
                     startDate,
                     endDate,
-                    datasetIdList,
+                    MapperUtil.mapList(datasetIdList, UUID::toString),
                     isIn,
                     pageable
-            ).map(GenerationJpaToDomainMapper::map);
+            ).map(GenerationProjectionJpaToDomainMapper::map);
 
-        }
+//        if (GenerationTypeEnum.INSTANT_MESSAGE.equals(type)) {
+//            page = jpaGenerationRepositoryCRUD.findMessagePagination(
+//                    messageTopic,
+//                    messageType,
+//                    authorTrigram,
+//                    quantity,
+//                    StringUtil.toLowerCaseIfNotNull(userPrompt),
+//                    StringUtil.toLowerCaseIfNotNull(systemPrompt),
+//                    startDate,
+//                    endDate,
+//                    datasetIdList,
+//                    isIn,
+//                    pageable
+//            ).map(GenerationJpaToDomainMapper::map);
+//
+//        }
 //        else if (GenerationTypeEnum.CONVERSATION.equals(type)) {
 //            page = jpaGenerationRepositoryCRUD.findConversationPagination(
 //                    messageTopic,
@@ -102,9 +119,9 @@ public class JpaGenerationRepository implements GenerationRepository {
 //                    pageable
 //            ).map(GenerationJpaToDomainMapper::map);
 //        }
-        else {
-            throw new IllegalArgumentException("Either inDatasetIdList or notInDatasetIdList must be provided");
-        }
+//        else {
+//            throw new IllegalArgumentException("Either inDatasetIdList or notInDatasetIdList must be provided");
+//        }
 
         final GenerationPage generationPage = GenerationPage.newBuilder()
                 .withPagination(new Pagination.Builder()

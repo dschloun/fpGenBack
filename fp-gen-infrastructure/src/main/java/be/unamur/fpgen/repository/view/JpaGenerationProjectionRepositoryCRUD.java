@@ -1,6 +1,7 @@
-package be.unamur.fpgen.entity.view;
+package be.unamur.fpgen.repository.view;
 
-import be.unamur.fpgen.entity.generation.InstantMessageGenerationEntity;
+import be.unamur.fpgen.entity.generation.GenerationEntity;
+import be.unamur.fpgen.entity.view.GenerationProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,14 +12,14 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
-public interface JpaGenerationProjectionRepositoryCRUD extends JpaRepository <InstantMessageGenerationEntity, UUID> {
+public interface JpaGenerationProjectionRepositoryCRUD extends JpaRepository <GenerationEntity, UUID> {
 
     @Query(nativeQuery = true, value =
     "SELECT distinct id as id, " +
             "creation_date as creationDate, " +
             "kind as kind, " +
             "generation_id as generationId, " +
-            "author_id as authorId, " +
+            "author_trigram as authorTrigram, " +
             "details as details, " +
             "user_prompt as userPrompt, " +
             "topic as topic, " +
@@ -28,12 +29,12 @@ public interface JpaGenerationProjectionRepositoryCRUD extends JpaRepository <In
             "FROM generation_search_view " +
             "WHERE (:topic is null or topic = :topic) " +
             "AND (:type is null or type = :type) " +
-            "AND (:authorTrigram is null or authorTrigram = :authorTrigram) " +
-            "AND (:userPrompt is null or lower(userPrompt) like %:userPrompt%) " +
+            "AND (:authorTrigram is null or author_trigram = :authorTrigram) " +
+            "AND (:userPrompt is null or lower(user_prompt) like %:userPrompt%) " +
             "AND (:quantity is null or quantity <= :quantity) " +
-            "AND g.creationDate >= cast(:startDate as timestamp) " +
-            "AND g.creationDate <= cast(:endDate as timestamp) " +
-            "AND gd.id NOT IN (:datasetIdList)"
+            "AND creation_date >= cast(:startDate as timestamp) " +
+            "AND creation_date <= cast(:endDate as timestamp) " +
+            "AND ((:isIn = true AND id IN :datasetIdList) OR (:isIn = false AND id NOT IN :datasetIdList ))"
     )
     Page<GenerationProjection> search(@Param("topic") String topic,
                                       @Param("type") String type,
@@ -43,5 +44,6 @@ public interface JpaGenerationProjectionRepositoryCRUD extends JpaRepository <In
                                       @Param("startDate") OffsetDateTime startDate,
                                       @Param("endDate") OffsetDateTime endDate,
                                       @Param("datasetIdList") List<String> datasetIdList,
+                                      @Param("isIn") boolean isIn,
                                       Pageable pageable);
 }
