@@ -41,8 +41,8 @@ public class OngoingGenerationListener {
         this.ongoingGenerationService = ongoingGenerationService;
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void generateInstantMessages(final OngoingGenerationEvent event) {
         final InstantMessageBatchCreation command = event.getCommand();
         final OngoingGeneration ongoingGeneration = ongoingGenerationService.getOngoingGenerationById(event.getOngoingGenerationId());

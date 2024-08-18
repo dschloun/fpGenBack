@@ -16,23 +16,23 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 @Service
 public class InstantMessageService {
 
     private final MessageRepository messageRepository;
-    private final GenerationService generationService;
     private final DatasetService datasetService;
     private final OngoingGenerationService ongoingGenerationService;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     public InstantMessageService(final MessageRepository messageRepository,
-                                 final GenerationService generationService,
                                  final DatasetService datasetService,
-                                 OngoingGenerationService ongoingGenerationService, ApplicationEventPublisher applicationEventPublisher) {
+                                 OngoingGenerationService ongoingGenerationService,
+                                 ApplicationEventPublisher applicationEventPublisher) {
         this.messageRepository = messageRepository;
-        this.generationService = generationService;
         this.datasetService = datasetService;
         this.ongoingGenerationService = ongoingGenerationService;
         this.applicationEventPublisher = applicationEventPublisher;
