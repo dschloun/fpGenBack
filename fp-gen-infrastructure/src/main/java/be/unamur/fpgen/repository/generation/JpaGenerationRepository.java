@@ -76,6 +76,7 @@ public class JpaGenerationRepository implements GenerationRepository {
         final Page<Generation> page;
 
         page = jpaGenerationProjectionRepositoryCRUD.search(
+                    convertGenerationTypeEnumToString(type),
                     Objects.nonNull(messageTopic) ? messageTopic.name() : null,
                     Objects.nonNull(messageType) ? messageType.name() : null,
                     authorTrigram,
@@ -135,4 +136,12 @@ public class JpaGenerationRepository implements GenerationRepository {
         // 3. return
         return generationPage;
     }
+
+    private String convertGenerationTypeEnumToString(GenerationTypeEnum type) {
+        return switch (type) {
+            case INSTANT_MESSAGE -> "IMG";
+            case CONVERSATION -> "CMG";
+        };
+    }
+
 }
