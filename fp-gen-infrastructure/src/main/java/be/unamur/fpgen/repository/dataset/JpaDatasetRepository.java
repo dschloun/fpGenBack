@@ -108,6 +108,10 @@ public class JpaDatasetRepository implements DatasetRepository {
 
     @Override
     public Optional<Dataset> findDatasetByOriginalDatasetAndVersion(UUID originalDatasetId, Integer version) {
+        if(version.equals(0)){
+            return jpaDatasetRepositoryCRUD.findById(originalDatasetId)
+                    .map(DatasetJpaToDomainMapper::map);
+        }
         return jpaDatasetRepositoryCRUD.findByOriginalDatasetIdAndVersion(originalDatasetId, version)
                 .map(DatasetJpaToDomainMapper::map);
     }

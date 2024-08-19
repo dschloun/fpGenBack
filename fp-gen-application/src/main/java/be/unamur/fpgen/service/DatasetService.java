@@ -67,7 +67,7 @@ public class DatasetService {
 
         // 3. if dataset part of a project and is original version throw exception
         if (Objects.isNull(dataset.getOriginalDatasetId()) && datasetRepository.isProjectDataset(dataset.getId())) {
-            throw DatasetValidatedException.withId(dataset.getId());
+            throw DeleteDatasetException.withId(dataset.getId());
         }
 
         // 4. find most recent dataset before this one and set it as last version
