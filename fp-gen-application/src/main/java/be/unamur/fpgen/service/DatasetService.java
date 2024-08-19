@@ -53,7 +53,7 @@ public class DatasetService {
 
     @Transactional
     public Dataset getDatasetById(UUID datasetId) {
-        return datasetRepository.findInstantMessageDatasetById(datasetId)
+        return datasetRepository.findDatasetById(datasetId)
                 .orElseThrow(() -> DatasetNotFoundException.withId(datasetId));
     }
 
@@ -64,6 +64,17 @@ public class DatasetService {
 
         // 2. check if dataset is already validated
         checkDatasetValidationState(dataset, false);
+
+        // 3. if dataset part of a project and is original version throw exception
+        if (Objects.isNull(dataset.getOriginalDatasetId()) && datasetRepository.isProjectDataset(dataset.getId())) {
+            throw DatasetValidatedException.withId(dataset.getId());
+        }
+
+        // 4. find most recent dataset before this one and set it as last version
+        final Dataset previousDataset = datasetRepository.findDatasetByOriginalDatasetAndVersion(dataset.getOriginalDatasetId(), dataset.getVersion() - 1)
+                .orElseThrow(() -> DatasetNotFoundException.withId(dataset.getOriginalDatasetId()));
+        previousDataset.isLastVersionAgain();
+        datasetRepository.updateDataset(previousDataset);
 
         // 3. delete
         datasetRepository.deleteDatasetById(datasetId);

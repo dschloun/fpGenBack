@@ -21,7 +21,11 @@ public interface DatasetRepository {
 
     Dataset updateDataset(Dataset dataset);
 
-    Optional<Dataset> findInstantMessageDatasetById(UUID dataset);
+    Optional<Dataset> findDatasetById(UUID datasetId);
+
+    boolean isProjectDataset(UUID datasetId);
+
+    Optional<Dataset> findDatasetByOriginalDatasetAndVersion(UUID originalDatasetId, Integer version);
 
     List<Dataset> findAllDatasetVersions(UUID origineDatasetId);
 

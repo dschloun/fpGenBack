@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface JpaDatasetRepositoryCRUD extends JpaRepository<DatasetEntity, UUID> {
@@ -47,4 +48,6 @@ public interface JpaDatasetRepositoryCRUD extends JpaRepository<DatasetEntity, U
             Pageable pageable);
 
     List<DatasetEntity> findAllByIdOrOriginalDatasetIdOrderByVersionDesc(UUID id, UUID originalDatasetId);
+
+    Optional<DatasetEntity> findByOriginalDatasetIdAndVersion(UUID originalDatasetId, Integer version);
 }

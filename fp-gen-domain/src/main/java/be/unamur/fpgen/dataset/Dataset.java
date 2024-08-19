@@ -101,6 +101,10 @@ public class Dataset extends BaseUuidDomain {
         this.lastVersion = false;
     }
 
+    public void isLastVersionAgain(){
+        this.lastVersion = true;
+    }
+
     public UUID getOriginalDatasetId() {
         return originalDatasetId;
     }

@@ -95,8 +95,20 @@ public class JpaDatasetRepository implements DatasetRepository {
     }
 
     @Override
-    public Optional<Dataset> findInstantMessageDatasetById(UUID instantMessageDatasetId) {
-        return jpaDatasetRepositoryCRUD.findById(instantMessageDatasetId)
+    public Optional<Dataset> findDatasetById(UUID datasetId) {
+        return jpaDatasetRepositoryCRUD.findById(datasetId)
+                .map(DatasetJpaToDomainMapper::map);
+    }
+
+    @Override
+    public boolean isProjectDataset(UUID datasetId) {
+        final DatasetEntity datasetEntity = jpaDatasetRepositoryCRUD.findById(datasetId).orElseThrow();
+        return Objects.nonNull(datasetEntity.getProject());
+    }
+
+    @Override
+    public Optional<Dataset> findDatasetByOriginalDatasetAndVersion(UUID originalDatasetId, Integer version) {
+        return jpaDatasetRepositoryCRUD.findByOriginalDatasetIdAndVersion(originalDatasetId, version)
                 .map(DatasetJpaToDomainMapper::map);
     }
 
