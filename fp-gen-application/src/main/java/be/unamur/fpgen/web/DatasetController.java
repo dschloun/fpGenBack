@@ -27,13 +27,13 @@ public class DatasetController implements DatasetApi {
     }
 
     @Override
-    public ResponseEntity<Void> addGenerationListToDataset(UUID datasetId, @NotNull @Valid DatasetType datasetType, @Valid List<UUID> UUID) {
+    public ResponseEntity<Void> addGenerationListToDataset(UUID datasetId, @Valid List<UUID> UUID) {
         datasetService.addGenerationListToDataset(datasetId, UUID);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
-    public ResponseEntity<Void> removeGenerationFromDataset(UUID datasetId, @NotNull @Valid DatasetType datasetType, @Valid List<UUID> UUID) {
+    public ResponseEntity<Void> removeGenerationFromDataset(UUID datasetId, @Valid List<UUID> UUID) {
         datasetService.removeGenerationListFromDataset(datasetId, UUID);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -45,13 +45,13 @@ public class DatasetController implements DatasetApi {
     }
 
     @Override
-    public ResponseEntity<Void> deleteDataset(UUID datasetId, @NotNull @Valid DatasetType datasetType) {
+    public ResponseEntity<Void> deleteDataset(UUID datasetId) {
         datasetService.deleteDatasetById(datasetId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
-    public ResponseEntity<Dataset> getDatasetById(UUID datasetId, @NotNull @Valid DatasetType datasetType) {
+    public ResponseEntity<Dataset> getDatasetById(UUID datasetId) {
         Dataset dataset = DatasetDomainToWebMapper.map(datasetService.getDatasetById(datasetId), DatasetType.INSTANT_MESSAGE);
 
         return new ResponseEntity<>(dataset, HttpStatus.OK);
@@ -64,18 +64,18 @@ public class DatasetController implements DatasetApi {
     }
 
     @Override
-    public ResponseEntity<Result> addResultOnDataset(UUID datasetId, @NotNull @Valid DatasetType datasetType, @Valid ResultCreation resultCreation) {
-        return DatasetApi.super.addResultOnDataset(datasetId, datasetType, resultCreation);
+    public ResponseEntity<Result> addResultOnDataset(UUID datasetId, @Valid ResultCreation resultCreation) {
+        return DatasetApi.super.addResultOnDataset(datasetId, resultCreation);
     }
 
     @Override
-    public ResponseEntity<Dataset> createNewDatasetVersion(UUID datasetId, @NotNull @Valid DatasetType datasetType, @Valid UUID authorId) {
+    public ResponseEntity<Dataset> createNewDatasetVersion(UUID datasetId, @Valid UUID authorId) {
         final be.unamur.fpgen.dataset.Dataset dataset = datasetService.createNewVersion(datasetId, authorId);
         return new ResponseEntity<>(DatasetDomainToWebMapper.map(dataset, DatasetTypeDomainToWebMapper.map(dataset.getType())), HttpStatus.CREATED);
     }
 
     @Override
-    public ResponseEntity<List<Dataset>> getDatasetAllVersions(UUID datasetId, @NotNull @Valid DatasetType datasetType) {
+    public ResponseEntity<List<Dataset>> getDatasetAllVersions(UUID datasetId) {
         return new ResponseEntity<>(
                 MapperUtil.mapList(datasetService.getAllDatasetVersions(datasetId),
                         d -> DatasetDomainToWebMapper.map(d, DatasetType.INSTANT_MESSAGE)),
@@ -83,27 +83,27 @@ public class DatasetController implements DatasetApi {
     }
 
     @Override
-    public ResponseEntity<Void> deleteResultOnDataset(UUID datasetId, @NotNull @Valid DatasetType datasetType, UUID resultId) {
-        return DatasetApi.super.deleteResultOnDataset(datasetId, datasetType, resultId);
+    public ResponseEntity<Void> deleteResultOnDataset(UUID datasetId, UUID resultId) {
+        return DatasetApi.super.deleteResultOnDataset(datasetId, resultId);
     }
 
     @Override
-    public ResponseEntity<List<Result>> getResultListDataset(UUID datasetId, @NotNull @Valid DatasetType datasetType) {
-        return DatasetApi.super.getResultListDataset(datasetId, datasetType);
+    public ResponseEntity<List<Result>> getResultListDataset(UUID datasetId) {
+        return DatasetApi.super.getResultListDataset(datasetId);
     }
 
     @Override
-    public ResponseEntity<Result> getResultOnDataset(UUID datasetId, @NotNull @Valid DatasetType datasetType, UUID resultId) {
-        return DatasetApi.super.getResultOnDataset(datasetId, datasetType, resultId);
+    public ResponseEntity<Result> getResultOnDataset(UUID datasetId, UUID resultId) {
+        return DatasetApi.super.getResultOnDataset(datasetId, resultId);
     }
 
     @Override
-    public ResponseEntity<Result> updateResultOnDataset(UUID datasetId, @NotNull @Valid DatasetType datasetType, UUID resultId, @Valid ResultUpdate resultUpdate) {
-        return DatasetApi.super.updateResultOnDataset(datasetId, datasetType, resultId, resultUpdate);
+    public ResponseEntity<Result> updateResultOnDataset(UUID datasetId, UUID resultId, @Valid ResultUpdate resultUpdate) {
+        return DatasetApi.super.updateResultOnDataset(datasetId, resultId, resultUpdate);
     }
 
     @Override
-    public ResponseEntity<Void> validateDataset(UUID datasetId, @NotNull @Valid DatasetType datasetType) {
+    public ResponseEntity<Void> validateDataset(UUID datasetId) {
         datasetService.validateDataset(datasetId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
