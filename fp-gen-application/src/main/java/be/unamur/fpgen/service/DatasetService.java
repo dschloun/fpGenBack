@@ -169,7 +169,7 @@ public class DatasetService {
     }
 
     @Transactional
-    public void removeOngoingGenerationToDataset(UUID datasetId, OngoingGeneration generation) {
+    public void removeOngoingGenerationFromDataset(UUID datasetId, OngoingGeneration generation) {
         final Dataset dataset = getDatasetById(datasetId);
         // check if dataset is already validated
         checkDatasetValidationState(dataset, false);

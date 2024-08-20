@@ -28,13 +28,13 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 @Component
-public class OngoingGenerationListener {
+public class InstantMessageOngoingGenerationListener {
     private final MessageRepository messageRepository;
     private final GenerationService generationService;
     private final DatasetService datasetService;
     private final OngoingGenerationService ongoingGenerationService;
 
-    public OngoingGenerationListener(MessageRepository messageRepository, GenerationService generationService, DatasetService datasetService, OngoingGenerationService ongoingGenerationService) {
+    public InstantMessageOngoingGenerationListener(MessageRepository messageRepository, GenerationService generationService, DatasetService datasetService, OngoingGenerationService ongoingGenerationService) {
         this.messageRepository = messageRepository;
         this.generationService = generationService;
         this.datasetService = datasetService;
@@ -111,7 +111,7 @@ public class OngoingGenerationListener {
                     ongoingGenerationService.addItemList(ongoingGeneration, results);
                     // 4.2 dataset case
                     if (Objects.nonNull(command.getDatasetId())) {
-                        datasetService.removeOngoingGenerationToDataset(command.getDatasetId(), ongoingGeneration);
+                        datasetService.removeOngoingGenerationFromDataset(command.getDatasetId(), ongoingGeneration);
                         datasetService.addGenerationListToDataset(command.getDatasetId(), results.stream()
                                 .filter(ogi -> OngoingGenerationItemStatus.SUCCESS.equals(ogi.getStatus()))
                                 .map(OngoingGenerationItem::getGenerationId)
