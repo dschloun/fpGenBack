@@ -6,7 +6,7 @@ import be.unamur.fpgen.generation.ongoing_generation.OngoingGeneration;
 import be.unamur.fpgen.message.InstantMessage;
 import be.unamur.fpgen.message.pagination.InstantMessage.InstantMessagesPage;
 import be.unamur.fpgen.message.pagination.InstantMessage.PagedInstantMessagesQuery;
-import be.unamur.fpgen.messaging.event.OngoingGenerationEvent;
+import be.unamur.fpgen.messaging.event.InstantMessageOngoingGenerationEvent;
 import be.unamur.fpgen.repository.MessageRepository;
 import be.unamur.fpgen.utils.DateUtil;
 import be.unamur.model.InstantMessageBatchCreation;
@@ -49,7 +49,7 @@ public class InstantMessageService {
             datasetService.addOngoingGenerationToDataset(command.getDatasetId(), ongoingGeneration);
         }
 
-        applicationEventPublisher.publishEvent(new OngoingGenerationEvent(this, GenerationTypeEnum.INSTANT_MESSAGE, ongoingGeneration.getId(), command));
+        applicationEventPublisher.publishEvent(new InstantMessageOngoingGenerationEvent(this, GenerationTypeEnum.INSTANT_MESSAGE, ongoingGeneration.getId(), command));
     }
 
     @Transactional

@@ -9,7 +9,7 @@ import be.unamur.fpgen.mapper.webToDomain.InstantMessageWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.MessageTopicWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.MessageTypeWebToDomainMapper;
 import be.unamur.fpgen.message.InstantMessage;
-import be.unamur.fpgen.messaging.event.OngoingGenerationEvent;
+import be.unamur.fpgen.messaging.event.InstantMessageOngoingGenerationEvent;
 import be.unamur.fpgen.repository.MessageRepository;
 import be.unamur.fpgen.service.DatasetService;
 import be.unamur.fpgen.service.GenerationService;
@@ -43,7 +43,7 @@ public class InstantMessageOngoingGenerationListener {
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void generateInstantMessages(final OngoingGenerationEvent event) {
+    public void generateInstantMessages(final InstantMessageOngoingGenerationEvent event) {
         final InstantMessageBatchCreation command = event.getCommand();
         final OngoingGeneration ongoingGeneration = ongoingGenerationService.getOngoingGenerationById(event.getOngoingGenerationId());
         // 2. generation stage

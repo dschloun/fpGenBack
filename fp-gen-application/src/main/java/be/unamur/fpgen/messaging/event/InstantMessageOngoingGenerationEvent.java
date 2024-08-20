@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationEvent;
 
 import java.util.UUID;
 
-public class OngoingGenerationEvent extends ApplicationEvent {
+public class InstantMessageOngoingGenerationEvent extends ApplicationEvent {
     private final GenerationTypeEnum type;
     private final UUID ongoingGenerationId;
     private final InstantMessageBatchCreation command;
@@ -23,7 +23,7 @@ public class OngoingGenerationEvent extends ApplicationEvent {
         return command;
     }
 
-    public OngoingGenerationEvent(Object source, GenerationTypeEnum type, UUID ongoingGenerationId, InstantMessageBatchCreation command) {
+    public InstantMessageOngoingGenerationEvent(Object source, GenerationTypeEnum type, UUID ongoingGenerationId, InstantMessageBatchCreation command) {
         super(source);
         this.type = type;
         this.ongoingGenerationId = ongoingGenerationId;
