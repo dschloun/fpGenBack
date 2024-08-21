@@ -4,8 +4,10 @@ import be.unamur.fpgen.dataset.Dataset;
 import be.unamur.fpgen.dataset.DatasetTypeEnum;
 import be.unamur.fpgen.dataset.pagination.DatasetsPage;
 import be.unamur.fpgen.entity.author.AuthorEntity;
+import be.unamur.fpgen.entity.dataset.ConversationDatasetEntity;
 import be.unamur.fpgen.entity.dataset.DatasetEntity;
 import be.unamur.fpgen.entity.dataset.InstantMessageDatasetEntity;
+import be.unamur.fpgen.entity.generation.ConversationGenerationEntity;
 import be.unamur.fpgen.entity.generation.InstantMessageGenerationEntity;
 import be.unamur.fpgen.entity.generation.ongoing_generation.OngoingGenerationEntity;
 import be.unamur.fpgen.generation.Generation;
@@ -15,6 +17,7 @@ import be.unamur.fpgen.mapper.jpaToDomain.DatasetJpaToDomainMapper;
 import be.unamur.fpgen.pagination.Pagination;
 import be.unamur.fpgen.repository.DatasetRepository;
 import be.unamur.fpgen.repository.author.JpaAuthorRepositoryCRUD;
+import be.unamur.fpgen.repository.generation.JpaConversationGenerationRepositoryCRUD;
 import be.unamur.fpgen.repository.generation.JpaGenerationRepositoryCRUD;
 import be.unamur.fpgen.repository.ongoing.JpaOngoingGenerationRepositoryCRUD;
 import be.unamur.fpgen.repository.generation.JpaInstantMessageGenerationRepositoryCRUD;
@@ -33,17 +36,19 @@ public class JpaDatasetRepository implements DatasetRepository {
 
     private final JpaDatasetRepositoryCRUD jpaDatasetRepositoryCRUD;
     private final JpaInstantMessageDatasetRepositoryCRUD jpaInstantMessageDatasetRepositoryCRUD;
+    private final JpaConversationDatasetRepositoryCRUD jpaConversationDatasetRepositoryCRUD;
     private final JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD;
-    private final JpaGenerationRepositoryCRUD jpaGenerationRepositoryCRUD;
+    private final JpaConversationGenerationRepositoryCRUD jpaConversationGenerationRepositoryCRUD;
     private final JpaInstantMessageGenerationRepositoryCRUD jpaInstantMessageGenerationRepositoryCRUD;
     private final JpaOngoingGenerationRepositoryCRUD jpaOngoingGenerationRepositoryCRUD;
     private final EntityManager entityManager;
 
-    public JpaDatasetRepository(JpaDatasetRepositoryCRUD jpaDatasetRepositoryCRUD, JpaInstantMessageDatasetRepositoryCRUD jpaInstantMessageDatasetRepositoryCRUD, JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD, JpaGenerationRepositoryCRUD jpaGenerationRepositoryCRUD, JpaInstantMessageGenerationRepositoryCRUD jpaInstantMessageGenerationRepositoryCRUD, JpaOngoingGenerationRepositoryCRUD jpaOngoingGenerationRepositoryCRUD, EntityManager entityManager) {
+    public JpaDatasetRepository(JpaDatasetRepositoryCRUD jpaDatasetRepositoryCRUD, JpaInstantMessageDatasetRepositoryCRUD jpaInstantMessageDatasetRepositoryCRUD, JpaConversationDatasetRepositoryCRUD jpaConversationDatasetRepositoryCRUD, JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD, JpaConversationGenerationRepositoryCRUD jpaConversationGenerationRepositoryCRUD, JpaInstantMessageGenerationRepositoryCRUD jpaInstantMessageGenerationRepositoryCRUD, JpaOngoingGenerationRepositoryCRUD jpaOngoingGenerationRepositoryCRUD, EntityManager entityManager) {
         this.jpaDatasetRepositoryCRUD = jpaDatasetRepositoryCRUD;
         this.jpaInstantMessageDatasetRepositoryCRUD = jpaInstantMessageDatasetRepositoryCRUD;
+        this.jpaConversationDatasetRepositoryCRUD = jpaConversationDatasetRepositoryCRUD;
         this.jpaAuthorRepositoryCRUD = jpaAuthorRepositoryCRUD;
-        this.jpaGenerationRepositoryCRUD = jpaGenerationRepositoryCRUD;
+        this.jpaConversationGenerationRepositoryCRUD = jpaConversationGenerationRepositoryCRUD;
         this.jpaInstantMessageGenerationRepositoryCRUD = jpaInstantMessageGenerationRepositoryCRUD;
         this.jpaOngoingGenerationRepositoryCRUD = jpaOngoingGenerationRepositoryCRUD;
         this.entityManager = entityManager;
@@ -129,9 +134,11 @@ public class JpaDatasetRepository implements DatasetRepository {
     }
 
     @Override
-    public void addItemListToDataset(Dataset datasetId, Set<Generation> generations) {
-        if(DatasetTypeEnum.INSTANT_MESSAGE.equals(datasetId.getType())) {
-            addInstantMessageGenerationListToDataset(datasetId, generations);
+    public void addItemListToDataset(Dataset dataset, Set<Generation> generations) {
+        if(DatasetTypeEnum.INSTANT_MESSAGE.equals(dataset.getType())) {
+            addInstantMessageGenerationListToDataset(dataset, generations);
+        } else {
+            addConversationGenerationListToDataset(dataset, generations);
         }
     }
 
@@ -139,7 +146,11 @@ public class JpaDatasetRepository implements DatasetRepository {
 
     @Override
     public void removeItemListFromDataset(Dataset dataset, Set<Generation> generations) {
-        removeInstantMessageGenerationListFromDataset(dataset, generations);
+        if(DatasetTypeEnum.INSTANT_MESSAGE.equals(dataset.getType())) {
+            removeInstantMessageGenerationListFromDataset(dataset, generations);
+        } else {
+            removeConversationGenerationListFromDataset(dataset, generations);
+        }
     }
 
     @Override
@@ -217,6 +228,26 @@ public class JpaDatasetRepository implements DatasetRepository {
     private void removeInstantMessageGenerationListFromDataset(Dataset dataset, Set<Generation> generations) {
         final InstantMessageDatasetEntity datasetEntity = jpaInstantMessageDatasetRepositoryCRUD.getReferenceById(dataset.getId());
         datasetEntity.getInstantMessageGenerationList().removeAll(getInstantMessageGenerationList(generations));
+        jpaDatasetRepositoryCRUD.save(datasetEntity);
+    }
+
+    private Set<ConversationGenerationEntity> getConversationGenerationList(Set<Generation> generations) {
+        final HashSet<ConversationGenerationEntity> conversationGenerations = new HashSet<>();
+        generations.forEach(g -> {
+            conversationGenerations.add(jpaConversationGenerationRepositoryCRUD.getReferenceById(g.getId()));
+        });
+        return conversationGenerations;
+    }
+
+    private void addConversationGenerationListToDataset(Dataset datasetId, Set<Generation> generations) {
+        final ConversationDatasetEntity dataset = jpaConversationDatasetRepositoryCRUD.getReferenceById(datasetId.getId());
+        dataset.getConversationGenerationList().addAll(getConversationGenerationList(generations));
+        jpaDatasetRepositoryCRUD.save(dataset);
+    }
+
+    private void removeConversationGenerationListFromDataset(Dataset dataset, Set<Generation> generations) {
+        final ConversationDatasetEntity datasetEntity = jpaConversationDatasetRepositoryCRUD.getReferenceById(dataset.getId());
+        datasetEntity.getConversationGenerationList().removeAll(getConversationGenerationList(generations));
         jpaDatasetRepositoryCRUD.save(datasetEntity);
     }
 }

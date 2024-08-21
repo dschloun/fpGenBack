@@ -179,7 +179,7 @@ public class ConversationOngoingGenerationListener {
                 .withReceiver(to)
                 .withTopic(topic)
                 .withType(type)
-                .withContent(String.format("number %s of %s conversation message %s %s: from %s to %s", number, quantity, type, topic, from, to))
+                .withContent(String.format("number %s of %s conversation message %s %s: from %s to %s", number, quantity, type, topic, from.getId(), to.getId()))
                 .build();
     }
 

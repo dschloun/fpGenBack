@@ -81,7 +81,7 @@ public class JpaConversationRepository implements ConversationRepository {
 
     @Override
     public List<Conversation> saveConversationList(List<Conversation> conversationList, Generation generation) {
-        final ConversationGenerationEntity generationEntity = jpaConversationGenerationRepositoryCRUD.getReferenceById(generation.getId());
+        final ConversationGenerationEntity generationEntity = jpaConversationGenerationRepositoryCRUD.findById(generation.getId()).orElseThrow();
         List<Conversation> l = jpaConversationRepositoryCRUD.saveAll(
                 conversationList.stream()
                         .map(c -> ConversationDomainToJpaMapper.mapForCreate(c, generationEntity))
