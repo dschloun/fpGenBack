@@ -27,7 +27,7 @@ public class ConversationController implements ConversationApi {
 
     @Override
     public ResponseEntity<Void> generateConversations(@Valid ConversationBatchCreation conversationBatchCreation) {
-        conversationService.createConversationList(conversationBatchCreation);
+        conversationService.generateConversationList(conversationBatchCreation);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
