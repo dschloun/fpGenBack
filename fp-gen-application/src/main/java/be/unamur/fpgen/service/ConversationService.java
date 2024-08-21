@@ -5,17 +5,20 @@ import be.unamur.fpgen.conversation.pagination.ConversationsPage;
 import be.unamur.fpgen.conversation.pagination.PagedConversationsQuery;
 import be.unamur.fpgen.generation.Generation;
 import be.unamur.fpgen.generation.GenerationTypeEnum;
+import be.unamur.fpgen.generation.ongoing_generation.OngoingGeneration;
 import be.unamur.fpgen.interlocutor.Interlocutor;
 import be.unamur.fpgen.interlocutor.InterlocutorTypeEnum;
 import be.unamur.fpgen.mapper.webToDomain.ConversationCreationWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.ConversationMessageCreationWebToDomainMapper;
 import be.unamur.fpgen.message.ConversationMessage;
+import be.unamur.fpgen.messaging.event.ConversationOngoingGenerationEvent;
 import be.unamur.fpgen.repository.ConversationMessageRepository;
 import be.unamur.fpgen.repository.ConversationRepository;
 import be.unamur.fpgen.utils.Alternator;
 import be.unamur.fpgen.utils.DateUtil;
 import be.unamur.fpgen.utils.TypeCorrespondenceMapper;
 import be.unamur.model.ConversationBatchCreation;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -31,21 +34,38 @@ import java.util.UUID;
 public class ConversationService {
 
     private final ConversationRepository conversationRepository;
+    private final OngoingGenerationService ongoingGenerationService;
     private final GenerationService generationService;
     private final InterlocutorService interlocutorService;
     private final ConversationMessageRepository conversationMessageRepository;
     private final DatasetService datasetService;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public ConversationService(ConversationRepository conversationRepository,
+    public ConversationService(ConversationRepository conversationRepository, OngoingGenerationService ongoingGenerationService,
                                GenerationService generationService,
                                InterlocutorService interlocutorService,
                                ConversationMessageRepository conversationMessageRepository,
-                               DatasetService datasetService) {
+                               DatasetService datasetService, ApplicationEventPublisher eventPublisher) {
         this.conversationRepository = conversationRepository;
+        this.ongoingGenerationService = ongoingGenerationService;
         this.generationService = generationService;
         this.interlocutorService = interlocutorService;
         this.conversationMessageRepository = conversationMessageRepository;
         this.datasetService = datasetService;
+        this.eventPublisher = eventPublisher;
+    }
+
+    @Transactional
+    public void generateConversationList(ConversationBatchCreation command) {
+        // 0. create ongoing generation
+        final OngoingGeneration ongoingGeneration = ongoingGenerationService.createOngoingGeneration(GenerationTypeEnum.CONVERSATION, command.getAuthorId());
+
+        // 1. if the generation refer to a dataset, then inform the dataset that a generation is pending for him
+        if (Objects.nonNull(command.getDatasetId())) {
+            datasetService.addOngoingGenerationToDataset(command.getDatasetId(), ongoingGeneration);
+        }
+
+        eventPublisher.publishEvent(new ConversationOngoingGenerationEvent(this, GenerationTypeEnum.CONVERSATION, ongoingGeneration.getId(), command));
     }
 
     @Transactional

@@ -8,18 +8,13 @@ import be.unamur.fpgen.generation.ongoing_generation.OngoingGenerationItemStatus
 import be.unamur.fpgen.generation.ongoing_generation.OngoingGenerationStatus;
 import be.unamur.fpgen.interlocutor.Interlocutor;
 import be.unamur.fpgen.interlocutor.InterlocutorTypeEnum;
-import be.unamur.fpgen.mapper.webToDomain.ConversationCreationWebToDomainMapper;
-import be.unamur.fpgen.mapper.webToDomain.InstantMessageWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.MessageTopicWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.MessageTypeWebToDomainMapper;
 import be.unamur.fpgen.message.ConversationMessage;
-import be.unamur.fpgen.message.InstantMessage;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.messaging.event.ConversationOngoingGenerationEvent;
-import be.unamur.fpgen.messaging.event.InstantMessageOngoingGenerationEvent;
 import be.unamur.fpgen.repository.ConversationRepository;
-import be.unamur.fpgen.repository.MessageRepository;
 import be.unamur.fpgen.service.DatasetService;
 import be.unamur.fpgen.service.GenerationService;
 import be.unamur.fpgen.service.InterlocutorService;
@@ -28,8 +23,6 @@ import be.unamur.fpgen.utils.Alternator;
 import be.unamur.fpgen.utils.TypeCorrespondenceMapper;
 import be.unamur.model.ConversationBatchCreation;
 import be.unamur.model.GenerationCreation;
-import be.unamur.model.InstantMessageBatchCreation;
-import be.unamur.model.MessageType;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,15 +34,13 @@ import java.util.concurrent.CompletableFuture;
 
 @Component
 public class ConversationOngoingGenerationListener {
-    private final MessageRepository messageRepository;
     private final ConversationRepository conversationRepository;
     private final GenerationService generationService;
     private final DatasetService datasetService;
     private final OngoingGenerationService ongoingGenerationService;
     private final InterlocutorService interlocutorService;
 
-    public ConversationOngoingGenerationListener(MessageRepository messageRepository, ConversationRepository conversationRepository, GenerationService generationService, DatasetService datasetService, OngoingGenerationService ongoingGenerationService, InterlocutorService interlocutorService) {
-        this.messageRepository = messageRepository;
+    public ConversationOngoingGenerationListener(ConversationRepository conversationRepository, GenerationService generationService, DatasetService datasetService, OngoingGenerationService ongoingGenerationService, InterlocutorService interlocutorService) {
         this.conversationRepository = conversationRepository;
         this.generationService = generationService;
         this.datasetService = datasetService;
