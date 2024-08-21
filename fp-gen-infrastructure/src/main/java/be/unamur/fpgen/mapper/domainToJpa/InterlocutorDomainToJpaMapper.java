@@ -13,4 +13,14 @@ public class InterlocutorDomainToJpaMapper {
         entity.setInterlocutorTypeEnum(domain.getType());
         return entity;
     }
+
+    public static InterlocutorEntity map(final Interlocutor domain){
+        if(domain == null){
+            return null;
+        }
+        final InterlocutorEntity entity = new InterlocutorEntity();
+        entity.setId(domain.getId());
+        entity.setInterlocutorTypeEnum(domain.getType());
+        return entity;
+    }
 }

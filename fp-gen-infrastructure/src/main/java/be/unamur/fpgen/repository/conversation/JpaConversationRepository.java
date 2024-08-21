@@ -2,7 +2,10 @@ package be.unamur.fpgen.repository.conversation;
 
 import be.unamur.fpgen.conversation.Conversation;
 import be.unamur.fpgen.conversation.pagination.ConversationsPage;
+import be.unamur.fpgen.entity.generation.ConversationGenerationEntity;
+import be.unamur.fpgen.generation.Generation;
 import be.unamur.fpgen.mapper.domainToJpa.ConversationDomainToJpaMapper;
+import be.unamur.fpgen.mapper.jpaToDomain.ConversationGenerationJpaToDomainMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.ConversationJpaToDomainMapper;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
@@ -14,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -73,5 +77,19 @@ public class JpaConversationRepository implements ConversationRepository {
         // 3. return
         return conversationsPage;
 
+    }
+
+    @Override
+    public List<Conversation> saveConversationList(List<Conversation> conversationList, Generation generation) {
+        final ConversationGenerationEntity generationEntity = jpaConversationGenerationRepositoryCRUD.getReferenceById(generation.getId());
+        List<Conversation> l = jpaConversationRepositoryCRUD.saveAll(
+                conversationList.stream()
+                        .map(c -> ConversationDomainToJpaMapper.mapForCreate(c, generationEntity))
+                        .toList()
+        ).stream()
+                .map(ConversationJpaToDomainMapper::map)
+                .toList();
+
+        return l;
     }
 }

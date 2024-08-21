@@ -67,7 +67,7 @@ public class ConversationOngoingGenerationListener {
 
         command.getConversationCreationList().forEach(cc -> {
             // 0. call to chatgpt
-            final CompletableFuture<OngoingGenerationItem> future = CompletableFuture.supplyAsync(() -> simulateChatGptCall(cc.getType().name(), cc.getTopic().name(), cc.getQuantity()))
+            final CompletableFuture<OngoingGenerationItem> future = CompletableFuture.supplyAsync(() -> simulateConversationList(cc, event.getCommand().getMinInteractionNumber(), event.getCommand().getMaxInteractionNumber()))
                     .exceptionally(ex -> {
                         // log
                         System.out.println("Error while generating instant messages");
@@ -89,13 +89,11 @@ public class ConversationOngoingGenerationListener {
                             // 1. create generation data
                             final Generation generation = generationService.createGeneration(event.getType(), cc, command.getAuthorId());
                             // 2. prepare a list of instant messages
-                            final List<InstantMessage> instantMessageList = new ArrayList<>();
+                            final List<Conversation> conversationList = new ArrayList<>();
                             // 3. generate instant messages
-                            for (String s : result) {
-                                instantMessageList.add(InstantMessageWebToDomainMapper.mapForCreate(cc, s));
-                            }
+                            conversationList.addAll(result);
                             // 4. save the instant messages
-                            List<InstantMessage> saved = messageRepository.saveInstantMessageList(instantMessageList, generation);
+                            List<Conversation> saved = conversationRepository.saveConversationList(conversationList, generation);
                             // 5. add generation to dataset if needed
                             if (Objects.nonNull(command.getDatasetId())) {
                                 datasetService.addGenerationListToDataset(command.getDatasetId(), List.of(generation.getId()));
@@ -136,8 +134,22 @@ public class ConversationOngoingGenerationListener {
                 });
     }
 
+
+    private List<Conversation> simulateConversationList(final GenerationCreation generationCreation, final int minimalInteraction, final int maxInteraction){
+        // 0. prepare conversationList
+        final List<Conversation> conversationList = new ArrayList<>();
+
+        // 1. for each
+        for(int i = 0; i < generationCreation.getQuantity(); i++) {
+            conversationList.add(simulateChatGptCall(MessageTypeWebToDomainMapper.map(generationCreation.getType()), MessageTopicWebToDomainMapper.map(generationCreation.getTopic()), minimalInteraction, maxInteraction));
+        }
+
+        // 2. return
+        return conversationList;
+    }
+
     // chatgpt method
-    private Conversation simulateChatGptCall(final Generation generation, final MessageTypeEnum type, final MessageTopicEnum topic, final int minimalInteraction, final int maxInteraction) {
+    private Conversation simulateChatGptCall(final MessageTypeEnum type, final MessageTopicEnum topic, final int minimalInteraction, final int maxInteraction) {
         // 0. simulate interlocutor
         final Interlocutor interlocutor1 = interlocutorService.getRandomInterlocutorByType(TypeCorrespondenceMapper.getCorrespondence(type));
         final Interlocutor interlocutor2 = interlocutorService.getRandomInterlocutorByType(InterlocutorTypeEnum.GENUINE);
@@ -158,7 +170,13 @@ public class ConversationOngoingGenerationListener {
         }
 
         // 3.1. save the conversation
-        final Conversation conversation = createConversation(generation, ConversationCreationWebToDomainMapper.map(type, topic, minimalInteraction, maxInteraction), messages);
+        final Conversation conversation =  Conversation.newBuilder()
+                .withMinInteractionNumber(minimalInteraction)
+                .withMaxInteractionNumber(maxInteraction)
+                .withType(type)
+                .withTopic(topic)
+                .withConversationMessageList(messages)
+                .build();
 
         return conversation;
     }
