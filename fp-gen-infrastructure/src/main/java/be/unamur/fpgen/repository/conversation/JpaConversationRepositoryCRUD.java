@@ -11,9 +11,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 
 public interface JpaConversationRepositoryCRUD extends JpaRepository<ConversationEntity, UUID>{
+
+    List<ConversationEntity> findAllByConversationGenerationId(UUID generationId);
 
     @Query(value = "SELECT DISTINCT c from ConversationEntity c" +
             " WHERE (:topic is null or c.topic = :topic)" +

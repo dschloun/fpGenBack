@@ -5,6 +5,7 @@ import be.unamur.fpgen.mapper.domainToWeb.ConversationDomainToWebMapper;
 import be.unamur.fpgen.mapper.domainToWeb.pagination.ConversationPaginationDomainToWebMapper;
 import be.unamur.fpgen.mapper.webToDomain.pagination.ConversationPaginationWebToDomainMapper;
 import be.unamur.fpgen.service.ConversationService;
+import be.unamur.fpgen.utils.MapperUtil;
 import be.unamur.model.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,5 +58,10 @@ public class ConversationController implements ConversationApi {
     public ResponseEntity<Void> deleteConversationById(UUID conversationId) {
         conversationService.deleteConversationById(conversationId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @Override
+    public ResponseEntity<List<Conversation>> findConversationByGenerationId(UUID generationId) {
+        return new ResponseEntity<>(MapperUtil.mapList(conversationService.findAllByGenerationId(generationId), ConversationDomainToWebMapper::map), HttpStatus.OK);
     }
 }

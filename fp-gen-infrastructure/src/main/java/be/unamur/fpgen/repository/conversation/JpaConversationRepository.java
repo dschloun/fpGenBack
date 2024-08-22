@@ -12,6 +12,7 @@ import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.pagination.Pagination;
 import be.unamur.fpgen.repository.ConversationRepository;
 import be.unamur.fpgen.repository.generation.JpaConversationGenerationRepositoryCRUD;
+import be.unamur.fpgen.utils.MapperUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -91,5 +92,10 @@ public class JpaConversationRepository implements ConversationRepository {
                 .toList();
 
         return l;
+    }
+
+    @Override
+    public List<Conversation> findAllByGenerationId(UUID generationId) {
+        return MapperUtil.mapList(jpaConversationRepositoryCRUD.findAllByConversationGenerationId(generationId), ConversationJpaToDomainMapper::map);
     }
 }

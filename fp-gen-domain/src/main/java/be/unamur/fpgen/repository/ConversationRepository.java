@@ -23,4 +23,6 @@ public interface ConversationRepository {
     ConversationsPage findPagination(MessageTopicEnum topic, MessageTypeEnum type, Integer maxInteractionNumber, Integer minInteractionNumber, OffsetDateTime startDate, OffsetDateTime endDate, Pageable pageable);
 
     List<Conversation> saveConversationList(List<Conversation> conversationList, Generation generation);
+
+    List<Conversation> findAllByGenerationId(UUID generationId);
 }

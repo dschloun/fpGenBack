@@ -11,6 +11,7 @@ import be.unamur.fpgen.interlocutor.InterlocutorTypeEnum;
 import be.unamur.fpgen.mapper.webToDomain.ConversationCreationWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.ConversationMessageCreationWebToDomainMapper;
 import be.unamur.fpgen.message.ConversationMessage;
+import be.unamur.fpgen.message.InstantMessage;
 import be.unamur.fpgen.messaging.event.ConversationOngoingGenerationEvent;
 import be.unamur.fpgen.repository.ConversationMessageRepository;
 import be.unamur.fpgen.repository.ConversationRepository;
@@ -160,5 +161,10 @@ public class ConversationService {
     @Transactional
     public void deleteConversationById(final UUID conversationId) {
         conversationRepository.deleteConversationById(conversationId);
+    }
+
+    @Transactional
+    public List<Conversation> findAllByGenerationId(UUID generationId) {
+        return conversationRepository.findAllByGenerationId(generationId);
     }
 }
