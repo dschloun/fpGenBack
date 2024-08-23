@@ -66,6 +66,7 @@ public class DatasetJpaToDomainMapper {
                 .withDatasetFunction(entity.getFunction())
                 .withItemList(MapperUtil.mapSet(entity.getConversationGenerationList(), ConversationGenerationJpaToDomainMapper::map))
                 .withOngoingGenerationId(Optional.ofNullable(entity.getOngoingGeneration()).map(BaseUuidEntity::getId).orElse(null))
+                .withStatistic(StatisticJpaToDomainMapper.map(entity.getStatistic()))
                 .withValidated(entity.isValidated())
                 .withLastVersion(entity.isLastVersion())
                 .withOriginalDatasetId(entity.getOriginalDatasetId())
