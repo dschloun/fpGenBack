@@ -8,5 +8,5 @@ import java.util.UUID;
 
 public interface JpaResultRepositoryCRUD extends JpaRepository<ResultEntity, UUID> {
 
-    List<ResultEntity> findAllByDatasetIdOrderByCreationDateDesc(UUID datasetId);
+    List<ResultEntity> findAllByDatasetIdOrderByExperimentDateDesc(UUID datasetId);
 }

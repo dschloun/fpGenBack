@@ -55,7 +55,7 @@ public class JpaResultRepository implements ResultRepository {
 
     @Override
     public List<Result> findAllResultByDatasetId(UUID datasetId) {
-        return jpaResultRepositoryCRUD.findAllByDatasetIdOrderByCreationDateDesc(datasetId)
+        return jpaResultRepositoryCRUD.findAllByDatasetIdOrderByExperimentDateDesc(datasetId)
                 .stream()
                 .map(ResultJpaToDomainMapper::map)
                 .toList();
