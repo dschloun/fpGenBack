@@ -11,6 +11,7 @@ import be.unamur.fpgen.repository.dataset.JpaDatasetRepositoryCRUD;
 import be.unamur.fpgen.result.Result;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -37,5 +38,25 @@ public class JpaResultRepository implements ResultRepository {
     @Override
     public Optional<Result> findResultById(UUID resultId) {
         return jpaResultRepositoryCRUD.findById(resultId).map(ResultJpaToDomainMapper::map);
+    }
+
+    @Override
+    public Result updateResult(Result result) {
+        final DatasetEntity datasetEntity = jpaDatasetRepositoryCRUD.getReferenceById(result.getDataset().getId());
+        final AuthorEntity authorEntity = jpaAuthorRepositoryCRUD.getReferenceById(result.getAuthor().getId());
+        return ResultJpaToDomainMapper.map(jpaResultRepositoryCRUD.save(ResultDomainToJpaMapper.map(result, datasetEntity, authorEntity)));
+    }
+
+    @Override
+    public void DeleteResult(UUID resultId) {
+        jpaResultRepositoryCRUD.deleteById(resultId);
+    }
+
+    @Override
+    public List<Result> findAllResultByDatasetId(UUID datasetId) {
+        return jpaResultRepositoryCRUD.findAllByDatasetIdOrderByCreationDateDesc(datasetId)
+                .stream()
+                .map(ResultJpaToDomainMapper::map)
+                .toList();
     }
 }

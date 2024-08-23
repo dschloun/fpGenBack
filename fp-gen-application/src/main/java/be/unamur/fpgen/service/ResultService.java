@@ -1,11 +1,13 @@
 package be.unamur.fpgen.service;
 
 import be.unamur.fpgen.dataset.Dataset;
+import be.unamur.fpgen.exception.ResultNotFoundException;
 import be.unamur.fpgen.repository.ResultRepository;
 import be.unamur.fpgen.result.Result;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -23,4 +25,25 @@ public class ResultService {
         final Dataset dataset = datasetService.getDatasetById(datasetId);
         return resultRepository.saveResult(dataset, result);
     }
+
+    @Transactional
+    public Result getResultById(UUID resultId) {
+        return resultRepository.findResultById(resultId).orElseThrow(() -> ResultNotFoundException.withId(resultId));
+    }
+
+    @Transactional
+    public Result updateResult(Result result) {
+        return resultRepository.updateResult(result);
+    }
+
+    @Transactional
+    public void deleteResult(UUID resultId) {
+        resultRepository.DeleteResult(resultId);
+    }
+
+    @Transactional
+    public List<Result> findAllResultByDatasetId(UUID datasetId) {
+        return resultRepository.findAllResultByDatasetId(datasetId);
+    }
+
 }
