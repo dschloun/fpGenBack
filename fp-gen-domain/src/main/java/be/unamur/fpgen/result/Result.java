@@ -36,6 +36,7 @@ public class Result extends BaseUuidDomain {
         experimentDate = builder.experimentDate;
         machineDetails = builder.machineDetails;
         algorithmType = builder.algorithmType;
+        algorithmSettingList.addAll(builder.algorithmSettingList);
         otherSettingDetails = builder.otherSettingDetails;
         accuracy = builder.accuracy;
         precision = builder.precision;
@@ -132,6 +133,7 @@ public class Result extends BaseUuidDomain {
         private OffsetDateTime experimentDate;
         private String machineDetails;
         private String algorithmType;
+        private Set<AlgorithmSetting> algorithmSettingList = new HashSet<>();
         private String otherSettingDetails;
         private BigDecimal accuracy;
         private BigDecimal precision;
@@ -170,6 +172,11 @@ public class Result extends BaseUuidDomain {
 
         public Builder withAlgorithmType(String val) {
             algorithmType = val;
+            return this;
+        }
+
+        public Builder withAlgorithmSettingList(Set<AlgorithmSetting> val) {
+            algorithmSettingList = val;
             return this;
         }
 

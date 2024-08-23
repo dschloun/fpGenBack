@@ -133,7 +133,7 @@ public class AuthorEntity extends BaseUuidEntity {
         this.ongoingGenerationList = ongoingGenerationList;
     }
 
-    @OneToMany(mappedBy = "authorId", orphanRemoval = true)
+    @OneToMany(mappedBy = "author", orphanRemoval = true)
     public Set<ResultEntity> getResultList() {
         return resultList;
     }

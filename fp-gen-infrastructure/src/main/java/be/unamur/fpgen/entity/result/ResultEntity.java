@@ -14,7 +14,7 @@ import java.util.Set;
 @Table(name = "result")
 public class ResultEntity extends BaseUuidEntity {
     private DatasetEntity dataset;
-    private AuthorEntity authorId;
+    private AuthorEntity author;
     private OffsetDateTime experimentDate;
     private String machineDetails;
     private String algorithmType;
@@ -44,12 +44,12 @@ public class ResultEntity extends BaseUuidEntity {
 
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
-    public AuthorEntity getAuthorId() {
-        return authorId;
+    public AuthorEntity getAuthor() {
+        return author;
     }
 
-    public void setAuthorId(AuthorEntity authorId) {
-        this.authorId = authorId;
+    public void setAuthor(AuthorEntity authorId) {
+        this.author = authorId;
     }
 
     @Column(name = "experiment_date")
@@ -196,183 +196,3 @@ public class ResultEntity extends BaseUuidEntity {
         this.comment = comment;
     }
 }
-
-//  - changeSet:
-//id: add-result-table
-//author: dsc
-//changes:
-//        - createTable:
-//tableName: result
-//columns:
-//        - column:
-//name: id
-//type: uuid
-//constraints:
-//        - primaryKey: true
-//        - primaryKeyName: pk_result
-//                    - nullable: false
-//        - unique: true
-//        - column:
-//name: creation_date
-//type: datetime
-//constraints:
-//        - nullable: false
-//        - unique: false
-//        - column:
-//name: modification_date
-//type: datetime
-//constraints:
-//        - nullable: false
-//        - unique: false
-//        - column:
-//name: dataset_id
-//type: uuid
-//constraints:
-//        - nullable: false
-//        - unique: false
-//        - foreignKeyName: fk_result_dataset
-//                    - references: dataset(id)
-//                    - onDelete: CASCADE
-//              - column:
-//name: author_id
-//type: uuid
-//constraints:
-//        - nullable: false
-//        - unique: false
-//        - foreignKeyName: fk_result_author
-//                    - references: author(id)
-//              - column:
-//name: experiment_date
-//type: datetime
-//constraints:
-//        - nullable: false
-//        - unique: false
-//        - column:
-//name: machine_details
-//type: varchar(255)
-//constraints:
-//        - nullable: false
-//        - unique: false
-//        - column:
-//name: algorithm_type
-//type: varchar(255)
-//constraints:
-//        - nullable: false
-//        - unique: false
-//        - column:
-//name: other_setting_details
-//type: varchar(255)
-//constraints:
-//        - nullable: false
-//        - unique: false
-//        - column:
-//name: accuracy
-//type: numeric
-//constraints:
-//        - nullable: false
-//        - unique: false
-//        - column:
-//name: precision
-//type: numeric
-//constraints:
-//        - nullable: false
-//        - unique: false
-//        - column:
-//name: recall
-//type: numeric
-//constraints:
-//        - nullable: false
-//        - unique: false
-//        - column:
-//name: f1_score
-//type: numeric
-//constraints:
-//        - nullable: false
-//        - unique: false
-//        - column:
-//name: pr_auc
-//type: numeric
-//constraints:
-//        - nullable: false
-//        - unique: false
-//        - column:
-//name: fp_rate
-//type: numeric
-//constraints:
-//        - nullable: false
-//        - unique: false
-//        - column:
-//name: fn_rate
-//type: numeric
-//constraints:
-//        - nullable: false
-//        - unique: false
-//        - column:
-//name: tp_rate
-//type: numeric
-//constraints:
-//        - nullable: false
-//        - unique: false
-//        - column:
-//name: tn_rate
-//type: numeric
-//constraints:
-//        - nullable: false
-//        - unique: false
-//        - column:
-//name: appreciation
-//type: varchar(255)
-//constraints:
-//        - nullable: false
-//        - unique: false
-//        - column:
-//name: comment
-//type: text
-//constraints:
-//        - nullable: false
-//        - unique: false
-//
-//        - createTable:
-//tableName: algorithm_setting
-//columns:
-//        - column:
-//name: id
-//type: uuid
-//constraints:
-//        - primaryKey: true
-//        - primaryKeyName: pk_algorithm_setting
-//                    - nullable: false
-//        - unique: true
-//        - column:
-//name: creation_date
-//type: datetime
-//constraints:
-//        - nullable: false
-//        - unique: false
-//        - column:
-//name: modification_date
-//type: datetime
-//constraints:
-//        - nullable: false
-//        - unique: false
-//        - column:
-//name: parameter_name
-//type: varchar(255)
-//constraints:
-//        - nullable: false
-//        - unique: false
-//        - column:
-//name: value
-//type: varchar(255)
-//constraints:
-//        - nullable: false
-//        - unique: false
-//        - column:
-//name: result_id
-//type: uuid
-//constraints:
-//        - nullable: false
-//        - unique: false
-//        - foreignKeyName: fk_algorithm_setting_result
-//                    - references: result(id)
-//                    - onDelete: CASCADE
