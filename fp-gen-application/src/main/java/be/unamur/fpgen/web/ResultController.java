@@ -28,7 +28,7 @@ public class ResultController implements ResultApi {
     @Override
     public ResponseEntity<Result> addResultOnDataset(UUID datasetId, @Valid ResultCreation resultCreation) {
         return new ResponseEntity<>(ResultDomainToWebMapper.map(
-                resultService.saveResult(datasetId, ResultWebToDomainMapper.map(resultCreation))), HttpStatus.OK);
+                resultService.saveResult(datasetId, resultCreation.getAuthorId(), ResultWebToDomainMapper.map(resultCreation))), HttpStatus.OK);
     }
 
     @Override

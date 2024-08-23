@@ -16,7 +16,7 @@ public class ResultDomainToJpaMapper {
         entity.setExperimentDate(domain.getExperimentDate());
         entity.setMachineDetails(domain.getMachineDetails());
         entity.setAlgorithmType(domain.getAlgorithmType());
-        entity.setAlgorithmSettingList(MapperUtil.mapSet(domain.getAlgorithmSettingList(), AlgorithmSettingDomainToJpaMapper::map));
+        entity.setAlgorithmSettingList(MapperUtil.mapSet(domain.getAlgorithmSettingList(), i -> AlgorithmSettingDomainToJpaMapper.map(i, entity)));
         entity.setOtherSettingDetails(domain.getOtherSettingDetails());
         entity.setAccuracy(domain.getAccuracy());
         entity.setPrecision(domain.getPrecision());

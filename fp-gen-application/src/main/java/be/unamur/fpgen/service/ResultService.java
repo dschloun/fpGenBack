@@ -27,7 +27,7 @@ public class ResultService {
     public Result saveResult(UUID datasetId, UUID authorId, Result result) {
         final Dataset dataset = datasetService.getDatasetById(datasetId);
         final Author author = authorService.getAuthorById(authorId);
-        return resultRepository.saveResult(dataset, result);
+        return resultRepository.saveResult(dataset, author, result);
     }
 
     @Transactional
