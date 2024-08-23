@@ -88,6 +88,15 @@ public class ResultEntity extends BaseUuidEntity {
         this.algorithmSettingList = algorithmSettingList;
     }
 
+    public ResultEntity addAlgorithmSetting(Set<AlgorithmSettingEntity> algorithmSettingList) {
+        this.algorithmSettingList.clear();
+        for(AlgorithmSettingEntity s : algorithmSettingList) {
+            getAlgorithmSettingList().add(s);
+            s.setResult(this);
+        }
+        return this;
+    }
+
     @Column(name = "other_setting_details")
     public String getOtherSettingDetails() {
         return otherSettingDetails;

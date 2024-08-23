@@ -14,7 +14,7 @@ public class AlgorithmSettingEntity extends BaseUuidEntity {
     private String value;
 
     @ManyToOne
-    @JoinColumn(name = "result_id", nullable = false)
+    @JoinColumn(name = "result_id")
     public ResultEntity getResult() {
         return result;
     }

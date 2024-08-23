@@ -16,7 +16,6 @@ public class ResultDomainToJpaMapper {
         entity.setExperimentDate(domain.getExperimentDate());
         entity.setMachineDetails(domain.getMachineDetails());
         entity.setAlgorithmType(domain.getAlgorithmType());
-        entity.setAlgorithmSettingList(MapperUtil.mapSet(domain.getAlgorithmSettingList(), i -> AlgorithmSettingDomainToJpaMapper.map(i, entity)));
         entity.setOtherSettingDetails(domain.getOtherSettingDetails());
         entity.setAccuracy(domain.getAccuracy());
         entity.setPrecision(domain.getPrecision());
@@ -29,8 +28,27 @@ public class ResultDomainToJpaMapper {
         entity.setTnRate(domain.getTnRate());
         entity.setAppreciation(domain.getAppreciation());
         entity.setComment(domain.getComment());
-        return entity;
+        return entity.addAlgorithmSetting(MapperUtil.mapSet(domain.getAlgorithmSettingList(), i -> AlgorithmSettingDomainToJpaMapper.map(i, entity)));
 
+    }
+
+    public static ResultEntity mapForUpdate(final Result domain, final ResultEntity entity){
+        entity.setExperimentDate(domain.getExperimentDate());
+        entity.setMachineDetails(domain.getMachineDetails());
+        entity.setAlgorithmType(domain.getAlgorithmType());
+        entity.setOtherSettingDetails(domain.getOtherSettingDetails());
+        entity.setAccuracy(domain.getAccuracy());
+        entity.setPrecision(domain.getPrecision());
+        entity.setRecall(domain.getRecall());
+        entity.setF1Score(domain.getF1Score());
+        entity.setPrAuc(domain.getPrAuc());
+        entity.setFpRate(domain.getFpRate());
+        entity.setFnRate(domain.getFnRate());
+        entity.setTpRate(domain.getTpRate());
+        entity.setTnRate(domain.getTnRate());
+        entity.setAppreciation(domain.getAppreciation());
+        entity.setComment(domain.getComment());
+        return entity.addAlgorithmSetting(MapperUtil.mapSet(domain.getAlgorithmSettingList(), i -> AlgorithmSettingDomainToJpaMapper.map(i, entity)));
     }
 }
 

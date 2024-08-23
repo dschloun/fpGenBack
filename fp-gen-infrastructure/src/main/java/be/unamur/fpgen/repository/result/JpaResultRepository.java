@@ -4,6 +4,7 @@ import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.dataset.Dataset;
 import be.unamur.fpgen.entity.author.AuthorEntity;
 import be.unamur.fpgen.entity.dataset.DatasetEntity;
+import be.unamur.fpgen.entity.result.ResultEntity;
 import be.unamur.fpgen.mapper.domainToJpa.ResultDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.ResultJpaToDomainMapper;
 import be.unamur.fpgen.repository.ResultRepository;
@@ -42,10 +43,9 @@ public class JpaResultRepository implements ResultRepository {
     }
 
     @Override
-    public Result updateResult(Dataset dataset, Author author, Result result) {
-        final DatasetEntity datasetEntity = jpaDatasetRepositoryCRUD.getReferenceById(dataset.getId());
-        final AuthorEntity authorEntity = jpaAuthorRepositoryCRUD.getReferenceById(author.getId());
-        return ResultJpaToDomainMapper.map(jpaResultRepositoryCRUD.save(ResultDomainToJpaMapper.map(result, datasetEntity, authorEntity)));
+    public Result updateResult(Result existingResult, Result result) {
+        final ResultEntity resultEntity = jpaResultRepositoryCRUD.findById(existingResult.getId()).orElseThrow();
+        return ResultJpaToDomainMapper.map(jpaResultRepositoryCRUD.save(ResultDomainToJpaMapper.mapForUpdate(result, resultEntity)));
     }
 
     @Override
