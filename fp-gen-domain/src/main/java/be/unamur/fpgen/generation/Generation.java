@@ -157,7 +157,7 @@ public class Generation extends AbstractItem {
         }
 
         public Generation build() {
-            generationId = generateGenerationId();
+            generationId = generateGenerationId(GenerationTypeEnum.INSTANT_MESSAGE.equals(generationType) ? "IM" : "C");
             return new Generation(this);
         }
 
@@ -165,8 +165,8 @@ public class Generation extends AbstractItem {
             return this.quantity > 1 ? "BATCH" : "SINGLE";
         }
 
-        public String generateGenerationId() {
-            return String.format("%s-%s-%s-%s", "IM", this.returnBatchOrSingle(), this.author.getTrigram(), DateUtil.convertOffsetDateTimeMillisToString(OffsetDateTime.now()));
+        public String generateGenerationId(final String generationType) {
+            return String.format("%s-%s-%s-%s", generationType, this.returnBatchOrSingle(), this.author.getTrigram(), DateUtil.convertOffsetDateTimeMillisToString(OffsetDateTime.now()));
         }
 
         @Override

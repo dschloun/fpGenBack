@@ -50,7 +50,7 @@ public class ConversationOngoingGenerationListener {
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void generateInstantMessages(final ConversationOngoingGenerationEvent event) {
+    public void generateConversations(final ConversationOngoingGenerationEvent event) {
         final ConversationBatchCreation command = event.getCommand();
         final OngoingGeneration ongoingGeneration = ongoingGenerationService.getOngoingGenerationById(event.getOngoingGenerationId());
         // 2. generation stage
