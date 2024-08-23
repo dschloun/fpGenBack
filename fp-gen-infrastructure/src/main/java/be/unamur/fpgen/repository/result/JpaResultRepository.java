@@ -1,5 +1,6 @@
 package be.unamur.fpgen.repository.result;
 
+import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.dataset.Dataset;
 import be.unamur.fpgen.entity.author.AuthorEntity;
 import be.unamur.fpgen.entity.dataset.DatasetEntity;
@@ -29,9 +30,9 @@ public class JpaResultRepository implements ResultRepository {
     }
 
     @Override
-    public Result saveResult(Dataset dataset, Result result) {
+    public Result saveResult(Dataset dataset, Author author, Result result) {
         final DatasetEntity datasetEntity = jpaDatasetRepositoryCRUD.getReferenceById(dataset.getId());
-        final AuthorEntity authorEntity = jpaAuthorRepositoryCRUD.getReferenceById(result.getAuthor().getId());
+        final AuthorEntity authorEntity = jpaAuthorRepositoryCRUD.getReferenceById(author.getId());
         return ResultJpaToDomainMapper.map(jpaResultRepositoryCRUD.save(ResultDomainToJpaMapper.map(result, datasetEntity, authorEntity)));
     }
 

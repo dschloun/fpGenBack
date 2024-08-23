@@ -13,8 +13,6 @@ public class ResultWebToDomainMapper {
 
     public static Result map(final ResultCreation web){
         return Result.newBuilder()
-                .withDataset(Dataset.newBuilder().withId(web.getDatasetId()).build())
-                .withAuthor(Author.newBuilder().withId(web.getAuthorId()).build())
                 .withExperimentDate(web.getExperimentDate())
                 .withMachineDetails(web.getMachineDetails())
                 .withAlgorithmType(web.getAlgorithmType())

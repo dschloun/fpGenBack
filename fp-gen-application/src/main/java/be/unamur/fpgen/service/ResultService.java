@@ -1,5 +1,6 @@
 package be.unamur.fpgen.service;
 
+import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.dataset.Dataset;
 import be.unamur.fpgen.exception.ResultNotFoundException;
 import be.unamur.fpgen.repository.ResultRepository;
@@ -14,15 +15,18 @@ import java.util.UUID;
 public class ResultService {
     private final ResultRepository resultRepository;
     private final DatasetService datasetService;
+    private final AuthorService authorService;
 
-    public ResultService(ResultRepository resultRepository, DatasetService datasetService) {
+    public ResultService(ResultRepository resultRepository, DatasetService datasetService, AuthorService authorService) {
         this.resultRepository = resultRepository;
         this.datasetService = datasetService;
+        this.authorService = authorService;
     }
 
     @Transactional
-    public Result saveResult(UUID datasetId, Result result) {
+    public Result saveResult(UUID datasetId, UUID authorId, Result result) {
         final Dataset dataset = datasetService.getDatasetById(datasetId);
+        final Author author = authorService.getAuthorById(authorId);
         return resultRepository.saveResult(dataset, result);
     }
 

@@ -10,11 +10,13 @@ import be.unamur.model.ResultCreation;
 import be.unamur.model.ResultUpdate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
+@Controller
 public class ResultController implements ResultApi {
 
     private final ResultService resultService;
