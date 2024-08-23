@@ -14,7 +14,7 @@ public interface ResultRepository {
 
     Optional<Result> findResultById(UUID resultId);
 
-    Result updateResult(Result result);
+    Result updateResult(Dataset dataset, Author author, Result result);
 
     void DeleteResult(UUID resultId);
 

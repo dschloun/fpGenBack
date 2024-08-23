@@ -36,8 +36,9 @@ public class ResultService {
     }
 
     @Transactional
-    public Result updateResult(Result result) {
-        return resultRepository.updateResult(result);
+    public Result updateResult(UUID resultId, Result result) {
+        final Result existingResult = this.getResultById(resultId);
+        return resultRepository.updateResult(existingResult.getDataset(), existingResult.getAuthor(), result);
     }
 
     @Transactional

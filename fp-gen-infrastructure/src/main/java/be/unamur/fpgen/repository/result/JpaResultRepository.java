@@ -42,9 +42,9 @@ public class JpaResultRepository implements ResultRepository {
     }
 
     @Override
-    public Result updateResult(Result result) {
-        final DatasetEntity datasetEntity = jpaDatasetRepositoryCRUD.getReferenceById(result.getDataset().getId());
-        final AuthorEntity authorEntity = jpaAuthorRepositoryCRUD.getReferenceById(result.getAuthor().getId());
+    public Result updateResult(Dataset dataset, Author author, Result result) {
+        final DatasetEntity datasetEntity = jpaDatasetRepositoryCRUD.getReferenceById(dataset.getId());
+        final AuthorEntity authorEntity = jpaAuthorRepositoryCRUD.getReferenceById(author.getId());
         return ResultJpaToDomainMapper.map(jpaResultRepositoryCRUD.save(ResultDomainToJpaMapper.map(result, datasetEntity, authorEntity)));
     }
 

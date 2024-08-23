@@ -50,6 +50,6 @@ public class ResultController implements ResultApi {
     @Override
     public ResponseEntity<Result> updateResultOnDataset(UUID resultId, @Valid ResultUpdate resultUpdate) {
         return new ResponseEntity<>(ResultDomainToWebMapper.map(
-                resultService.updateResult(ResultWebToDomainMapper.map(resultUpdate))), HttpStatus.OK);
+                resultService.updateResult(resultId, ResultWebToDomainMapper.map(resultUpdate))), HttpStatus.OK);
     }
 }
