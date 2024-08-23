@@ -63,11 +63,6 @@ public class DatasetController implements DatasetApi {
     }
 
     @Override
-    public ResponseEntity<Result> addResultOnDataset(UUID datasetId, @Valid ResultCreation resultCreation) {
-        return DatasetApi.super.addResultOnDataset(datasetId, resultCreation);
-    }
-
-    @Override
     public ResponseEntity<Dataset> createNewDatasetVersion(UUID datasetId, @Valid UUID authorId) {
         final be.unamur.fpgen.dataset.Dataset dataset = datasetService.createNewVersion(datasetId, authorId);
         return new ResponseEntity<>(DatasetDomainToWebMapper.map(dataset), HttpStatus.CREATED);
@@ -79,26 +74,6 @@ public class DatasetController implements DatasetApi {
                 MapperUtil.mapList(datasetService.getAllDatasetVersions(datasetId),
                         DatasetDomainToWebMapper::map),
                 HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<Void> deleteResultOnDataset(UUID datasetId, UUID resultId) {
-        return DatasetApi.super.deleteResultOnDataset(datasetId, resultId);
-    }
-
-    @Override
-    public ResponseEntity<List<Result>> getResultListDataset(UUID datasetId) {
-        return DatasetApi.super.getResultListDataset(datasetId);
-    }
-
-    @Override
-    public ResponseEntity<Result> getResultOnDataset(UUID datasetId, UUID resultId) {
-        return DatasetApi.super.getResultOnDataset(datasetId, resultId);
-    }
-
-    @Override
-    public ResponseEntity<Result> updateResultOnDataset(UUID datasetId, UUID resultId, @Valid ResultUpdate resultUpdate) {
-        return DatasetApi.super.updateResultOnDataset(datasetId, resultId, resultUpdate);
     }
 
     @Override
