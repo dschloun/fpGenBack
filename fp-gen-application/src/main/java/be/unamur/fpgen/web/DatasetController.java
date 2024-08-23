@@ -2,7 +2,6 @@ package be.unamur.fpgen.web;
 
 import be.unamur.api.DatasetApi;
 import be.unamur.fpgen.mapper.domainToWeb.DatasetDomainToWebMapper;
-import be.unamur.fpgen.mapper.domainToWeb.DatasetTypeDomainToWebMapper;
 import be.unamur.fpgen.mapper.domainToWeb.pagination.DatasetPaginationDomainToWebMapper;
 import be.unamur.fpgen.mapper.webToDomain.DatasetTypeWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.pagination.DatasetPaginationWebToDomainMapper;
@@ -40,7 +39,7 @@ public class DatasetController implements DatasetApi {
 
     @Override
     public ResponseEntity<Dataset> createDataset(@NotNull @Valid DatasetType datasetType, @Valid DatasetCreation datasetCreation) {
-        Dataset dataset = DatasetDomainToWebMapper.map(datasetService.createDataset(datasetCreation, DatasetTypeWebToDomainMapper.map(datasetType)), DatasetType.INSTANT_MESSAGE);
+        Dataset dataset = DatasetDomainToWebMapper.map(datasetService.createDataset(datasetCreation, DatasetTypeWebToDomainMapper.map(datasetType)));
         return new ResponseEntity<>(dataset, HttpStatus.CREATED);
     }
 
@@ -52,7 +51,7 @@ public class DatasetController implements DatasetApi {
 
     @Override
     public ResponseEntity<Dataset> getDatasetById(UUID datasetId) {
-        Dataset dataset = DatasetDomainToWebMapper.map(datasetService.getDatasetById(datasetId), DatasetType.INSTANT_MESSAGE);
+        Dataset dataset = DatasetDomainToWebMapper.map(datasetService.getDatasetById(datasetId));
 
         return new ResponseEntity<>(dataset, HttpStatus.OK);
     }
@@ -71,14 +70,14 @@ public class DatasetController implements DatasetApi {
     @Override
     public ResponseEntity<Dataset> createNewDatasetVersion(UUID datasetId, @Valid UUID authorId) {
         final be.unamur.fpgen.dataset.Dataset dataset = datasetService.createNewVersion(datasetId, authorId);
-        return new ResponseEntity<>(DatasetDomainToWebMapper.map(dataset, DatasetTypeDomainToWebMapper.map(dataset.getType())), HttpStatus.CREATED);
+        return new ResponseEntity<>(DatasetDomainToWebMapper.map(dataset), HttpStatus.CREATED);
     }
 
     @Override
     public ResponseEntity<List<Dataset>> getDatasetAllVersions(UUID datasetId) {
         return new ResponseEntity<>(
                 MapperUtil.mapList(datasetService.getAllDatasetVersions(datasetId),
-                        d -> DatasetDomainToWebMapper.map(d, DatasetType.INSTANT_MESSAGE)),
+                        DatasetDomainToWebMapper::map),
                 HttpStatus.OK);
     }
 

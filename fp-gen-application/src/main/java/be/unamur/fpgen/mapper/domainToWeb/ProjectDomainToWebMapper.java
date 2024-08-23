@@ -27,7 +27,7 @@ public class ProjectDomainToWebMapper {
     private static be.unamur.model.Dataset mapAndGetLastVersion(Set<Dataset> datasetList, DatasetFunctionEnum datasetFunction) {
         final List<be.unamur.model.Dataset> datasetListTemp = datasetList.stream()
                 .filter(d -> datasetFunction.equals(d.getDatasetFunction()) && d.isLastVersion())
-                .map(d -> DatasetDomainToWebMapper.map(d, DatasetTypeDomainToWebMapper.map(d.getType())))
+                .map(DatasetDomainToWebMapper::map)
                 .toList();
         if(datasetListTemp.isEmpty()){
             return null;
