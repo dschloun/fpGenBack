@@ -3,6 +3,7 @@ package be.unamur.fpgen.mapper.domainToJpa;
 import be.unamur.fpgen.conversation.Conversation;
 import be.unamur.fpgen.entity.conversation.ConversationEntity;
 import be.unamur.fpgen.entity.generation.ConversationGenerationEntity;
+import be.unamur.fpgen.utils.MapperUtil;
 
 public class ConversationDomainToJpaMapper {
 
@@ -13,6 +14,7 @@ public class ConversationDomainToJpaMapper {
         entity.setType(domain.getType());
         entity.setMaxInteractionNumber(domain.getMaxInteractionNumber());
         entity.setMinInteractionNumber(domain.getMinInteractionNumber());
+        entity.setMessageSet(MapperUtil.mapSet(domain.getConversationMessageList(), c -> ConversationInstantMessageDomainToJpaMapper.mapForCreate(c, entity)));
 
         return entity;
     }

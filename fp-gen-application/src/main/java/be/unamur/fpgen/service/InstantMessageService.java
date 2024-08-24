@@ -6,8 +6,8 @@ import be.unamur.fpgen.generation.ongoing_generation.OngoingGeneration;
 import be.unamur.fpgen.message.InstantMessage;
 import be.unamur.fpgen.message.pagination.InstantMessage.InstantMessagesPage;
 import be.unamur.fpgen.message.pagination.InstantMessage.PagedInstantMessagesQuery;
-import be.unamur.fpgen.messaging.event.OngoingGenerationEvent;
-import be.unamur.fpgen.repository.InstantMessageRepository;
+import be.unamur.fpgen.messaging.event.InstantMessageOngoingGenerationEvent;
+import be.unamur.fpgen.repository.MessageRepository;
 import be.unamur.fpgen.utils.DateUtil;
 import be.unamur.model.InstantMessageBatchCreation;
 import org.springframework.context.ApplicationEventPublisher;
@@ -16,24 +16,24 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 @Service
 public class InstantMessageService {
 
-    private final InstantMessageRepository instantMessageRepository;
-    private final InstantMessageGenerationService instantMessageGenerationService;
-    private final InstantMessageDatasetService instantMessageDatasetService;
+    private final MessageRepository messageRepository;
+    private final DatasetService datasetService;
     private final OngoingGenerationService ongoingGenerationService;
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    public InstantMessageService(final InstantMessageRepository instantMessageRepository,
-                                 final InstantMessageGenerationService instantMessageGenerationService,
-                                 final InstantMessageDatasetService instantMessageDatasetService,
-                                 OngoingGenerationService ongoingGenerationService, ApplicationEventPublisher applicationEventPublisher) {
-        this.instantMessageRepository = instantMessageRepository;
-        this.instantMessageGenerationService = instantMessageGenerationService;
-        this.instantMessageDatasetService = instantMessageDatasetService;
+    public InstantMessageService(final MessageRepository messageRepository,
+                                 final DatasetService datasetService,
+                                 OngoingGenerationService ongoingGenerationService,
+                                 ApplicationEventPublisher applicationEventPublisher) {
+        this.messageRepository = messageRepository;
+        this.datasetService = datasetService;
         this.ongoingGenerationService = ongoingGenerationService;
         this.applicationEventPublisher = applicationEventPublisher;
     }
@@ -46,15 +46,15 @@ public class InstantMessageService {
 
         // 1. if the generation refer to a dataset, then inform the dataset that a generation is pending for him
         if (Objects.nonNull(command.getDatasetId())) {
-            instantMessageDatasetService.addOngoingGenerationToDataset(command.getDatasetId(), ongoingGeneration);
+            datasetService.addOngoingGenerationToDataset(command.getDatasetId(), ongoingGeneration);
         }
 
-        applicationEventPublisher.publishEvent(new OngoingGenerationEvent(this, ongoingGeneration.getId(), command));
+        applicationEventPublisher.publishEvent(new InstantMessageOngoingGenerationEvent(this, GenerationTypeEnum.INSTANT_MESSAGE, ongoingGeneration.getId(), command));
     }
 
     @Transactional
     public InstantMessage getInstantMessageById(UUID instantMessageId) {
-        return instantMessageRepository.getInstantMessageById(instantMessageId)
+        return messageRepository.getInstantMessageById(instantMessageId)
                 .orElseThrow(() -> InstantMessageNotFoundException.withId(instantMessageId));
     }
 
@@ -64,7 +64,7 @@ public class InstantMessageService {
                 .of(query.getQueryPage().getPage(),
                         query.getQueryPage().getSize());
 
-        return instantMessageRepository.findPagination(
+        return messageRepository.findPagination(
                 query.getInstantMessageQuery().getMessageTopic(),
                 query.getInstantMessageQuery().getMessageType(),
                 query.getInstantMessageQuery().getContent(),
@@ -75,12 +75,12 @@ public class InstantMessageService {
 
     @Transactional
     public void deleteById(UUID instantMessageId) {
-        instantMessageRepository.deleteInstantMessageById(instantMessageId);
+        messageRepository.deleteInstantMessageById(instantMessageId);
     }
 
     @Transactional
     public List<InstantMessage> findAllByGenerationId(UUID generationId) {
-        return instantMessageRepository.findInstantMessageByGenerationId(generationId);
+        return messageRepository.findInstantMessageByGenerationId(generationId);
     }
 
 }

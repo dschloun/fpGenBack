@@ -1,11 +1,11 @@
 package be.unamur.fpgen.message;
 
-import be.unamur.fpgen.BaseUuidDomain;
+import be.unamur.fpgen.AbstractItem;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-public abstract class AbstractInstantMessage extends BaseUuidDomain {
+public abstract class AbstractInstantMessage extends AbstractItem {
     // members
     private MessageTopicEnum topic;
     private MessageTypeEnum type;

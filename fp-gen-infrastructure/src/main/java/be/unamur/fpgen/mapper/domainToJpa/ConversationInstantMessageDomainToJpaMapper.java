@@ -20,4 +20,16 @@ public class ConversationInstantMessageDomainToJpaMapper {
         entity.setReceiver(interlocutor2);
         return entity;
     }
+
+    public static ConversationInstantMessageEntity mapForCreate(final ConversationMessage domain,
+                                                                final ConversationEntity conversation){
+        final ConversationInstantMessageEntity entity = new ConversationInstantMessageEntity();
+        entity.setTopic(domain.getTopic());
+        entity.setType(domain.getType());
+        entity.setContent(domain.getContent());
+        entity.setConversation(conversation);
+        entity.setSender(InterlocutorDomainToJpaMapper.map(domain.getSender()));
+        entity.setReceiver(InterlocutorDomainToJpaMapper.map(domain.getReceiver()));
+        return entity;
+    }
 }

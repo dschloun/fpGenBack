@@ -1,7 +1,7 @@
 package be.unamur.fpgen.dataset.pagination;
 
 
-import be.unamur.fpgen.dataset.ConversationDataset;
+import be.unamur.fpgen.dataset.Dataset;
 import be.unamur.fpgen.exception.pagination.IncompleteDatasetsPageException;
 import be.unamur.fpgen.pagination.Pagination;
 import be.unamur.fpgen.utils.ViolationHandler;
@@ -11,7 +11,7 @@ import java.util.List;
 
 public class DatasetsPage {
     private final Pagination pagination;
-    private final List<ConversationDataset> datasetList;
+    private final List<Dataset> datasetList;
 
     private DatasetsPage(Builder builder) {
         pagination = builder.pagination;
@@ -25,13 +25,13 @@ public class DatasetsPage {
         return pagination;
     }
 
-    public List<ConversationDataset> getDatasetList() {
+    public List<Dataset> getDatasetList() {
         return datasetList;
     }
 
     public static final class Builder extends ViolationHandler {
         private Pagination pagination;
-        private List<ConversationDataset> datasetList;
+        private List<Dataset> datasetList;
 
         private Builder() {
         }
@@ -41,7 +41,7 @@ public class DatasetsPage {
             return this;
         }
 
-        public Builder withDatasetList(List<ConversationDataset> val) {
+        public Builder withDatasetList(List<Dataset> val) {
             datasetList = val;
             return this;
         }

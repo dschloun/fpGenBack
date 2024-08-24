@@ -1,7 +1,7 @@
 package be.unamur.fpgen.statistic;
 
 import be.unamur.fpgen.BaseUuidDomain;
-import be.unamur.fpgen.dataset.AbstractDataset;
+import be.unamur.fpgen.dataset.Dataset;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -16,7 +16,7 @@ public class Statistic extends BaseUuidDomain {
     private final Set<MessageTypeTopicStatistic> genuineTopicStatisticList = new HashSet<>();
     private final Set<MessageTypeTopicStatistic> socialEngineeringTopicStatisticList = new HashSet<>();
     private final Set<MessageTypeTopicStatistic> trollingTopicStatisticList = new HashSet<>();
-    private final AbstractDataset dataset;
+    private final Dataset dataset;
 
     private Statistic(Builder builder) {
         super(builder.getId(), builder.getCreationDate(), builder.getModificationDate());
@@ -63,7 +63,7 @@ public class Statistic extends BaseUuidDomain {
         return trollingTopicStatisticList;
     }
 
-    public AbstractDataset getDataset() {
+    public Dataset getDataset() {
         return dataset;
     }
 
@@ -80,7 +80,7 @@ public class Statistic extends BaseUuidDomain {
         private Set<MessageTypeTopicStatistic> genuineTopicStatisticList = new HashSet<>();
         private Set<MessageTypeTopicStatistic> socialEngineeringTopicStatisticList = new HashSet<>();
         private Set<MessageTypeTopicStatistic> trollingTopicStatisticList = new HashSet<>();
-        private AbstractDataset dataset;
+        private Dataset dataset;
 
         private Builder() {
         }
@@ -125,7 +125,7 @@ public class Statistic extends BaseUuidDomain {
             return this;
         }
 
-        public Builder withDataset(AbstractDataset val) {
+        public Builder withDataset(Dataset val) {
             dataset = val;
             return this;
         }

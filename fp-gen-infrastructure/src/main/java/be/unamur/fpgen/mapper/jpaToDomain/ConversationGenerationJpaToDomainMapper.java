@@ -1,17 +1,16 @@
 package be.unamur.fpgen.mapper.jpaToDomain;
 
 import be.unamur.fpgen.entity.generation.ConversationGenerationEntity;
-import be.unamur.fpgen.generation.ConversationGeneration;
+import be.unamur.fpgen.generation.Generation;
 import be.unamur.fpgen.utils.MapperUtil;
 
 public class ConversationGenerationJpaToDomainMapper {
 
-    public static ConversationGeneration map(final ConversationGenerationEntity entity){
+    public static Generation map(final ConversationGenerationEntity entity){
         if (entity == null){
             return null;
         }
-
-        return ConversationGeneration.newBuilder()
+        return Generation.newBuilder()
                 .withId(entity.getId())
                 .withCreationDate(entity.getCreationDate())
                 .withModificationDate(entity.getModificationDate())
@@ -22,7 +21,7 @@ public class ConversationGenerationJpaToDomainMapper {
                 .withType(entity.getType())
                 .withSystemPrompt(entity.getSystemPrompt())
                 .withUserPrompt(entity.getUserPrompt())
-                .withConversationList(MapperUtil.mapSet(entity.getConversationList(), ConversationJpaToDomainMapper::map))
+                .withItemList(MapperUtil.mapSet(entity.getConversationList(), ConversationJpaToDomainMapper::map))
                 .build();
     }
 }

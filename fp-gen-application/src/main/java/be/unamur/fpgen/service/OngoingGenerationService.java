@@ -7,8 +7,9 @@ import be.unamur.fpgen.generation.ongoing_generation.OngoingGenerationItem;
 import be.unamur.fpgen.generation.ongoing_generation.OngoingGenerationStatus;
 import be.unamur.fpgen.repository.OngoingGenerationRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
+
 import java.util.List;
 import java.util.UUID;
 
