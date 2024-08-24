@@ -1,5 +1,6 @@
 package be.unamur.fpgen.mapper.domainToWeb;
 
+import be.unamur.fpgen.utils.BigDecimalSafeMapper;
 import be.unamur.model.Result;
 
 public class ResultDomainToWebMapper {
@@ -18,15 +19,15 @@ public class ResultDomainToWebMapper {
                         .map(AlgorithmSettingDomainToWebMapper::map)
                         .toList())
                 .otherSettingDetails(domain.getOtherSettingDetails())
-                .accuracy(domain.getAccuracy().doubleValue())
-                .precision(domain.getPrecision().doubleValue())
-                .recall(domain.getRecall().doubleValue())
-                .f1Score(domain.getF1Score().doubleValue())
-                .prAuc(domain.getPrAuc().doubleValue())
-                .fpRate(domain.getFpRate().doubleValue())
-                .fnRate(domain.getFnRate().doubleValue())
-                .tpRate(domain.getTpRate().doubleValue())
-                .tnRate(domain.getTnRate().doubleValue())
+                .accuracy(BigDecimalSafeMapper.map(domain.getAccuracy()))
+                .precision(BigDecimalSafeMapper.map(domain.getPrecision()))
+                .recall(BigDecimalSafeMapper.map(domain.getRecall()))
+                .f1Score(BigDecimalSafeMapper.map(domain.getF1Score()))
+                .prAuc(BigDecimalSafeMapper.map(domain.getPrAuc()))
+                .fpRate(BigDecimalSafeMapper.map(domain.getFpRate()))
+                .fnRate(BigDecimalSafeMapper.map(domain.getFnRate()))
+                .tpRate(BigDecimalSafeMapper.map(domain.getTpRate()))
+                .tnRate(BigDecimalSafeMapper.map(domain.getTnRate()))
                 .appreciation(domain.getAppreciation())
                 .comment(domain.getComment());
     }
