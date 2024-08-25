@@ -59,7 +59,7 @@ databaseChangeLog:
               m.type as type,
               m.topic as topic,
               m.content as content
-              from message m
+              from instant_message m
               join generation g
               on m.generation_id = g.id
               join dataset_generation_join_table dgj
@@ -81,7 +81,7 @@ databaseChangeLog:
               m.sender_id as sender_id,
               m.receiver_id as receiver_id,
               m.content as content
-              from message m
+              from instant_message m
               join generation g
               on m.generation_id = g.id
               join dataset_generation_join_table dgj

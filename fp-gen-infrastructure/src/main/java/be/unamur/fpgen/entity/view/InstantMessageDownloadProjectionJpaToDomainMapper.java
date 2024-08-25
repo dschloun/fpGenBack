@@ -11,9 +11,7 @@ public class InstantMessageDownloadProjectionJpaToDomainMapper {
             return null;
         }
         return InstantMessageDownload.newBuilder()
-                .withId(entity.getId())
                 .withType(entity.getType())
-                .withTopic(entity.getTopic())
                 .withContent(entity.getContent())
                 .build();
     }
