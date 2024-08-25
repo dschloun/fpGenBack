@@ -30,6 +30,7 @@ public class DatasetDomainToWebMapper {
                 .ongoingGenerationId(domain.getOngoingGenerationId())
                 .statistic(StatisticDomainToWebMapper.map(domain.getStatistic()))
                 .validated(domain.isValidated())
-                .isLastVersion(domain.isLastVersion());
+                .isLastVersion(domain.isLastVersion())
+                .hasResult(domain.hasResult());
     }
 }
