@@ -10,6 +10,7 @@ public class ConversationMessageDomainToWebMapper {
                 .conversationId(domain.getConversationId())
                 .sender(InterlocutorDomainToWebMapper.map(domain.getSender()))
                 .receiver(InterlocutorDomainToWebMapper.map(domain.getReceiver()))
+                .orderNumber(domain.getOrderNumber())
                 .content(domain.getContent());
     }
 }

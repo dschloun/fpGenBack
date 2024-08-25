@@ -3,10 +3,7 @@ package be.unamur.fpgen.entity.instant_message;
 import be.unamur.fpgen.entity.conversation.ConversationEntity;
 import be.unamur.fpgen.entity.interlocutor.InterlocutorEntity;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 @DiscriminatorValue(value = "CIM")
@@ -16,6 +13,7 @@ public class ConversationInstantMessageEntity extends AbstractInstantMessageEnti
     private ConversationEntity conversation;
     private InterlocutorEntity sender;
     private InterlocutorEntity receiver;
+    private Integer orderNumber;
 
     // getters and setters
     @ManyToOne
@@ -46,5 +44,14 @@ public class ConversationInstantMessageEntity extends AbstractInstantMessageEnti
 
     public void setReceiver(final InterlocutorEntity receiver) {
         this.receiver = receiver;
+    }
+
+    @Column(name = "order_number")
+    public Integer getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(final Integer orderNumber) {
+        this.orderNumber = orderNumber;
     }
 }

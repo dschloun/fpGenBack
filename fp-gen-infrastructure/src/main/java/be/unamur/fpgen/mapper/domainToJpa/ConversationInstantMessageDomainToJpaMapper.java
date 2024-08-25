@@ -18,6 +18,7 @@ public class ConversationInstantMessageDomainToJpaMapper {
         entity.setConversation(conversation);
         entity.setSender(interlocutor1);
         entity.setReceiver(interlocutor2);
+        entity.setOrderNumber(domain.getOrderNumber());
         return entity;
     }
 
@@ -30,6 +31,7 @@ public class ConversationInstantMessageDomainToJpaMapper {
         entity.setConversation(conversation);
         entity.setSender(InterlocutorDomainToJpaMapper.map(domain.getSender()));
         entity.setReceiver(InterlocutorDomainToJpaMapper.map(domain.getReceiver()));
+        entity.setOrderNumber(domain.getOrderNumber());
         return entity;
     }
 }

@@ -20,6 +20,7 @@ public class ConversationInstantMessageJpaToDomainMapper {
                 .withSender(InterlocutorJpaToDomainMapper.map(entity.getSender()))
                 .withReceiver(InterlocutorJpaToDomainMapper.map(entity.getReceiver()))
                 .withBatch(entity.getConversation().getConversationGeneration().getQuantity() > 1)
+                .withOrderNumber(entity.getOrderNumber())
                 .build();
     }
 }
