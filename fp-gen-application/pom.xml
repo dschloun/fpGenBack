@@ -52,6 +52,13 @@
             <version>31.0.1-jre</version>
         </dependency>
 
+        <!-- csv -->
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>5.7.1</version>
+        </dependency>
+
         <!-- Test dependencies-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

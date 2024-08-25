@@ -31,6 +31,10 @@ public class DocumentContent {
         return contentStream;
     }
 
+    public static Builder newBuilder() {
+        return new Builder();
+    }
+
     public static final class Builder {
         private String fileName;
         private String mimeType;
@@ -38,10 +42,6 @@ public class DocumentContent {
         private Resource contentStream;
 
         private Builder() {
-        }
-
-        public static Builder newBuilder() {
-            return new Builder();
         }
 
         public Builder withFileName(String val) {

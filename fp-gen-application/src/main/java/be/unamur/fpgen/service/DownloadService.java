@@ -1,8 +1,16 @@
 package be.unamur.fpgen.service;
 
+import be.unamur.fpgen.message.download.DocumentContent;
 import be.unamur.fpgen.message.download.InstantMessageDownload;
+import com.opencsv.CSVWriter;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +24,29 @@ public class DownloadService {
     public static final DateTimeFormatter DATE_DOWNLOAD_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 
+    public DocumentContent downloadInstantMessageDataset(final String datasetBusinessId, final List<InstantMessageDownload> instantMessageDownloadList){
+        final byte[] bom = new byte[] { (byte) 239, (byte) 187, (byte) 191 };
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()){
+            outputStream.write(bom);
+            final PrintWriter writer = new PrintWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
+
+            final CSVWriter csvWriter = new CSVWriter(writer, ';', '"', '"', "\n");
+            csvWriter.writeAll(instantMessageElementsToStringArray(instantMessageDownloadList));
+            csvWriter.close();
+
+            final ByteArrayResource contentStream = new ByteArrayResource(outputStream.toByteArray());
+
+            return DocumentContent.newBuilder()
+                    .withMimeType(TEXT_CSV_MIMETYPE)
+                    .withLength(contentStream.contentLength())
+                    .withFileName(datasetBusinessId + DOCUMENT_FILE_EXTENSION)
+                    .withContentStream(contentStream)
+                    .build();
+
+        } catch (IOException e) {
+            throw new RuntimeException("Error while writing BOM to output stream", e);
+        }
+    }
 
     private List<String[]> instantMessageElementsToStringArray(final List<InstantMessageDownload> instantMessages) {
         final List<String[]> records = new ArrayList<>(instantMessages.size());
