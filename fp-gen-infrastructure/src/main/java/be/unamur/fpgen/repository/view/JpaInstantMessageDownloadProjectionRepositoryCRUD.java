@@ -16,7 +16,7 @@ public interface JpaInstantMessageDownloadProjectionRepositoryCRUD extends JpaRe
                     "type as type, " +
                     "topic as topic, " +
                     "content as content " +
-                    "FROM instant_message_download_view " +
+                    "FROM message_search_view " +
                     "WHERE dataset_id = :datasetId "
 
     )
