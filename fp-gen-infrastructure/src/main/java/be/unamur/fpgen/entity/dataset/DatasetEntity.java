@@ -111,7 +111,7 @@ public class DatasetEntity extends BaseUuidEntity {
         this.project = project;
     }
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "ongoing_generation_id")
     public OngoingGenerationEntity getOngoingGeneration() {
         return ongoingGeneration;

@@ -5,6 +5,7 @@ import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.messaging.event.StatisticComputationEvent;
 import be.unamur.fpgen.repository.StatisticRepository;
 import be.unamur.fpgen.service.DatasetService;
+import be.unamur.fpgen.service.OngoingGenerationService;
 import be.unamur.fpgen.statistic.MessageTypeTopicTransformer;
 import be.unamur.fpgen.statistic.Statistic;
 import be.unamur.fpgen.statistic.TypeTopicDistributionProjection;
@@ -18,6 +19,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
@@ -25,10 +27,14 @@ public class StatisticComputationListener {
 
     private final StatisticRepository statisticRepository;
     private final DatasetService datasetService;
+    private final OngoingGenerationService ongoingGenerationService;
 
-    public StatisticComputationListener(StatisticRepository statisticRepository, DatasetService datasetService) {
+    public StatisticComputationListener(final StatisticRepository statisticRepository,
+                                        final DatasetService datasetService,
+                                        final OngoingGenerationService ongoingGenerationService) {
         this.statisticRepository = statisticRepository;
         this.datasetService = datasetService;
+        this.ongoingGenerationService = ongoingGenerationService;
     }
 
     @Async
@@ -65,6 +71,12 @@ public class StatisticComputationListener {
 
         // 9. save
         statisticRepository.save(statistic, dataset);
+
+        // 10. remove ongoing generation from dataset if exists
+//        if (Objects.nonNull(dataset.getOngoingGenerationId())){
+//            datasetService.removeOngoingGenerationFromDataset(dataset.getId(), null);
+//            ongoingGenerationService.deleteOngoingGenerationById(dataset.getOngoingGenerationId());
+//        }
     }
 
 }

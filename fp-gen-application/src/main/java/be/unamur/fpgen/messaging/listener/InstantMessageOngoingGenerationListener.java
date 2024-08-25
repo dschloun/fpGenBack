@@ -113,7 +113,7 @@ public class InstantMessageOngoingGenerationListener {
                     ongoingGenerationService.addItemList(ongoingGeneration, results);
                     // 4.2 dataset case
                     if (Objects.nonNull(command.getDatasetId())) {
-                        datasetService.removeOngoingGenerationFromDataset(command.getDatasetId(), ongoingGeneration);
+                        datasetService.removeOngoingGenerationFromDataset(command.getDatasetId());
                         datasetService.addGenerationListToDataset(command.getDatasetId(), results.stream()
                                 .filter(ogi -> OngoingGenerationItemStatus.SUCCESS.equals(ogi.getStatus()))
                                 .map(OngoingGenerationItem::getGenerationId)

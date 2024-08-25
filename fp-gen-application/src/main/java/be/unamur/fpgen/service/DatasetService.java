@@ -26,12 +26,14 @@ public class DatasetService {
     private final AuthorService authorService;
     private final DatasetRepository datasetRepository;
     private final GenerationService generationService;
+    private final OngoingGenerationService ongoingGenerationService;
     private final ApplicationEventPublisher eventPublisher;
 
-    public DatasetService(AuthorService authorService, DatasetRepository datasetRepository, GenerationService generationService, ApplicationEventPublisher eventPublisher) {
+    public DatasetService(AuthorService authorService, DatasetRepository datasetRepository, GenerationService generationService, OngoingGenerationService ongoingGenerationService, ApplicationEventPublisher eventPublisher) {
         this.authorService = authorService;
         this.datasetRepository = datasetRepository;
         this.generationService = generationService;
+        this.ongoingGenerationService = ongoingGenerationService;
         this.eventPublisher = eventPublisher;
     }
 
@@ -169,11 +171,11 @@ public class DatasetService {
     }
 
     @Transactional
-    public void removeOngoingGenerationFromDataset(UUID datasetId, OngoingGeneration generation) {
+    public void removeOngoingGenerationFromDataset(UUID datasetId) {
         final Dataset dataset = getDatasetById(datasetId);
         // check if dataset is already validated
         checkDatasetValidationState(dataset, false);
-        datasetRepository.removeOngoingGenerationToDataset(dataset, generation);
+        datasetRepository.removeOngoingGenerationFromDataset(dataset);
     }
 
     @Transactional

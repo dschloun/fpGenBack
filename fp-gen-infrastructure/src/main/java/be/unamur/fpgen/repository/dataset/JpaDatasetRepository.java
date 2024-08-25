@@ -203,7 +203,7 @@ public class JpaDatasetRepository implements DatasetRepository {
     }
 
     @Override
-    public void removeOngoingGenerationToDataset(Dataset dataset, OngoingGeneration generation) {
+    public void removeOngoingGenerationFromDataset(Dataset dataset) {
         final DatasetEntity datasetEntity = jpaDatasetRepositoryCRUD.findById(dataset.getId()).orElseThrow();
         datasetEntity.setOngoingGeneration(null);
         jpaDatasetRepositoryCRUD.save(datasetEntity);
