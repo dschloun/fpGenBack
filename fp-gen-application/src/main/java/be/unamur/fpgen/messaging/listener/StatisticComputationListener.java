@@ -2,13 +2,14 @@ package be.unamur.fpgen.messaging.listener;
 
 import be.unamur.fpgen.dataset.Dataset;
 import be.unamur.fpgen.message.MessageTypeEnum;
+import be.unamur.fpgen.messaging.event.DatasetOngoingGenerationCleanEvent;
 import be.unamur.fpgen.messaging.event.StatisticComputationEvent;
 import be.unamur.fpgen.repository.StatisticRepository;
 import be.unamur.fpgen.service.DatasetService;
-import be.unamur.fpgen.service.OngoingGenerationService;
 import be.unamur.fpgen.statistic.MessageTypeTopicTransformer;
 import be.unamur.fpgen.statistic.Statistic;
 import be.unamur.fpgen.statistic.TypeTopicDistributionProjection;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
@@ -27,14 +28,14 @@ public class StatisticComputationListener {
 
     private final StatisticRepository statisticRepository;
     private final DatasetService datasetService;
-    private final OngoingGenerationService ongoingGenerationService;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     public StatisticComputationListener(final StatisticRepository statisticRepository,
                                         final DatasetService datasetService,
-                                        final OngoingGenerationService ongoingGenerationService) {
+                                        final ApplicationEventPublisher applicationEventPublisher) {
         this.statisticRepository = statisticRepository;
         this.datasetService = datasetService;
-        this.ongoingGenerationService = ongoingGenerationService;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Async
@@ -73,10 +74,8 @@ public class StatisticComputationListener {
         statisticRepository.save(statistic, dataset);
 
         // 10. remove ongoing generation from dataset if exists
-//        if (Objects.nonNull(dataset.getOngoingGenerationId())){
-//            datasetService.removeOngoingGenerationFromDataset(dataset.getId(), null);
-//            ongoingGenerationService.deleteOngoingGenerationById(dataset.getOngoingGenerationId());
-//        }
+        if (Objects.nonNull(dataset.getOngoingGenerationId())){
+            applicationEventPublisher.publishEvent(new DatasetOngoingGenerationCleanEvent(this, dataset.getId()));
+        }
     }
-
 }
