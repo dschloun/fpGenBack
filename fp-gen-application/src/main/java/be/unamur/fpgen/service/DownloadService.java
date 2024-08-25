@@ -129,6 +129,8 @@ public class DownloadService {
         });
 
         conversationMessages.forEach(cm -> records.add(new String[]{
+                cm.getConversationId(),
+                cm.getOrderNumber(),
                 cm.getType(),
                 cm.getContent()
         }));
