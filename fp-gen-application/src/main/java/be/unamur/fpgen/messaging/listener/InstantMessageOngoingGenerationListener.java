@@ -15,6 +15,7 @@ import be.unamur.fpgen.service.DatasetService;
 import be.unamur.fpgen.service.GenerationService;
 import be.unamur.fpgen.service.OngoingGenerationService;
 import be.unamur.model.InstantMessageBatchCreation;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +42,7 @@ public class InstantMessageOngoingGenerationListener {
         this.ongoingGenerationService = ongoingGenerationService;
     }
 
+    @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void generateInstantMessages(final InstantMessageOngoingGenerationEvent event) {
