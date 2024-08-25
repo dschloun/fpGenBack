@@ -14,7 +14,7 @@ public interface JpaConversationMessageDownloadProjectionRepositoryCRUD extends 
     @Query(nativeQuery = true, value =
             "SELECT id as id, " +
                     "conversation_id as conversationId, " +
-                    "order_number as orderNumber " +
+                    "order_number as orderNumber, " +
                     "type as type, " +
                     "content as content " +
                     "FROM conversation_search_view " +

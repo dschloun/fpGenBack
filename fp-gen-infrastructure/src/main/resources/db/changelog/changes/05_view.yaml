@@ -82,8 +82,10 @@ databaseChangeLog:
               m.receiver_id as receiver_id,
               m.content as content
               from instant_message m
+              join conversation c
+              on m.conversation_id = c.id
               join generation g
-              on m.generation_id = g.id
+              on c.generation_id = g.id
               join dataset_generation_join_table dgj
               on g.id = dgj.generation_id
               where m.kind = 'CIM'
