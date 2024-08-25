@@ -45,12 +45,12 @@ public class DownloadService {
 
         // 2. get data
         //if (DatasetTypeEnum.INSTANT_MESSAGE.equals(dataset.getType())){
-            return downloadInstantMessageDataset(dataset.getBusinessId(), downloadRepository.findAllByDatasetId(datasetId.toString()));
+            return downloadInstantMessageDataset(prepareFileName(dataset), downloadRepository.findAllByDatasetId(datasetId.toString()));
         //}
     }
 
 
-    private DocumentContent downloadInstantMessageDataset(final String datasetBusinessId, final List<InstantMessageDownload> instantMessageDownloadList){
+    private DocumentContent downloadInstantMessageDataset(final String fileName, final List<InstantMessageDownload> instantMessageDownloadList){
         final byte[] bom = new byte[] { (byte) 239, (byte) 187, (byte) 191 };
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()){
             outputStream.write(bom);
@@ -65,7 +65,7 @@ public class DownloadService {
             return DocumentContent.newBuilder()
                     .withMimeType(TEXT_CSV_MIMETYPE)
                     .withLength(contentStream.contentLength())
-                    .withFileName(datasetBusinessId + DOCUMENT_FILE_EXTENSION)
+                    .withFileName(fileName + DOCUMENT_FILE_EXTENSION)
                     .withContentStream(contentStream)
                     .build();
 
@@ -89,5 +89,53 @@ public class DownloadService {
         }));
 
         return records;
+    }
+
+    private DocumentContent downloadConversationMessageDataset(final String fileName, final List<ConversationMessageDownload> conversationMessageDownloadList) {
+        final byte[] bom = new byte[] { (byte) 239, (byte) 187, (byte) 191 };
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            outputStream.write(bom);
+            final PrintWriter writer = new PrintWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
+
+            final CSVWriter csvWriter = new CSVWriter(writer, ';', '"', '"', "\n");
+            csvWriter.writeAll(conversationMessageElementsToStringArray(conversationMessageDownloadList));
+            csvWriter.close();
+
+            final ByteArrayResource contentStream = new ByteArrayResource(outputStream.toByteArray());
+
+            return DocumentContent.newBuilder()
+                    .withMimeType(TEXT_CSV_MIMETYPE)
+                    .withLength(contentStream.contentLength())
+                    .withFileName(fileName + DOCUMENT_FILE_EXTENSION)
+                    .withContentStream(contentStream)
+                    .build();
+
+        } catch (IOException e) {
+            throw new RuntimeException("Error while writing BOM to output stream", e);
+        }
+    }
+
+    private List<String[]> conversationMessageElementsToStringArray(final List<ConversationMessageDownload> conversationMessages) {
+        final List<String[]> records = new ArrayList<>(conversationMessages.size());
+
+        // CSV header
+        records.add(new String[]{
+                "conversationId",
+                "orderNumber",
+                "type",
+                "content"
+        });
+
+        conversationMessages.forEach(cm -> records.add(new String[]{
+                cm.getType(),
+                cm.getContent()
+        }));
+
+        return records;
+    }
+
+    private String prepareFileName(final Dataset dataset){
+        final String kind = DatasetTypeEnum.INSTANT_MESSAGE.equals(dataset.getType()) ? "IM " : "CM ";
+        return kind + dataset.getName();
     }
 }

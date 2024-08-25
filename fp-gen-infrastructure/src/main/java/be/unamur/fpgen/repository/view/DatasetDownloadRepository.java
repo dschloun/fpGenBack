@@ -1,6 +1,7 @@
 package be.unamur.fpgen.repository.view;
 
 import be.unamur.fpgen.entity.view.InstantMessageDownloadProjectionJpaToDomainMapper;
+import be.unamur.fpgen.message.download.ConversationMessageDownload;
 import be.unamur.fpgen.message.download.InstantMessageDownload;
 import be.unamur.fpgen.repository.DownloadRepository;
 import be.unamur.fpgen.utils.MapperUtil;
@@ -18,9 +19,14 @@ public class DatasetDownloadRepository implements DownloadRepository {
     }
 
     @Override
-    public List<InstantMessageDownload> findAllByDatasetId(final String datasetId) {
+    public List<InstantMessageDownload> findAllMessagesByDatasetId(final String datasetId) {
         return MapperUtil.mapList(
                 jpaInstantMessageDownloadProjectionRepositoryCRUD.findAllByDatasetId(datasetId),
                 InstantMessageDownloadProjectionJpaToDomainMapper::map);
+    }
+
+    @Override
+    public List<ConversationMessageDownload> findAllConversationsByDatasetId(String datasetId) {
+        return null;
     }
 }
