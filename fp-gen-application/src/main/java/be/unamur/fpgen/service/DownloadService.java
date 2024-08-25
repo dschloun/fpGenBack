@@ -1,11 +1,16 @@
 package be.unamur.fpgen.service;
 
+import be.unamur.fpgen.dataset.Dataset;
+import be.unamur.fpgen.dataset.DatasetTypeEnum;
 import be.unamur.fpgen.message.download.DocumentContent;
 import be.unamur.fpgen.message.download.InstantMessageDownload;
+import be.unamur.fpgen.repository.DatasetRepository;
+import be.unamur.fpgen.repository.DownloadRepository;
 import com.opencsv.CSVWriter;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -14,17 +19,38 @@ import java.nio.charset.StandardCharsets;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class DownloadService {
+
+    private final DatasetService datasetService;
+    private final DownloadRepository downloadRepository;
 
     public static final String TEXT_CSV_MIMETYPE = "text/csv";
     public static final String DOCUMENT_FILE_EXTENSION = ".csv";
     private static final String DATASET_FILENAME_PREFIX = "dataset_";
     public static final DateTimeFormatter DATE_DOWNLOAD_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
+    public DownloadService(final DatasetService datasetService,
+                           final DownloadRepository downloadRepository) {
+        this.datasetService = datasetService;
+        this.downloadRepository = downloadRepository;
+    }
 
-    public DocumentContent downloadInstantMessageDataset(final String datasetBusinessId, final List<InstantMessageDownload> instantMessageDownloadList){
+    @Transactional
+    public DocumentContent downloadDataset(final UUID datasetId){
+        // 1. Get dataset
+        final Dataset dataset = datasetService.getDatasetById(datasetId);
+
+        // 2. get data
+        //if (DatasetTypeEnum.INSTANT_MESSAGE.equals(dataset.getType())){
+            return downloadInstantMessageDataset(dataset.getBusinessId(), downloadRepository.findAllByDatasetId(datasetId.toString()));
+        //}
+    }
+
+
+    private DocumentContent downloadInstantMessageDataset(final String datasetBusinessId, final List<InstantMessageDownload> instantMessageDownloadList){
         final byte[] bom = new byte[] { (byte) 239, (byte) 187, (byte) 191 };
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()){
             outputStream.write(bom);
