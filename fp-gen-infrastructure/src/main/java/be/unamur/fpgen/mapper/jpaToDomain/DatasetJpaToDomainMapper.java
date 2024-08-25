@@ -44,6 +44,7 @@ public class DatasetJpaToDomainMapper {
                 .withStatistic(StatisticJpaToDomainMapper.map(entity.getStatistic()))
                 .withValidated(entity.isValidated())
                 .withLastVersion(entity.isLastVersion())
+                .withResult(!entity.getResultList().isEmpty())
                 .withOriginalDatasetId(entity.getOriginalDatasetId())
                 .build();
     }
