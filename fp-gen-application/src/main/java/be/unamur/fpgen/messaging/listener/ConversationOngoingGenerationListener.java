@@ -180,6 +180,7 @@ public class ConversationOngoingGenerationListener {
                 .withTopic(topic)
                 .withType(type)
                 .withContent(String.format("number %s of %s conversation message %s %s: from %s to %s", number, quantity, type, topic, from.getId(), to.getId()))
+                .withOrderNumber(number)
                 .build();
     }
 
@@ -190,17 +191,5 @@ public class ConversationOngoingGenerationListener {
 
         Random random = new Random();
         return random.nextInt((max - min) + 1) + min;
-    }
-
-    public Conversation createConversation(final Generation generation, final Conversation conversation, final Set<ConversationMessage> messageList) {
-        return conversationRepository.saveConversation(
-                Conversation.newBuilder()
-                        .withTopic(conversation.getTopic())
-                        .withType(conversation.getType())
-                        .withMaxInteractionNumber(conversation.getMaxInteractionNumber())
-                        .withMinInteractionNumber(conversation.getMinInteractionNumber())
-                        .withGenerationId(generation.getId())
-                        .withConversationMessageList(messageList)
-                        .build());
     }
 }
