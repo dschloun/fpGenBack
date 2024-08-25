@@ -1,5 +1,6 @@
 package be.unamur.fpgen.repository.view;
 
+import be.unamur.fpgen.entity.view.ConversationMessageDownloadProjectionJpaToDomainMapper;
 import be.unamur.fpgen.entity.view.InstantMessageDownloadProjectionJpaToDomainMapper;
 import be.unamur.fpgen.message.download.ConversationMessageDownload;
 import be.unamur.fpgen.message.download.InstantMessageDownload;
@@ -13,9 +14,12 @@ import java.util.List;
 public class DatasetDownloadRepository implements DownloadRepository {
 
     private final JpaInstantMessageDownloadProjectionRepositoryCRUD jpaInstantMessageDownloadProjectionRepositoryCRUD;
+    private final JpaConversationMessageDownloadProjectionRepositoryCRUD jpaConversationMessageDownloadProjectionRepositoryCRUD;
 
-    public DatasetDownloadRepository(final JpaInstantMessageDownloadProjectionRepositoryCRUD jpaInstantMessageDownloadProjectionRepositoryCRUD) {
+    public DatasetDownloadRepository(final JpaInstantMessageDownloadProjectionRepositoryCRUD jpaInstantMessageDownloadProjectionRepositoryCRUD,
+                                     final JpaConversationMessageDownloadProjectionRepositoryCRUD jpaConversationMessageDownloadProjectionRepositoryCRUD) {
         this.jpaInstantMessageDownloadProjectionRepositoryCRUD = jpaInstantMessageDownloadProjectionRepositoryCRUD;
+        this.jpaConversationMessageDownloadProjectionRepositoryCRUD = jpaConversationMessageDownloadProjectionRepositoryCRUD;
     }
 
     @Override
@@ -26,7 +30,9 @@ public class DatasetDownloadRepository implements DownloadRepository {
     }
 
     @Override
-    public List<ConversationMessageDownload> findAllConversationsByDatasetId(String datasetId) {
-        return null;
+    public List<ConversationMessageDownload> findAllConversationsByDatasetId(final String datasetId) {
+        return MapperUtil.mapList(
+                jpaConversationMessageDownloadProjectionRepositoryCRUD.findAllByDatasetId(datasetId),
+                ConversationMessageDownloadProjectionJpaToDomainMapper::map);
     }
 }

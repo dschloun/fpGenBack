@@ -2,9 +2,9 @@ package be.unamur.fpgen.service;
 
 import be.unamur.fpgen.dataset.Dataset;
 import be.unamur.fpgen.dataset.DatasetTypeEnum;
+import be.unamur.fpgen.message.download.ConversationMessageDownload;
 import be.unamur.fpgen.message.download.DocumentContent;
 import be.unamur.fpgen.message.download.InstantMessageDownload;
-import be.unamur.fpgen.repository.DatasetRepository;
 import be.unamur.fpgen.repository.DownloadRepository;
 import com.opencsv.CSVWriter;
 import org.springframework.core.io.ByteArrayResource;
@@ -44,9 +44,11 @@ public class DownloadService {
         final Dataset dataset = datasetService.getDatasetById(datasetId);
 
         // 2. get data
-        //if (DatasetTypeEnum.INSTANT_MESSAGE.equals(dataset.getType())){
-            return downloadInstantMessageDataset(prepareFileName(dataset), downloadRepository.findAllByDatasetId(datasetId.toString()));
-        //}
+        if (DatasetTypeEnum.INSTANT_MESSAGE.equals(dataset.getType())){
+            return downloadInstantMessageDataset(prepareFileName(dataset), downloadRepository.findAllMessagesByDatasetId(datasetId.toString()));
+        } else {
+            return downloadConversationMessageDataset(prepareFileName(dataset), downloadRepository.findAllConversationsByDatasetId(datasetId.toString()));
+        }
     }
 
 
