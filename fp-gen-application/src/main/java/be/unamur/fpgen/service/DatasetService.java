@@ -212,6 +212,7 @@ public class DatasetService {
                 .withVersion(getNewVersion(oldDataset))
                 .withLastVersion(true)
                 .withOriginalDatasetId(Objects.nonNull(oldDataset.getOriginalDatasetId()) ? oldDataset.getOriginalDatasetId() : oldDataset.getId()) // case if first new version (in the original dataset there is no originalDatasetId
+                .withStatistic(oldDataset.getStatistic())
                 .build();
 
         // 4. update old version
