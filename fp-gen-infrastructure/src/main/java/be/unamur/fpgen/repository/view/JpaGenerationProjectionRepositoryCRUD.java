@@ -29,7 +29,7 @@ public interface JpaGenerationProjectionRepositoryCRUD extends JpaRepository <Ge
                     "WHERE :kind = kind " +
                     "AND (:topic is null or topic = :topic) " +
                     "AND (:type is null or type = :type) " +
-                    "AND (:authorTrigram is null or author_trigram = :authorTrigram) " +
+                    "AND (:authorTrigram is null or lower(author_trigram) like %:authorTrigram%) " +
                     "AND (:userPrompt is null or lower(user_prompt) like %:userPrompt%) " +
                     "AND (:quantity is null or quantity <= :quantity) " +
                     "AND creation_date >= cast(:startDate as timestamp) " +

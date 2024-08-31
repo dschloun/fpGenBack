@@ -19,7 +19,7 @@ public interface JpaGenerationRepositoryCRUD extends JpaRepository<GenerationEnt
     String COMMON =
         " WHERE (:topic is null or g.topic = :topic) " +
             "AND (:type is null or g.type = :type) " +
-            "AND (:authorTrigram is null or g.author.trigram = :authorTrigram) " +
+            "AND (:authorTrigram is null or lower(g.author.trigram) like %:authorTrigram%) " +
             "AND (:userPrompt is null or lower(g.userPrompt) like %:userPrompt%) " +
             "AND (:systemPrompt is null or lower(g.systemPrompt) like %:userPrompt%) " +
             "AND (:quantity is null or g.quantity <= :quantity) " +
