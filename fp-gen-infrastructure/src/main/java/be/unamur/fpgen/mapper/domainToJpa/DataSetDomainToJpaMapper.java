@@ -69,6 +69,7 @@ public class DataSetDomainToJpaMapper {
         entity.setLastVersion(newVersion.isLastVersion());
         entity.setOriginalDatasetId(newVersion.getOriginalDatasetId());
         entity.setProject(oldVersionEntity.getProject());
+        entity.setStatistic(StatisticDomainToJpaMapper.mapForCreate(newVersion.getStatistic(), entity));
         return entity;
     }
 

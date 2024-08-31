@@ -21,4 +21,6 @@ public interface OngoingGenerationRepository {
     List<OngoingGeneration> findAllByAuthorId(UUID authorId);
 
     List<OngoingGeneration> findAllByAuthorIdAndStatusList(UUID authorId, List<OngoingGenerationStatus> statusList);
+
+    void deleteById(UUID id);
 }

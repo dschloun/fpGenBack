@@ -15,15 +15,15 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface JpaDatasetRepositoryCRUD extends JpaRepository<DatasetEntity, UUID> {
-    String COMMON = " WHERE (:authorTrigram is null or g.author.trigram = :authorTrigram) " +
-            "AND (:name is null or lower(g.name) like %:name%) " +
-            "AND (:version is null or g.version = :version) " +
-            "AND (:description is null or lower(g.description) like %:description%) " +
-            "AND (:comment is null or lower(g.comment) like %:comment%) " +
-            "AND g.creationDate >= cast(:startDate as timestamp) " +
-            "AND g.creationDate <= cast(:endDate as timestamp) ";
+    String COMMON = " WHERE (:authorTrigram is null or lower(d.author.trigram) like %:authorTrigram%) " +
+            "AND (:name is null or lower(d.name) like %:name%) " +
+            "AND (:version is null or d.version = :version) " +
+            "AND (:description is null or lower(d.description) like %:description%) " +
+            "AND (:comment is null or lower(d.comment) like %:comment%) " +
+            "AND d.creationDate >= cast(:startDate as timestamp) " +
+            "AND d.creationDate <= cast(:endDate as timestamp) ";
 
-    @Query(value = "SELECT DISTINCT g from InstantMessageDatasetEntity g " +
+    @Query(value = "SELECT DISTINCT d from InstantMessageDatasetEntity d " +
             COMMON)
     Page<InstantMessageDatasetEntity> findInstantMessagePagination(
             @Param("name") String name,
@@ -35,7 +35,7 @@ public interface JpaDatasetRepositoryCRUD extends JpaRepository<DatasetEntity, U
             @Param("endDate") OffsetDateTime endDate,
             Pageable pageable);
 
-    @Query(value = "SELECT DISTINCT g from ConversationDatasetEntity g " +
+    @Query(value = "SELECT DISTINCT d from ConversationDatasetEntity d " +
             COMMON)
     Page<ConversationDatasetEntity> findConversationPagination(
             @Param("name") String name,

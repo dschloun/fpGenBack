@@ -64,4 +64,9 @@ public class JpaOngoingGenerationRepository implements OngoingGenerationReposito
     public List<OngoingGeneration> findAllByAuthorIdAndStatusList(UUID authorId, List<OngoingGenerationStatus> statusList) {
         return null;
     }
+
+    @Override
+    public void deleteById(UUID id) {
+        jpaOngoingGenerationRepositoryCRUD.deleteById(id);
+    }
 }

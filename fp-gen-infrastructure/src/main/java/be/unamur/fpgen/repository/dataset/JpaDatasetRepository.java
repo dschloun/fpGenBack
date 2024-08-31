@@ -18,9 +18,8 @@ import be.unamur.fpgen.pagination.Pagination;
 import be.unamur.fpgen.repository.DatasetRepository;
 import be.unamur.fpgen.repository.author.JpaAuthorRepositoryCRUD;
 import be.unamur.fpgen.repository.generation.JpaConversationGenerationRepositoryCRUD;
-import be.unamur.fpgen.repository.generation.JpaGenerationRepositoryCRUD;
-import be.unamur.fpgen.repository.ongoing.JpaOngoingGenerationRepositoryCRUD;
 import be.unamur.fpgen.repository.generation.JpaInstantMessageGenerationRepositoryCRUD;
+import be.unamur.fpgen.repository.ongoing.JpaOngoingGenerationRepositoryCRUD;
 import be.unamur.fpgen.utils.MapperUtil;
 import be.unamur.fpgen.utils.StringUtil;
 import org.springframework.data.domain.Page;
@@ -203,7 +202,7 @@ public class JpaDatasetRepository implements DatasetRepository {
     }
 
     @Override
-    public void removeOngoingGenerationToDataset(Dataset dataset, OngoingGeneration generation) {
+    public void removeOngoingGenerationFromDataset(Dataset dataset) {
         final DatasetEntity datasetEntity = jpaDatasetRepositoryCRUD.findById(dataset.getId()).orElseThrow();
         datasetEntity.setOngoingGeneration(null);
         jpaDatasetRepositoryCRUD.save(datasetEntity);

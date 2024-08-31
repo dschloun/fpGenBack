@@ -44,3 +44,49 @@ databaseChangeLog:
               on d.id = dgj.dataset_id
               inner join generation g
               on dgj.generation_id = g.id;
+
+  - changeSet:
+      id: create_message_search_view
+      author: dsc
+      changes:
+        - createView:
+            viewName: message_search_view
+            replaceIfExists: true
+            encoding: UTF-8
+            selectQuery: select
+              CAST(m.id as varchar) as id,
+              CAST(dgj.dataset_id as varchar) as dataset_id,
+              m.type as type,
+              m.topic as topic,
+              m.content as content
+              from instant_message m
+              join generation g
+              on m.generation_id = g.id
+              join dataset_generation_join_table dgj
+              on g.id = dgj.generation_id
+              where m.kind = 'SIM'
+              order by dgj.dataset_id;
+
+        - createView:
+            viewName: conversation_search_view
+            replaceIfExists: true
+            encoding: UTF-8
+            selectQuery: select
+              CAST(m.id as varchar) as id,
+              CAST(m.conversation_id as varchar) as conversation_id,
+              CAST(dgj.dataset_id as varchar) as dataset_id,
+              m.order_number as order_number,
+              m.type as type,
+              m.topic as topic,
+              m.sender_id as sender_id,
+              m.receiver_id as receiver_id,
+              m.content as content
+              from instant_message m
+              join conversation c
+              on m.conversation_id = c.id
+              join generation g
+              on c.generation_id = g.id
+              join dataset_generation_join_table dgj
+              on g.id = dgj.generation_id
+              where m.kind = 'CIM'
+              order by dgj.dataset_id;

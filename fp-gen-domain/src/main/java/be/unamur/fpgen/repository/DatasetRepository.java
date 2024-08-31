@@ -39,5 +39,5 @@ public interface DatasetRepository {
 
     void addOngoingGenerationToDataset(Dataset dataset, OngoingGeneration generation);
 
-    void removeOngoingGenerationToDataset(Dataset dataset, OngoingGeneration generation);
+    void removeOngoingGenerationFromDataset(Dataset dataset);
 }

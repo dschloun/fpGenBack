@@ -47,4 +47,9 @@ public class OngoingGenerationService {
     public OngoingGeneration getOngoingGenerationById(UUID id) {
         return ongoingGenerationRepository.findById(id).orElseThrow();
     }
+
+    @Transactional
+    public void deleteOngoingGenerationById(UUID id) {
+        ongoingGenerationRepository.deleteById(id);
+    }
 }

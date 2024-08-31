@@ -26,12 +26,14 @@ public class DatasetService {
     private final AuthorService authorService;
     private final DatasetRepository datasetRepository;
     private final GenerationService generationService;
+    private final OngoingGenerationService ongoingGenerationService;
     private final ApplicationEventPublisher eventPublisher;
 
-    public DatasetService(AuthorService authorService, DatasetRepository datasetRepository, GenerationService generationService, ApplicationEventPublisher eventPublisher) {
+    public DatasetService(AuthorService authorService, DatasetRepository datasetRepository, GenerationService generationService, OngoingGenerationService ongoingGenerationService, ApplicationEventPublisher eventPublisher) {
         this.authorService = authorService;
         this.datasetRepository = datasetRepository;
         this.generationService = generationService;
+        this.ongoingGenerationService = ongoingGenerationService;
         this.eventPublisher = eventPublisher;
     }
 
@@ -121,9 +123,6 @@ public class DatasetService {
 
     @Transactional
     public DatasetsPage searchDatasetPaginate(final PagedDatasetsQuery query) {
-        //0. get author (check if author exists)
-        final Author author = query.getDatasetQuery().getAuthorTrigram() != null ? authorService.getAuthorByTrigram(query.getDatasetQuery().getAuthorTrigram()) : null;
-
         //1. get pageable
         final Pageable pageable = PageRequest
                 .of(query.getQueryPage().getPage(),
@@ -169,11 +168,11 @@ public class DatasetService {
     }
 
     @Transactional
-    public void removeOngoingGenerationFromDataset(UUID datasetId, OngoingGeneration generation) {
+    public void removeOngoingGenerationFromDataset(UUID datasetId) {
         final Dataset dataset = getDatasetById(datasetId);
         // check if dataset is already validated
         checkDatasetValidationState(dataset, false);
-        datasetRepository.removeOngoingGenerationToDataset(dataset, generation);
+        datasetRepository.removeOngoingGenerationFromDataset(dataset);
     }
 
     @Transactional
@@ -213,6 +212,7 @@ public class DatasetService {
                 .withVersion(getNewVersion(oldDataset))
                 .withLastVersion(true)
                 .withOriginalDatasetId(Objects.nonNull(oldDataset.getOriginalDatasetId()) ? oldDataset.getOriginalDatasetId() : oldDataset.getId()) // case if first new version (in the original dataset there is no originalDatasetId
+                .withStatistic(oldDataset.getStatistic())
                 .build();
 
         // 4. update old version

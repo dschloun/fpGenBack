@@ -90,3 +90,17 @@ databaseChangeLog:
                   constraints:
                     nullable: true
                     unique: false
+
+  - changeSet:
+      id: add-order-message-number-in-conversation-message
+      author: dsc
+      changes:
+          - addColumn:
+              tableName: instant_message
+              columns:
+              - column:
+                  name: order_number
+                  type: int
+                  constraints:
+                      nullable: true
+                      unique: false

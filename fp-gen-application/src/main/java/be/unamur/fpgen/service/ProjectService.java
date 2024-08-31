@@ -61,6 +61,11 @@ public class ProjectService {
                 pageable);
     }
 
+    @Transactional
+    public void deleteById(UUID projectId){
+        projectRepository.deleteById(projectId);
+    }
+
     private DatasetTypeEnum getDatasetType(final ProjectCreation projectCreation){
         if (projectCreation.getProjectType().name().equals(DatasetTypeEnum.INSTANT_MESSAGE.name())){
             return DatasetTypeEnum.INSTANT_MESSAGE;

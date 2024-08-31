@@ -25,6 +25,7 @@ public class Dataset extends BaseUuidDomain {
     private boolean validated;
     private boolean lastVersion;
     private final UUID originalDatasetId;
+    private final boolean result;
     private final Set<AbstractItem> itemList = new HashSet<>();
 
     private Dataset(Builder builder) {
@@ -42,6 +43,7 @@ public class Dataset extends BaseUuidDomain {
         validated = builder.validated;
         lastVersion = builder.lastVersion;
         originalDatasetId = builder.originalDatasetId;
+        result = builder.result;
         itemList.addAll(builder.itemList);
     }
 
@@ -109,6 +111,10 @@ public class Dataset extends BaseUuidDomain {
         return originalDatasetId;
     }
 
+    public boolean hasResult() {
+        return result;
+    }
+
     public Set<AbstractItem> getItemList() {
         return itemList;
     }
@@ -131,6 +137,7 @@ public class Dataset extends BaseUuidDomain {
         private boolean validated;
         private boolean lastVersion;
         private UUID originalDatasetId;
+        private boolean result;
         private Set<AbstractItem> itemList = new HashSet<>();
 
         private Builder() {
@@ -198,6 +205,11 @@ public class Dataset extends BaseUuidDomain {
 
         public Builder withOriginalDatasetId(UUID val) {
             originalDatasetId = val;
+            return this;
+        }
+
+        public Builder withResult(boolean val) {
+            result = val;
             return this;
         }
 

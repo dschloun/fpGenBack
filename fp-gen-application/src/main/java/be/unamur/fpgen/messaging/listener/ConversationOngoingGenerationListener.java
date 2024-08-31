@@ -23,6 +23,7 @@ import be.unamur.fpgen.utils.Alternator;
 import be.unamur.fpgen.utils.TypeCorrespondenceMapper;
 import be.unamur.model.ConversationBatchCreation;
 import be.unamur.model.GenerationCreation;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,6 +49,7 @@ public class ConversationOngoingGenerationListener {
         this.interlocutorService = interlocutorService;
     }
 
+    @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void generateConversations(final ConversationOngoingGenerationEvent event) {
@@ -116,7 +118,7 @@ public class ConversationOngoingGenerationListener {
                     ongoingGenerationService.addItemList(ongoingGeneration, results);
                     // 4.2 dataset case
                     if (Objects.nonNull(command.getDatasetId())) {
-                        datasetService.removeOngoingGenerationFromDataset(command.getDatasetId(), ongoingGeneration);
+                        //datasetService.removeOngoingGenerationFromDataset(command.getDatasetId());
                         datasetService.addGenerationListToDataset(command.getDatasetId(), results.stream()
                                 .filter(ogi -> OngoingGenerationItemStatus.SUCCESS.equals(ogi.getStatus()))
                                 .map(OngoingGenerationItem::getGenerationId)
@@ -180,6 +182,7 @@ public class ConversationOngoingGenerationListener {
                 .withTopic(topic)
                 .withType(type)
                 .withContent(String.format("number %s of %s conversation message %s %s: from %s to %s", number, quantity, type, topic, from.getId(), to.getId()))
+                .withOrderNumber(number)
                 .build();
     }
 
@@ -190,17 +193,5 @@ public class ConversationOngoingGenerationListener {
 
         Random random = new Random();
         return random.nextInt((max - min) + 1) + min;
-    }
-
-    public Conversation createConversation(final Generation generation, final Conversation conversation, final Set<ConversationMessage> messageList) {
-        return conversationRepository.saveConversation(
-                Conversation.newBuilder()
-                        .withTopic(conversation.getTopic())
-                        .withType(conversation.getType())
-                        .withMaxInteractionNumber(conversation.getMaxInteractionNumber())
-                        .withMinInteractionNumber(conversation.getMinInteractionNumber())
-                        .withGenerationId(generation.getId())
-                        .withConversationMessageList(messageList)
-                        .build());
     }
 }

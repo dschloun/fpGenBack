@@ -2,12 +2,15 @@ package be.unamur.fpgen.messaging.listener;
 
 import be.unamur.fpgen.dataset.Dataset;
 import be.unamur.fpgen.message.MessageTypeEnum;
+import be.unamur.fpgen.messaging.event.DatasetOngoingGenerationCleanEvent;
 import be.unamur.fpgen.messaging.event.StatisticComputationEvent;
 import be.unamur.fpgen.repository.StatisticRepository;
 import be.unamur.fpgen.service.DatasetService;
 import be.unamur.fpgen.statistic.MessageTypeTopicTransformer;
 import be.unamur.fpgen.statistic.Statistic;
 import be.unamur.fpgen.statistic.TypeTopicDistributionProjection;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +20,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
@@ -24,12 +28,17 @@ public class StatisticComputationListener {
 
     private final StatisticRepository statisticRepository;
     private final DatasetService datasetService;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
-    public StatisticComputationListener(StatisticRepository statisticRepository, DatasetService datasetService) {
+    public StatisticComputationListener(final StatisticRepository statisticRepository,
+                                        final DatasetService datasetService,
+                                        final ApplicationEventPublisher applicationEventPublisher) {
         this.statisticRepository = statisticRepository;
         this.datasetService = datasetService;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
+    @Async
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void computeStatistic(final StatisticComputationEvent event) {
@@ -63,6 +72,10 @@ public class StatisticComputationListener {
 
         // 9. save
         statisticRepository.save(statistic, dataset);
-    }
 
+        // 10. remove ongoing generation from dataset if exists
+        if (Objects.nonNull(dataset.getOngoingGenerationId())){
+            applicationEventPublisher.publishEvent(new DatasetOngoingGenerationCleanEvent(this, dataset.getId()));
+        }
+    }
 }

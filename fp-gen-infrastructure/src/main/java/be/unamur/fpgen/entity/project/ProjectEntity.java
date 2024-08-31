@@ -79,7 +79,7 @@ public class ProjectEntity extends BaseUuidEntity {
         this.author = author;
     }
 
-    @OneToMany(mappedBy = "project", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "project", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     public Set<DatasetEntity> getDatasetList() {
         return datasetList;
     }

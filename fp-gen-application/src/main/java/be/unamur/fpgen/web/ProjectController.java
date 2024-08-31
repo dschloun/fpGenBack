@@ -33,7 +33,8 @@ public class ProjectController implements ProjectApi {
 
     @Override
     public ResponseEntity<Void> deleteProject(UUID projectId) {
-        return ProjectApi.super.deleteProject(projectId);
+        projectService.deleteById(projectId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
