@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public interface JpaConversationDatasetRepositoryCRUD extends JpaRepository<ConversationDatasetEntity, UUID>{
     @Query(value = "SELECT DISTINCT g from ConversationDatasetEntity g" +
-            " WHERE (:authorTrigram is null or g.author.trigram = :authorTrigram)" +
+            " WHERE (:authorTrigram is null or lower(g.author.trigram) like %:authorTrigram%)" +
             " AND (:name is null or lower(g.name) like %:name%)" +
             " AND (:version is null or lower(g.version) like %:version%)" +
             " AND (:description is null or lower(g.description) like %:description%)" +
