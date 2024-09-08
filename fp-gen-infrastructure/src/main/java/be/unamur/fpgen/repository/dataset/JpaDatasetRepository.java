@@ -161,7 +161,7 @@ public class JpaDatasetRepository implements DatasetRepository {
             page = jpaDatasetRepositoryCRUD.findInstantMessagePagination(
                     StringUtil.toLowerCaseIfNotNull(name),
                     version,
-                    authorTrigram,
+                    StringUtil.toLowerCaseIfNotNull(authorTrigram),
                     StringUtil.toLowerCaseIfNotNull(description),
                     StringUtil.toLowerCaseIfNotNull(comment),
                     startDate,
@@ -172,7 +172,7 @@ public class JpaDatasetRepository implements DatasetRepository {
             page = jpaDatasetRepositoryCRUD.findConversationPagination(
                     StringUtil.toLowerCaseIfNotNull(name),
                     version,
-                    authorTrigram,
+                    StringUtil.toLowerCaseIfNotNull(authorTrigram),
                     StringUtil.toLowerCaseIfNotNull(description),
                     StringUtil.toLowerCaseIfNotNull(comment),
                     startDate,

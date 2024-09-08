@@ -77,7 +77,7 @@ public class JpaGenerationRepository implements GenerationRepository {
                     convertGenerationTypeEnumToString(type),
                     Objects.nonNull(messageTopic) ? messageTopic.name() : null,
                     Objects.nonNull(messageType) ? messageType.name() : null,
-                    authorTrigram,
+                    StringUtil.toLowerCaseIfNotNull(authorTrigram),
                     quantity,
                     StringUtil.toLowerCaseIfNotNull(userPrompt),
                     startDate,
