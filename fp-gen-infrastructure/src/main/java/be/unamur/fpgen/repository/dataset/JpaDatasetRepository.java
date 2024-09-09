@@ -66,12 +66,7 @@ public class JpaDatasetRepository implements DatasetRepository {
         // maybe it's not the old version author
         final AuthorEntity author = jpaAuthorRepositoryCRUD.getReferenceById(newVersion.getAuthor().getId());
 
-        if(DatasetTypeEnum.INSTANT_MESSAGE.equals(oldVersion.getType())) {
-            return createInstantMessageDatasetNewVersion(oldVersion, newVersion, author);
-        } else {
-            //todo
-        }
-        return createInstantMessageDatasetNewVersion(oldVersion, newVersion, author); // remove when both are made
+        return createInstantMessageDatasetNewVersion(oldVersion, newVersion, author);
     }
 
     private Dataset createInstantMessageDatasetNewVersion(Dataset oldVersion, Dataset newVersion, AuthorEntity author) {
