@@ -109,4 +109,9 @@ public class DatasetController implements DatasetApi {
 
         return new ResponseEntity<>(documentContent.getContentStream(), headers, HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<RealFakeTopicBias> checkDatasetBias(UUID datasetId) {
+        return DatasetApi.super.checkDatasetBias(datasetId);
+    }
 }
