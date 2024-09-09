@@ -2,6 +2,7 @@ package be.unamur.fpgen.web;
 
 import be.unamur.api.ProjectApi;
 import be.unamur.fpgen.mapper.domainToWeb.ProjectDomainToWebMapper;
+import be.unamur.fpgen.mapper.domainToWeb.TrainingTestDifferenceDomainToWebMapper;
 import be.unamur.fpgen.mapper.domainToWeb.pagination.ProjectPaginationDomainToWebMapper;
 import be.unamur.fpgen.mapper.webToDomain.ProjectWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.pagination.ProjectPaginationWebToDomainMapper;
@@ -56,5 +57,10 @@ public class ProjectController implements ProjectApi {
     @Override
     public ResponseEntity<Project> updateProjectData(UUID projectId, @Valid List<UUID> UUID) {
         return ProjectApi.super.updateProjectData(projectId, UUID);
+    }
+
+    @Override
+    public ResponseEntity<TrainingTestDifferences> getDatasetsTrainingTestDifferencesByProjectId(UUID projectId) {
+        return new ResponseEntity<>(TrainingTestDifferenceDomainToWebMapper.map(projectService.computeTrainingTestDifference(projectId)), HttpStatus.OK);
     }
 }
