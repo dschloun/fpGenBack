@@ -111,7 +111,7 @@ public class DatasetController implements DatasetApi {
     }
 
     @Override
-    public ResponseEntity<RealFakeTopicBias> checkDatasetBias(UUID datasetId) {
+    public ResponseEntity<List<RealFakeTopicBias>> checkDatasetBias(UUID datasetId) {
         return DatasetApi.super.checkDatasetBias(datasetId);
     }
 }
