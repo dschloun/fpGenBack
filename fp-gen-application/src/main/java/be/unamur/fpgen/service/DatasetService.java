@@ -284,7 +284,7 @@ public class DatasetService {
                 .build()));
 
         return realFakeTopicBiasList.stream()
-                .sorted(Comparator.comparing(RealFakeTopicBias::getTopic))
+                .sorted(Comparator.comparing(i -> i.getTopic().name()))
                 .toList();
     }
 
