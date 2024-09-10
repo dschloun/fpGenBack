@@ -3,16 +3,21 @@ package be.unamur.fpgen.service;
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.dataset.Dataset;
 import be.unamur.fpgen.dataset.DatasetTypeEnum;
+import be.unamur.fpgen.dataset.RealFakeTopicBias;
 import be.unamur.fpgen.dataset.pagination.DatasetsPage;
 import be.unamur.fpgen.dataset.pagination.PagedDatasetsQuery;
 import be.unamur.fpgen.exception.*;
 import be.unamur.fpgen.generation.Generation;
 import be.unamur.fpgen.generation.ongoing_generation.OngoingGeneration;
 import be.unamur.fpgen.mapper.webToDomain.DatasetWebToDomainMapper;
+import be.unamur.fpgen.message.MessageTopicEnum;
+import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.messaging.event.StatisticComputationEvent;
+import be.unamur.fpgen.project.TypeTopicDifference;
 import be.unamur.fpgen.repository.DatasetRepository;
 import be.unamur.fpgen.utils.DateUtil;
 import be.unamur.model.DatasetCreation;
+import org.apache.commons.lang3.tuple.Triple;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class DatasetService {
@@ -258,5 +264,67 @@ public class DatasetService {
         return datasetRepository.findAllDatasetVersions(Objects.nonNull(dataset.getOriginalDatasetId()) ? dataset.getOriginalDatasetId() : datasetId);
     }
 
+    @Transactional
+    public List<RealFakeTopicBias> checkDatasetBias(UUID datasetId) {
+        // 1. get dataset
+        final Dataset dataset = getDatasetById(datasetId);
 
+        // 2. get real fake topic bias
+        final List<RealFakeTopicBias> realFakeTopicBiasList = new ArrayList<>();
+
+        final Map<String, Integer> real = countReal(dataset);
+        final Map<String, Integer> fake = countFake(dataset);
+        final Map<MessageTopicEnum, Triple<Integer, Integer, Integer>> difference = computeDifference(real, fake);
+
+        difference.forEach((k, v) -> realFakeTopicBiasList.add(RealFakeTopicBias.newBuilder()
+                .withTopic(k)
+                .withRealNumber(v.getLeft())
+                .withFakeNumber(v.getMiddle())
+                .withBias(v.getRight())
+                .build()));
+
+        return realFakeTopicBiasList.stream()
+                .sorted(Comparator.comparing(RealFakeTopicBias::getTopic))
+                .toList();
+    }
+
+    private Map<String, Integer> countFake(final Dataset dataset) {
+        final List<Generation> socialEngineeringGenerationList = dataset.getItemList()
+                .stream()
+                .filter(i -> MessageTypeEnum.SOCIAL_ENGINEERING.equals(((Generation) i).getType()) || MessageTypeEnum.TROLLING.equals(((Generation)i).getType()))
+                .map(i -> (Generation) i)
+                .toList();
+
+        return countType(socialEngineeringGenerationList);
+    }
+
+    private Map<String, Integer> countReal(final Dataset dataset) {
+        final List<Generation> socialEngineeringGenerationList = dataset.getItemList()
+                .stream()
+                .filter(i -> MessageTypeEnum.GENUINE.equals(((Generation) i).getType()))
+                .map(i -> (Generation) i)
+                .toList();
+
+        return countType(socialEngineeringGenerationList);
+    }
+
+    private Map<String, Integer> countType(final List<Generation> generationList){
+        return generationList.stream()
+                .collect(Collectors.groupingBy(i -> i.getTopic().name(),
+                        Collectors.summingInt(Generation::getQuantity)));
+    }
+
+    private Map<MessageTopicEnum, Triple<Integer, Integer, Integer>> computeDifference(final Map<String, Integer> real, final Map<String, Integer> fake) {
+        final Set<String> allKeys = new HashSet<>();
+        allKeys.addAll(real.keySet());
+        allKeys.addAll(fake.keySet());
+
+        final Map<MessageTopicEnum, Triple<Integer, Integer, Integer>> difference = new HashMap<>();
+        for (String key : allKeys) {
+            int realValue = real.getOrDefault(key, 0);
+            int fakeValue = fake.getOrDefault(key, 0);
+            difference.put(MessageTopicEnum.valueOf(key), Triple.of(realValue, fakeValue, realValue - fakeValue));
+        }
+        return difference;
+    }
 }
