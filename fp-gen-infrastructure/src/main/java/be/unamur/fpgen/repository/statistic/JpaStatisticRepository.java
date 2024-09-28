@@ -30,8 +30,8 @@ public class JpaStatisticRepository implements StatisticRepository {
     }
 
     @Override
-    public Integer findTrollingTotal(UUID datasetId) {
-        return jpaStatisticRepositoryCRUD.findTrollingTotalByDatasetId(datasetId.toString()).orElse(0);
+    public Integer findHarassmentTotal(UUID datasetId) {
+        return jpaStatisticRepositoryCRUD.findHarassmentTotalByDatasetId(datasetId.toString()).orElse(0);
     }
 
     @Override

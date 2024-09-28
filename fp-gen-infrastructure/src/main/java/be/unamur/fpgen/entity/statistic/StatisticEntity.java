@@ -15,7 +15,7 @@ public class StatisticEntity extends BaseUuidEntity {
     private BigDecimal fakeRatio;
     private BigDecimal realRatio;
     private BigDecimal socialEngineerRatio;
-    private BigDecimal trollRatio;
+    private BigDecimal harasserRatio;
     private DatasetEntity dataset;
     private Set<MessageTypeTopicStatisticEntity> messageTopicStatisticList = new HashSet<>();
 
@@ -55,13 +55,13 @@ public class StatisticEntity extends BaseUuidEntity {
         this.socialEngineerRatio = socialEngineerRatio;
     }
 
-    @Column(name = "troll_ratio", nullable = false)
-    public BigDecimal getTrollRatio() {
-        return trollRatio;
+    @Column(name = "harasser_ratio", nullable = false)
+    public BigDecimal getHarasserRatio() {
+        return harasserRatio;
     }
 
-    public void setTrollRatio(BigDecimal trollRatio) {
-        this.trollRatio = trollRatio;
+    public void setHarasserRatio(BigDecimal harasserRatio) {
+        this.harasserRatio = harasserRatio;
     }
 
     @OneToOne(mappedBy = "statistic")

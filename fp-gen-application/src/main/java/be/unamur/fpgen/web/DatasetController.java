@@ -2,6 +2,7 @@ package be.unamur.fpgen.web;
 
 import be.unamur.api.DatasetApi;
 import be.unamur.fpgen.mapper.domainToWeb.DatasetDomainToWebMapper;
+import be.unamur.fpgen.mapper.domainToWeb.RealFakeTopicBiasDomainToWebMapper;
 import be.unamur.fpgen.mapper.domainToWeb.pagination.DatasetPaginationDomainToWebMapper;
 import be.unamur.fpgen.mapper.webToDomain.DatasetTypeWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.pagination.DatasetPaginationWebToDomainMapper;
@@ -108,5 +109,10 @@ public class DatasetController implements DatasetApi {
         headers.add(HttpHeaders.CONTENT_LENGTH, String.valueOf(documentContent.getLength()));
 
         return new ResponseEntity<>(documentContent.getContentStream(), headers, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<List<RealFakeTopicBias>> checkDatasetBias(UUID datasetId) {
+        return new ResponseEntity<>(MapperUtil.mapList(datasetService.checkDatasetBias(datasetId), RealFakeTopicBiasDomainToWebMapper::map), HttpStatus.OK);
     }
 }

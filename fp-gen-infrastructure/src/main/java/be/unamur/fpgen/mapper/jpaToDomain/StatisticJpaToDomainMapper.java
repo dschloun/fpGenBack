@@ -21,15 +21,15 @@ public class StatisticJpaToDomainMapper {
                 .withFakeRatio(entity.getFakeRatio())
                 .withRealRatio(entity.getRealRatio())
                 .withSocialEngineerRatio(entity.getSocialEngineerRatio())
-                .withTrollRatio(entity.getTrollRatio())
+                .withHarasserRatio(entity.getHarasserRatio())
                 .withGenuineTopicStatisticList(MapperUtil
                         .mapSet(entity.getMessageTopicStatisticList().stream().filter(e -> MessageTypeEnum.GENUINE.equals(e.getMessageType())).collect(Collectors.toSet()),
                                 MessageTopicStatisticJpaToDomainMapper::map))
                 .withSocialEngineeringTopicStatisticList(MapperUtil
                         .mapSet(entity.getMessageTopicStatisticList().stream().filter(e -> MessageTypeEnum.SOCIAL_ENGINEERING.equals(e.getMessageType())).collect(Collectors.toSet()),
                                 MessageTopicStatisticJpaToDomainMapper::map))
-                .withTrollingTopicStatisticList(MapperUtil
-                        .mapSet(entity.getMessageTopicStatisticList().stream().filter(e -> MessageTypeEnum.TROLLING.equals(e.getMessageType())).collect(Collectors.toSet()),
+                .withHarassmentTopicStatisticList(MapperUtil
+                        .mapSet(entity.getMessageTopicStatisticList().stream().filter(e -> MessageTypeEnum.HARASSMENT.equals(e.getMessageType())).collect(Collectors.toSet()),
                                 MessageTopicStatisticJpaToDomainMapper::map))
                 .build();
     }

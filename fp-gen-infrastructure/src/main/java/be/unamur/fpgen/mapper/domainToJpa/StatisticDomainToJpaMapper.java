@@ -14,14 +14,14 @@ public class StatisticDomainToJpaMapper {
         final Set<MessageTypeTopicStatistic> set = new HashSet<>();
         set.addAll(domain.getGenuineTopicStatisticList());
         set.addAll(domain.getSocialEngineeringTopicStatisticList());
-        set.addAll(domain.getTrollingTopicStatisticList());
+        set.addAll(domain.getHarassmentTopicStatisticList());
 
         final StatisticEntity entity = new StatisticEntity();
         entity.setTotal(domain.getTotal());
         entity.setFakeRatio(domain.getFakeRatio());
         entity.setRealRatio(domain.getRealRatio());
         entity.setSocialEngineerRatio(domain.getSocialEngineerRatio());
-        entity.setTrollRatio(domain.getTrollRatio());
+        entity.setHarasserRatio(domain.getHarasserRatio());
         entity.setMessageTopicStatisticList(MapperUtil
                 .mapSet(set,
                         d -> MessageTopicStatisticDomainToJpaMapper.mapForCreate(d, entity)));

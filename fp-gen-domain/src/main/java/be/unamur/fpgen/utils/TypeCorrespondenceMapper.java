@@ -13,11 +13,11 @@ public class TypeCorrespondenceMapper {
 
         static {
             enumMap.put(InterlocutorTypeEnum.GENUINE, MessageTypeEnum.GENUINE);
-            enumMap.put(InterlocutorTypeEnum.TROLL, MessageTypeEnum.TROLLING);
+            enumMap.put(InterlocutorTypeEnum.HARASSER, MessageTypeEnum.HARASSMENT);
             enumMap.put(InterlocutorTypeEnum.SOCIAL_ENGINEER, MessageTypeEnum.SOCIAL_ENGINEERING);
 
             enumMap2.put(MessageTypeEnum.GENUINE, InterlocutorTypeEnum.GENUINE);
-            enumMap2.put(MessageTypeEnum.TROLLING,InterlocutorTypeEnum.TROLL);
+            enumMap2.put(MessageTypeEnum.HARASSMENT,InterlocutorTypeEnum.HARASSER);
             enumMap2.put(MessageTypeEnum.SOCIAL_ENGINEERING, InterlocutorTypeEnum.SOCIAL_ENGINEER);
         }
 

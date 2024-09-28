@@ -12,10 +12,10 @@ public class Statistic extends BaseUuidDomain {
     private final BigDecimal fakeRatio;
     private final BigDecimal realRatio;
     private final BigDecimal socialEngineerRatio;
-    private final BigDecimal trollRatio;
+    private final BigDecimal harasserRatio;
     private final Set<MessageTypeTopicStatistic> genuineTopicStatisticList = new HashSet<>();
     private final Set<MessageTypeTopicStatistic> socialEngineeringTopicStatisticList = new HashSet<>();
-    private final Set<MessageTypeTopicStatistic> trollingTopicStatisticList = new HashSet<>();
+    private final Set<MessageTypeTopicStatistic> harassmentTopicStatisticList = new HashSet<>();
     private final Dataset dataset;
 
     private Statistic(Builder builder) {
@@ -24,10 +24,10 @@ public class Statistic extends BaseUuidDomain {
         fakeRatio = builder.fakeRatio;
         realRatio = builder.realRatio;
         socialEngineerRatio = builder.socialEngineerRatio;
-        trollRatio = builder.trollRatio;
+        harasserRatio = builder.harasserRatio;
         genuineTopicStatisticList.addAll(builder.genuineTopicStatisticList);
         socialEngineeringTopicStatisticList.addAll(builder.socialEngineeringTopicStatisticList);
-        trollingTopicStatisticList.addAll(builder.trollingTopicStatisticList);
+        harassmentTopicStatisticList.addAll(builder.harassmentTopicStatisticList);
         dataset = builder.dataset;
     }
 
@@ -47,8 +47,8 @@ public class Statistic extends BaseUuidDomain {
         return socialEngineerRatio;
     }
 
-    public BigDecimal getTrollRatio() {
-        return trollRatio;
+    public BigDecimal getHarasserRatio() {
+        return harasserRatio;
     }
 
     public Set<MessageTypeTopicStatistic> getGenuineTopicStatisticList() {
@@ -59,8 +59,8 @@ public class Statistic extends BaseUuidDomain {
         return socialEngineeringTopicStatisticList;
     }
 
-    public Set<MessageTypeTopicStatistic> getTrollingTopicStatisticList() {
-        return trollingTopicStatisticList;
+    public Set<MessageTypeTopicStatistic> getHarassmentTopicStatisticList() {
+        return harassmentTopicStatisticList;
     }
 
     public Dataset getDataset() {
@@ -76,10 +76,10 @@ public class Statistic extends BaseUuidDomain {
         private BigDecimal fakeRatio;
         private BigDecimal realRatio;
         private BigDecimal socialEngineerRatio;
-        private BigDecimal trollRatio;
+        private BigDecimal harasserRatio;
         private Set<MessageTypeTopicStatistic> genuineTopicStatisticList = new HashSet<>();
         private Set<MessageTypeTopicStatistic> socialEngineeringTopicStatisticList = new HashSet<>();
-        private Set<MessageTypeTopicStatistic> trollingTopicStatisticList = new HashSet<>();
+        private Set<MessageTypeTopicStatistic> harassmentTopicStatisticList = new HashSet<>();
         private Dataset dataset;
 
         private Builder() {
@@ -105,8 +105,8 @@ public class Statistic extends BaseUuidDomain {
             return this;
         }
 
-        public Builder withTrollRatio(BigDecimal val) {
-            trollRatio = val;
+        public Builder withHarasserRatio(BigDecimal val) {
+            harasserRatio = val;
             return this;
         }
 
@@ -120,8 +120,8 @@ public class Statistic extends BaseUuidDomain {
             return this;
         }
 
-        public Builder withTrollingTopicStatisticList(Set<MessageTypeTopicStatistic> val) {
-            trollingTopicStatisticList = val;
+        public Builder withHarassmentTopicStatisticList(Set<MessageTypeTopicStatistic> val) {
+            harassmentTopicStatisticList = val;
             return this;
         }
 

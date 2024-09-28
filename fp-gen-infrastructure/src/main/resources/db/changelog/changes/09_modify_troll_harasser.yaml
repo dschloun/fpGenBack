@@ -1,0 +1,57 @@
+databaseChangeLog:
+  - changeSet:
+      id: update_troll_harasser
+      author: dsc
+      changes:
+        - update:
+            tableName: message_type_topic_statistic
+            columns:
+              - column:
+                  name: message_type
+                  value: 'HARASSMENT'
+            where: message_type = 'TROLLING'
+
+        - update:
+            tableName: ongoing_generation_item
+            columns:
+              - column:
+                  name: message_type
+                  value: 'HARASSMENT'
+            where: message_type = 'TROLLING'
+
+        - update:
+            tableName: generation
+            columns:
+              - column:
+                  name: type
+                  value: 'HARASSMENT'
+            where: type = 'TROLLING'
+
+        - update:
+            tableName: conversation
+            columns:
+              - column:
+                  name: type
+                  value: 'HARASSMENT'
+            where: type = 'TROLLING'
+
+        - update:
+            tableName: instant_message
+            columns:
+              - column:
+                  name: type
+                  value: 'HARASSMENT'
+            where: type = 'TROLLING'
+
+        - update:
+            tableName: interlocutor
+            columns:
+              - column:
+                  name: type
+                  value: 'HARASSER'
+            where: type = 'TROLL'
+
+        - renameColumn:
+            tableName: statistic
+            oldColumnName: troll_ratio
+            newColumnName: harasser_ratio

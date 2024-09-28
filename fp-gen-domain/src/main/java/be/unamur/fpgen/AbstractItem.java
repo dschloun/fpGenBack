@@ -1,7 +1,5 @@
 package be.unamur.fpgen;
 
-import be.unamur.fpgen.BaseUuidDomain;
-
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
