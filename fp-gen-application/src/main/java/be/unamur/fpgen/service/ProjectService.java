@@ -117,10 +117,10 @@ public class ProjectService {
         final Integer socialEngineeringTest = countSocialEngineering(testDataset);
         final Integer socialEngineeringDifference = socialEngineeringTraining - socialEngineeringTest;
 
-        // 2.4 count trolling
-        final Integer trollingTraining = countTrolling(trainingDataset);
-        final Integer trollingTest = countTrolling(testDataset);
-        final Integer trollingDifference = trollingTraining - trollingTest;
+        // 2.4 count harassment
+        final Integer harassmentTraining = countHarassment(trainingDataset);
+        final Integer harassmentTest = countHarassment(testDataset);
+        final Integer harassmentDifference = harassmentTraining - harassmentTest;
 
         // 3. type topic details
         final Map<String, Integer> trainingTypeTopic = countTypeTopic(trainingDataset);
@@ -132,7 +132,7 @@ public class ProjectService {
                 .withFakeDifference(fakeDifference)
                 .withRealDifference(realDifference)
                 .withSocialEngineeringDifference(socialEngineeringDifference)
-                .withTrollingDifference(trollingDifference)
+                .withHarassmentDifference(harassmentDifference)
                 .withTypeTopicDifferences(typeTopicDifferences)
                 .build();
     }
@@ -140,7 +140,7 @@ public class ProjectService {
     private Integer countFake(final Dataset dataset){
         return dataset.getItemList()
                 .stream()
-                .filter(i -> MessageTypeEnum.SOCIAL_ENGINEERING.equals(((Generation)i).getType()) || MessageTypeEnum.TROLLING.equals(((Generation)i).getType()))
+                .filter(i -> MessageTypeEnum.SOCIAL_ENGINEERING.equals(((Generation)i).getType()) || MessageTypeEnum.HARASSMENT.equals(((Generation)i).getType()))
                 .map(i -> ((Generation)i).getQuantity())
                 .reduce(0, Integer::sum);
     }
@@ -161,10 +161,10 @@ public class ProjectService {
                 .reduce(0, Integer::sum);
     }
 
-    private Integer countTrolling(final Dataset dataset){
+    private Integer countHarassment(final Dataset dataset){
         return dataset.getItemList()
                 .stream()
-                .filter(i -> MessageTypeEnum.TROLLING.equals(((Generation)i).getType()))
+                .filter(i -> MessageTypeEnum.HARASSMENT.equals(((Generation)i).getType()))
                 .map(i -> ((Generation)i).getQuantity())
                 .reduce(0, Integer::sum);
     }

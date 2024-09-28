@@ -52,8 +52,8 @@ public class StatisticComputationListener {
         final Integer genuineTotal = statisticRepository.findGenuineTotal(event.getDatasetId());
         // 5. get social engineering total
         final Integer socialEngineeringTotal = statisticRepository.findSocialEngineeringTotal(event.getDatasetId());
-        // 6. get trolling total
-        final Integer trollingTotal = statisticRepository.findTrollingTotal(event.getDatasetId());
+        // 6. get harassment total
+        final Integer harassmentTotal = statisticRepository.findHarassmentTotal(event.getDatasetId());
         // 7. get type topic distribution
         final List<TypeTopicDistributionProjection> distribution = statisticRepository.findTypeTopicDistribution(event.getDatasetId());
 
@@ -61,13 +61,13 @@ public class StatisticComputationListener {
         final Statistic statistic = Statistic.newBuilder()
                 .withDataset(dataset)
                 .withTotal(total)
-                .withFakeRatio(BigDecimal.valueOf(trollingTotal).add(BigDecimal.valueOf(socialEngineeringTotal)).divide(BigDecimal.valueOf(total), 2, RoundingMode.HALF_UP))
+                .withFakeRatio(BigDecimal.valueOf(harassmentTotal).add(BigDecimal.valueOf(socialEngineeringTotal)).divide(BigDecimal.valueOf(total), 2, RoundingMode.HALF_UP))
                 .withRealRatio(BigDecimal.valueOf(genuineTotal).divide(BigDecimal.valueOf(total), 2, RoundingMode.HALF_UP))
                 .withSocialEngineerRatio(BigDecimal.valueOf(socialEngineeringTotal).divide(BigDecimal.valueOf(total), 2, RoundingMode.HALF_UP))
-                .withTrollRatio(BigDecimal.valueOf(trollingTotal).divide(BigDecimal.valueOf(total), 2, RoundingMode.HALF_UP))
+                .withHarasserRatio(BigDecimal.valueOf(harassmentTotal).divide(BigDecimal.valueOf(total), 2, RoundingMode.HALF_UP))
                 .withGenuineTopicStatisticList(distribution.stream().filter(d -> MessageTypeEnum.GENUINE.equals(d.getType())).map(d -> MessageTypeTopicTransformer.transform(d, genuineTotal)).collect(Collectors.toSet()))
                 .withSocialEngineeringTopicStatisticList(distribution.stream().filter(d -> MessageTypeEnum.SOCIAL_ENGINEERING.equals(d.getType())).map(d -> MessageTypeTopicTransformer.transform(d, socialEngineeringTotal)).collect(Collectors.toSet()))
-                .withTrollingTopicStatisticList(distribution.stream().filter(d -> MessageTypeEnum.TROLLING.equals(d.getType())).map(d -> MessageTypeTopicTransformer.transform(d, trollingTotal)).collect(Collectors.toSet()))
+                .withHarassmentTopicStatisticList(distribution.stream().filter(d -> MessageTypeEnum.HARASSMENT.equals(d.getType())).map(d -> MessageTypeTopicTransformer.transform(d, harassmentTotal)).collect(Collectors.toSet()))
                 .build();
 
         // 9. save

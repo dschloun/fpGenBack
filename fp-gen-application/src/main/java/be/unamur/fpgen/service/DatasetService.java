@@ -291,7 +291,7 @@ public class DatasetService {
     private Map<String, Integer> countFake(final Dataset dataset) {
         final List<Generation> socialEngineeringGenerationList = dataset.getItemList()
                 .stream()
-                .filter(i -> MessageTypeEnum.SOCIAL_ENGINEERING.equals(((Generation) i).getType()) || MessageTypeEnum.TROLLING.equals(((Generation)i).getType()))
+                .filter(i -> MessageTypeEnum.SOCIAL_ENGINEERING.equals(((Generation) i).getType()) || MessageTypeEnum.HARASSMENT.equals(((Generation)i).getType()))
                 .map(i -> (Generation) i)
                 .toList();
 

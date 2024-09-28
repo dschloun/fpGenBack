@@ -6,14 +6,14 @@ public class TrainingTestDifference {
     private final Integer fakeDifference;
     private final Integer realDifference;
     private final Integer socialEngineeringDifference;
-    private final Integer trollingDifference;
+    private final Integer harassmentDifference;
     private final Set<TypeTopicDifference> typeTopicDifferences;
 
     private TrainingTestDifference(Builder builder) {
         fakeDifference = builder.fakeDifference;
         realDifference = builder.realDifference;
         socialEngineeringDifference = builder.socialEngineeringDifference;
-        trollingDifference = builder.trollingDifference;
+        harassmentDifference = builder.harassmentDifference;
         typeTopicDifferences = builder.typeTopicDifferences;
     }
 
@@ -29,8 +29,8 @@ public class TrainingTestDifference {
         return socialEngineeringDifference;
     }
 
-    public Integer getTrollingDifference() {
-        return trollingDifference;
+    public Integer getHarassmentDifference() {
+        return harassmentDifference;
     }
 
     public Set<TypeTopicDifference> getTypeTopicDifferences() {
@@ -45,7 +45,7 @@ public class TrainingTestDifference {
         private Integer fakeDifference;
         private Integer realDifference;
         private Integer socialEngineeringDifference;
-        private Integer trollingDifference;
+        private Integer harassmentDifference;
         private Set<TypeTopicDifference> typeTopicDifferences;
 
         private Builder() {
@@ -66,8 +66,8 @@ public class TrainingTestDifference {
             return this;
         }
 
-        public Builder withTrollingDifference(Integer val) {
-            trollingDifference = val;
+        public Builder withHarassmentDifference(Integer val) {
+            harassmentDifference = val;
             return this;
         }
 

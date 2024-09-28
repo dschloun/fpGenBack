@@ -12,7 +12,7 @@ public interface StatisticRepository {
 
     Integer findTotal(UUID datasetId);
 
-    Integer findTrollingTotal(UUID datasetId);
+    Integer findHarassmentTotal(UUID datasetId);
 
     Integer findSocialEngineeringTotal(UUID datasetId);
 

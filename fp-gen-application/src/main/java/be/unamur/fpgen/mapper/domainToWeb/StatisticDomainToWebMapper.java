@@ -35,10 +35,10 @@ public class StatisticDomainToWebMapper {
                         .realRatio(domain.getRealRatio().doubleValue()))
                 .typeRatios(new TypeRatios()
                         .socialEngineeringRatio(domain.getSocialEngineerRatio().doubleValue())
-                        .trollingRatio(domain.getTrollRatio().doubleValue())
+                        .harassmentRatio(domain.getHarasserRatio().doubleValue())
                         .genuineRatio(domain.getRealRatio().doubleValue()))
                 .genuineTopicRatios(map(domain.getGenuineTopicStatisticList(), MessageTypeEnum.GENUINE))
                 .socialEngineeringTopicRatios(map(domain.getSocialEngineeringTopicStatisticList(), MessageTypeEnum.SOCIAL_ENGINEERING))
-                .trollingTopicRatios(map(domain.getTrollingTopicStatisticList(), MessageTypeEnum.TROLLING));
+                .harassmentTopicRatios(map(domain.getHarassmentTopicStatisticList(), MessageTypeEnum.HARASSMENT));
     }
 }

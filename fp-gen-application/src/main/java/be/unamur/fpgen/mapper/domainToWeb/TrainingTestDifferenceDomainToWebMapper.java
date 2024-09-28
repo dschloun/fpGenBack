@@ -20,7 +20,7 @@ public class TrainingTestDifferenceDomainToWebMapper {
                 .fakeDifference(domain.getFakeDifference())
                 .realDifference(domain.getRealDifference())
                 .socialEngineeringDifference(domain.getSocialEngineeringDifference())
-                .trollingDifference(domain.getTrollingDifference())
+                .harassmentDifference(domain.getHarassmentDifference())
                 .typeTopicDifferences(domain.getTypeTopicDifferences()
                         .stream()
                         .sorted(Comparator.comparing(be.unamur.fpgen.project.TypeTopicDifference::getKey))

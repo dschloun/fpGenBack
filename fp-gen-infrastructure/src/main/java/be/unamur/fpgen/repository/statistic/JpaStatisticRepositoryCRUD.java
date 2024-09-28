@@ -30,8 +30,8 @@ public interface JpaStatisticRepositoryCRUD extends JpaRepository<StatisticEntit
     @Query(nativeQuery = true, value = "SELECT sum(message_quantity)" +
             " FROM statistic_helper_view" +
             " WHERE dataset_id = :datasetId" +
-            " AND message_type = 'TROLLING'")
-    Optional<Integer> findTrollingTotalByDatasetId(@Param("datasetId") String datasetId);
+            " AND message_type = 'HARASSMENT'")
+    Optional<Integer> findHarassmentTotalByDatasetId(@Param("datasetId") String datasetId);
 
     @Query(nativeQuery = true, value = "SELECT sum(message_quantity)" +
             " FROM statistic_helper_view" +
