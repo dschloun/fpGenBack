@@ -33,17 +33,17 @@
             <artifactId>fp-gen-infrastructure</artifactId>
         </dependency>
 
-        <!-- Keycloak dependencies-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.keycloak</groupId>-->
-        <!--            <artifactId>keycloak-spring-boot-starter</artifactId>-->
-        <!--            <version>16.1.1</version>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.keycloak</groupId>-->
-        <!--            <artifactId>keycloak-spring-boot-adapter</artifactId>-->
-        <!--            <version>16.1.1</version>-->
-        <!--        </dependency>-->
+<!--         Keycloak dependencies-->
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-spring-boot-starter</artifactId>
+            <version>16.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-spring-boot-adapter</artifactId>
+            <version>16.1.1</version>
+        </dependency>
 
         <!-- check file extension -->
         <dependency>
