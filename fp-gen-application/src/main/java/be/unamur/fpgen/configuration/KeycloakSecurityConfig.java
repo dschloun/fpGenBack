@@ -21,11 +21,19 @@ import org.springframework.security.web.authentication.session.SessionAuthentica
 @EnableGlobalMethodSecurity(jsr250Enabled = true)
 public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 
+    private KeycloakConfigResolver keycloakConfigResolver;
+
+    @Autowired
+    public void setKeycloakConfigResolver(KeycloakConfigResolver keycloakConfigResolver) {
+        this.keycloakConfigResolver = keycloakConfigResolver;
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
-        http.cors().and().csrf().disable().authorizeRequests()
-                .anyRequest().authenticated();
+        http.cors().disable().csrf().disable()
+                .authorizeRequests()
+                .anyRequest().permitAll();
     }
 
     @Autowired

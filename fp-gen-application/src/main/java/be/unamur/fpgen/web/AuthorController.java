@@ -35,7 +35,6 @@ public class AuthorController implements AuthorApi {
         return new ResponseEntity<>(author, HttpStatus.CREATED);
     }
 
-    @RolesAllowed({"administrator"})
     @Override
     public ResponseEntity<Author> getAuthorById(UUID authorId) {
         return new ResponseEntity<>(AuthorDomainToWebMapper.map(authorService.getAuthorById(authorId)), HttpStatus.OK);
