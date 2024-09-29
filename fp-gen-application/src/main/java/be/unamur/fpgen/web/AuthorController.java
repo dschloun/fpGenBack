@@ -7,15 +7,17 @@ import be.unamur.fpgen.mapper.webToDomain.AuthorWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.pagination.AuthorPaginationWebToDomainMapper;
 import be.unamur.fpgen.service.AuthorService;
 import be.unamur.fpgen.utils.MapperUtil;
-import be.unamur.model.*;
+import be.unamur.model.Author;
+import be.unamur.model.AuthorCreation;
+import be.unamur.model.AuthorsPage;
+import be.unamur.model.PagedAuthorQuery;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.context.request.NativeWebRequest;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Controller
@@ -33,11 +35,13 @@ public class AuthorController implements AuthorApi {
         return new ResponseEntity<>(author, HttpStatus.CREATED);
     }
 
+    @RolesAllowed({"administrator"})
     @Override
     public ResponseEntity<Author> getAuthorById(UUID authorId) {
         return new ResponseEntity<>(AuthorDomainToWebMapper.map(authorService.getAuthorById(authorId)), HttpStatus.OK);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<AuthorsPage> searchAuthorsPaginate(@Valid PagedAuthorQuery pagedAuthorQuery) {
         return new ResponseEntity<>(

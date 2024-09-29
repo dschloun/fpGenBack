@@ -1,6 +1,12 @@
 volumes:
   db_data:
     driver: local
+  keycloak_data:
+    driver: local
+
+networks:
+  keycloak_network:
+    driver: bridge
 
 services:
   postgres:
@@ -13,3 +19,26 @@ services:
       POSTGRES_PASSWORD: fpgen
     ports:
       - 5432:5432
+    networks:
+      - keycloak_network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:legacy
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgres
+      DB_DATABASE: keycloak
+      DB_USER: fpgen
+      DB_SCHEMA: public
+      DB_PASSWORD: fpgen
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+      KC_PROXY: edge
+    volumes:
+      - keycloak_data:/var/lib/keycloak/data
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+    networks:
+      - keycloak_network

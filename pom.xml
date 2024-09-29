@@ -47,13 +47,13 @@
             </dependency>
 
             <!-- Keycloak dependency-->
-            <!--            <dependency>-->
-            <!--                <groupId>org.keycloak.bom</groupId>-->
-            <!--                <artifactId>keycloak-adapter-bom</artifactId>-->
-            <!--                <version>16.1.1</version>-->
-            <!--                <type>pom</type>-->
-            <!--                <scope>import</scope>-->
-            <!--            </dependency>-->
+            <dependency>
+                <groupId>org.keycloak.bom</groupId>
+                <artifactId>keycloak-adapter-bom</artifactId>
+                <version>18.0.2</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>
