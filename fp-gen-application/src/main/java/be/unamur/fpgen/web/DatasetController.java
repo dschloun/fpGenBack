@@ -49,6 +49,7 @@ public class DatasetController implements DatasetApi {
 
     @Override
     public ResponseEntity<Void> removeGenerationFromDataset(UUID datasetId, @Valid List<UUID> UUID) {
+        authorVerification.verifyAuthor(datasetId);
         datasetService.removeGenerationListFromDataset(datasetId, UUID);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -61,6 +62,7 @@ public class DatasetController implements DatasetApi {
 
     @Override
     public ResponseEntity<Void> deleteDataset(UUID datasetId) {
+        authorVerification.verifyAuthor(datasetId);
         datasetService.deleteDatasetById(datasetId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -80,6 +82,7 @@ public class DatasetController implements DatasetApi {
 
     @Override
     public ResponseEntity<Dataset> createNewDatasetVersion(UUID datasetId, @Valid UUID authorId) {
+        authorVerification.verifyAuthor(datasetId);
         final be.unamur.fpgen.dataset.Dataset dataset = datasetService.createNewVersion(datasetId, authorId);
         return new ResponseEntity<>(DatasetDomainToWebMapper.map(dataset), HttpStatus.CREATED);
     }
@@ -94,6 +97,7 @@ public class DatasetController implements DatasetApi {
 
     @Override
     public ResponseEntity<Void> validateDataset(UUID datasetId) {
+        authorVerification.verifyAuthor(datasetId);
         datasetService.validateDataset(datasetId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

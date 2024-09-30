@@ -4,6 +4,7 @@ import be.unamur.api.ResultApi;
 import be.unamur.fpgen.mapper.domainToWeb.ResultDomainToWebMapper;
 import be.unamur.fpgen.mapper.webToDomain.ResultWebToDomainMapper;
 import be.unamur.fpgen.service.ResultService;
+import be.unamur.fpgen.service.identification.AuthorVerification;
 import be.unamur.fpgen.utils.MapperUtil;
 import be.unamur.model.Result;
 import be.unamur.model.ResultCreation;
@@ -20,9 +21,11 @@ import java.util.UUID;
 public class ResultController implements ResultApi {
 
     private final ResultService resultService;
+    private final AuthorVerification authorVerification;
 
     public ResultController(ResultService resultService) {
         this.resultService = resultService;
+        this.authorVerification = AuthorVerification.newBuilder().withFindByIdService(resultService).build();
     }
 
     @Override
@@ -33,6 +36,7 @@ public class ResultController implements ResultApi {
 
     @Override
     public ResponseEntity<Void> deleteResultById(UUID resultId) {
+        authorVerification.verifyAuthor(resultId);
         resultService.deleteResult(resultId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -49,6 +53,7 @@ public class ResultController implements ResultApi {
 
     @Override
     public ResponseEntity<Result> updateResultOnDataset(UUID resultId, @Valid ResultUpdate resultUpdate) {
+        authorVerification.verifyAuthor(resultId);
         return new ResponseEntity<>(ResultDomainToWebMapper.map(
                 resultService.updateResult(resultId, ResultWebToDomainMapper.map(resultUpdate))), HttpStatus.OK);
     }

@@ -7,6 +7,7 @@ import be.unamur.fpgen.mapper.domainToWeb.pagination.ProjectPaginationDomainToWe
 import be.unamur.fpgen.mapper.webToDomain.ProjectWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.pagination.ProjectPaginationWebToDomainMapper;
 import be.unamur.fpgen.service.ProjectService;
+import be.unamur.fpgen.service.identification.AuthorVerification;
 import be.unamur.model.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +21,11 @@ import java.util.UUID;
 @Controller
 public class ProjectController implements ProjectApi {
     private final ProjectService projectService;
+    private final AuthorVerification authorVerification;
 
     public ProjectController(ProjectService projectService) {
         this.projectService = projectService;
+        this.authorVerification = AuthorVerification.newBuilder().withFindByIdService(projectService).build();
     }
 
     @Override
@@ -34,6 +37,7 @@ public class ProjectController implements ProjectApi {
 
     @Override
     public ResponseEntity<Void> deleteProject(UUID projectId) {
+        authorVerification.verifyAuthor(projectId);
         projectService.deleteById(projectId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
