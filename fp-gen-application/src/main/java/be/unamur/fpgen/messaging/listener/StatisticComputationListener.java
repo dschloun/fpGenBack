@@ -43,7 +43,7 @@ public class StatisticComputationListener {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void computeStatistic(final StatisticComputationEvent event) {
         // 1. get dataset
-        Dataset dataset = datasetService.getDatasetById(event.getDatasetId());
+        Dataset dataset = datasetService.findById(event.getDatasetId());
         // 2. delete existing statistic if present
         statisticRepository.findStatisticByDatasetId(event.getDatasetId()).ifPresent(s -> statisticRepository.deleteByDataset(dataset));
         // 3. get total

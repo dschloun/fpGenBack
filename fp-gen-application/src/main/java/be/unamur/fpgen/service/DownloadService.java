@@ -41,7 +41,7 @@ public class DownloadService {
     @Transactional
     public DocumentContent downloadDataset(final UUID datasetId){
         // 1. Get dataset
-        final Dataset dataset = datasetService.getDatasetById(datasetId);
+        final Dataset dataset = datasetService.findById(datasetId);
 
         // 2. get data
         if (DatasetTypeEnum.INSTANT_MESSAGE.equals(dataset.getType())){

@@ -2,6 +2,7 @@ package be.unamur.fpgen.generation;
 
 import be.unamur.fpgen.AbstractItem;
 import be.unamur.fpgen.BaseUuidDomain;
+import be.unamur.fpgen.HasAuthor;
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
@@ -20,7 +21,7 @@ import java.util.Set;
  * format 'trigram' ex: JDO (John Doe)
  * @specfield details: String // details of the generation
  */
-public class Generation extends AbstractItem {
+public class Generation extends AbstractItem implements HasAuthor {
     // members
     private final String generationId;
     private final GenerationTypeEnum generationType;

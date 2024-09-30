@@ -39,7 +39,7 @@ public class ResultController implements ResultApi {
 
     @Override
     public ResponseEntity<Result> getResultById(UUID resultId) {
-        return new ResponseEntity<>(ResultDomainToWebMapper.map(resultService.getResultById(resultId)), HttpStatus.OK);
+        return new ResponseEntity<>(ResultDomainToWebMapper.map(resultService.findById(resultId)), HttpStatus.OK);
     }
 
     @Override

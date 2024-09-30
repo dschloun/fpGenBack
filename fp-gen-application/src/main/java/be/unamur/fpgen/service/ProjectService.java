@@ -29,7 +29,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class ProjectService {
+public class ProjectService implements FindByIdService{
     private final AuthorService authorService;
     private final ProjectRepository projectRepository;
 

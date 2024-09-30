@@ -20,7 +20,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Service
-public class GenerationService {
+public class GenerationService implements FindByIdService{
     private final GenerationRepository generationRepository;
     private final AuthorService authorService;
 
@@ -48,7 +48,7 @@ public class GenerationService {
     }
 
     @Transactional
-    public Generation findGenerationById(final UUID generationId) {
+    public Generation findById(final UUID generationId) {
         return generationRepository.findGenerationById(generationId)
                 .orElseThrow(() -> GenerationNotFoundException.withId(generationId));
     }

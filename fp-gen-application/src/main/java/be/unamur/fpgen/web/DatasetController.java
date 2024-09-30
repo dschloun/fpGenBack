@@ -9,6 +9,7 @@ import be.unamur.fpgen.mapper.webToDomain.pagination.DatasetPaginationWebToDomai
 import be.unamur.fpgen.message.download.DocumentContent;
 import be.unamur.fpgen.service.DatasetService;
 import be.unamur.fpgen.service.DownloadService;
+import be.unamur.fpgen.service.identification.AuthorVerification;
 import be.unamur.fpgen.utils.MapperUtil;
 import be.unamur.model.*;
 import org.springframework.core.io.Resource;
@@ -30,15 +31,18 @@ public class DatasetController implements DatasetApi {
 
     private final DatasetService datasetService;
     private final DownloadService downloadService;
+    private final AuthorVerification authorVerification;
 
     public DatasetController(DatasetService datasetService,
                              DownloadService downloadService) {
         this.datasetService = datasetService;
         this.downloadService = downloadService;
+        this.authorVerification = AuthorVerification.newBuilder().withFindByIdService(datasetService).build();
     }
 
     @Override
     public ResponseEntity<Void> addGenerationListToDataset(UUID datasetId, @Valid List<UUID> UUID) {
+        authorVerification.verifyAuthor(datasetId);
         datasetService.addGenerationListToDataset(datasetId, UUID);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -63,7 +67,7 @@ public class DatasetController implements DatasetApi {
 
     @Override
     public ResponseEntity<Dataset> getDatasetById(UUID datasetId) {
-        Dataset dataset = DatasetDomainToWebMapper.map(datasetService.getDatasetById(datasetId));
+        Dataset dataset = DatasetDomainToWebMapper.map(datasetService.findById(datasetId));
 
         return new ResponseEntity<>(dataset, HttpStatus.OK);
     }
