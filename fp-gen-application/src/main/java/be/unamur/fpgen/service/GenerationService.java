@@ -33,6 +33,7 @@ public class GenerationService implements FindByIdService{
     public Generation createGeneration(final GenerationTypeEnum type, final GenerationCreation command, final UUID authorId) {
         // 0. check if author is registered
         final Author author = authorService.getAuthorById(authorId);
+        // 0.1 get prompt version
         // 1. save the generation
         return generationRepository.saveGeneration(
                 Generation.newBuilder()
@@ -42,8 +43,7 @@ public class GenerationService implements FindByIdService{
                         .withQuantity(command.getQuantity())
                         .withTopic(MessageTopicWebToDomainMapper.map(command.getTopic()))
                         .withType(MessageTypeWebToDomainMapper.map(command.getType()))
-                        .withSystemPrompt(command.getSystemPrompt())
-                        .withUserPrompt(command.getUserPrompt())
+                        .withPrompt()
                         .build());
     }
 

@@ -10,6 +10,7 @@ public class Author extends BaseUuidDomain {
     private final String function;
     private final String email;
     private final String phoneNumber;
+    private final AuthorStatusEnum status;
 
     private Author(Builder builder) {
         super(builder.getId(), builder.getCreationDate(), builder.getModificationDate());
@@ -20,6 +21,7 @@ public class Author extends BaseUuidDomain {
         function = builder.function;
         email = builder.email;
         phoneNumber = builder.phoneNumber;
+        status = builder.status;
     }
 
     public static Builder newBuilder() {
@@ -54,6 +56,10 @@ public class Author extends BaseUuidDomain {
         return phoneNumber;
     }
 
+    public AuthorStatusEnum getStatus() {
+        return status;
+    }
+
     public static final class Builder extends AbstractBaseUuidDomainBuilder<Builder>{
         private String lastName;
         private String firstName;
@@ -62,6 +68,7 @@ public class Author extends BaseUuidDomain {
         private String function;
         private String email;
         private String phoneNumber;
+        private AuthorStatusEnum status;
 
         public Builder() {
         }
@@ -98,6 +105,11 @@ public class Author extends BaseUuidDomain {
 
         public Builder withPhoneNumber(String val) {
             this.phoneNumber = val;
+            return this;
+        }
+
+        public Builder withStatus(AuthorStatusEnum val) {
+            this.status = val;
             return this;
         }
 

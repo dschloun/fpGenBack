@@ -1,0 +1,139 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-prompt-and-text-table
+      author: dsc
+      changes:
+        - createTable:
+            tableName: prompt
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    - primaryKey: true
+                    - primaryKeyName: pk_prompt
+                    - nullable: false
+                    - unique: true
+              - column:
+                  name: creation_date
+                  type: datetime
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: modification_date
+                  type: datetime
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: type
+                  type: varchar(25)
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: userPrompt
+                  type: text
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: author_id
+                  type: uuid
+                  constraints:
+                    - nullable: false
+                    - unique: false
+                    - foreignKeyName: fk_prompt_author
+                    - references: author(id)
+                    - onDelete: CASCADE
+              - column:
+                  name: systemPrompt
+                  type: text
+                  constraints:
+                    - nullable: true
+                    - unique: false
+              - column:
+                  name: version
+                  type: integer
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: status
+                  type: varchar(25)
+                  constraints:
+                    - nullable: false
+                    - unique: false
+
+        - addColumn:
+            tableName: generation
+            columns:
+              - column:
+                    name: prompt_id
+                    type: uuid
+                    constraints:
+                      - nullable: true
+                      - unique: false
+                      - foreignKeyName: fk_generation_prompt
+                      - references: prompt(id)
+                      - onDelete: CASCADE
+
+        - addColumn:
+            tableName: author
+            columns:
+              - column:
+                  name: status
+                  type: varchar(25)
+                  constraints:
+                    - nullable: true
+                    - unique: false
+              - column:
+                  name: accept_terms_of_use
+                  type: boolean
+                  constraints:
+                    - nullable: true
+                    - unique: false
+              - column:
+                  name: motivation
+                  type: text
+                  constraints:
+                    - nullable: true
+                    - unique: false
+
+        - createTable:
+            tableName: text
+            columns:
+              - column:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    - primaryKey: true
+                    - primaryKeyName: pk_text
+                    - nullable: false
+                    - unique: true
+              - column:
+                  name: creation_date
+                  type: datetime
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: modification_date
+                  type: datetime
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: title
+                  type: varchar(255)
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: content
+                  type: text
+                  constraints:
+                    - nullable: false
+                    - unique: false

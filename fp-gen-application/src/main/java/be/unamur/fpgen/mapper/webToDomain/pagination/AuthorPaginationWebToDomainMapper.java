@@ -5,6 +5,8 @@ import be.unamur.fpgen.author.pagination.PagedAuthorsQuery;
 import be.unamur.fpgen.mapper.webToDomain.PaginationWebToDomainMapper;
 import be.unamur.model.PagedAuthorQuery;
 
+import java.util.Optional;
+
 public class AuthorPaginationWebToDomainMapper {
     public static AuthorQuery map(be.unamur.model.AuthorQuery web) {
         return AuthorQuery.newBuilder()
@@ -14,6 +16,7 @@ public class AuthorPaginationWebToDomainMapper {
                 .withFunction(web.getAuthorFunction())
                 .withTrigram(web.getTrigram())
                 .withEmail(web.getEmail())
+                .withStatus(Optional.ofNullable(web.getStatus()).map(Enum::name).orElse(null))
                 .build();
     }
 

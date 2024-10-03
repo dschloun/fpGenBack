@@ -7,6 +7,7 @@ public class AuthorQuery {
     private final String function;
     private final String trigram;
     private final String email;
+    private final String status;
 
     private AuthorQuery(Builder builder) {
         lastname = builder.lastname;
@@ -15,6 +16,7 @@ public class AuthorQuery {
         function = builder.function;
         trigram = builder.trigram;
         email = builder.email;
+        status = builder.status;
     }
     public static Builder newBuilder() {
         return new Builder();
@@ -44,6 +46,10 @@ public class AuthorQuery {
         return email;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
     public static final class Builder {
         private String lastname;
         private String firstname;
@@ -51,6 +57,7 @@ public class AuthorQuery {
         private String function;
         private String trigram;
         private String email;
+        private String status;
 
         private Builder() {
         }
@@ -82,6 +89,11 @@ public class AuthorQuery {
 
         public Builder withEmail(String val) {
             email = val;
+            return this;
+        }
+
+        public Builder withStatus(String val) {
+            status = val;
             return this;
         }
 

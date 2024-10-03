@@ -12,8 +12,7 @@ public class GenerationQuery {
     private final GenerationTypeEnum generationType;
     private final MessageTypeEnum messageType;
     private final MessageTopicEnum messageTopic;
-    private final String userPrompt;
-    private final String systemPrompt;
+    private final Integer promptVersion;
     private final Integer quantity;
     private final String authorTrigram;
     private final List<UUID> notInDatasetIdList;
@@ -25,8 +24,7 @@ public class GenerationQuery {
         generationType = builder.generationType;
         messageType = builder.messageType;
         messageTopic = builder.messageTopic;
-        userPrompt = builder.userPrompt;
-        systemPrompt = builder.systemPrompt;
+        promptVersion = builder.promptVersion;
         quantity = builder.quantity;
         authorTrigram = builder.authorTrigram;
         notInDatasetIdList = builder.notInDatasetIdList;
@@ -51,12 +49,8 @@ public class GenerationQuery {
         return messageTopic;
     }
 
-    public String getUserPrompt() {
-        return userPrompt;
-    }
-
-    public String getSystemPrompt() {
-        return systemPrompt;
+    public Integer getPromptVersion() {
+        return promptVersion;
     }
 
     public Integer getQuantity() {
@@ -87,8 +81,7 @@ public class GenerationQuery {
         private GenerationTypeEnum generationType;
         private MessageTypeEnum messageType;
         private MessageTopicEnum messageTopic;
-        private String userPrompt;
-        private String systemPrompt;
+        private Integer promptVersion;
         private Integer quantity;
         private String authorTrigram;
         private List<UUID> notInDatasetIdList;
@@ -114,13 +107,8 @@ public class GenerationQuery {
             return this;
         }
 
-        public Builder withUserPrompt(String val) {
-            userPrompt = val;
-            return this;
-        }
-
-        public Builder withSystemPrompt(String val) {
-            systemPrompt = val;
+        public Builder withPromptVersion(Integer val) {
+            promptVersion = val;
             return this;
         }
 

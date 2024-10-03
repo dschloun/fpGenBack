@@ -12,5 +12,6 @@
     <include file="changes/07_add_statistic_table.yaml" relativeToChangelogFile="true"/>
     <include file="changes/08_add_result_table.yaml" relativeToChangelogFile="true"/>
     <include file="changes/09_modify_troll_harasser.yaml" relativeToChangelogFile="true"/>
+    <include file="changes/10_add_prompt_table.yaml" relativeToChangelogFile="true"/>
     <include file="changelog-quartz.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>
