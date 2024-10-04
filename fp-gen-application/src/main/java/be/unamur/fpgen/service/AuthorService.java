@@ -1,5 +1,6 @@
 package be.unamur.fpgen.service;
 
+import be.unamur.fpgen.author.AuthorStatusEnum;
 import be.unamur.fpgen.author.pagination.AuthorsPage;
 import be.unamur.fpgen.author.pagination.PagedAuthorsQuery;
 import be.unamur.fpgen.exception.AuthorAlreadyExistException;
@@ -68,5 +69,14 @@ public class AuthorService {
                 query.getAuthorQuery().getTrigram(),
                 query.getAuthorQuery().getEmail(),
                 pageable);
+    }
+
+    @Transactional
+    public void updateAuthorStatus(final UUID authorId, final AuthorStatusEnum status){
+        final Author author = authorRepository.getAuthorById(authorId).orElseThrow(() -> AuthorNotFoundException.withId(authorId));
+        author.updateStatus(status);
+        authorRepository.saveAuthor(author);
+
+        //todo contact keycloak depending of status if validate, create account, if banished delete the account
     }
 }

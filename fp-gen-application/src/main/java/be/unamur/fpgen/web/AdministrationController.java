@@ -2,8 +2,10 @@ package be.unamur.fpgen.web;
 
 import be.unamur.api.AdministrationApi;
 import be.unamur.fpgen.mapper.domainToWeb.PromptDomainToWebMapper;
+import be.unamur.fpgen.mapper.webToDomain.AuthorWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.MessageTypeWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.PromptWebToDomainMapper;
+import be.unamur.fpgen.service.AuthorService;
 import be.unamur.fpgen.service.PromptService;
 import be.unamur.fpgen.utils.MapperUtil;
 import be.unamur.model.*;
@@ -19,9 +21,11 @@ import java.util.UUID;
 @Controller
 public class AdministrationController implements AdministrationApi {
     private final PromptService promptService;
+    private final AuthorService authorService;
 
-    public AdministrationController(PromptService promptService) {
+    public AdministrationController(PromptService promptService, AuthorService authorService) {
         this.promptService = promptService;
+        this.authorService = authorService;
     }
 
     @Override
@@ -55,8 +59,9 @@ public class AdministrationController implements AdministrationApi {
     }
 
     @Override
-    public ResponseEntity<Void> updateAuthorStatus(UUID authorId, @Valid String body) {
-        return AdministrationApi.super.updateAuthorStatus(authorId, body);
+    public ResponseEntity<Void> updateAuthorStatus(UUID authorId, @NotNull @Valid AuthorStatusEnum authorStatus) {
+        authorService.updateAuthorStatus(authorId, AuthorWebToDomainMapper.map(authorStatus));
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
