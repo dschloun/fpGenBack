@@ -33,12 +33,6 @@ databaseChangeLog:
                     - nullable: false
                     - unique: false
               - column:
-                  name: userPrompt
-                  type: text
-                  constraints:
-                    - nullable: false
-                    - unique: false
-              - column:
                   name: author_id
                   type: uuid
                   constraints:
@@ -48,10 +42,16 @@ databaseChangeLog:
                     - references: author(id)
                     - onDelete: CASCADE
               - column:
-                  name: systemPrompt
+                  name: system_prompt
                   type: text
                   constraints:
                     - nullable: true
+                    - unique: false
+              - column:
+                  name: user_prompt
+                  type: text
+                  constraints:
+                    - nullable: false
                     - unique: false
               - column:
                   name: version
@@ -84,7 +84,7 @@ databaseChangeLog:
                     name: prompt_id
                     type: uuid
                     constraints:
-                      - nullable: true
+                      - nullable: false
                       - unique: false
                       - foreignKeyName: fk_generation_prompt
                       - references: prompt(id)
@@ -97,25 +97,24 @@ databaseChangeLog:
                   name: status
                   type: varchar(25)
                   constraints:
-                    - nullable: true
+                    - nullable: false
                     - unique: false
               - column:
                   name: accept_terms_of_use
                   type: boolean
                   constraints:
-                    - nullable: true
+                    - nullable: false
                     - unique: false
               - column:
                   name: motivation
                   type: text
                   constraints:
-                    - nullable: true
+                    - nullable: false
                     - unique: false
 
         - createTable:
             tableName: text
             columns:
-              - column:
               - column:
                   name: id
                   type: uuid

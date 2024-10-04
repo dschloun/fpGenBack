@@ -67,6 +67,7 @@ public class PromptEntity extends BaseUuidEntity {
     }
 
     @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
     public PromptStatusEnum getStatus() {
         return status;
     }

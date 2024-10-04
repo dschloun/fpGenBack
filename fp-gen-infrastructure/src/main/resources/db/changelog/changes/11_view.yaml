@@ -24,7 +24,7 @@ databaseChangeLog:
               on g.id = gdj.generation_id
               inner join author a
               on g.author_id = a.id
-              left join prompt p
+              inner join prompt p
               on g.prompt_id = p.id;
 
   - changeSet:
