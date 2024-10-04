@@ -22,5 +22,5 @@ public interface JpaPromptRepositoryCRUD extends JpaRepository<PromptEntity, UUI
     Optional<PromptEntity> findByDatasetTypeAndMessageTypeAndDefaultPromptIsTrue(DatasetTypeEnum datasetType, MessageTypeEnum type);
 
     @Query("SELECT MAX(p.version) FROM PromptEntity p WHERE p.datasetType = :datasetType AND p.messageType = :messageType")
-    Integer findMaxVersionByDatasetTypeAndMessageType(@Param("datasetType") DatasetTypeEnum datasetType, @Param("type") MessageTypeEnum messageType);
+    Integer findMaxVersionByDatasetTypeAndMessageType(@Param("datasetType") DatasetTypeEnum datasetType, @Param("messageType") MessageTypeEnum messageType);
 }
