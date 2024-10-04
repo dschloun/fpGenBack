@@ -15,7 +15,9 @@ public class AuthorDomainToWebMapper {
                 .authorFunction(domain.getFunction())
                 .email(domain.getEmail())
                 .phoneNumber(domain.getPhoneNumber())
-                .status(map(domain.getStatus()));
+                .status(map(domain.getStatus()))
+                .acceptTermsOfUse(domain.isAcceptTermsOfUse())
+                .motivation(domain.getMotivation());
     }
 
     public static AuthorStatusEnum map(final be.unamur.fpgen.author.AuthorStatusEnum domain) {

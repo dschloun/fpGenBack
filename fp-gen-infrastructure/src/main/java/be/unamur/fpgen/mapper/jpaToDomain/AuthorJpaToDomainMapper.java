@@ -23,6 +23,9 @@ public class AuthorJpaToDomainMapper {
                 .withFunction(entity.getFunction())
                 .withEmail(entity.getEmail())
                 .withPhoneNumber(entity.getPhoneNumber())
+                .withStatus(entity.getStatus())
+                .withAcceptTermsOfUse(entity.isAcceptTermsOfUse())
+                .withMotivation(entity.getMotivation())
                 .build();
     }
 }

@@ -10,7 +10,9 @@ public class Author extends BaseUuidDomain {
     private final String function;
     private final String email;
     private final String phoneNumber;
-    private final AuthorStatusEnum status;
+    private AuthorStatusEnum status;
+    private boolean acceptTermsOfUse;
+    private final String motivation;
 
     private Author(Builder builder) {
         super(builder.getId(), builder.getCreationDate(), builder.getModificationDate());
@@ -22,6 +24,8 @@ public class Author extends BaseUuidDomain {
         email = builder.email;
         phoneNumber = builder.phoneNumber;
         status = builder.status;
+        acceptTermsOfUse = builder.acceptTermsOfUse;
+        motivation = builder.motivation;
     }
 
     public static Builder newBuilder() {
@@ -60,6 +64,22 @@ public class Author extends BaseUuidDomain {
         return status;
     }
 
+    public boolean isAcceptTermsOfUse() {
+        return acceptTermsOfUse;
+    }
+
+    public String getMotivation() {
+        return motivation;
+    }
+
+    public void acceptTermsOfUse(){
+        acceptTermsOfUse = true;
+    }
+
+    public void updateStatus(AuthorStatusEnum status){
+        this.status = status;
+    }
+
     public static final class Builder extends AbstractBaseUuidDomainBuilder<Builder>{
         private String lastName;
         private String firstName;
@@ -69,6 +89,8 @@ public class Author extends BaseUuidDomain {
         private String email;
         private String phoneNumber;
         private AuthorStatusEnum status;
+        private boolean acceptTermsOfUse;
+        private String motivation;
 
         public Builder() {
         }
@@ -110,6 +132,16 @@ public class Author extends BaseUuidDomain {
 
         public Builder withStatus(AuthorStatusEnum val) {
             this.status = val;
+            return this;
+        }
+
+        public Builder withAcceptTermsOfUse(boolean val) {
+            this.acceptTermsOfUse = val;
+            return this;
+        }
+
+        public Builder withMotivation(String val) {
+            this.motivation = val;
             return this;
         }
 
