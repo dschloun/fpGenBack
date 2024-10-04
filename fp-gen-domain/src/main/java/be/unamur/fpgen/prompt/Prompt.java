@@ -2,10 +2,12 @@ package be.unamur.fpgen.prompt;
 
 import be.unamur.fpgen.BaseUuidDomain;
 import be.unamur.fpgen.author.Author;
+import be.unamur.fpgen.dataset.DatasetTypeEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
 
 public class Prompt extends BaseUuidDomain {
-    private final MessageTypeEnum type;
+    private final DatasetTypeEnum datasetType;
+    private final MessageTypeEnum messageType;
     private final Integer version;
     private String userPrompt;
     private String systemPrompt;
@@ -15,7 +17,8 @@ public class Prompt extends BaseUuidDomain {
 
     private Prompt(Builder builder) {
         super(builder.getId(), builder.getCreationDate(), builder.getModificationDate());
-        type = builder.type;
+        datasetType = builder.datasetType;
+        messageType = builder.messageType;
         version = builder.version;
         userPrompt = builder.userPrompt;
         systemPrompt = builder.systemPrompt;
@@ -24,8 +27,12 @@ public class Prompt extends BaseUuidDomain {
         defaultPrompt = builder.defaultPrompt;
     }
 
-    public MessageTypeEnum getType() {
-        return type;
+    public DatasetTypeEnum getDatasetType() {
+        return datasetType;
+    }
+
+    public MessageTypeEnum getMessageType() {
+        return messageType;
     }
 
     public Integer getVersion() {
@@ -65,7 +72,8 @@ public class Prompt extends BaseUuidDomain {
     }
 
     public static final class Builder extends AbstractBaseUuidDomainBuilder<Builder>{
-        private MessageTypeEnum type;
+        private DatasetTypeEnum datasetType;
+        private MessageTypeEnum messageType;
         private Integer version;
         private String userPrompt;
         private String systemPrompt;
@@ -76,8 +84,13 @@ public class Prompt extends BaseUuidDomain {
         private Builder() {
         }
 
-        public Builder withType(MessageTypeEnum val) {
-            type = val;
+        public Builder withDatasetType(DatasetTypeEnum val) {
+            datasetType = val;
+            return this;
+        }
+
+        public Builder withMessageType(MessageTypeEnum val) {
+            messageType = val;
             return this;
         }
 

@@ -1,5 +1,6 @@
 package be.unamur.fpgen.repository.prompt;
 
+import be.unamur.fpgen.dataset.DatasetTypeEnum;
 import be.unamur.fpgen.entity.PromptEntity;
 import be.unamur.fpgen.entity.author.AuthorEntity;
 import be.unamur.fpgen.mapper.domainToJpa.PromptDomainToJpaMapper;
@@ -32,8 +33,8 @@ public class JpaPromptRepository implements PromptRepository {
     }
 
     @Override
-    public Optional<Prompt> findPromptByTypeAndVersion(MessageTypeEnum type, Integer version) {
-        return jpaPromptRepositoryCRUD.findByTypeAndVersion(type, version).map(PromptJpaToDomainMapper::map);
+    public Optional<Prompt> findPromptByDatasetTypeAndMessageTypeAndVersion(DatasetTypeEnum datasetType, MessageTypeEnum messageType, Integer version) {
+        return jpaPromptRepositoryCRUD.findByDatasetTypeAndMessageTypeAndVersion(datasetType, messageType, version).map(PromptJpaToDomainMapper::map);
     }
 
     @Override
@@ -48,7 +49,7 @@ public class JpaPromptRepository implements PromptRepository {
     public void setDefaultPrompt(UUID id) {
         final Optional<PromptEntity> promptEntity = jpaPromptRepositoryCRUD.findById(id);
         promptEntity.ifPresent(p-> {
-            jpaPromptRepositoryCRUD.findByTypeAndDefaultPromptIsTrue(p.getType()).ifPresent(entity -> {
+            jpaPromptRepositoryCRUD.findByDatasetTypeAndMessageTypeAndDefaultPromptIsTrue(p.getDatasetType(), p.getMessageType()).ifPresent(entity -> {
                 entity.setDefaultPrompt(false);
                 jpaPromptRepositoryCRUD.save(entity);
             });
@@ -58,13 +59,13 @@ public class JpaPromptRepository implements PromptRepository {
     }
 
     @Override
-    public Optional<Prompt> getDefaultPrompt(MessageTypeEnum type) {
-        return jpaPromptRepositoryCRUD.findByTypeAndDefaultPromptIsTrue(type).map(PromptJpaToDomainMapper::map);
+    public Optional<Prompt> getDefaultPrompt(DatasetTypeEnum datasetType, MessageTypeEnum messageType) {
+        return jpaPromptRepositoryCRUD.findByDatasetTypeAndMessageTypeAndDefaultPromptIsTrue(datasetType, messageType).map(PromptJpaToDomainMapper::map);
     }
 
     @Override
-    public List<Prompt> findAllPromptsByType(MessageTypeEnum type, PromptStatusEnum status) {
-        return MapperUtil.mapList(jpaPromptRepositoryCRUD.findAllByTypeAndStatusOrderByVersionAsc(type, status), PromptJpaToDomainMapper::map);
+    public List<Prompt> ByDatasetTypeAndMessageType(DatasetTypeEnum datasetType, MessageTypeEnum messageType, PromptStatusEnum status) {
+        return MapperUtil.mapList(jpaPromptRepositoryCRUD.findAllByDatasetTypeAndMessageTypeAndStatusOrderByVersionAsc(datasetType, messageType, status), PromptJpaToDomainMapper::map);
     }
 
     @Override
@@ -88,7 +89,7 @@ public class JpaPromptRepository implements PromptRepository {
     }
 
     @Override
-    public Integer findMaxVersionByType(MessageTypeEnum type) {
-        return jpaPromptRepositoryCRUD.findMaxVersionByType(type);
+    public Integer findMaxVersionByDatasetTypeAndMessageType(DatasetTypeEnum datasetType, MessageTypeEnum messageType) {
+        return jpaPromptRepositoryCRUD.findMaxVersionByDatasetTypeAndMessageType(datasetType, messageType);
     }
 }

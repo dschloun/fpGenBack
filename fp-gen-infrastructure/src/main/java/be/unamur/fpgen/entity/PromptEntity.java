@@ -1,5 +1,6 @@
 package be.unamur.fpgen.entity;
 
+import be.unamur.fpgen.dataset.DatasetTypeEnum;
 import be.unamur.fpgen.entity.author.AuthorEntity;
 import be.unamur.fpgen.entity.base.BaseUuidEntity;
 import be.unamur.fpgen.message.MessageTypeEnum;
@@ -10,7 +11,8 @@ import javax.persistence.*;
 @Entity
 @Table(name = "prompt")
 public class PromptEntity extends BaseUuidEntity {
-    private MessageTypeEnum type;
+    private DatasetTypeEnum datasetType;
+    private MessageTypeEnum messageType;
     private Integer version;
     private String userPrompt;
     private String systemPrompt;
@@ -18,14 +20,24 @@ public class PromptEntity extends BaseUuidEntity {
     private PromptStatusEnum status;
     private boolean defaultPrompt;
 
-    @Column(name = "type", nullable = false)
+    @Column(name = "dataset_type", nullable = false)
     @Enumerated(EnumType.STRING)
-    public MessageTypeEnum getType() {
-        return type;
+    public DatasetTypeEnum getDatasetType() {
+        return datasetType;
     }
 
-    public void setType(MessageTypeEnum type) {
-        this.type = type;
+    public void setDatasetType(DatasetTypeEnum datasetType) {
+        this.datasetType = datasetType;
+    }
+
+    @Column(name = "message_type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    public MessageTypeEnum getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(MessageTypeEnum type) {
+        this.messageType = type;
     }
 
     @Column(name = "version", nullable = false)

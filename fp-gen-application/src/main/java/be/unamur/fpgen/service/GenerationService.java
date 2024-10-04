@@ -1,6 +1,7 @@
 package be.unamur.fpgen.service;
 
 import be.unamur.fpgen.author.Author;
+import be.unamur.fpgen.dataset.DatasetTypeEnum;
 import be.unamur.fpgen.exception.GenerationNotFoundException;
 import be.unamur.fpgen.generation.Generation;
 import be.unamur.fpgen.generation.GenerationTypeEnum;
@@ -35,18 +36,18 @@ public class GenerationService implements FindByIdService{
     }
 
     @Transactional
-    public Generation createGeneration(final GenerationTypeEnum type, final GenerationCreation command, final UUID authorId) {
+    public Generation createGeneration(final GenerationTypeEnum generationType, final GenerationCreation command, final UUID authorId) {
         // 0. check if author is registered
         final Author author = authorService.getAuthorById(authorId);
         // 0.1 get prompt version
-        final Prompt prompt = Optional.ofNullable(command.getPromptVersion()).map(v -> promptService.findByTypeAndVersion(MessageTypeEnum.valueOf(type.name()), v))
-                .orElse(promptService.getDefaultPrompt(MessageTypeEnum.valueOf(type.name()))); //todo check what append if version do not exist...
+        final Prompt prompt = Optional.ofNullable(command.getPromptVersion()).map(v -> promptService.findByDatasetTypeAndMessageTypeAndVersion(DatasetTypeEnum.valueOf(generationType.name()), MessageTypeEnum.valueOf(command.getType().name()), v))
+                .orElse(promptService.getDefaultPrompt(DatasetTypeEnum.valueOf(generationType.name()), MessageTypeEnum.valueOf(command.getType().name()))); //todo check what append if version do not exist...
         // 1. save the generation
         return generationRepository.saveGeneration(
                 Generation.newBuilder()
-                        .withGenerationType(type)
+                        .withGenerationType(generationType)
                         .withAuthor(author)
-                        .withDetails(getDetail(command, type.toString()))
+                        .withDetails(getDetail(command, command.getType().name()))
                         .withQuantity(command.getQuantity())
                         .withTopic(MessageTopicWebToDomainMapper.map(command.getTopic()))
                         .withType(MessageTypeWebToDomainMapper.map(command.getType()))

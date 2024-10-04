@@ -17,6 +17,8 @@ public class AuthorWebToDomainMapper {
                 .withFunction(authorCreation.getAuthorFunction())
                 .withEmail(authorCreation.getEmail())
                 .withPhoneNumber(authorCreation.getPhoneNumber())
+                .withMotivation(authorCreation.getMotivation())
+                .withAcceptTermsOfUse(authorCreation.getAcceptTermsOfUse())
                 .build();
     }
 

@@ -27,7 +27,13 @@ databaseChangeLog:
                     - nullable: false
                     - unique: false
               - column:
-                  name: type
+                  name: dataset_type
+                  type: varchar(25)
+                  constraints:
+                    - nullable: false
+                    - unique: false
+              - column:
+                  name: message_type
                   type: varchar(25)
                   constraints:
                     - nullable: false
@@ -74,8 +80,8 @@ databaseChangeLog:
 
         - addUniqueConstraint:
             tableName: prompt
-            columnNames: type, version
-            constraintName: uk_prompt_type_version
+            columnNames: dataset_type, message_type, version
+            constraintName: uk_prompt_datatset_type_message_type_version
 
         - addColumn:
             tableName: generation

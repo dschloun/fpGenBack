@@ -35,6 +35,7 @@ public class AuthorService {
         if(authorRepository.existsAuthorByTrigram(author.getTrigram())){
             throw AuthorAlreadyExistException.withTrigram(author.getTrigram());
         }
+        author.updateStatus(AuthorStatusEnum.WAITING_VERIFICATION);
         return authorRepository.saveAuthor(author);
     }
 

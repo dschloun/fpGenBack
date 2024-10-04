@@ -1,7 +1,9 @@
 package be.unamur.fpgen.service;
 
 import be.unamur.fpgen.author.Author;
+import be.unamur.fpgen.dataset.DatasetTypeEnum;
 import be.unamur.fpgen.exception.PromptNotFoundException;
+import be.unamur.fpgen.mapper.webToDomain.DatasetTypeWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.MessageTypeWebToDomainMapper;
 import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.prompt.Prompt;
@@ -28,13 +30,14 @@ public class PromptService {
     @Transactional
     public Prompt create(final PromptCreation command) {
         final Author author = authorService.getAuthorById(command.getAuthorId());
-        final Integer lastVersion = findMaxVersionByType(MessageTypeWebToDomainMapper.map(command.getCategory()));
+        final Integer lastVersion = findMaxVersionByDatasetTypeAndMessageType(DatasetTypeWebToDomainMapper.map(command.getDatasetType()), MessageTypeWebToDomainMapper.map(command.getMessageType()));
 
         return promptRepository.savePrompt(
                 Prompt.newBuilder()
                         .withAuthor(author)
                         .withDefaultPrompt(false)
-                        .withType(MessageTypeWebToDomainMapper.map(command.getCategory()))
+                        .withDatasetType(DatasetTypeWebToDomainMapper.map(command.getDatasetType()))
+                        .withMessageType(MessageTypeWebToDomainMapper.map(command.getMessageType()))
                         .withStatus(PromptStatusEnum.WAITING_ANALYSE)
                         .withUserPrompt(command.getUserContent())
                         .withSystemPrompt(command.getSystemContent())
@@ -63,8 +66,8 @@ public class PromptService {
     }
 
     @Transactional
-    public Prompt getDefaultPrompt(final MessageTypeEnum type) {
-        return promptRepository.getDefaultPrompt(type)
+    public Prompt getDefaultPrompt(final DatasetTypeEnum datasetType, final MessageTypeEnum messageType) {
+        return promptRepository.getDefaultPrompt(datasetType, messageType)
                 .orElseThrow(PromptNotFoundException::withDefaultPrompt);
     }
 
@@ -74,8 +77,8 @@ public class PromptService {
     }
 
     @Transactional
-    public List<Prompt> findAllPromptsByType(MessageTypeEnum type) {
-        return promptRepository.findAllPromptsByType(type, PromptStatusEnum.VALIDATED);
+    public List<Prompt> findAllPromptsByDatasetTypeAndMessageType(DatasetTypeEnum datasetType, MessageTypeEnum messageType) {
+        return promptRepository.ByDatasetTypeAndMessageType(datasetType, messageType, PromptStatusEnum.VALIDATED);
     }
 
     @Transactional
@@ -84,13 +87,13 @@ public class PromptService {
     }
 
     @Transactional
-    public Integer findMaxVersionByType(MessageTypeEnum type) {
-        return promptRepository.findMaxVersionByType(type);
+    public Integer findMaxVersionByDatasetTypeAndMessageType(DatasetTypeEnum datasetType, MessageTypeEnum messageType) {
+        return promptRepository.findMaxVersionByDatasetTypeAndMessageType(datasetType, messageType);
     }
 
     @Transactional
-    public Prompt findByTypeAndVersion(MessageTypeEnum type, Integer version) {
-        return promptRepository.findPromptByTypeAndVersion(type, version)
-                .orElseThrow(() -> PromptNotFoundException.withTypeAndVersion(type.name(), version));
+    public Prompt findByDatasetTypeAndMessageTypeAndVersion(DatasetTypeEnum datasetType, MessageTypeEnum messageType, Integer version) {
+        return promptRepository.findPromptByDatasetTypeAndMessageTypeAndVersion(datasetType, messageType, version)
+                .orElseThrow(() -> PromptNotFoundException.withTypeAndVersion(messageType.name(), version));
     }
 }

@@ -15,7 +15,8 @@ public class PromptDomainToJpaMapper {
         entity.setId(domain.getId());
         entity.setCreationDate(domain.getCreationDate());
         entity.setModificationDate(domain.getModificationDate());
-        entity.setType(domain.getType());
+        entity.setDatasetType(domain.getDatasetType());
+        entity.setMessageType(domain.getMessageType());
         entity.setVersion(domain.getVersion());
         entity.setUserPrompt(domain.getUserPrompt());
         entity.setSystemPrompt(domain.getSystemPrompt());
@@ -34,7 +35,8 @@ public class PromptDomainToJpaMapper {
         entity.setId(domain.getId());
         entity.setCreationDate(domain.getCreationDate());
         entity.setModificationDate(domain.getModificationDate());
-        entity.setType(domain.getType());
+        entity.setDatasetType(domain.getDatasetType());
+        entity.setMessageType(domain.getMessageType());
         entity.setVersion(domain.getVersion());
         entity.setUserPrompt(domain.getUserPrompt());
         entity.setSystemPrompt(domain.getSystemPrompt());
