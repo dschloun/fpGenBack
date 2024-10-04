@@ -7,8 +7,8 @@ import be.unamur.fpgen.message.MessageTypeEnum;
 public class Prompt extends BaseUuidDomain {
     private final MessageTypeEnum type;
     private final Integer version;
-    private final String userPrompt;
-    private final String systemPrompt;
+    private String userPrompt;
+    private String systemPrompt;
     private final Author author;
     private final PromptStatusEnum status;
     private final boolean defaultPrompt;
@@ -54,6 +54,14 @@ public class Prompt extends BaseUuidDomain {
 
     public static Builder newBuilder() {
         return new Builder();
+    }
+
+    public void updateSystemPrompt(final String content){
+        this.systemPrompt = content;
+    }
+
+    public void updateUserPrompt(final String content){
+        this.userPrompt = content;
     }
 
     public static final class Builder extends AbstractBaseUuidDomainBuilder<Builder>{

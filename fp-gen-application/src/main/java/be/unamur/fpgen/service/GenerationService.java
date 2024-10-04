@@ -8,6 +8,7 @@ import be.unamur.fpgen.generation.pagination.GenerationPage;
 import be.unamur.fpgen.generation.pagination.PagedGenerationsQuery;
 import be.unamur.fpgen.mapper.webToDomain.MessageTopicWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.MessageTypeWebToDomainMapper;
+import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.prompt.Prompt;
 import be.unamur.fpgen.repository.GenerationRepository;
 import be.unamur.fpgen.utils.DateUtil;
@@ -18,16 +19,19 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class GenerationService implements FindByIdService{
     private final GenerationRepository generationRepository;
     private final AuthorService authorService;
+    private final PromptService promptService;
 
-    public GenerationService(final GenerationRepository generationRepository, AuthorService authorService) {
+    public GenerationService(final GenerationRepository generationRepository, AuthorService authorService, PromptService promptService) {
         this.generationRepository = generationRepository;
         this.authorService = authorService;
+        this.promptService = promptService;
     }
 
     @Transactional
@@ -35,7 +39,8 @@ public class GenerationService implements FindByIdService{
         // 0. check if author is registered
         final Author author = authorService.getAuthorById(authorId);
         // 0.1 get prompt version
-        final Prompt prompt
+        final Prompt prompt = Optional.ofNullable(command.getPromptVersion()).map(v -> promptService.findByTypeAndVersion(MessageTypeEnum.valueOf(type.name()), v))
+                .orElse(promptService.getDefaultPrompt(MessageTypeEnum.valueOf(type.name()))); //todo check what append if version do not exist...
         // 1. save the generation
         return generationRepository.saveGeneration(
                 Generation.newBuilder()
@@ -45,7 +50,7 @@ public class GenerationService implements FindByIdService{
                         .withQuantity(command.getQuantity())
                         .withTopic(MessageTopicWebToDomainMapper.map(command.getTopic()))
                         .withType(MessageTypeWebToDomainMapper.map(command.getType()))
-                        .withPrompt()
+                        .withPrompt(prompt)
                         .build());
     }
 

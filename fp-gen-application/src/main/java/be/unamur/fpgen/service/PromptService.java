@@ -8,6 +8,7 @@ import be.unamur.fpgen.prompt.Prompt;
 import be.unamur.fpgen.prompt.PromptStatusEnum;
 import be.unamur.fpgen.repository.PromptRepository;
 import be.unamur.model.PromptCreation;
+import be.unamur.model.PromptUpdate;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -25,9 +26,9 @@ public class PromptService {
     }
 
     @Transactional
-    public Prompt create(final PromptCreation command, final UUID authorId) {
-        final Author author = authorService.getAuthorById(authorId);
-        final Integer lastVersion = promptRepository.findMaxVersionByType(MessageTypeWebToDomainMapper.map(command.getCategory()));
+    public Prompt create(final PromptCreation command) {
+        final Author author = authorService.getAuthorById(command.getAuthorId());
+        final Integer lastVersion = findMaxVersionByType(MessageTypeWebToDomainMapper.map(command.getCategory()));
 
         return promptRepository.savePrompt(
                 Prompt.newBuilder()
@@ -48,23 +49,22 @@ public class PromptService {
     }
 
     @Transactional
-    public Prompt createPrompt(final Prompt prompt) {
-        return promptRepository.savePrompt(prompt);
+    public Prompt updatePrompt(final UUID id, final PromptUpdate promptUpdate) {
+        final Prompt currentPrompt = findById(id);
+        currentPrompt.updateSystemPrompt(promptUpdate.getSystemContent());
+        currentPrompt.updateUserPrompt(promptUpdate.getUserContent());
+        promptRepository.updatePrompt(currentPrompt);
+        return currentPrompt;
     }
 
     @Transactional
-    public void updatePrompt(final Prompt prompt) {
-        promptRepository.updatePrompt(prompt);
+    public void setDefaultPrompt(UUID id) {
+        promptRepository.setDefaultPrompt(id);
     }
 
     @Transactional
-    public void setDefaultPrompt(UUID id, boolean state) {
-        promptRepository.setDefaultPrompt(id, state);
-    }
-
-    @Transactional
-    public Prompt getDefaultPrompt() {
-        return promptRepository.getDefaultPrompt()
+    public Prompt getDefaultPrompt(final MessageTypeEnum type) {
+        return promptRepository.getDefaultPrompt(type)
                 .orElseThrow(PromptNotFoundException::withDefaultPrompt);
     }
 
@@ -74,8 +74,8 @@ public class PromptService {
     }
 
     @Transactional
-    public List<Prompt> findAllPromptsByType(MessageTypeEnum type, PromptStatusEnum status) {
-        return promptRepository.findAllPromptsByType(type, status);
+    public List<Prompt> findAllPromptsByType(MessageTypeEnum type) {
+        return promptRepository.findAllPromptsByType(type, PromptStatusEnum.VALIDATED);
     }
 
     @Transactional

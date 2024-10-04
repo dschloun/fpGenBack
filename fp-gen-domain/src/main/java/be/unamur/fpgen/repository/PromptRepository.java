@@ -15,9 +15,9 @@ public interface PromptRepository {
 
     void updatePromptStatus(UUID id, PromptStatusEnum status);
 
-    void setDefaultPrompt(UUID id, boolean state);
+    void setDefaultPrompt(UUID id);
 
-    Optional<Prompt> getDefaultPrompt();
+    Optional<Prompt> getDefaultPrompt(MessageTypeEnum type);
 
     List<Prompt> findAllPromptsByType(MessageTypeEnum type, PromptStatusEnum status);
 

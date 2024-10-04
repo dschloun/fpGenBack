@@ -12,13 +12,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface JpaPromptRepositoryCRUD extends JpaRepository<PromptEntity, UUID> {
-    List<PromptEntity> findAllByTypeAndStatusEquals(MessageTypeEnum type, PromptStatusEnum status);
+    List<PromptEntity> findAllByTypeAndStatusOrderByVersionAsc(MessageTypeEnum type, PromptStatusEnum status);
 
-    List<PromptEntity> findAllByStatus(PromptStatusEnum status);
+    List<PromptEntity> findAllByStatusOrderByVersionAsc(PromptStatusEnum status);
 
     Optional<PromptEntity> findByTypeAndVersion(MessageTypeEnum type, Integer version);
 
-    Optional<PromptEntity> findByDefaultPromptIsTrue();
+    Optional<PromptEntity> findByTypeAndDefaultPromptIsTrue(MessageTypeEnum type);
 
     @Query("SELECT MAX(p.version) FROM PromptEntity p WHERE p.type = :type")
     Integer findMaxVersionByType(@Param("type") MessageTypeEnum type);

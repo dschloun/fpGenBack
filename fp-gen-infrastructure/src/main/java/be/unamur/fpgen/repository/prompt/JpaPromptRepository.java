@@ -1,5 +1,6 @@
 package be.unamur.fpgen.repository.prompt;
 
+import be.unamur.fpgen.entity.PromptEntity;
 import be.unamur.fpgen.entity.author.AuthorEntity;
 import be.unamur.fpgen.mapper.domainToJpa.PromptDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.PromptJpaToDomainMapper;
@@ -32,7 +33,7 @@ public class JpaPromptRepository implements PromptRepository {
 
     @Override
     public Optional<Prompt> findPromptByTypeAndVersion(MessageTypeEnum type, Integer version) {
-        return jpaPromptRepositoryCRUD.findByVersion(version).map(PromptJpaToDomainMapper::map);
+        return jpaPromptRepositoryCRUD.findByTypeAndVersion(type, version).map(PromptJpaToDomainMapper::map);
     }
 
     @Override
@@ -44,26 +45,31 @@ public class JpaPromptRepository implements PromptRepository {
     }
 
     @Override
-    public void setDefaultPrompt(UUID id, boolean state) {
-        jpaPromptRepositoryCRUD.findById(id).ifPresent(entity -> {
-            entity.setDefaultPrompt(state);
-            jpaPromptRepositoryCRUD.save(entity);
+    public void setDefaultPrompt(UUID id) {
+        final Optional<PromptEntity> promptEntity = jpaPromptRepositoryCRUD.findById(id);
+        promptEntity.ifPresent(p-> {
+            jpaPromptRepositoryCRUD.findByTypeAndDefaultPromptIsTrue(p.getType()).ifPresent(entity -> {
+                entity.setDefaultPrompt(false);
+                jpaPromptRepositoryCRUD.save(entity);
+            });
+            p.setDefaultPrompt(true);
+            jpaPromptRepositoryCRUD.save(p);
         });
     }
 
     @Override
-    public Optional<Prompt> getDefaultPrompt() {
-        return jpaPromptRepositoryCRUD.findByDefaultPromptIsTrue().map(PromptJpaToDomainMapper::map);
+    public Optional<Prompt> getDefaultPrompt(MessageTypeEnum type) {
+        return jpaPromptRepositoryCRUD.findByTypeAndDefaultPromptIsTrue(type).map(PromptJpaToDomainMapper::map);
     }
 
     @Override
     public List<Prompt> findAllPromptsByType(MessageTypeEnum type, PromptStatusEnum status) {
-        return MapperUtil.mapList(jpaPromptRepositoryCRUD.findAllByTypeAndStatusEquals(type, status), PromptJpaToDomainMapper::map);
+        return MapperUtil.mapList(jpaPromptRepositoryCRUD.findAllByTypeAndStatusOrderByVersionAsc(type, status), PromptJpaToDomainMapper::map);
     }
 
     @Override
     public List<Prompt> findAllPromptsByStatus(PromptStatusEnum status) {
-        return MapperUtil.mapList(jpaPromptRepositoryCRUD.findAllByStatus( status), PromptJpaToDomainMapper::map);
+        return MapperUtil.mapList(jpaPromptRepositoryCRUD.findAllByStatusOrderByVersionAsc( status), PromptJpaToDomainMapper::map);
     }
 
     @Override
