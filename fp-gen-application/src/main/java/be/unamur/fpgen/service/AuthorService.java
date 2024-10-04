@@ -76,7 +76,7 @@ public class AuthorService {
     public void updateAuthorStatus(final UUID authorId, final AuthorStatusEnum status){
         final Author author = authorRepository.getAuthorById(authorId).orElseThrow(() -> AuthorNotFoundException.withId(authorId));
         author.updateStatus(status);
-        authorRepository.saveAuthor(author);
+        authorRepository.updateAuthor(author);
 
         //todo contact keycloak depending of status if validate, create account, if banished delete the account
     }

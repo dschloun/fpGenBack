@@ -2,6 +2,7 @@ package be.unamur.fpgen.repository.author;
 
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.author.pagination.AuthorsPage;
+import be.unamur.fpgen.entity.author.AuthorEntity;
 import be.unamur.fpgen.mapper.domainToJpa.AuthorDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.AuthorJpaToDomainMapper;
 import be.unamur.fpgen.pagination.Pagination;
@@ -32,8 +33,12 @@ public class JpaAuthorRepository implements AuthorRepository {
     }
 
     @Override
-    public Author updateAuthor(Author author) {
-        return null;
+    public void updateAuthor(Author author) {
+        jpaAuthorRepositoryCRUD.findById(author.getId())
+                .ifPresent(a -> {
+                    a.setStatus(author.getStatus());
+                    jpaAuthorRepositoryCRUD.save(a);
+                });
     }
 
     @Override

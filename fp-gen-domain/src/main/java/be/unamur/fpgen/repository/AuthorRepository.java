@@ -12,7 +12,7 @@ public interface AuthorRepository {
 
     Author saveAuthor(Author author);
 
-    Author updateAuthor(Author author);
+    void updateAuthor(Author author);
 
     Optional<Author> getAuthorById(UUID authorId);
 
