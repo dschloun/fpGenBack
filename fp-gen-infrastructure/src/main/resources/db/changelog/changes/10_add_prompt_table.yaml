@@ -58,7 +58,7 @@ databaseChangeLog:
                   type: integer
                   constraints:
                     - nullable: false
-                    - unique: false
+                    - unique: true
               - column:
                   name: status
                   type: varchar(25)

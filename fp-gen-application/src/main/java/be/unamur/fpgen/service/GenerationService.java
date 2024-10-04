@@ -8,6 +8,7 @@ import be.unamur.fpgen.generation.pagination.GenerationPage;
 import be.unamur.fpgen.generation.pagination.PagedGenerationsQuery;
 import be.unamur.fpgen.mapper.webToDomain.MessageTopicWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.MessageTypeWebToDomainMapper;
+import be.unamur.fpgen.prompt.Prompt;
 import be.unamur.fpgen.repository.GenerationRepository;
 import be.unamur.fpgen.utils.DateUtil;
 import be.unamur.model.GenerationCreation;
@@ -34,6 +35,7 @@ public class GenerationService implements FindByIdService{
         // 0. check if author is registered
         final Author author = authorService.getAuthorById(authorId);
         // 0.1 get prompt version
+        final Prompt prompt
         // 1. save the generation
         return generationRepository.saveGeneration(
                 Generation.newBuilder()
