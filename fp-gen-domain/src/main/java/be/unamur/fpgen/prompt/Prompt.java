@@ -11,6 +11,7 @@ public class Prompt extends BaseUuidDomain {
     private final String systemPrompt;
     private final Author author;
     private final PromptStatusEnum status;
+    private final boolean defaultPrompt;
 
     private Prompt(Builder builder) {
         super(builder.getId(), builder.getCreationDate(), builder.getModificationDate());
@@ -20,6 +21,7 @@ public class Prompt extends BaseUuidDomain {
         systemPrompt = builder.systemPrompt;
         author = builder.author;
         status = builder.status;
+        defaultPrompt = builder.defaultPrompt;
     }
 
     public MessageTypeEnum getType() {
@@ -46,6 +48,9 @@ public class Prompt extends BaseUuidDomain {
         return status;
     }
 
+    public boolean isDefaultPrompt() {
+        return defaultPrompt;
+    }
 
     public static Builder newBuilder() {
         return new Builder();
@@ -58,6 +63,7 @@ public class Prompt extends BaseUuidDomain {
         private String systemPrompt;
         private Author author;
         private PromptStatusEnum status;
+        private boolean defaultPrompt;
 
         private Builder() {
         }
@@ -89,6 +95,11 @@ public class Prompt extends BaseUuidDomain {
 
         public Builder withStatus(PromptStatusEnum val) {
             status = val;
+            return this;
+        }
+
+        public Builder withDefaultPrompt(boolean val) {
+            defaultPrompt = val;
             return this;
         }
 

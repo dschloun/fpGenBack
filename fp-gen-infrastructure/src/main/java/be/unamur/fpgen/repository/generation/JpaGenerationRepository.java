@@ -1,6 +1,7 @@
 package be.unamur.fpgen.repository.generation;
 
 import be.unamur.fpgen.entity.view.GenerationProjectionJpaToDomainMapper;
+import be.unamur.fpgen.repository.prompt.JpaPromptRepositoryCRUD;
 import be.unamur.fpgen.repository.view.JpaGenerationProjectionRepositoryCRUD;
 import be.unamur.fpgen.generation.Generation;
 import be.unamur.fpgen.generation.GenerationTypeEnum;
@@ -29,19 +30,24 @@ public class JpaGenerationRepository implements GenerationRepository {
     private final JpaGenerationRepositoryCRUD jpaGenerationRepositoryCRUD;
     private final JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD;
     private final JpaGenerationProjectionRepositoryCRUD jpaGenerationProjectionRepositoryCRUD;
+    private final JpaPromptRepositoryCRUD jpaPromptRepositoryCRUD;
 
     public JpaGenerationRepository(JpaGenerationRepositoryCRUD jpaGenerationRepositoryCRUD,
                                    JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD,
-                                   JpaGenerationProjectionRepositoryCRUD jpaGenerationProjectionRepositoryCRUD) {
+                                   JpaGenerationProjectionRepositoryCRUD jpaGenerationProjectionRepositoryCRUD,
+                                   JpaPromptRepositoryCRUD jpaPromptRepositoryCRUD) {
         this.jpaGenerationRepositoryCRUD = jpaGenerationRepositoryCRUD;
         this.jpaAuthorRepositoryCRUD = jpaAuthorRepositoryCRUD;
         this.jpaGenerationProjectionRepositoryCRUD = jpaGenerationProjectionRepositoryCRUD;
+        this.jpaPromptRepositoryCRUD = jpaPromptRepositoryCRUD;
     }
 
     @Override
     public Generation saveGeneration(Generation generation) {
         return Optional.of(jpaGenerationRepositoryCRUD.save(GenerationDomainToJpaMapper
-                        .mapForCreate(generation, jpaAuthorRepositoryCRUD.getReferenceById(generation.getAuthor().getId()))))
+                        .mapForCreate(generation,
+                                jpaAuthorRepositoryCRUD.getReferenceById(generation.getAuthor().getId()),
+                                jpaPromptRepositoryCRUD.getReferenceById(generation.getPrompt().getId()))))
                 .map(GenerationJpaToDomainMapper::map)
                 .orElseThrow();
     }
@@ -62,8 +68,7 @@ public class JpaGenerationRepository implements GenerationRepository {
             GenerationTypeEnum type,
             MessageTypeEnum messageType,
             MessageTopicEnum messageTopic,
-            String userPrompt,
-            String systemPrompt,
+            Integer promptVersion,
             Integer quantity,
             String authorTrigram,
             OffsetDateTime startDate,
@@ -79,7 +84,7 @@ public class JpaGenerationRepository implements GenerationRepository {
                     Objects.nonNull(messageType) ? messageType.name() : null,
                     StringUtil.toLowerCaseIfNotNull(authorTrigram),
                     quantity,
-                    StringUtil.toLowerCaseIfNotNull(userPrompt),
+                    promptVersion,
                     startDate,
                     endDate,
                     MapperUtil.mapList(datasetIdList, UUID::toString),

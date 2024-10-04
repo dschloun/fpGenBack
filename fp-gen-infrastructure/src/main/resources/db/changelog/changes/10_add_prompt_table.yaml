@@ -65,6 +65,12 @@ databaseChangeLog:
                   constraints:
                     - nullable: false
                     - unique: false
+              - column:
+                  name: default_prompt
+                  type: boolean
+                  constraints:
+                    - nullable: false
+                    - unique: false
 
         - addColumn:
             tableName: generation

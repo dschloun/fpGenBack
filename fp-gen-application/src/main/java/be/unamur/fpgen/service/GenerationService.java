@@ -64,8 +64,7 @@ public class GenerationService implements FindByIdService{
                 query.getGenerationQuery().getGenerationType(),
                 query.getGenerationQuery().getMessageType(),
                 query.getGenerationQuery().getMessageTopic(),
-                query.getGenerationQuery().getUserPrompt(),
-                query.getGenerationQuery().getSystemPrompt(),
+                query.getGenerationQuery().getPromptVersion(),
                 query.getGenerationQuery().getQuantity(),
                 query.getGenerationQuery().getAuthorTrigram(),
                 DateUtil.ifNullReturnOldDate(query.getGenerationQuery().getStartDate()),
@@ -81,8 +80,8 @@ public class GenerationService implements FindByIdService{
     }
 
     private String getDetail(final GenerationCreation command, final String generationType) {
-        return String.format("generate %s set with Topic: %s, Type: %s, Quantity: %s,}\n System prompt: %s \n User prompt: %s",
-                generationType, command.getTopic(), command.getType(), command.getQuantity(), command.getSystemPrompt(), command.getUserPrompt());
+        return String.format("generate %s set with Topic: %s, Type: %s, Quantity: %s,}\n prompt version: %s",
+                generationType, command.getTopic(), command.getType(), command.getQuantity(), command.getPromptVersion());
     }
 
     private boolean inDatasetSearch(final PagedGenerationsQuery query) {

@@ -1,5 +1,6 @@
 package be.unamur.fpgen.entity.generation;
 
+import be.unamur.fpgen.entity.PromptEntity;
 import be.unamur.fpgen.entity.author.AuthorEntity;
 import be.unamur.fpgen.entity.base.BaseUuidEntity;
 import be.unamur.fpgen.message.MessageTopicEnum;
@@ -23,8 +24,7 @@ public class GenerationEntity extends BaseUuidEntity {
     private Integer quantity;
     private MessageTypeEnum type;
     private MessageTopicEnum topic;
-    private String systemPrompt;
-    private String userPrompt;
+    private PromptEntity prompt;
 
     // getters and setters
     @Column(name = "generation_id", nullable = false)
@@ -84,21 +84,13 @@ public class GenerationEntity extends BaseUuidEntity {
         this.topic = topic;
     }
 
-    @Column(name = "system_prompt")
-    public String getSystemPrompt() {
-        return systemPrompt;
+    @ManyToOne
+    @JoinColumn(name = "prompt_id")
+    public PromptEntity getPrompt() {
+        return prompt;
     }
 
-    public void setSystemPrompt(String systemPrompt) {
-        this.systemPrompt = systemPrompt;
-    }
-
-    @Column(name = "user_prompt")
-    public String getUserPrompt() {
-        return userPrompt;
-    }
-
-    public void setUserPrompt(String userPrompt) {
-        this.userPrompt = userPrompt;
+    public void setPrompt(PromptEntity prompt) {
+        this.prompt = prompt;
     }
 }

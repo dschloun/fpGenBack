@@ -9,7 +9,7 @@ public interface GenerationProjection {
     String getGenerationId();
     String getAuthorTrigram();
     String getDetails();
-    String getUserPrompt();
+    Integer getPromptVersion();
     String getTopic();
     String getType();
     Integer getQuantity();

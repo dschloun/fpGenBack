@@ -14,7 +14,7 @@ databaseChangeLog:
               g.generation_id as generation_id,
               a.trigram as author_trigram,
               g.details as details,
-              g.user_prompt as user_prompt,
+              p.version as prompt_version,
               g.topic as topic,
               g.type as type,
               g.quantity as quantity,
@@ -23,7 +23,9 @@ databaseChangeLog:
               left join dataset_generation_join_table gdj 
               on g.id = gdj.generation_id
               inner join author a
-              on g.author_id = a.id;
+              on g.author_id = a.id
+              left join prompt p
+              on g.prompt_id = p.id;
 
   - changeSet:
       id: create_statistic_helper_view

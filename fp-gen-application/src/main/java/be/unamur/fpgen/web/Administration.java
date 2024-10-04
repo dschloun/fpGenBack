@@ -1,14 +1,12 @@
 package be.unamur.fpgen.web;
 
 import be.unamur.api.AdministrationApi;
-import be.unamur.model.MessageType;
-import be.unamur.model.Prompt;
-import be.unamur.model.PromptCreation;
-import be.unamur.model.PromptUpdate;
+import be.unamur.model.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.UUID;
 
@@ -45,7 +43,7 @@ public class Administration implements AdministrationApi {
     }
 
     @Override
-    public ResponseEntity<Void> validatePrompt(UUID promptId) {
-        return AdministrationApi.super.validatePrompt(promptId);
+    public ResponseEntity<Void> updatePromptStatus(UUID promptId, @NotNull @Valid PromptStatusEnum promptStatus) {
+        return AdministrationApi.super.updatePromptStatus(promptId, promptStatus);
     }
 }

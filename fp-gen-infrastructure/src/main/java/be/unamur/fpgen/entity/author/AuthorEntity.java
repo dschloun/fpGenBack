@@ -1,5 +1,6 @@
 package be.unamur.fpgen.entity.author;
 
+import be.unamur.fpgen.entity.PromptEntity;
 import be.unamur.fpgen.entity.base.BaseUuidEntity;
 import be.unamur.fpgen.entity.dataset.DatasetEntity;
 import be.unamur.fpgen.entity.generation.GenerationEntity;
@@ -31,6 +32,7 @@ public class AuthorEntity extends BaseUuidEntity {
     private Set<ProjectEntity> projectList;
     private Set<OngoingGenerationEntity> ongoingGenerationList;
     private Set<ResultEntity> resultList = new HashSet<>();
+    private Set<PromptEntity> promptList = new HashSet<>();
 
     // getters and setters
 
@@ -140,5 +142,14 @@ public class AuthorEntity extends BaseUuidEntity {
 
     public void setResultList(Set<ResultEntity> resultList) {
         this.resultList = resultList;
+    }
+
+    @OneToMany(mappedBy = "author", orphanRemoval = true)
+    public Set<PromptEntity> getPromptList() {
+        return promptList;
+    }
+
+    public void setPromptList(Set<PromptEntity> promptList) {
+        this.promptList = promptList;
     }
 }
