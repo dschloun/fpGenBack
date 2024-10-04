@@ -45,7 +45,7 @@ public class AdministrationController implements AdministrationApi {
     }
 
     @Override
-    public ResponseEntity<List<Prompt>> getPromptsByStatus(@NotNull @Valid PromptStatusEnum promptStatus, @NotNull @Valid DatasetType datasetType) {
+    public ResponseEntity<List<Prompt>> getPromptsByStatus(@NotNull @Valid PromptStatusEnum promptStatus) {
         return new ResponseEntity<>(MapperUtil.mapList(promptService.findAllPromptsByStatus(PromptWebToDomainMapper.map(promptStatus)),
                 PromptDomainToWebMapper::map), HttpStatus.OK);
     }
