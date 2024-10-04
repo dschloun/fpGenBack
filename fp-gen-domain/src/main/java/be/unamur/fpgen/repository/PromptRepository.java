@@ -11,7 +11,7 @@ import java.util.UUID;
 public interface PromptRepository {
     Optional<Prompt> findPromptBId(UUID id);
 
-    Optional<Prompt> findPromptByVersion(Integer version);
+    Optional<Prompt> findPromptByTypeAndVersion(MessageTypeEnum type, Integer version);
 
     void updatePromptStatus(UUID id, PromptStatusEnum status);
 
@@ -26,4 +26,6 @@ public interface PromptRepository {
     Prompt savePrompt(Prompt prompt);
 
     void updatePrompt(Prompt prompt);
+
+    Integer findMaxVersionByType(MessageTypeEnum type);
 }

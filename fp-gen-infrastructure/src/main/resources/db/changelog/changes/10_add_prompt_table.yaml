@@ -58,7 +58,7 @@ databaseChangeLog:
                   type: integer
                   constraints:
                     - nullable: false
-                    - unique: true
+                    - unique: false
               - column:
                   name: status
                   type: varchar(25)
@@ -71,6 +71,11 @@ databaseChangeLog:
                   constraints:
                     - nullable: false
                     - unique: false
+
+        - addUniqueConstraint:
+            tableName: prompt
+            columnNames: type, version
+            constraintName: uk_prompt_type_version
 
         - addColumn:
             tableName: generation

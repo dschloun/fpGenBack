@@ -31,7 +31,7 @@ public class JpaPromptRepository implements PromptRepository {
     }
 
     @Override
-    public Optional<Prompt> findPromptByVersion(Integer version) {
+    public Optional<Prompt> findPromptByTypeAndVersion(MessageTypeEnum type, Integer version) {
         return jpaPromptRepositoryCRUD.findByVersion(version).map(PromptJpaToDomainMapper::map);
     }
 
@@ -79,5 +79,10 @@ public class JpaPromptRepository implements PromptRepository {
             entity.setSystemPrompt(prompt.getSystemPrompt());
             jpaPromptRepositoryCRUD.save(entity);
         });
+    }
+
+    @Override
+    public Integer findMaxVersionByType(MessageTypeEnum type) {
+        return jpaPromptRepositoryCRUD.findMaxVersionByType(type);
     }
 }
