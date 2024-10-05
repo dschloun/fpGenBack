@@ -76,13 +76,16 @@ public class AuthorService {
 
     @Transactional
     public void updateAuthorStatus(final UUID authorId, final AuthorStatusEnum status){
+        // 1. get author
         final Author author = authorRepository.getAuthorById(authorId).orElseThrow(() -> AuthorNotFoundException.withId(authorId));
-        author.updateStatus(status);
-        authorRepository.updateAuthor(author);
 
-        if(AuthorStatusEnum.VERIFIED.equals(status)) {
-            //todo contact keycloak depending of status if validate, create account, if banished delete the account
+        // 2. create user keycloak
+        if (AuthorStatusEnum.VERIFIED.equals(status)) {
             keycloakService.createUser(author);
         }
+
+        // 3. update author status
+        author.updateStatus(status);
+        authorRepository.updateAuthor(author);
     }
 }
