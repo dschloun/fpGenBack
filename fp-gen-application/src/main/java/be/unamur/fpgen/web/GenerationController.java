@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.util.UUID;
 
@@ -24,6 +25,7 @@ public class GenerationController implements GenerationApi {
         this.authorVerification = AuthorVerification.newBuilder().withFindByIdService(generationService).build();
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<GenerationsPage> searchGenerationsPaginate(@Valid PagedGenerationQuery pagedGenerationQuery) {
         GenerationsPage generationsPage = GenerationPaginationDomainToWebMapper.map(
