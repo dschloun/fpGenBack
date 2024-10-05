@@ -2,6 +2,7 @@ package be.unamur.fpgen.context;
 
 public class UserContext {
 
+    private String token;
     private String email;
     private String trigram;
 
@@ -19,5 +20,13 @@ public class UserContext {
 
     public void setTrigram(String trigram) {
         this.trigram = trigram;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

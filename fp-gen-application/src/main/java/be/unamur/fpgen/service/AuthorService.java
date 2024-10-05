@@ -19,9 +19,11 @@ import java.util.UUID;
 public class AuthorService {
 
     private final AuthorRepository authorRepository;
+    private final KeycloakService keycloakService;
 
-    public AuthorService(AuthorRepository authorRepository) {
+    public AuthorService(AuthorRepository authorRepository, KeycloakService keycloakService) {
         this.authorRepository = authorRepository;
+        this.keycloakService = keycloakService;
     }
 
 
@@ -78,6 +80,9 @@ public class AuthorService {
         author.updateStatus(status);
         authorRepository.updateAuthor(author);
 
-        //todo contact keycloak depending of status if validate, create account, if banished delete the account
+        if(AuthorStatusEnum.VERIFIED.equals(status)) {
+            //todo contact keycloak depending of status if validate, create account, if banished delete the account
+            keycloakService.createUser(author);
+        }
     }
 }

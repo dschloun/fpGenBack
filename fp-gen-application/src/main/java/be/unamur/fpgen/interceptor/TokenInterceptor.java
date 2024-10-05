@@ -28,6 +28,7 @@ public class TokenInterceptor implements HandlerInterceptor {
                 UserContext userContext = UserContextHolder.getContext();
                 userContext.setEmail(email);
                 userContext.setTrigram((String) payloadMap.get("preferred_username"));
+                userContext.setToken(token);
             }
         }
         return true;
