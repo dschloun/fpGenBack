@@ -80,7 +80,7 @@ public class AuthorService {
         final Author author = authorRepository.getAuthorById(authorId).orElseThrow(() -> AuthorNotFoundException.withId(authorId));
 
         // 2. create user keycloak
-        if (AuthorStatusEnum.VERIFIED.equals(status)) {
+        if (!AuthorStatusEnum.VERIFIED.equals(author.getStatus()) && AuthorStatusEnum.VERIFIED.equals(status)) {
             keycloakService.createUser(author);
         }
 
