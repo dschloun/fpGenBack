@@ -1,6 +1,7 @@
 package be.unamur.fpgen.repository;
 
 import be.unamur.fpgen.author.Author;
+import be.unamur.fpgen.author.AuthorStatusEnum;
 import be.unamur.fpgen.author.pagination.AuthorsPage;
 import org.springframework.data.domain.Pageable;
 
@@ -21,5 +22,5 @@ public interface AuthorRepository {
     boolean existsAuthorByTrigram(String trigram);
 
     List<Author> getAuthors();
-    AuthorsPage findAuthorsPagination(String lastName, String firstName, String organization, String function, String trigram, String email, Pageable pageable);
+    AuthorsPage findAuthorsPagination(String lastName, String firstName, String organization, String function, String trigram, String email, AuthorStatusEnum status, Pageable pageable);
 }

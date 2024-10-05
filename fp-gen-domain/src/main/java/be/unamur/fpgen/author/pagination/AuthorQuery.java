@@ -1,5 +1,7 @@
 package be.unamur.fpgen.author.pagination;
 
+import be.unamur.fpgen.author.AuthorStatusEnum;
+
 public class AuthorQuery {
     private final String lastname;
     private final String firstname;
@@ -7,7 +9,7 @@ public class AuthorQuery {
     private final String function;
     private final String trigram;
     private final String email;
-    private final String status;
+    private final AuthorStatusEnum status;
 
     private AuthorQuery(Builder builder) {
         lastname = builder.lastname;
@@ -46,7 +48,7 @@ public class AuthorQuery {
         return email;
     }
 
-    public String getStatus() {
+    public AuthorStatusEnum getStatus() {
         return status;
     }
 
@@ -57,7 +59,7 @@ public class AuthorQuery {
         private String function;
         private String trigram;
         private String email;
-        private String status;
+        private AuthorStatusEnum status;
 
         private Builder() {
         }
@@ -92,7 +94,7 @@ public class AuthorQuery {
             return this;
         }
 
-        public Builder withStatus(String val) {
+        public Builder withStatus(AuthorStatusEnum val) {
             status = val;
             return this;
         }

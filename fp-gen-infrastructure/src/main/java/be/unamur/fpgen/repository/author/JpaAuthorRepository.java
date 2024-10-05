@@ -1,6 +1,7 @@
 package be.unamur.fpgen.repository.author;
 
 import be.unamur.fpgen.author.Author;
+import be.unamur.fpgen.author.AuthorStatusEnum;
 import be.unamur.fpgen.author.pagination.AuthorsPage;
 import be.unamur.fpgen.entity.author.AuthorEntity;
 import be.unamur.fpgen.mapper.domainToJpa.AuthorDomainToJpaMapper;
@@ -65,7 +66,7 @@ public class JpaAuthorRepository implements AuthorRepository {
     }
 
     @Override
-    public AuthorsPage findAuthorsPagination(String lastName, String firstName, String organization, String function, String trigram, String email, Pageable pageable) {
+    public AuthorsPage findAuthorsPagination(String lastName, String firstName, String organization, String function, String trigram, String email, AuthorStatusEnum status, Pageable pageable) {
         // 1. get in Page format
         Page<Author> page = jpaAuthorRepositoryCRUD.findPagination(
                 StringUtil.toLowerCaseIfNotNull(lastName),
@@ -74,6 +75,7 @@ public class JpaAuthorRepository implements AuthorRepository {
                 StringUtil.toLowerCaseIfNotNull(function),
                 StringUtil.toLowerCaseIfNotNull(trigram),
                 StringUtil.toLowerCaseIfNotNull(email),
+                status,
                 pageable
         ).map(AuthorJpaToDomainMapper::map);
 

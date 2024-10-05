@@ -2,6 +2,7 @@ package be.unamur.fpgen.mapper.webToDomain.pagination;
 
 import be.unamur.fpgen.author.pagination.AuthorQuery;
 import be.unamur.fpgen.author.pagination.PagedAuthorsQuery;
+import be.unamur.fpgen.mapper.webToDomain.AuthorWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.PaginationWebToDomainMapper;
 import be.unamur.model.PagedAuthorQuery;
 
@@ -16,7 +17,7 @@ public class AuthorPaginationWebToDomainMapper {
                 .withFunction(web.getAuthorFunction())
                 .withTrigram(web.getTrigram())
                 .withEmail(web.getEmail())
-                .withStatus(Optional.ofNullable(web.getStatus()).map(Enum::name).orElse(null))
+                .withStatus(AuthorWebToDomainMapper.map(web.getStatus()))
                 .build();
     }
 

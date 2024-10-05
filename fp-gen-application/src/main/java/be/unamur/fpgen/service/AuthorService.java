@@ -71,6 +71,7 @@ public class AuthorService {
                 query.getAuthorQuery().getFunction(),
                 query.getAuthorQuery().getTrigram(),
                 query.getAuthorQuery().getEmail(),
+                query.getAuthorQuery().getStatus(),
                 pageable);
     }
 
