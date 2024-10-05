@@ -10,11 +10,10 @@ import be.unamur.model.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.context.request.NativeWebRequest;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Controller
@@ -26,12 +25,14 @@ public class ConversationController implements ConversationApi {
         this.conversationService = conversationService;
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Void> generateConversations(@Valid ConversationBatchCreation conversationBatchCreation) {
         conversationService.generateConversationList(conversationBatchCreation);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Conversation> getConversationById(UUID conversationId) {
         return new ResponseEntity<>(
@@ -46,6 +47,7 @@ public class ConversationController implements ConversationApi {
         return ConversationApi.super.getConversationInstantMessageListById(conversationId, conversationInstantMessageId);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<ConversationsPage> searchConversationsPaginate(@Valid PagedConversationQuery pagedConversationQuery) {
         return new ResponseEntity<>(ConversationPaginationDomainToWebMapper.map(
@@ -54,12 +56,14 @@ public class ConversationController implements ConversationApi {
                 , HttpStatus.OK);
     }
 
+    @RolesAllowed({"administrator"})
     @Override
     public ResponseEntity<Void> deleteConversationById(UUID conversationId) {
         conversationService.deleteConversationById(conversationId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<List<Conversation>> findConversationByGenerationId(UUID generationId) {
         return new ResponseEntity<>(MapperUtil.mapList(conversationService.findAllByGenerationId(generationId), ConversationDomainToWebMapper::map), HttpStatus.OK);

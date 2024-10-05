@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
@@ -28,12 +29,14 @@ public class ResultController implements ResultApi {
         this.authorVerification = AuthorVerification.newBuilder().withFindByIdService(resultService).build();
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Result> addResultOnDataset(UUID datasetId, @Valid ResultCreation resultCreation) {
         return new ResponseEntity<>(ResultDomainToWebMapper.map(
                 resultService.saveResult(datasetId, ResultWebToDomainMapper.map(resultCreation))), HttpStatus.OK);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Void> deleteResultById(UUID resultId) {
         authorVerification.verifyAuthor(resultId);
@@ -41,16 +44,19 @@ public class ResultController implements ResultApi {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Result> getResultById(UUID resultId) {
         return new ResponseEntity<>(ResultDomainToWebMapper.map(resultService.findById(resultId)), HttpStatus.OK);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<List<Result>> getResultListDataset(UUID datasetId) {
         return new ResponseEntity<>(MapperUtil.mapList(resultService.findAllResultByDatasetId(datasetId), ResultDomainToWebMapper::map), HttpStatus.OK);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Result> updateResultOnDataset(UUID resultId, @Valid ResultUpdate resultUpdate) {
         authorVerification.verifyAuthor(resultId);

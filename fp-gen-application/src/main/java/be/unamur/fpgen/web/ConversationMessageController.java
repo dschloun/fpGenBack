@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 @Controller
@@ -20,6 +21,7 @@ public class ConversationMessageController implements ConversationMessageApi {
         this.conversationMessageService = conversationMessageService;
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<ConversationMessagesPage> searchConversationMessagesPaginate(@Valid PagedConversationMessageQuery pagedConversationMessageQuery) {
         return new ResponseEntity<>(ConversationMessagePaginationDomainToWebMapper.map(

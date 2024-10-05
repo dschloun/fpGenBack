@@ -36,6 +36,7 @@ public class GenerationController implements GenerationApi {
         return new ResponseEntity<>(generationsPage, HttpStatus.OK);
     }
 
+    @RolesAllowed({"administrator"})
     @Override
     public ResponseEntity<Void> deleteGenerationById(UUID generationId) {
         authorVerification.verifyAuthor(generationId);

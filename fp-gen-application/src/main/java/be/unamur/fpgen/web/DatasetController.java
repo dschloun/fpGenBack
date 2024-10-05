@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.MultiValueMap;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -40,6 +41,7 @@ public class DatasetController implements DatasetApi {
         this.authorVerification = AuthorVerification.newBuilder().withFindByIdService(datasetService).build();
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Void> addGenerationListToDataset(UUID datasetId, @Valid List<UUID> UUID) {
         authorVerification.verifyAuthor(datasetId);
@@ -47,6 +49,7 @@ public class DatasetController implements DatasetApi {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Void> removeGenerationFromDataset(UUID datasetId, @Valid List<UUID> UUID) {
         authorVerification.verifyAuthor(datasetId);
@@ -54,12 +57,14 @@ public class DatasetController implements DatasetApi {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Dataset> createDataset(@NotNull @Valid DatasetType datasetType, @Valid DatasetCreation datasetCreation) {
         Dataset dataset = DatasetDomainToWebMapper.map(datasetService.createDataset(datasetCreation, DatasetTypeWebToDomainMapper.map(datasetType)));
         return new ResponseEntity<>(dataset, HttpStatus.CREATED);
     }
 
+    @RolesAllowed({"administrator"})
     @Override
     public ResponseEntity<Void> deleteDataset(UUID datasetId) {
         authorVerification.verifyAuthor(datasetId);
@@ -67,6 +72,7 @@ public class DatasetController implements DatasetApi {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Dataset> getDatasetById(UUID datasetId) {
         Dataset dataset = DatasetDomainToWebMapper.map(datasetService.findById(datasetId));
@@ -74,12 +80,14 @@ public class DatasetController implements DatasetApi {
         return new ResponseEntity<>(dataset, HttpStatus.OK);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<DatasetsPage> searchDatasetsPaginate(@Valid PagedDatasetQuery pagedDatasetQuery) {
         DatasetsPage datasetsPage = DatasetPaginationDomainToWebMapper.map(datasetService.searchDatasetPaginate(DatasetPaginationWebToDomainMapper.map(pagedDatasetQuery)), DatasetType.INSTANT_MESSAGE);
         return new ResponseEntity<>(datasetsPage, HttpStatus.OK);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Dataset> createNewDatasetVersion(UUID datasetId, @Valid UUID authorId) {
         authorVerification.verifyAuthor(datasetId);
@@ -87,6 +95,7 @@ public class DatasetController implements DatasetApi {
         return new ResponseEntity<>(DatasetDomainToWebMapper.map(dataset), HttpStatus.CREATED);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<List<Dataset>> getDatasetAllVersions(UUID datasetId) {
         return new ResponseEntity<>(
@@ -95,6 +104,7 @@ public class DatasetController implements DatasetApi {
                 HttpStatus.OK);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Void> validateDataset(UUID datasetId) {
         authorVerification.verifyAuthor(datasetId);
@@ -102,6 +112,7 @@ public class DatasetController implements DatasetApi {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Resource> downloadDataset(UUID datasetId) {
         final DocumentContent documentContent = downloadService.downloadDataset(datasetId);

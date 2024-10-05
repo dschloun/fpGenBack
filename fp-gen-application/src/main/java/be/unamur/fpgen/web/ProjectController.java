@@ -4,7 +4,6 @@ import be.unamur.api.ProjectApi;
 import be.unamur.fpgen.mapper.domainToWeb.ProjectDomainToWebMapper;
 import be.unamur.fpgen.mapper.domainToWeb.TrainingTestDifferenceDomainToWebMapper;
 import be.unamur.fpgen.mapper.domainToWeb.pagination.ProjectPaginationDomainToWebMapper;
-import be.unamur.fpgen.mapper.webToDomain.ProjectWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.pagination.ProjectPaginationWebToDomainMapper;
 import be.unamur.fpgen.service.ProjectService;
 import be.unamur.fpgen.service.identification.AuthorVerification;
@@ -13,8 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,6 +27,7 @@ public class ProjectController implements ProjectApi {
         this.authorVerification = AuthorVerification.newBuilder().withFindByIdService(projectService).build();
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Project> createProject(@Valid ProjectCreation projectCreation) {
         return new ResponseEntity<>(ProjectDomainToWebMapper.map(
@@ -35,6 +35,7 @@ public class ProjectController implements ProjectApi {
         ), HttpStatus.OK);
     }
 
+    @RolesAllowed({"administrator"})
     @Override
     public ResponseEntity<Void> deleteProject(UUID projectId) {
         authorVerification.verifyAuthor(projectId);
@@ -42,6 +43,7 @@ public class ProjectController implements ProjectApi {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Project> getProjectById(UUID projectId) {
         return new ResponseEntity<>(ProjectDomainToWebMapper.map(
@@ -49,6 +51,7 @@ public class ProjectController implements ProjectApi {
         ), HttpStatus.OK);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<ProjectsPage> searchProjectsPaginate(@Valid PagedProjectQuery pagedProjectQuery) {
         return new ResponseEntity<>(ProjectPaginationDomainToWebMapper.map(
@@ -58,11 +61,13 @@ public class ProjectController implements ProjectApi {
         ), HttpStatus.OK);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Project> updateProjectData(UUID projectId, @Valid List<UUID> UUID) {
         return ProjectApi.super.updateProjectData(projectId, UUID);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<TrainingTestDifferences> getDatasetsTrainingTestDifferencesByProjectId(UUID projectId) {
         return new ResponseEntity<>(TrainingTestDifferenceDomainToWebMapper.map(projectService.computeTrainingTestDifference(projectId)), HttpStatus.OK);
