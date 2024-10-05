@@ -1,6 +1,7 @@
 package be.unamur.fpgen.service;
 
 import be.unamur.fpgen.author.Author;
+import be.unamur.fpgen.context.UserContextHolder;
 import be.unamur.fpgen.dataset.DatasetTypeEnum;
 import be.unamur.fpgen.exception.PromptNotFoundException;
 import be.unamur.fpgen.mapper.webToDomain.DatasetTypeWebToDomainMapper;
@@ -29,7 +30,7 @@ public class PromptService {
 
     @Transactional
     public Prompt create(final PromptCreation command) {
-        final Author author = authorService.getAuthorById(command.getAuthorId());
+        final Author author = authorService.getAuthorByTrigram(UserContextHolder.getContext().getTrigram());
         final Integer lastVersion = findMaxVersionByDatasetTypeAndMessageType(DatasetTypeWebToDomainMapper.map(command.getDatasetType()), MessageTypeWebToDomainMapper.map(command.getMessageType()));
 
         return promptRepository.savePrompt(

@@ -59,7 +59,7 @@ public class ConversationService {
     @Transactional
     public void generateConversationList(ConversationBatchCreation command) {
         // 0. create ongoing generation
-        final OngoingGeneration ongoingGeneration = ongoingGenerationService.createOngoingGeneration(GenerationTypeEnum.CONVERSATION, command.getAuthorId());
+        final OngoingGeneration ongoingGeneration = ongoingGenerationService.createOngoingGeneration(GenerationTypeEnum.CONVERSATION);
 
         // 1. if the generation refer to a dataset, then inform the dataset that a generation is pending for him
         if (Objects.nonNull(command.getDatasetId())) {
@@ -77,7 +77,7 @@ public class ConversationService {
         // 0. for each
         command.getConversationCreationList().forEach(cc -> {
             // 1. create generation data
-            final Generation generation = generationService.createGeneration(GenerationTypeEnum.CONVERSATION, cc, command.getAuthorId());
+            final Generation generation = generationService.createGeneration(GenerationTypeEnum.CONVERSATION, cc);
 
             // 3. generate conversations
             //todo chat gpt api with prompt // return the x messages in json format, unmarshall, ...

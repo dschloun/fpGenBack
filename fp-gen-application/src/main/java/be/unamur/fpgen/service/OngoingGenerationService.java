@@ -1,6 +1,7 @@
 package be.unamur.fpgen.service;
 
 import be.unamur.fpgen.author.Author;
+import be.unamur.fpgen.context.UserContextHolder;
 import be.unamur.fpgen.generation.GenerationTypeEnum;
 import be.unamur.fpgen.generation.ongoing_generation.OngoingGeneration;
 import be.unamur.fpgen.generation.ongoing_generation.OngoingGenerationItem;
@@ -24,8 +25,8 @@ public class OngoingGenerationService {
     }
 
     @Transactional
-    public OngoingGeneration createOngoingGeneration(GenerationTypeEnum type, UUID authorId) {
-        final Author author = authorService.getAuthorById(authorId);
+    public OngoingGeneration createOngoingGeneration(GenerationTypeEnum type) {
+        final Author author = authorService.getAuthorByTrigram(UserContextHolder.getContext().getTrigram());
         return ongoingGenerationRepository.save(OngoingGeneration.newBuilder()
                 .withType(type)
                 .withAuthor(author)

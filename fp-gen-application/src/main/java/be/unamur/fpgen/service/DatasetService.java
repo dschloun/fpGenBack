@@ -1,6 +1,7 @@
 package be.unamur.fpgen.service;
 
 import be.unamur.fpgen.author.Author;
+import be.unamur.fpgen.context.UserContextHolder;
 import be.unamur.fpgen.dataset.Dataset;
 import be.unamur.fpgen.dataset.DatasetTypeEnum;
 import be.unamur.fpgen.dataset.RealFakeTopicBias;
@@ -44,7 +45,7 @@ public class DatasetService implements FindByIdService{
 
     @Transactional
     public Dataset createDataset(DatasetCreation datasetCreation, DatasetTypeEnum type) {
-        final Author author = authorService.getAuthorById(datasetCreation.getAuthorId());
+        final Author author = authorService.getAuthorByTrigram(UserContextHolder.getContext().getTrigram());
         return datasetRepository.saveDataset(
                 Dataset.newBuilder()
                         .withType(type)

@@ -1,6 +1,7 @@
 package be.unamur.fpgen.service;
 
 import be.unamur.fpgen.author.Author;
+import be.unamur.fpgen.context.UserContextHolder;
 import be.unamur.fpgen.dataset.Dataset;
 import be.unamur.fpgen.exception.ResultNotFoundException;
 import be.unamur.fpgen.repository.ResultRepository;
@@ -24,9 +25,9 @@ public class ResultService implements FindByIdService{
     }
 
     @Transactional
-    public Result saveResult(UUID datasetId, UUID authorId, Result result) {
+    public Result saveResult(UUID datasetId, Result result) {
         final Dataset dataset = datasetService.findById(datasetId);
-        final Author author = authorService.getAuthorById(authorId);
+        final Author author = authorService.getAuthorByTrigram(UserContextHolder.getContext().getTrigram());
         return resultRepository.saveResult(dataset, author, result);
     }
 
