@@ -34,6 +34,7 @@ public class AuthorEntity extends BaseUuidEntity {
     private AuthorStatusEnum status;
     private boolean acceptTermsOfUse;
     private String motivation;
+    private boolean accountCreated;
 
     // getters and setters
 
@@ -180,5 +181,14 @@ public class AuthorEntity extends BaseUuidEntity {
 
     public void setMotivation(String motivation) {
         this.motivation = motivation;
+    }
+
+    @Column(name = "account_created", nullable = false)
+    public boolean isAccountCreated() {
+        return accountCreated;
+    }
+
+    public void setAccountCreated(boolean accountCreated) {
+        this.accountCreated = accountCreated;
     }
 }

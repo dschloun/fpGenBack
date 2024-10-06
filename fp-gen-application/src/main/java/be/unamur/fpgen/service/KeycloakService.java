@@ -92,4 +92,31 @@ public class KeycloakService {
         }
     }
 
+    @Transactional
+    public void updateUserStatus(final boolean enabled, final String userName){
+        // 0. get admin access token
+        String accessToken = getAdminAccessToken();
+
+        // 1. prepare request
+        String url = keycloakUrl + "/admin/realms/" + realm + "/users/" + userName;
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(accessToken);
+
+        // 2. update user status
+        Map<String, Object> userMap = new HashMap<>();
+        userMap.put("enabled", enabled);
+
+        HttpEntity<Map<String, Object>> request = new HttpEntity<>(userMap, headers);
+        try{
+        restTemplate.put(url, request, String.class);
+        } catch (Exception e){
+            System.out.println("Failed to update user status: " + e.getMessage());
+
+        }
+        System.out.println("User status updated successfully");
+    }
+
 }

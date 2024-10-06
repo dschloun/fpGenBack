@@ -20,6 +20,7 @@ public class AuthorWebToDomainMapper {
                 .withPhoneNumber(authorCreation.getPhoneNumber())
                 .withMotivation(authorCreation.getMotivation())
                 .withAcceptTermsOfUse(authorCreation.getAcceptTermsOfUse())
+                .withAccountCreated(false)
                 .build();
     }
 

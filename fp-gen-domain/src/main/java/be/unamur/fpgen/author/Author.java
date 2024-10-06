@@ -13,6 +13,7 @@ public class Author extends BaseUuidDomain {
     private AuthorStatusEnum status;
     private boolean acceptTermsOfUse;
     private final String motivation;
+    private boolean accountCreated;
 
     private Author(Builder builder) {
         super(builder.getId(), builder.getCreationDate(), builder.getModificationDate());
@@ -26,6 +27,7 @@ public class Author extends BaseUuidDomain {
         status = builder.status;
         acceptTermsOfUse = builder.acceptTermsOfUse;
         motivation = builder.motivation;
+        accountCreated = builder.accountCreated;
     }
 
     public static Builder newBuilder() {
@@ -72,12 +74,20 @@ public class Author extends BaseUuidDomain {
         return motivation;
     }
 
+    public boolean isAccountCreated() {
+        return accountCreated;
+    }
+
     public void acceptTermsOfUse(){
         acceptTermsOfUse = true;
     }
 
     public void updateStatus(AuthorStatusEnum status){
         this.status = status;
+    }
+
+    public void createAccount(){
+        accountCreated = true;
     }
 
     public static final class Builder extends AbstractBaseUuidDomainBuilder<Builder>{
@@ -91,6 +101,7 @@ public class Author extends BaseUuidDomain {
         private AuthorStatusEnum status;
         private boolean acceptTermsOfUse;
         private String motivation;
+        private boolean accountCreated;
 
         public Builder() {
         }
@@ -142,6 +153,11 @@ public class Author extends BaseUuidDomain {
 
         public Builder withMotivation(String val) {
             this.motivation = val;
+            return this;
+        }
+
+        public Builder withAccountCreated(boolean val) {
+            this.accountCreated = val;
             return this;
         }
 

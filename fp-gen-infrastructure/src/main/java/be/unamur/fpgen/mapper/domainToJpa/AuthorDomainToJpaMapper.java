@@ -23,6 +23,7 @@ public class AuthorDomainToJpaMapper {
         entity.setAcceptTermsOfUse(domain.isAcceptTermsOfUse());
         entity.setMotivation(domain.getMotivation());
         entity.setStatus(domain.getStatus());
+        entity.setAccountCreated(domain.isAccountCreated());
 
         return entity;
     }
@@ -43,6 +44,7 @@ public class AuthorDomainToJpaMapper {
         entity.setAcceptTermsOfUse(domain.isAcceptTermsOfUse());
         entity.setMotivation(domain.getMotivation());
         entity.setStatus(domain.getStatus());
+        entity.setAccountCreated(domain.isAccountCreated());
 
         return entity;
     }

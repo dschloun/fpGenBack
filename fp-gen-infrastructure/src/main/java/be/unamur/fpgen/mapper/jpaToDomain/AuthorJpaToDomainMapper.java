@@ -26,6 +26,7 @@ public class AuthorJpaToDomainMapper {
                 .withStatus(entity.getStatus())
                 .withAcceptTermsOfUse(entity.isAcceptTermsOfUse())
                 .withMotivation(entity.getMotivation())
+                .withAccountCreated(entity.isAccountCreated())
                 .build();
     }
 }
