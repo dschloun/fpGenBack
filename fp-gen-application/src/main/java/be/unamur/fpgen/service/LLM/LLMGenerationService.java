@@ -77,32 +77,33 @@ public class LLMGenerationService {
 
         // 2. start the task
         for (OngoingGeneration o : ongoingGenerations) {
-            // 0. get prompt
-            final Prompt prompt;
-
-            if (Objects.nonNull(o.getPromptVersion())) {
-                prompt = promptService.findByDatasetTypeAndMessageTypeAndVersion(DatasetTypeEnum.INSTANT_MESSAGE, MessageTypeEnum.valueOf(o.getType().name()), o.getPromptVersion())
-                        .orElse(promptService.getDefaultPrompt(DatasetTypeEnum.INSTANT_MESSAGE, MessageTypeEnum.valueOf(o.getType().name())));
-            } else {
-                prompt = promptService.getDefaultPrompt(DatasetTypeEnum.INSTANT_MESSAGE, MessageTypeEnum.valueOf(o.getType().name()));
-            }
 
             // 1. change the status of the ongoing generation
             o.updateStatus(OngoingGenerationStatus.ONGOING);
 
             // 2. generation
             if (GenerationTypeEnum.INSTANT_MESSAGE.equals(o.getType())) {
-                generateMessages(o, prompt);
+                generateMessages(o, o.getPromptVersion());
             }
 
         }
     }
 
     // chatgpt method
-    private void generateMessages(final OngoingGeneration ongoingGeneration, final Prompt prompt) {
+    private void generateMessages(final OngoingGeneration ongoingGeneration, final Integer promptVersion) {
 
         // 0. for each generation item
         for (OngoingGenerationItem im : ongoingGeneration.getItemList()) {
+            // 0. get prompt
+            final Prompt prompt;
+
+            if (Objects.nonNull(promptVersion)) {
+                prompt = promptService.findByDatasetTypeAndMessageTypeAndVersion(DatasetTypeEnum.INSTANT_MESSAGE, im.getMessageType(), promptVersion)
+                        .orElse(promptService.getDefaultPrompt(DatasetTypeEnum.INSTANT_MESSAGE, im.getMessageType()));
+            } else {
+                prompt = promptService.getDefaultPrompt(DatasetTypeEnum.INSTANT_MESSAGE, im.getMessageType());
+            }
+
             // 0. crate generation
             final GenerationCreation command = new GenerationCreation()
                     .quantity(im.getQuantity())
