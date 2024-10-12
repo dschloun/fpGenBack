@@ -36,8 +36,8 @@ import java.util.*;
 @Service
 public class LLMGenerationService {
 
-
-    private final boolean simulation;
+    @Value("${simulationLLM}")
+    private boolean simulation;
 
 
     private final OngoingGenerationService ongoingGenerationService;
@@ -48,15 +48,13 @@ public class LLMGenerationService {
     private final ConversationRepository conversationRepository;
     private final DatasetService datasetService;
 
-    public LLMGenerationService(@Value("${simulation}") boolean simulation,
-                                final OngoingGenerationService ongoingGenerationService,
+    public LLMGenerationService(final OngoingGenerationService ongoingGenerationService,
                                 final GenerationService generationService,
                                 final InterlocutorService interlocutorService,
                                 final PromptService promptService,
                                 final MessageRepository messageRepository,
                                 final ConversationRepository conversationRepository,
                                 final DatasetService datasetService) {
-        this.simulation = simulation;
         this.ongoingGenerationService = ongoingGenerationService;
         this.generationService = generationService;
         this.interlocutorService = interlocutorService;
