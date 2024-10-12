@@ -1,5 +1,6 @@
 package be.unamur.fpgen.service;
 
+import be.unamur.fpgen.author.AuthorStatusEnum;
 import be.unamur.fpgen.author.pagination.AuthorsPage;
 import be.unamur.fpgen.author.pagination.PagedAuthorsQuery;
 import be.unamur.fpgen.exception.AuthorAlreadyExistException;
@@ -18,9 +19,11 @@ import java.util.UUID;
 public class AuthorService {
 
     private final AuthorRepository authorRepository;
+    private final KeycloakService keycloakService;
 
-    public AuthorService(AuthorRepository authorRepository) {
+    public AuthorService(AuthorRepository authorRepository, KeycloakService keycloakService) {
         this.authorRepository = authorRepository;
+        this.keycloakService = keycloakService;
     }
 
 
@@ -34,6 +37,7 @@ public class AuthorService {
         if(authorRepository.existsAuthorByTrigram(author.getTrigram())){
             throw AuthorAlreadyExistException.withTrigram(author.getTrigram());
         }
+        author.updateStatus(AuthorStatusEnum.WAITING_VERIFICATION);
         return authorRepository.saveAuthor(author);
     }
 
@@ -67,6 +71,27 @@ public class AuthorService {
                 query.getAuthorQuery().getFunction(),
                 query.getAuthorQuery().getTrigram(),
                 query.getAuthorQuery().getEmail(),
+                query.getAuthorQuery().getStatus(),
                 pageable);
+    }
+
+    @Transactional
+    public void updateAuthorStatus(final UUID authorId, final AuthorStatusEnum status){
+        // 1. get author
+        final Author author = authorRepository.getAuthorById(authorId).orElseThrow(() -> AuthorNotFoundException.withId(authorId));
+
+        // 2. create user keycloak
+        if (!author.isAccountCreated() && !AuthorStatusEnum.VERIFIED.equals(author.getStatus()) && AuthorStatusEnum.VERIFIED.equals(status)) {
+            keycloakService.createUser(author);
+            author.createAccount();
+        } else if (author.isAccountCreated() && AuthorStatusEnum.VERIFIED.equals(author.getStatus()) && AuthorStatusEnum.SUSPENDED.equals(status)) {
+            keycloakService.updateUserStatus(false, author.getTrigram());
+        } else if (author.isAccountCreated() && AuthorStatusEnum.SUSPENDED.equals(author.getStatus()) && AuthorStatusEnum.VERIFIED.equals(status)) {
+            keycloakService.updateUserStatus(true, author.getTrigram());
+        }
+
+        // 3. update author status
+        author.updateStatus(status);
+        authorRepository.updateAuthor(author);
     }
 }

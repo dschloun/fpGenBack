@@ -37,8 +37,7 @@ public class GenerationJpaToDomainMapper {
                 .withQuantity(entity.getQuantity())
                 .withTopic(entity.getTopic())
                 .withType(entity.getType())
-                .withSystemPrompt(entity.getSystemPrompt())
-                .withUserPrompt(entity.getUserPrompt())
+                .withPrompt(PromptJpaToDomainMapper.map(entity.getPrompt()))
                 .withItemList(MapperUtil.mapSet(entity.getInstantMessageList(), InstantMessageJpaToDomainMapper::map))
                 .build();
     }
@@ -57,8 +56,7 @@ public class GenerationJpaToDomainMapper {
                 .withQuantity(entity.getQuantity())
                 .withTopic(entity.getTopic())
                 .withType(entity.getType())
-                .withSystemPrompt(entity.getSystemPrompt())
-                .withUserPrompt(entity.getUserPrompt())
+                .withPrompt(PromptJpaToDomainMapper.map(entity.getPrompt()))
                 .withItemList(MapperUtil.mapSet(entity.getConversationList(), ConversationJpaToDomainMapper::map))
                 .build();
     }

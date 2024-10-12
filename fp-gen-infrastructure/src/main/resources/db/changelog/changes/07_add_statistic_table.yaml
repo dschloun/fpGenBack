@@ -51,7 +51,7 @@ databaseChangeLog:
                     - nullable: false
                     - unique: false
               - column:
-                  name: troll_ratio
+                  name: harasser_ratio
                   type: numeric
                   constraints:
                     - nullable: false

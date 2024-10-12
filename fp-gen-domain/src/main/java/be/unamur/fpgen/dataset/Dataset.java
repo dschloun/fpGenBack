@@ -2,6 +2,7 @@ package be.unamur.fpgen.dataset;
 
 import be.unamur.fpgen.AbstractItem;
 import be.unamur.fpgen.BaseUuidDomain;
+import be.unamur.fpgen.HasAuthor;
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.statistic.Statistic;
 import be.unamur.fpgen.utils.DateUtil;
@@ -11,7 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class Dataset extends BaseUuidDomain {
+public class Dataset extends BaseUuidDomain implements HasAuthor {
     private final DatasetTypeEnum type;
     private final String businessId;
     private final Integer version;

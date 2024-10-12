@@ -42,7 +42,7 @@ public class InstantMessageService {
     public void generateInstantMessages(final InstantMessageBatchCreation command) {
         // 0. create ongoing generation
         final OngoingGeneration ongoingGeneration = ongoingGenerationService.createOngoingGeneration(
-                GenerationTypeEnum.INSTANT_MESSAGE, command.getAuthorId());
+                GenerationTypeEnum.INSTANT_MESSAGE);
 
         // 1. if the generation refer to a dataset, then inform the dataset that a generation is pending for him
         if (Objects.nonNull(command.getDatasetId())) {

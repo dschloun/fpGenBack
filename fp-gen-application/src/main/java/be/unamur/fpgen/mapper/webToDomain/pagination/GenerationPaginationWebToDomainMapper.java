@@ -24,8 +24,7 @@ public class GenerationPaginationWebToDomainMapper {
                 .withNotInDatasetIdList(web.getNotInDatasetIdList())
                 .withInDatasetIdList(web.getInDatasetIdList())
                 .withQuantity(web.getQuantity())
-                .withSystemPrompt(web.getSystemPrompt())
-                .withUserPrompt(web.getUserPrompt())
+                .withPromptVersion(web.getPromptVersion())
                 .build();
     }
 

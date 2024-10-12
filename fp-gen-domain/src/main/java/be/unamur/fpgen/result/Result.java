@@ -1,6 +1,7 @@
 package be.unamur.fpgen.result;
 
 import be.unamur.fpgen.BaseUuidDomain;
+import be.unamur.fpgen.HasAuthor;
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.dataset.Dataset;
 
@@ -9,7 +10,7 @@ import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Result extends BaseUuidDomain {
+public class Result extends BaseUuidDomain implements HasAuthor {
     private final Dataset dataset;
     private final Author author;
     private final OffsetDateTime experimentDate;

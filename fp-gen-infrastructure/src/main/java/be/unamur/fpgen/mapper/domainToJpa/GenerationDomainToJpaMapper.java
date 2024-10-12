@@ -1,5 +1,6 @@
 package be.unamur.fpgen.mapper.domainToJpa;
 
+import be.unamur.fpgen.entity.PromptEntity;
 import be.unamur.fpgen.entity.author.AuthorEntity;
 import be.unamur.fpgen.entity.generation.ConversationGenerationEntity;
 import be.unamur.fpgen.entity.generation.GenerationEntity;
@@ -9,11 +10,11 @@ import be.unamur.fpgen.generation.GenerationTypeEnum;
 
 public class GenerationDomainToJpaMapper {
 
-    public static GenerationEntity mapForCreate(final Generation domain, final AuthorEntity author) {
+    public static GenerationEntity mapForCreate(final Generation domain, final AuthorEntity author, final PromptEntity prompt) {
         if (GenerationTypeEnum.INSTANT_MESSAGE.equals(domain.getGenerationType())){
-            return mapForCreateInstantMessageGeneration(domain, author);
+            return mapForCreateInstantMessageGeneration(domain, author, prompt);
         } else {
-            return mapForCreateConversationGeneration(domain, author);
+            return mapForCreateConversationGeneration(domain, author, prompt);
         }
     }
 
@@ -28,12 +29,11 @@ public class GenerationDomainToJpaMapper {
         entity.setQuantity(domain.getQuantity());
         entity.setType(domain.getType());
         entity.setTopic(domain.getTopic());
-        entity.setSystemPrompt(domain.getSystemPrompt());
-        entity.setUserPrompt(domain.getUserPrompt());
+        entity.setPrompt(PromptDomainToJpaMapper.map(domain.getPrompt()));
         return entity;
     }
 
-    public static InstantMessageGenerationEntity mapForCreateInstantMessageGeneration(final Generation domain, final AuthorEntity author) {
+    public static InstantMessageGenerationEntity mapForCreateInstantMessageGeneration(final Generation domain, final AuthorEntity author, final PromptEntity prompt) {
         final InstantMessageGenerationEntity entity = new InstantMessageGenerationEntity();
         entity.setGenerationId(domain.getGenerationId());
         entity.setAuthor(author);
@@ -41,12 +41,11 @@ public class GenerationDomainToJpaMapper {
         entity.setQuantity(domain.getQuantity());
         entity.setType(domain.getType());
         entity.setTopic(domain.getTopic());
-        entity.setSystemPrompt(domain.getSystemPrompt());
-        entity.setUserPrompt(domain.getUserPrompt());
+        entity.setPrompt(prompt);
         return entity;
     }
 
-    public static ConversationGenerationEntity mapForCreateConversationGeneration(final Generation domain, final AuthorEntity author) {
+    public static ConversationGenerationEntity mapForCreateConversationGeneration(final Generation domain, final AuthorEntity author, final PromptEntity prompt) {
         final ConversationGenerationEntity entity = new ConversationGenerationEntity();
         entity.setAuthor(author);
         entity.setGenerationId(domain.getGenerationId());
@@ -54,8 +53,7 @@ public class GenerationDomainToJpaMapper {
         entity.setQuantity(domain.getQuantity());
         entity.setType(domain.getType());
         entity.setTopic(domain.getTopic());
-        entity.setSystemPrompt(domain.getSystemPrompt());
-        entity.setUserPrompt(domain.getUserPrompt());
+        entity.setPrompt(prompt);
         return entity;
     }
 }

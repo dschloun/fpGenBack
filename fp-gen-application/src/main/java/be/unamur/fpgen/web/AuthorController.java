@@ -41,7 +41,7 @@ public class AuthorController implements AuthorApi {
         return new ResponseEntity<>(AuthorDomainToWebMapper.map(authorService.getAuthorById(authorId)), HttpStatus.OK);
     }
 
-    @RolesAllowed({"user"})
+    @RolesAllowed({"administrator"})
     @Override
     public ResponseEntity<AuthorsPage> searchAuthorsPaginate(@Valid PagedAuthorQuery pagedAuthorQuery) {
         return new ResponseEntity<>(
@@ -51,6 +51,7 @@ public class AuthorController implements AuthorApi {
                 ), HttpStatus.OK);
     }
 
+    @RolesAllowed({"administrator"})
     @Override
     public ResponseEntity<List<Author>> getAuthorList() {
         return new ResponseEntity<>(MapperUtil.mapList(authorService.getAuthors(), AuthorDomainToWebMapper::map), HttpStatus.OK);

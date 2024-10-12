@@ -9,6 +9,7 @@ import be.unamur.fpgen.mapper.webToDomain.pagination.DatasetPaginationWebToDomai
 import be.unamur.fpgen.message.download.DocumentContent;
 import be.unamur.fpgen.service.DatasetService;
 import be.unamur.fpgen.service.DownloadService;
+import be.unamur.fpgen.service.identification.AuthorVerification;
 import be.unamur.fpgen.utils.MapperUtil;
 import be.unamur.model.*;
 import org.springframework.core.io.Resource;
@@ -18,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.MultiValueMap;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -30,56 +32,70 @@ public class DatasetController implements DatasetApi {
 
     private final DatasetService datasetService;
     private final DownloadService downloadService;
+    private final AuthorVerification authorVerification;
 
     public DatasetController(DatasetService datasetService,
                              DownloadService downloadService) {
         this.datasetService = datasetService;
         this.downloadService = downloadService;
+        this.authorVerification = AuthorVerification.newBuilder().withFindByIdService(datasetService).build();
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Void> addGenerationListToDataset(UUID datasetId, @Valid List<UUID> UUID) {
+        authorVerification.verifyAuthor(datasetId);
         datasetService.addGenerationListToDataset(datasetId, UUID);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Void> removeGenerationFromDataset(UUID datasetId, @Valid List<UUID> UUID) {
+        authorVerification.verifyAuthor(datasetId);
         datasetService.removeGenerationListFromDataset(datasetId, UUID);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Dataset> createDataset(@NotNull @Valid DatasetType datasetType, @Valid DatasetCreation datasetCreation) {
         Dataset dataset = DatasetDomainToWebMapper.map(datasetService.createDataset(datasetCreation, DatasetTypeWebToDomainMapper.map(datasetType)));
         return new ResponseEntity<>(dataset, HttpStatus.CREATED);
     }
 
+    @RolesAllowed({"administrator"})
     @Override
     public ResponseEntity<Void> deleteDataset(UUID datasetId) {
+        authorVerification.verifyAuthor(datasetId);
         datasetService.deleteDatasetById(datasetId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Dataset> getDatasetById(UUID datasetId) {
-        Dataset dataset = DatasetDomainToWebMapper.map(datasetService.getDatasetById(datasetId));
+        Dataset dataset = DatasetDomainToWebMapper.map(datasetService.findById(datasetId));
 
         return new ResponseEntity<>(dataset, HttpStatus.OK);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<DatasetsPage> searchDatasetsPaginate(@Valid PagedDatasetQuery pagedDatasetQuery) {
         DatasetsPage datasetsPage = DatasetPaginationDomainToWebMapper.map(datasetService.searchDatasetPaginate(DatasetPaginationWebToDomainMapper.map(pagedDatasetQuery)), DatasetType.INSTANT_MESSAGE);
         return new ResponseEntity<>(datasetsPage, HttpStatus.OK);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Dataset> createNewDatasetVersion(UUID datasetId, @Valid UUID authorId) {
+        authorVerification.verifyAuthor(datasetId);
         final be.unamur.fpgen.dataset.Dataset dataset = datasetService.createNewVersion(datasetId, authorId);
         return new ResponseEntity<>(DatasetDomainToWebMapper.map(dataset), HttpStatus.CREATED);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<List<Dataset>> getDatasetAllVersions(UUID datasetId) {
         return new ResponseEntity<>(
@@ -88,12 +104,15 @@ public class DatasetController implements DatasetApi {
                 HttpStatus.OK);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Void> validateDataset(UUID datasetId) {
+        authorVerification.verifyAuthor(datasetId);
         datasetService.validateDataset(datasetId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Resource> downloadDataset(UUID datasetId) {
         final DocumentContent documentContent = downloadService.downloadDataset(datasetId);

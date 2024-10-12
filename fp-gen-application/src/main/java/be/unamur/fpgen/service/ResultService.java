@@ -1,6 +1,7 @@
 package be.unamur.fpgen.service;
 
 import be.unamur.fpgen.author.Author;
+import be.unamur.fpgen.context.UserContextHolder;
 import be.unamur.fpgen.dataset.Dataset;
 import be.unamur.fpgen.exception.ResultNotFoundException;
 import be.unamur.fpgen.repository.ResultRepository;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class ResultService {
+public class ResultService implements FindByIdService{
     private final ResultRepository resultRepository;
     private final DatasetService datasetService;
     private final AuthorService authorService;
@@ -24,20 +25,20 @@ public class ResultService {
     }
 
     @Transactional
-    public Result saveResult(UUID datasetId, UUID authorId, Result result) {
-        final Dataset dataset = datasetService.getDatasetById(datasetId);
-        final Author author = authorService.getAuthorById(authorId);
+    public Result saveResult(UUID datasetId, Result result) {
+        final Dataset dataset = datasetService.findById(datasetId);
+        final Author author = authorService.getAuthorByTrigram(UserContextHolder.getContext().getTrigram());
         return resultRepository.saveResult(dataset, author, result);
     }
 
     @Transactional
-    public Result getResultById(UUID resultId) {
+    public Result findById(UUID resultId) {
         return resultRepository.findResultById(resultId).orElseThrow(() -> ResultNotFoundException.withId(resultId));
     }
 
     @Transactional
     public Result updateResult(UUID resultId, Result result) {
-        final Result existingResult = this.getResultById(resultId);
+        final Result existingResult = this.findById(resultId);
         return resultRepository.updateResult(existingResult, result);
     }
 

@@ -20,6 +20,10 @@ public class AuthorDomainToJpaMapper {
         entity.setFunction(domain.getFunction());
         entity.setEmail(domain.getEmail());
         entity.setPhoneNumber(domain.getPhoneNumber());
+        entity.setAcceptTermsOfUse(domain.isAcceptTermsOfUse());
+        entity.setMotivation(domain.getMotivation());
+        entity.setStatus(domain.getStatus());
+        entity.setAccountCreated(domain.isAccountCreated());
 
         return entity;
     }
@@ -37,6 +41,10 @@ public class AuthorDomainToJpaMapper {
         entity.setFunction(domain.getFunction());
         entity.setEmail(domain.getEmail());
         entity.setPhoneNumber(domain.getPhoneNumber());
+        entity.setAcceptTermsOfUse(domain.isAcceptTermsOfUse());
+        entity.setMotivation(domain.getMotivation());
+        entity.setStatus(domain.getStatus());
+        entity.setAccountCreated(domain.isAccountCreated());
 
         return entity;
     }
@@ -53,6 +61,9 @@ public class AuthorDomainToJpaMapper {
         entity.setFunction(domain.getFunction());
         entity.setEmail(domain.getEmail());
         entity.setPhoneNumber(domain.getPhoneNumber());
+        entity.setAcceptTermsOfUse(domain.isAcceptTermsOfUse());
+        entity.setMotivation(domain.getMotivation());
+        entity.setStatus(domain.getStatus());
 
         return entity;
     }

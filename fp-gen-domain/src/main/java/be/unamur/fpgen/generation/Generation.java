@@ -2,9 +2,11 @@ package be.unamur.fpgen.generation;
 
 import be.unamur.fpgen.AbstractItem;
 import be.unamur.fpgen.BaseUuidDomain;
+import be.unamur.fpgen.HasAuthor;
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
+import be.unamur.fpgen.prompt.Prompt;
 import be.unamur.fpgen.utils.DateUtil;
 
 import java.time.OffsetDateTime;
@@ -20,7 +22,7 @@ import java.util.Set;
  * format 'trigram' ex: JDO (John Doe)
  * @specfield details: String // details of the generation
  */
-public class Generation extends AbstractItem {
+public class Generation extends AbstractItem implements HasAuthor {
     // members
     private final String generationId;
     private final GenerationTypeEnum generationType;
@@ -29,8 +31,7 @@ public class Generation extends AbstractItem {
     private final Integer quantity;
     private final MessageTypeEnum type;
     private final MessageTopicEnum topic;
-    private final String systemPrompt;
-    private final String userPrompt;
+    private final Prompt prompt;
     private final Set<AbstractItem> itemList = new HashSet<>();
 
     private Generation(Builder builder) {
@@ -42,8 +43,7 @@ public class Generation extends AbstractItem {
         quantity = builder.quantity;
         type = builder.type;
         topic = builder.topic;
-        systemPrompt = builder.systemPrompt;
-        userPrompt = builder.userPrompt;
+        prompt = builder.prompt;
         itemList.addAll(builder.itemList);
     }
 
@@ -75,12 +75,8 @@ public class Generation extends AbstractItem {
         return topic;
     }
 
-    public String getSystemPrompt() {
-        return systemPrompt;
-    }
-
-    public String getUserPrompt() {
-        return userPrompt;
+    public Prompt getPrompt() {
+        return prompt;
     }
 
     public Set<AbstractItem> getItemList() {
@@ -99,8 +95,7 @@ public class Generation extends AbstractItem {
         private Integer quantity;
         private MessageTypeEnum type;
         private MessageTopicEnum topic;
-        private String systemPrompt;
-        private String userPrompt;
+        private Prompt prompt;
         private Set<AbstractItem> itemList = new HashSet<>();
 
         private Builder() {
@@ -141,13 +136,8 @@ public class Generation extends AbstractItem {
             return this;
         }
 
-        public Builder withSystemPrompt(String val) {
-            systemPrompt = val;
-            return this;
-        }
-
-        public Builder withUserPrompt(String val) {
-            userPrompt = val;
+        public Builder withPrompt(Prompt val) {
+            prompt = val;
             return this;
         }
 

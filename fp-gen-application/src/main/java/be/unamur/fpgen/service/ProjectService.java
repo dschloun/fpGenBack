@@ -1,6 +1,7 @@
 package be.unamur.fpgen.service;
 
 import be.unamur.fpgen.author.Author;
+import be.unamur.fpgen.context.UserContextHolder;
 import be.unamur.fpgen.dataset.Dataset;
 import be.unamur.fpgen.dataset.DatasetFunctionEnum;
 import be.unamur.fpgen.dataset.DatasetTypeEnum;
@@ -29,7 +30,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class ProjectService {
+public class ProjectService implements FindByIdService{
     private final AuthorService authorService;
     private final ProjectRepository projectRepository;
 
@@ -41,7 +42,7 @@ public class ProjectService {
     @Transactional
     public Project createProject(ProjectCreation projectCreation){
         // 0. get author
-        final Author author = authorService.getAuthorById(projectCreation.getAuthorId());
+        final Author author = authorService.getAuthorByTrigram(UserContextHolder.getContext().getTrigram());
 
         // 1. generate 3 datasets for the project
         final Project project = ProjectWebToDomainMapper.map(projectCreation, author);

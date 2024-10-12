@@ -1,6 +1,7 @@
 package be.unamur.fpgen.service;
 
 import be.unamur.fpgen.author.Author;
+import be.unamur.fpgen.context.UserContextHolder;
 import be.unamur.fpgen.dataset.Dataset;
 import be.unamur.fpgen.dataset.DatasetTypeEnum;
 import be.unamur.fpgen.dataset.RealFakeTopicBias;
@@ -13,7 +14,6 @@ import be.unamur.fpgen.mapper.webToDomain.DatasetWebToDomainMapper;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.messaging.event.StatisticComputationEvent;
-import be.unamur.fpgen.project.TypeTopicDifference;
 import be.unamur.fpgen.repository.DatasetRepository;
 import be.unamur.fpgen.utils.DateUtil;
 import be.unamur.model.DatasetCreation;
@@ -28,7 +28,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class DatasetService {
+public class DatasetService implements FindByIdService{
     private final AuthorService authorService;
     private final DatasetRepository datasetRepository;
     private final GenerationService generationService;
@@ -45,7 +45,7 @@ public class DatasetService {
 
     @Transactional
     public Dataset createDataset(DatasetCreation datasetCreation, DatasetTypeEnum type) {
-        final Author author = authorService.getAuthorById(datasetCreation.getAuthorId());
+        final Author author = authorService.getAuthorByTrigram(UserContextHolder.getContext().getTrigram());
         return datasetRepository.saveDataset(
                 Dataset.newBuilder()
                         .withType(type)
@@ -60,7 +60,7 @@ public class DatasetService {
     }
 
     @Transactional
-    public Dataset getDatasetById(UUID datasetId) {
+    public Dataset findById(UUID datasetId) {
         return datasetRepository.findDatasetById(datasetId)
                 .orElseThrow(() -> DatasetNotFoundException.withId(datasetId));
     }
@@ -68,7 +68,7 @@ public class DatasetService {
     @Transactional
     public void deleteDatasetById(UUID datasetId) {
         // 1. get dataset
-        final Dataset dataset = getDatasetById(datasetId);
+        final Dataset dataset = findById(datasetId);
 
         // 2. check if dataset is already validated
         checkDatasetValidationState(dataset, false);
@@ -91,7 +91,7 @@ public class DatasetService {
     @Transactional
     public void addGenerationListToDataset(UUID datasetId, List<UUID> generationIdsList) {
         // 1. get dataset
-        final Dataset dataset = getDatasetById(datasetId);
+        final Dataset dataset = findById(datasetId);
 
         // 2. check if dataset is already validated
         checkDatasetValidationState(dataset, false);
@@ -110,7 +110,7 @@ public class DatasetService {
     @Transactional
     public void removeGenerationListFromDataset(UUID datasetId, List<UUID> generationIdsList) {
         // 1. get dataset
-        final Dataset dataset = getDatasetById(datasetId);
+        final Dataset dataset = findById(datasetId);
 
         // 2. check if dataset is already validated
         checkDatasetValidationState(dataset, false);
@@ -152,7 +152,7 @@ public class DatasetService {
         final Set<Generation> generationList = new HashSet<>();
         generationIdsList.forEach(i -> {
             try {
-                final Generation generation = generationService.findGenerationById(i);
+                final Generation generation = generationService.findById(i);
                 generationList.add(generation);
             } catch (GenerationNotFoundException e) {
                 System.out.println("generation does not exist");
@@ -167,7 +167,7 @@ public class DatasetService {
 
     @Transactional
     public void addOngoingGenerationToDataset(UUID datasetId, OngoingGeneration generation) {
-        final Dataset dataset = getDatasetById(datasetId);
+        final Dataset dataset = findById(datasetId);
         // check if dataset is already validated
         checkDatasetValidationState(dataset, false);
         datasetRepository.addOngoingGenerationToDataset(dataset, generation);
@@ -175,7 +175,7 @@ public class DatasetService {
 
     @Transactional
     public void removeOngoingGenerationFromDataset(UUID datasetId) {
-        final Dataset dataset = getDatasetById(datasetId);
+        final Dataset dataset = findById(datasetId);
         // check if dataset is already validated
         checkDatasetValidationState(dataset, false);
         datasetRepository.removeOngoingGenerationFromDataset(dataset);
@@ -183,7 +183,7 @@ public class DatasetService {
 
     @Transactional
     public void validateDataset(UUID datasetId) {
-        final Dataset dataset = getDatasetById(datasetId);
+        final Dataset dataset = findById(datasetId);
         checkIfDatasetIsEmpty(dataset);
         dataset.validateDataset();
         datasetRepository.updateDataset(dataset);
@@ -198,10 +198,10 @@ public class DatasetService {
         }
 
         // 1. get old dataset and original dataset if exist
-        final Dataset oldDataset = getDatasetById(oldDatasetId);
+        final Dataset oldDataset = findById(oldDatasetId);
         Dataset originalDataset = null;
         if (Objects.nonNull(oldDataset.getOriginalDatasetId())) {
-            originalDataset = getDatasetById(oldDataset.getOriginalDatasetId());
+            originalDataset = findById(oldDataset.getOriginalDatasetId());
         }
 
         // 2. check if old dataset is already validated and is last version
@@ -258,7 +258,7 @@ public class DatasetService {
     @Transactional
     public List<Dataset> getAllDatasetVersions(UUID datasetId) {
         // 1. get the reference dataset
-        final Dataset dataset = getDatasetById(datasetId);
+        final Dataset dataset = findById(datasetId);
 
         // 2. return all dataset version older and newer
         return datasetRepository.findAllDatasetVersions(Objects.nonNull(dataset.getOriginalDatasetId()) ? dataset.getOriginalDatasetId() : datasetId);
@@ -267,7 +267,7 @@ public class DatasetService {
     @Transactional
     public List<RealFakeTopicBias> checkDatasetBias(UUID datasetId) {
         // 1. get dataset
-        final Dataset dataset = getDatasetById(datasetId);
+        final Dataset dataset = findById(datasetId);
 
         // 2. get real fake topic bias
         final List<RealFakeTopicBias> realFakeTopicBiasList = new ArrayList<>();

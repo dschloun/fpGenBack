@@ -12,8 +12,7 @@ public class GenerationDomainToWebMapper {
                 .generationType(GenerationTypeDomainToWebMapper.map(domain.getGenerationType()))
                 .messageType(MessageTypeDomainToWebMapper.map(domain.getType()))
                 .messageTopic(MessageTopicDomainToWebMapper.map(domain.getTopic()))
-                .systemPrompt(domain.getSystemPrompt())
-                .userPrompt(domain.getUserPrompt())
+                .promptVersion(domain.getPrompt().getVersion())
                 .author(domain.getAuthor().getTrigram())
                 .details(domain.getDetails())
                 .quantity(domain.getQuantity());

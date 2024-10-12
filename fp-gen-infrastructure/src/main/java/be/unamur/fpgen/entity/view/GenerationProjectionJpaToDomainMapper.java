@@ -5,6 +5,7 @@ import be.unamur.fpgen.generation.Generation;
 import be.unamur.fpgen.generation.GenerationTypeEnum;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
+import be.unamur.fpgen.prompt.Prompt;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -22,7 +23,7 @@ public class GenerationProjectionJpaToDomainMapper {
                 .withGenerationType(convertKindToGenerationType(entity.getKind()))
                 .withType(MessageTypeEnum.valueOf(entity.getType()))
                 .withTopic(MessageTopicEnum.valueOf(entity.getTopic()))
-                .withUserPrompt(entity.getUserPrompt())
+                .withPrompt(Prompt.newBuilder().withVersion(entity.getPromptVersion()).build())
                 .withAuthor(Author.newBuilder().withTrigram(entity.getAuthorTrigram()).build())
                 .withDetails(entity.getDetails())
                 .withQuantity(entity.getQuantity())

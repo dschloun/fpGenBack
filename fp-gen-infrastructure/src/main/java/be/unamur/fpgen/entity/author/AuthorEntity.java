@@ -1,5 +1,7 @@
 package be.unamur.fpgen.entity.author;
 
+import be.unamur.fpgen.author.AuthorStatusEnum;
+import be.unamur.fpgen.entity.PromptEntity;
 import be.unamur.fpgen.entity.base.BaseUuidEntity;
 import be.unamur.fpgen.entity.dataset.DatasetEntity;
 import be.unamur.fpgen.entity.generation.GenerationEntity;
@@ -7,10 +9,7 @@ import be.unamur.fpgen.entity.generation.ongoing_generation.OngoingGenerationEnt
 import be.unamur.fpgen.entity.project.ProjectEntity;
 import be.unamur.fpgen.entity.result.ResultEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,6 +30,11 @@ public class AuthorEntity extends BaseUuidEntity {
     private Set<ProjectEntity> projectList;
     private Set<OngoingGenerationEntity> ongoingGenerationList;
     private Set<ResultEntity> resultList = new HashSet<>();
+    private Set<PromptEntity> promptList = new HashSet<>();
+    private AuthorStatusEnum status;
+    private boolean acceptTermsOfUse;
+    private String motivation;
+    private boolean accountCreated;
 
     // getters and setters
 
@@ -140,5 +144,51 @@ public class AuthorEntity extends BaseUuidEntity {
 
     public void setResultList(Set<ResultEntity> resultList) {
         this.resultList = resultList;
+    }
+
+    @OneToMany(mappedBy = "author", orphanRemoval = true)
+    public Set<PromptEntity> getPromptList() {
+        return promptList;
+    }
+
+    public void setPromptList(Set<PromptEntity> promptList) {
+        this.promptList = promptList;
+    }
+
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    public AuthorStatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(AuthorStatusEnum status) {
+        this.status = status;
+    }
+
+    @Column(name = "accept_terms_of_use", nullable = false)
+    public boolean isAcceptTermsOfUse() {
+        return acceptTermsOfUse;
+    }
+
+    public void setAcceptTermsOfUse(boolean acceptTermsOfUse) {
+        this.acceptTermsOfUse = acceptTermsOfUse;
+    }
+
+    @Column(name = "motivation", nullable = false)
+    public String getMotivation() {
+        return motivation;
+    }
+
+    public void setMotivation(String motivation) {
+        this.motivation = motivation;
+    }
+
+    @Column(name = "account_created", nullable = false)
+    public boolean isAccountCreated() {
+        return accountCreated;
+    }
+
+    public void setAccountCreated(boolean accountCreated) {
+        this.accountCreated = accountCreated;
     }
 }

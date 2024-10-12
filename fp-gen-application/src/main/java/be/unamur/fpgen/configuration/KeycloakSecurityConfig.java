@@ -35,6 +35,7 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
                 .authorizeRequests()
                 .antMatchers("/v1/authors").permitAll()
                 .anyRequest().authenticated();
+//                .anyRequest().permitAll();
     }
 
     @Autowired

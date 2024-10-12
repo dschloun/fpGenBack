@@ -1,5 +1,6 @@
 package be.unamur.fpgen.repository.author;
 
+import be.unamur.fpgen.author.AuthorStatusEnum;
 import be.unamur.fpgen.entity.author.AuthorEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +26,8 @@ public interface JpaAuthorRepositoryCRUD extends JpaRepository<AuthorEntity, UUI
             " AND (:organization is null or lower(i.organization) like %:organization%)" +
             " AND (:function is null or lower(i.function) like %:function%)" +
             " AND (:trigram is null or lower(i.trigram) like %:trigram%)" +
-            " AND (:email is null or lower(i.email) like %:email%)"
+            " AND (:email is null or lower(i.email) like %:email%)" +
+            " AND (:status is null or i.status = :status) "
     )
     Page<AuthorEntity> findPagination(@Param("lastname") String lastname,
                                       @Param("firstname") String firstname,
@@ -33,6 +35,7 @@ public interface JpaAuthorRepositoryCRUD extends JpaRepository<AuthorEntity, UUI
                                       @Param("function") String function,
                                       @Param("trigram") String trigram,
                                       @Param("email") String email,
+                                      @Param("status") AuthorStatusEnum status,
                                       Pageable pageable);
 
 

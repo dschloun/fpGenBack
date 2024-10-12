@@ -2,8 +2,11 @@ package be.unamur.fpgen.mapper.webToDomain.pagination;
 
 import be.unamur.fpgen.author.pagination.AuthorQuery;
 import be.unamur.fpgen.author.pagination.PagedAuthorsQuery;
+import be.unamur.fpgen.mapper.webToDomain.AuthorWebToDomainMapper;
 import be.unamur.fpgen.mapper.webToDomain.PaginationWebToDomainMapper;
 import be.unamur.model.PagedAuthorQuery;
+
+import java.util.Optional;
 
 public class AuthorPaginationWebToDomainMapper {
     public static AuthorQuery map(be.unamur.model.AuthorQuery web) {
@@ -14,6 +17,7 @@ public class AuthorPaginationWebToDomainMapper {
                 .withFunction(web.getAuthorFunction())
                 .withTrigram(web.getTrigram())
                 .withEmail(web.getEmail())
+                .withStatus(AuthorWebToDomainMapper.map(web.getStatus()))
                 .build();
     }
 

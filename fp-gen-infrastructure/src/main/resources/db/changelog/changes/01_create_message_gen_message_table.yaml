@@ -568,3 +568,27 @@ databaseChangeLog:
                     - references: ongoing_generation(id)
                     - onDelete: CASCADE
 
+  - changeSet:
+      id: add-account-created-in-author
+      author: dsc
+      changes:
+        - addColumn:
+            tableName: author
+            columns:
+              - column:
+                  name: account_created
+                  type: boolean
+                  constraints:
+                    nullable: true
+                    unique: false
+        - update:
+            tableName: author
+            columns:
+              - column:
+                  name: account_created
+                  valueBoolean: 'false'
+
+        - addNotNullConstraint:
+            tableName: author
+            columnName: account_created
+            columnDataType: boolean

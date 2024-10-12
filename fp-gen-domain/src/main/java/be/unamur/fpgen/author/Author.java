@@ -10,6 +10,10 @@ public class Author extends BaseUuidDomain {
     private final String function;
     private final String email;
     private final String phoneNumber;
+    private AuthorStatusEnum status;
+    private boolean acceptTermsOfUse;
+    private final String motivation;
+    private boolean accountCreated;
 
     private Author(Builder builder) {
         super(builder.getId(), builder.getCreationDate(), builder.getModificationDate());
@@ -20,6 +24,10 @@ public class Author extends BaseUuidDomain {
         function = builder.function;
         email = builder.email;
         phoneNumber = builder.phoneNumber;
+        status = builder.status;
+        acceptTermsOfUse = builder.acceptTermsOfUse;
+        motivation = builder.motivation;
+        accountCreated = builder.accountCreated;
     }
 
     public static Builder newBuilder() {
@@ -54,6 +62,34 @@ public class Author extends BaseUuidDomain {
         return phoneNumber;
     }
 
+    public AuthorStatusEnum getStatus() {
+        return status;
+    }
+
+    public boolean isAcceptTermsOfUse() {
+        return acceptTermsOfUse;
+    }
+
+    public String getMotivation() {
+        return motivation;
+    }
+
+    public boolean isAccountCreated() {
+        return accountCreated;
+    }
+
+    public void acceptTermsOfUse(){
+        acceptTermsOfUse = true;
+    }
+
+    public void updateStatus(AuthorStatusEnum status){
+        this.status = status;
+    }
+
+    public void createAccount(){
+        accountCreated = true;
+    }
+
     public static final class Builder extends AbstractBaseUuidDomainBuilder<Builder>{
         private String lastName;
         private String firstName;
@@ -62,6 +98,10 @@ public class Author extends BaseUuidDomain {
         private String function;
         private String email;
         private String phoneNumber;
+        private AuthorStatusEnum status;
+        private boolean acceptTermsOfUse;
+        private String motivation;
+        private boolean accountCreated;
 
         public Builder() {
         }
@@ -98,6 +138,26 @@ public class Author extends BaseUuidDomain {
 
         public Builder withPhoneNumber(String val) {
             this.phoneNumber = val;
+            return this;
+        }
+
+        public Builder withStatus(AuthorStatusEnum val) {
+            this.status = val;
+            return this;
+        }
+
+        public Builder withAcceptTermsOfUse(boolean val) {
+            this.acceptTermsOfUse = val;
+            return this;
+        }
+
+        public Builder withMotivation(String val) {
+            this.motivation = val;
+            return this;
+        }
+
+        public Builder withAccountCreated(boolean val) {
+            this.accountCreated = val;
             return this;
         }
 

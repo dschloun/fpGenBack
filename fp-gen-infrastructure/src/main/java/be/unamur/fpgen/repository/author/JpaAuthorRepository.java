@@ -1,7 +1,9 @@
 package be.unamur.fpgen.repository.author;
 
 import be.unamur.fpgen.author.Author;
+import be.unamur.fpgen.author.AuthorStatusEnum;
 import be.unamur.fpgen.author.pagination.AuthorsPage;
+import be.unamur.fpgen.entity.author.AuthorEntity;
 import be.unamur.fpgen.mapper.domainToJpa.AuthorDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.AuthorJpaToDomainMapper;
 import be.unamur.fpgen.pagination.Pagination;
@@ -32,8 +34,13 @@ public class JpaAuthorRepository implements AuthorRepository {
     }
 
     @Override
-    public Author updateAuthor(Author author) {
-        return null;
+    public void updateAuthor(Author author) {
+        jpaAuthorRepositoryCRUD.findById(author.getId())
+                .ifPresent(a -> {
+                    a.setStatus(author.getStatus());
+                    a.setAccountCreated(author.isAccountCreated());
+                    jpaAuthorRepositoryCRUD.save(a);
+                });
     }
 
     @Override
@@ -60,7 +67,7 @@ public class JpaAuthorRepository implements AuthorRepository {
     }
 
     @Override
-    public AuthorsPage findAuthorsPagination(String lastName, String firstName, String organization, String function, String trigram, String email, Pageable pageable) {
+    public AuthorsPage findAuthorsPagination(String lastName, String firstName, String organization, String function, String trigram, String email, AuthorStatusEnum status, Pageable pageable) {
         // 1. get in Page format
         Page<Author> page = jpaAuthorRepositoryCRUD.findPagination(
                 StringUtil.toLowerCaseIfNotNull(lastName),
@@ -69,6 +76,7 @@ public class JpaAuthorRepository implements AuthorRepository {
                 StringUtil.toLowerCaseIfNotNull(function),
                 StringUtil.toLowerCaseIfNotNull(trigram),
                 StringUtil.toLowerCaseIfNotNull(email),
+                status,
                 pageable
         ).map(AuthorJpaToDomainMapper::map);
 
