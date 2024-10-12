@@ -107,10 +107,9 @@ public class LLMGenerationService {
             final GenerationCreation command = new GenerationCreation()
                     .quantity(im.getQuantity())
                     .type(MessageType.valueOf(im.getMessageTopic().name()))
-                    .topic(MessageTopic.valueOf(im.getMessageTopic().name()))
-                    .promptVersion(ongoingGeneration.getPromptVersion());
+                    .topic(MessageTopic.valueOf(im.getMessageTopic().name()));
 
-            final Generation generation = generationService.createGeneration(GenerationTypeEnum.INSTANT_MESSAGE, command);
+            final Generation generation = generationService.createGeneration(GenerationTypeEnum.INSTANT_MESSAGE, command, prompt);
 
             // 1. get text
             final List<InstantMessage> instantMessageList = new ArrayList<>();

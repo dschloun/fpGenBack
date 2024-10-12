@@ -67,6 +67,7 @@ public class ConversationService {
         }
     }
 
+    //todo not used anymore
     @Transactional
     public List<Conversation> createConversationList(ConversationBatchCreation command) {
         // 2. prepare conversation list
@@ -75,7 +76,7 @@ public class ConversationService {
         // 0. for each
         command.getConversationCreationList().forEach(cc -> {
             // 1. create generation data
-            final Generation generation = generationService.createGeneration(GenerationTypeEnum.CONVERSATION, cc);
+            final Generation generation = generationService.createGeneration(GenerationTypeEnum.CONVERSATION, cc, null);
 
             // 3. generate conversations
             //todo chat gpt api with prompt // return the x messages in json format, unmarshall, ...

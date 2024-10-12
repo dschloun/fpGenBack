@@ -73,7 +73,7 @@ public class InstantMessageOngoingGenerationListener {
                         } else {
                             // Generation successful
                             // 1. create generation data
-                            final Generation generation = generationService.createGeneration(event.getType(), imc);
+                            final Generation generation = generationService.createGeneration(event.getType(), imc, null);
                             // 2. prepare a list of instant messages
                             final List<InstantMessage> instantMessageList = new ArrayList<>();
                             // 3. generate instant messages
