@@ -13,6 +13,7 @@ public class OngoingGeneration extends BaseUuidDomain {
     private final Set<OngoingGenerationItem> itemList = new HashSet<>();
     private final Author author;
     private OngoingGenerationStatus status;
+    private final Integer promptVersion;
 
     private OngoingGeneration(Builder builder) {
         super(builder.getId(), builder.getCreationDate(), builder.getModificationDate());
@@ -20,6 +21,7 @@ public class OngoingGeneration extends BaseUuidDomain {
         itemList.addAll(builder.itemList);
         author = builder.author;
         status = builder.status;
+        promptVersion = builder.promptVersion;
     }
 
     public GenerationTypeEnum getType() {
@@ -42,6 +44,10 @@ public class OngoingGeneration extends BaseUuidDomain {
         this.status = status;
     }
 
+    public Integer getPromptVersion() {
+        return promptVersion;
+    }
+
     public static Builder newBuilder() {
         return new Builder();
     }
@@ -52,6 +58,7 @@ public class OngoingGeneration extends BaseUuidDomain {
         private Set<OngoingGenerationItem> itemList = new HashSet<>();
         private Author author;
         private OngoingGenerationStatus status;
+        private Integer promptVersion;
 
         private Builder() {
         }
@@ -73,6 +80,11 @@ public class OngoingGeneration extends BaseUuidDomain {
 
         public Builder withStatus(OngoingGenerationStatus val) {
             status = val;
+            return this;
+        }
+
+        public Builder withPromptVersion(Integer val) {
+            promptVersion = val;
             return this;
         }
 
