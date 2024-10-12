@@ -39,7 +39,7 @@ public class LLMGenerationService {
 
     private final boolean simulation;
 
-    private final TaskStatus taskStatus;
+
     private final OngoingGenerationService ongoingGenerationService;
     private final GenerationService generationService;
     private final InterlocutorService interlocutorService;
@@ -48,7 +48,7 @@ public class LLMGenerationService {
     private final ConversationRepository conversationRepository;
     private final DatasetService datasetService;
 
-    public LLMGenerationService(@Value("${simulation}") boolean simulation, final TaskStatus taskStatus,
+    public LLMGenerationService(@Value("${simulation}") boolean simulation,
                                 final OngoingGenerationService ongoingGenerationService,
                                 final GenerationService generationService,
                                 final InterlocutorService interlocutorService,
@@ -57,7 +57,6 @@ public class LLMGenerationService {
                                 final ConversationRepository conversationRepository,
                                 final DatasetService datasetService) {
         this.simulation = simulation;
-        this.taskStatus = taskStatus;
         this.ongoingGenerationService = ongoingGenerationService;
         this.generationService = generationService;
         this.interlocutorService = interlocutorService;
@@ -67,12 +66,10 @@ public class LLMGenerationService {
         this.datasetService = datasetService;
     }
 
+
+
     @Transactional
     public void generate() {
-        // 0. check if a task is currently running
-        if (taskStatus.isRunning()) {
-            return;
-        }
 
         // 1. check if there are any ongoing generations
         final List<OngoingGeneration> ongoingGenerations = ongoingGenerationService.findAllByStatus(OngoingGenerationStatus.WAITING);
@@ -101,7 +98,6 @@ public class LLMGenerationService {
             }
 
         }
-
     }
 
     // chatgpt method

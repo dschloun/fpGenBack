@@ -1,0 +1,31 @@
+package be.unamur.fpgen.service.LLM;
+
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+
+@Service
+public class CronTaskService {
+    private final TaskStatus taskStatus;
+    private final LLMGenerationService llmGenerationService;
+
+    public CronTaskService(TaskStatus taskStatus, LLMGenerationService llmGenerationService) {
+        this.taskStatus = taskStatus;
+        this.llmGenerationService = llmGenerationService;
+    }
+
+    @Scheduled(cron = "0 */1 * * * *")
+    public void executeTask() {
+        if (taskStatus.isRunning()) {
+            System.out.println("Tâche déjà en cours, saut de l'exécution.");
+            return;
+        }
+
+        taskStatus.setRunning(true);
+        try {
+            // Exécuter la tâche longue ici
+            llmGenerationService.generate();
+        } finally {
+            taskStatus.setRunning(false); // Réinitialiser le flag
+        }
+    }
+}
