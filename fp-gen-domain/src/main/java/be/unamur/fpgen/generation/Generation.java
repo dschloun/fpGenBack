@@ -1,7 +1,6 @@
 package be.unamur.fpgen.generation;
 
 import be.unamur.fpgen.AbstractItem;
-import be.unamur.fpgen.BaseUuidDomain;
 import be.unamur.fpgen.HasAuthor;
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.message.MessageTopicEnum;
@@ -33,7 +32,7 @@ public class Generation extends AbstractItem implements HasAuthor {
     private final MessageTopicEnum topic;
     private final Prompt prompt;
     private final Set<AbstractItem> itemList = new HashSet<>();
-    private final String hash;
+
 
     private Generation(Builder builder) {
         super(builder.getId(), builder.getCreationDate(), builder.getModificationDate());
@@ -46,7 +45,6 @@ public class Generation extends AbstractItem implements HasAuthor {
         topic = builder.topic;
         prompt = builder.prompt;
         itemList.addAll(builder.itemList);
-        hash = builder.hash;
     }
 
     public GenerationTypeEnum getGenerationType() {
@@ -85,10 +83,6 @@ public class Generation extends AbstractItem implements HasAuthor {
         return itemList;
     }
 
-    public String getHash() {
-        return hash;
-    }
-
     public static Builder newBuilder() {
         return new Builder();
     }
@@ -103,7 +97,6 @@ public class Generation extends AbstractItem implements HasAuthor {
         private MessageTopicEnum topic;
         private Prompt prompt;
         private Set<AbstractItem> itemList = new HashSet<>();
-        private String hash;
 
         private Builder() {
         }
@@ -150,11 +143,6 @@ public class Generation extends AbstractItem implements HasAuthor {
 
         public Builder withItemList(Set<AbstractItem> val) {
             itemList = val;
-            return this;
-        }
-
-        public Builder withHash(String val){
-            hash = val;
             return this;
         }
 

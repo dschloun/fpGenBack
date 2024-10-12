@@ -27,6 +27,7 @@ public class InstantMessageDomainToJpaMapper {
         entity.setType(domain.getType());
         entity.setContent(domain.getContent());
         entity.setInstantMessageGeneration(generation);
+        entity.setHash(domain.getHash());
         return entity;
     }
 
@@ -38,6 +39,7 @@ public class InstantMessageDomainToJpaMapper {
         entity.setTopic(domain.getTopic());
         entity.setType(domain.getType());
         entity.setContent(domain.getContent());
+        entity.setHash(domain.getHash());
         return entity;
     }
 

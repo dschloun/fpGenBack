@@ -5,6 +5,7 @@ import java.util.UUID;
 public class InstantMessage extends AbstractInstantMessage {
     private final UUID generationTechniqueId;
     private final String generationBusinessId;
+    private final String hash;
 
     public UUID getGenerationTechniqueId() {
         return generationTechniqueId;
@@ -12,6 +13,10 @@ public class InstantMessage extends AbstractInstantMessage {
 
     public String getGenerationBusinessId() {
         return generationBusinessId;
+    }
+
+    public String getHash() {
+        return hash;
     }
 
     // constructors
@@ -26,6 +31,7 @@ public class InstantMessage extends AbstractInstantMessage {
                 builder.isBatch());
         generationTechniqueId = builder.generationTechniqueId;
         generationBusinessId = builder.generationBusinessId;
+        hash = builder.hash;
     }
 
     public static Builder newBuilder() {
@@ -36,6 +42,7 @@ public class InstantMessage extends AbstractInstantMessage {
     public static final class Builder extends AbstractInstantMessageBuilder<Builder> {
         private UUID generationTechniqueId;
         private String generationBusinessId;
+        private String hash;
 
         Builder() {
         }
@@ -47,6 +54,11 @@ public class InstantMessage extends AbstractInstantMessage {
 
         public Builder withGenerationBusinessId(String generationBusinessId) {
             this.generationBusinessId = generationBusinessId;
+            return this;
+        }
+
+        public Builder withHash(String val){
+            hash = val;
             return this;
         }
 

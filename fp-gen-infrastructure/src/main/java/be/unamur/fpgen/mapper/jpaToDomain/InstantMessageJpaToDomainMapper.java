@@ -37,6 +37,7 @@ public class InstantMessageJpaToDomainMapper {
                 .withGenerationTechniqueId(entity.getInstantMessageGeneration().getId())
                 .withGenerationBusinessId(entity.getInstantMessageGeneration().getGenerationId())
                 .withBatch(entity.getInstantMessageGeneration().getQuantity() > 1)
+                .withHash(entity.getHash())
                 .build();
     }
 }
