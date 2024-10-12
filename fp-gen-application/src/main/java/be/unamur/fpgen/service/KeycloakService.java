@@ -14,6 +14,7 @@ import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class KeycloakService {
@@ -71,6 +72,7 @@ public class KeycloakService {
         Map<String, Object> userMap = new HashMap<>();
         userMap.put("username", author.getTrigram());
         userMap.put("email", author.getEmail());
+        userMap.put("emailVerified", true);
         userMap.put("enabled", true);
         userMap.put("firstName", author.getFirstName());
         userMap.put("lastName", author.getLastName());
@@ -97,8 +99,11 @@ public class KeycloakService {
         // 0. get admin access token
         String accessToken = getAdminAccessToken();
 
+        // 2. get userId
+        String userId = searchUserByUsername(userName).toString();
+
         // 1. prepare request
-        String url = keycloakUrl + "/admin/realms/" + realm + "/users/" + userName;
+        String url = keycloakUrl + "/admin/realms/" + realm + "/users/" + userId;
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -117,6 +122,29 @@ public class KeycloakService {
 
         }
         System.out.println("User status updated successfully");
+    }
+
+    @Transactional
+    public UUID searchUserByUsername(String username) {
+        String accessToken = getAdminAccessToken();
+        String url = keycloakUrl + "/admin/realms/" + realm + "/users?username=" + username;
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(accessToken);
+
+        HttpEntity<Void> request = new HttpEntity<>(headers);
+        ResponseEntity<Map[]> response = restTemplate.exchange(url, HttpMethod.GET, request, Map[].class);
+
+        if (response.getStatusCode() == HttpStatus.OK && response.getBody().length > 0) {
+            Map<String, Object> user = response.getBody()[0];
+            String userId = (String) user.get("id");
+            return UUID.fromString(userId);
+        } else {
+            System.out.println("User not found: " + response.getStatusCode() + " - " + response.getBody());
+            throw new RuntimeException("User not found");
+        }
     }
 
 }
