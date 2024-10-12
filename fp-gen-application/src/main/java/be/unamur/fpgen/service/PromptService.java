@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -93,8 +94,8 @@ public class PromptService {
     }
 
     @Transactional
-    public Prompt findByDatasetTypeAndMessageTypeAndVersion(DatasetTypeEnum datasetType, MessageTypeEnum messageType, Integer version) {
-        return promptRepository.findPromptByDatasetTypeAndMessageTypeAndVersion(datasetType, messageType, version)
-                .orElseThrow(() -> PromptNotFoundException.withTypeAndVersion(messageType.name(), version));
+    public Optional<Prompt> findByDatasetTypeAndMessageTypeAndVersion(DatasetTypeEnum datasetType, MessageTypeEnum messageType, Integer version) {
+        return promptRepository.findPromptByDatasetTypeAndMessageTypeAndVersion(datasetType, messageType, version);
+               // .orElseThrow(() -> PromptNotFoundException.withTypeAndVersion(messageType.name(), version));
     }
 }

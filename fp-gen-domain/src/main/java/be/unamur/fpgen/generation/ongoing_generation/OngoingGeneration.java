@@ -6,6 +6,7 @@ import be.unamur.fpgen.generation.GenerationTypeEnum;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 public class OngoingGeneration extends BaseUuidDomain {
 
@@ -14,6 +15,7 @@ public class OngoingGeneration extends BaseUuidDomain {
     private final Author author;
     private OngoingGenerationStatus status;
     private final Integer promptVersion;
+    private final UUID datasetId;
 
     private OngoingGeneration(Builder builder) {
         super(builder.getId(), builder.getCreationDate(), builder.getModificationDate());
@@ -22,6 +24,7 @@ public class OngoingGeneration extends BaseUuidDomain {
         author = builder.author;
         status = builder.status;
         promptVersion = builder.promptVersion;
+        datasetId = builder.datasetId;
     }
 
     public GenerationTypeEnum getType() {
@@ -48,6 +51,10 @@ public class OngoingGeneration extends BaseUuidDomain {
         return promptVersion;
     }
 
+    public UUID getDatasetId() {
+        return datasetId;
+    }
+
     public static Builder newBuilder() {
         return new Builder();
     }
@@ -59,6 +66,7 @@ public class OngoingGeneration extends BaseUuidDomain {
         private Author author;
         private OngoingGenerationStatus status;
         private Integer promptVersion;
+        private UUID datasetId;
 
         private Builder() {
         }
@@ -85,6 +93,11 @@ public class OngoingGeneration extends BaseUuidDomain {
 
         public Builder withPromptVersion(Integer val) {
             promptVersion = val;
+            return this;
+        }
+
+        public Builder withDatasetId(UUID val){
+            datasetId = val;
             return this;
         }
 

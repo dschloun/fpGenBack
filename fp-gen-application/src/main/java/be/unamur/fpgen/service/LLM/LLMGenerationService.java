@@ -1,10 +1,12 @@
 package be.unamur.fpgen.service.LLM;
 
 import be.unamur.fpgen.conversation.Conversation;
+import be.unamur.fpgen.dataset.DatasetTypeEnum;
 import be.unamur.fpgen.generation.Generation;
 import be.unamur.fpgen.generation.GenerationTypeEnum;
 import be.unamur.fpgen.generation.ongoing_generation.OngoingGeneration;
 import be.unamur.fpgen.generation.ongoing_generation.OngoingGenerationItem;
+import be.unamur.fpgen.generation.ongoing_generation.OngoingGenerationItemStatus;
 import be.unamur.fpgen.generation.ongoing_generation.OngoingGenerationStatus;
 import be.unamur.fpgen.interlocutor.Interlocutor;
 import be.unamur.fpgen.interlocutor.InterlocutorTypeEnum;
@@ -13,13 +15,15 @@ import be.unamur.fpgen.message.ConversationMessage;
 import be.unamur.fpgen.message.InstantMessage;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
-import be.unamur.fpgen.service.GenerationService;
-import be.unamur.fpgen.service.InterlocutorService;
-import be.unamur.fpgen.service.OngoingGenerationService;
-import be.unamur.fpgen.service.PromptService;
+import be.unamur.fpgen.prompt.Prompt;
+import be.unamur.fpgen.repository.ConversationRepository;
+import be.unamur.fpgen.repository.MessageRepository;
+import be.unamur.fpgen.service.*;
 import be.unamur.fpgen.utils.Alternator;
 import be.unamur.fpgen.utils.TypeCorrespondenceMapper;
 import be.unamur.model.GenerationCreation;
+import be.unamur.model.MessageTopic;
+import be.unamur.model.MessageType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -40,72 +44,148 @@ public class LLMGenerationService {
     private final GenerationService generationService;
     private final InterlocutorService interlocutorService;
     private final PromptService promptService;
+    private final MessageRepository messageRepository;
+    private final ConversationRepository conversationRepository;
+    private final DatasetService datasetService;
 
     public LLMGenerationService(@Value("${simulation}") boolean simulation, final TaskStatus taskStatus,
                                 final OngoingGenerationService ongoingGenerationService,
                                 final GenerationService generationService,
                                 final InterlocutorService interlocutorService,
-                                final PromptService promptService) {
+                                final PromptService promptService,
+                                final MessageRepository messageRepository,
+                                final ConversationRepository conversationRepository,
+                                final DatasetService datasetService) {
         this.simulation = simulation;
         this.taskStatus = taskStatus;
         this.ongoingGenerationService = ongoingGenerationService;
         this.generationService = generationService;
         this.interlocutorService = interlocutorService;
         this.promptService = promptService;
+        this.messageRepository = messageRepository;
+        this.conversationRepository = conversationRepository;
+        this.datasetService = datasetService;
     }
 
     @Transactional
-    public void generate(){
+    public void generate() {
         // 0. check if a task is currently running
-        if(taskStatus.isRunning()){
+        if (taskStatus.isRunning()) {
             return;
         }
 
         // 1. check if there are any ongoing generations
         final List<OngoingGeneration> ongoingGenerations = ongoingGenerationService.findAllByStatus(OngoingGenerationStatus.WAITING);
-        if(ongoingGenerations.isEmpty()){
+        if (ongoingGenerations.isEmpty()) {
             return;
         }
 
         // 2. start the task
-        for(OngoingGeneration o : ongoingGenerations){
+        for (OngoingGeneration o : ongoingGenerations) {
+            // 0. get prompt
+            final Prompt prompt;
+
+            if (Objects.nonNull(o.getPromptVersion())) {
+                prompt = promptService.findByDatasetTypeAndMessageTypeAndVersion(DatasetTypeEnum.INSTANT_MESSAGE, MessageTypeEnum.valueOf(o.getType().name()), o.getPromptVersion())
+                        .orElse(promptService.getDefaultPrompt(DatasetTypeEnum.INSTANT_MESSAGE, MessageTypeEnum.valueOf(o.getType().name())));
+            } else {
+                prompt = promptService.getDefaultPrompt(DatasetTypeEnum.INSTANT_MESSAGE, MessageTypeEnum.valueOf(o.getType().name()));
+            }
+
             // 1. change the status of the ongoing generation
             o.updateStatus(OngoingGenerationStatus.ONGOING);
 
-            // 2. generate each item
-            for(OngoingGenerationItem item : o.getItemList()){
-                // 1. check message or conversation
-                if (GenerationTypeEnum.INSTANT_MESSAGE.equals(o.getType())){
-
-                }
+            // 2. generation
+            if (GenerationTypeEnum.INSTANT_MESSAGE.equals(o.getType())) {
+                generateMessages(o, prompt);
             }
+
         }
-
-
 
     }
 
     // chatgpt method
-    private void generateMessages(final OngoingGeneration ongoingGeneration){
-        for(OngoingGenerationItem im : ongoingGeneration.getItemList()){
-            final GenerationCreation command = new GenerationCreation().promptVersion()
-            final Generation generation = generationService.createGeneration(GenerationTypeEnum.INSTANT_MESSAGE, im);
-            // 1. get text
-            List<String> messages = simulateChatGptCallMessage(im.getMessageType().name(), im.getMessageTopic().name(), im.getQuantity());
+    private void generateMessages(final OngoingGeneration ongoingGeneration, final Prompt prompt) {
 
-            // 2. create messages objects
+        // 0. for each generation item
+        for (OngoingGenerationItem im : ongoingGeneration.getItemList()) {
+            // 0. crate generation
+            final GenerationCreation command = new GenerationCreation()
+                    .quantity(im.getQuantity())
+                    .type(MessageType.valueOf(im.getMessageTopic().name()))
+                    .topic(MessageTopic.valueOf(im.getMessageTopic().name()))
+                    .promptVersion(ongoingGeneration.getPromptVersion());
+
+            final Generation generation = generationService.createGeneration(GenerationTypeEnum.INSTANT_MESSAGE, command);
+
+            // 1. get text
             final List<InstantMessage> instantMessageList = new ArrayList<>();
-            for (String s : messages) {
-                instantMessageList.add(InstantMessageWebToDomainMapper.mapForCreate(im, s));
+            int tryCounter = 3; //limit the number of try when failed or duplicated messages
+
+            // 2. generation
+            while (tryCounter > 0 && im.getQuantity() > 0) {
+                // 0. init a list
+                List<String> messages = new ArrayList<>();
+
+                // 1. generate with LLM
+                try {
+                    messages = simulateChatGptCallMessage(im.getMessageType().name(), im.getMessageTopic().name(), im.getQuantity(), prompt);
+                } catch (Exception e) {
+                    System.out.println("Error joining CHAT-GPT");
+                }
+
+                // 2. create messages objects
+                boolean hasDuplicated = false;
+
+                for (String s : messages) {
+                    String hash = generateSHA256(s);
+                    InstantMessage message = InstantMessageWebToDomainMapper.mapForCreate(command, s, hash);
+                    // check if hash already exist
+                    if (simulation) {
+                        instantMessageList.add(message);
+                        im.decrementQuantity();
+                    } else {
+                        boolean alreadyExist = messageRepository.existByHash(message.getHash());
+
+                        if (!alreadyExist) {
+                            instantMessageList.add(message);
+                            im.decrementQuantity();
+                        } else {
+                            hasDuplicated = true;
+                        }
+                    }
+                }
+
+                // 3. increment try number if duplicate
+                if (hasDuplicated) {
+                    tryCounter--;
+                }
+            }
+
+            // 4. set generation item status
+            if (im.getQuantity() > 0) {
+                im.updateStatus(OngoingGenerationItemStatus.FAILURE);
+            } else {
+                im.updateStatus(OngoingGenerationItemStatus.SUCCESS);
+            }
+
+            // 5. persist messages
+            messageRepository.saveInstantMessageList(instantMessageList, generation);
+
+            // 6. add generation to dataset if needed
+            //todo what if all items of generation have failed???
+            if (Objects.nonNull(ongoingGeneration.getDatasetId())) {
+                datasetService.addGenerationListToDataset(ongoingGeneration.getDatasetId(), List.of(generation.getId()));
             }
         }
 
     }
 
-    private List<String> simulateChatGptCallMessage(String type, String topic, int quantity) {
+    private List<String> simulateChatGptCallMessage(String type, String topic, int quantity, final Prompt prompt) {
         final List<String> result = new ArrayList<>();
         int i = 0;
         try {
+            // todo use prompt for real generation
             while (i < quantity) {
                 i++;
                 result.add(String.format("message %s %s: %s of %s", type, topic, i, quantity));
@@ -139,7 +219,7 @@ public class LLMGenerationService {
         }
 
         // 3.1. save the conversation
-        final Conversation conversation =  Conversation.newBuilder()
+        final Conversation conversation = Conversation.newBuilder()
                 .withMinInteractionNumber(minimalInteraction)
                 .withMaxInteractionNumber(maxInteraction)
                 .withType(type)

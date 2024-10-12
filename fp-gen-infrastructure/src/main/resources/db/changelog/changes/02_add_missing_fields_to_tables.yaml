@@ -118,6 +118,12 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     unique: false
+              - column:
+                  name: dataset_id
+                  type: uuid
+                  constraints:
+                    nullable: true
+                    unique: false
 
   - changeSet:
       id: add-hash-on-message

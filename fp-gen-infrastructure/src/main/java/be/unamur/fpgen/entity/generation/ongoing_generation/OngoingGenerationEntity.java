@@ -8,6 +8,7 @@ import be.unamur.fpgen.generation.ongoing_generation.OngoingGenerationStatus;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "ongoing_generation")
@@ -17,6 +18,7 @@ public class OngoingGenerationEntity extends BaseUuidEntity {
     private AuthorEntity author;
     private OngoingGenerationStatus status;
     private Integer promptVersion;
+    private UUID datasetId;
 
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -64,5 +66,14 @@ public class OngoingGenerationEntity extends BaseUuidEntity {
 
     public void setPromptVersion(Integer promptVersion) {
         this.promptVersion = promptVersion;
+    }
+
+    @Column(name = "dataset_id", nullable = false)
+    public UUID getDatasetId() {
+        return datasetId;
+    }
+
+    public void setDatasetId(UUID datasetId) {
+        this.datasetId = datasetId;
     }
 }

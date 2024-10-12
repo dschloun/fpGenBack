@@ -25,12 +25,13 @@ public class OngoingGenerationService {
     }
 
     @Transactional
-    public OngoingGeneration createOngoingGeneration(GenerationTypeEnum type) {
+    public OngoingGeneration createOngoingGeneration(GenerationTypeEnum type, UUID datasetId) {
         final Author author = authorService.getAuthorByTrigram(UserContextHolder.getContext().getTrigram());
         return ongoingGenerationRepository.save(OngoingGeneration.newBuilder()
                 .withType(type)
                 .withAuthor(author)
                 .withStatus(OngoingGenerationStatus.ONGOING)
+                .withDatasetId(datasetId)
                 .build());
     }
 

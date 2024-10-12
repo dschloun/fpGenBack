@@ -12,6 +12,7 @@ public class OngoingGenerationDomainToJpaMapper {
         entity.setStatus(domain.getStatus());
         entity.setAuthor(author);
         entity.setPromptVersion(domain.getPromptVersion());
+        entity.setDatasetId(domain.getDatasetId());
         return entity;
     }
 }

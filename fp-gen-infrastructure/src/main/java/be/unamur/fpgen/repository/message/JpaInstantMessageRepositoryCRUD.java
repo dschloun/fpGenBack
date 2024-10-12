@@ -30,4 +30,6 @@ public interface JpaInstantMessageRepositoryCRUD extends JpaRepository<InstantMe
                                               @Param("startDate") OffsetDateTime startDate,
                                               @Param("endDate") OffsetDateTime endDate,
                                               Pageable pageable);
+
+    boolean existsByHash(String hash);
 }

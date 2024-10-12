@@ -15,6 +15,7 @@ public class OngoingGenerationJpaToDomainMapper {
                 .withAuthor(AuthorJpaToDomainMapper.map(entity.getAuthor()))
                 .withStatus(entity.getStatus())
                 .withPromptVersion(entity.getPromptVersion())
+                .withDatasetId(entity.getDatasetId())
                 .build();
     }
 }

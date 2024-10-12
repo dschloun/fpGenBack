@@ -41,7 +41,8 @@ public class GenerationService implements FindByIdService{
         // 0. check if author is registered
         final Author author = authorService.getAuthorByTrigram(UserContextHolder.getContext().getTrigram());
         // 0.1 get prompt version
-        final Prompt prompt = Optional.ofNullable(command.getPromptVersion()).map(v -> promptService.findByDatasetTypeAndMessageTypeAndVersion(DatasetTypeEnum.valueOf(generationType.name()), MessageTypeEnum.valueOf(command.getType().name()), v))
+        final Prompt prompt = Optional.ofNullable(command.getPromptVersion()).map(v -> promptService.findByDatasetTypeAndMessageTypeAndVersion(DatasetTypeEnum.valueOf(generationType.name()), MessageTypeEnum.valueOf(command.getType().name()), v)
+                        .orElse(promptService.getDefaultPrompt(DatasetTypeEnum.INSTANT_MESSAGE, MessageTypeEnum.valueOf(command.getType().name()))))
                 .orElse(promptService.getDefaultPrompt(DatasetTypeEnum.valueOf(generationType.name()), MessageTypeEnum.valueOf(command.getType().name()))); //todo check what append if version do not exist...
         // 1. save the generation
         return generationRepository.saveGeneration(
