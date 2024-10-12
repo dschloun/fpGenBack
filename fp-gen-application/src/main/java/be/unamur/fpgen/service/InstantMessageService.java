@@ -48,8 +48,6 @@ public class InstantMessageService {
         if (Objects.nonNull(command.getDatasetId())) {
             datasetService.addOngoingGenerationToDataset(command.getDatasetId(), ongoingGeneration);
         }
-
-        applicationEventPublisher.publishEvent(new InstantMessageOngoingGenerationEvent(this, GenerationTypeEnum.INSTANT_MESSAGE, ongoingGeneration.getId(), command));
     }
 
     @Transactional

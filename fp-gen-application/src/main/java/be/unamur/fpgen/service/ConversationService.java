@@ -65,8 +65,6 @@ public class ConversationService {
         if (Objects.nonNull(command.getDatasetId())) {
             datasetService.addOngoingGenerationToDataset(command.getDatasetId(), ongoingGeneration);
         }
-
-        eventPublisher.publishEvent(new ConversationOngoingGenerationEvent(this, GenerationTypeEnum.CONVERSATION, ongoingGeneration.getId(), command));
     }
 
     @Transactional
