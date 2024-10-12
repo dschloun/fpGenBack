@@ -10,6 +10,7 @@ import be.unamur.fpgen.mapper.domainToJpa.OngoingGenerationItemDomainToJpaMapper
 import be.unamur.fpgen.mapper.jpaToDomain.OngoingGenerationJpaToDomainMapper;
 import be.unamur.fpgen.repository.author.JpaAuthorRepositoryCRUD;
 import be.unamur.fpgen.repository.OngoingGenerationRepository;
+import be.unamur.fpgen.utils.MapperUtil;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -61,8 +62,8 @@ public class JpaOngoingGenerationRepository implements OngoingGenerationReposito
     }
 
     @Override
-    public List<OngoingGeneration> findAllByAuthorIdAndStatusList(UUID authorId, List<OngoingGenerationStatus> statusList) {
-        return null;
+    public List<OngoingGeneration> findAllByStatus(OngoingGenerationStatus status) {
+        return MapperUtil.mapList(jpaOngoingGenerationRepositoryCRUD.findAllByStatus(status), OngoingGenerationJpaToDomainMapper::map);
     }
 
     @Override

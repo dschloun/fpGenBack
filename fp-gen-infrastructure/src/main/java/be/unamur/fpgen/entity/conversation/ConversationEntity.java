@@ -21,6 +21,7 @@ public class ConversationEntity extends BaseUuidEntity {
     private Integer maxInteractionNumber;
     private Integer minInteractionNumber;
     private Set<ConversationInstantMessageEntity> messageSet = new HashSet<>();
+    private String hash;
 
     // getters and setters
     @ManyToOne
@@ -78,5 +79,14 @@ public class ConversationEntity extends BaseUuidEntity {
 
     public void setMinInteractionNumber(Integer minInteractionNumber) {
         this.minInteractionNumber = minInteractionNumber;
+    }
+
+    @Column(name = "hash", nullable = false)
+    public String getHash() {
+        return hash;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
     }
 }

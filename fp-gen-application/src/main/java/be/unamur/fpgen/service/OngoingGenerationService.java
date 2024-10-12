@@ -50,6 +50,11 @@ public class OngoingGenerationService {
     }
 
     @Transactional
+    public List<OngoingGeneration> findAllByStatus(OngoingGenerationStatus status) {
+        return ongoingGenerationRepository.findAllByStatus(status);
+    }
+
+    @Transactional
     public void deleteOngoingGenerationById(UUID id) {
         ongoingGenerationRepository.deleteById(id);
     }

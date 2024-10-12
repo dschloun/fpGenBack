@@ -20,7 +20,7 @@ public interface OngoingGenerationRepository {
 
     List<OngoingGeneration> findAllByAuthorId(UUID authorId);
 
-    List<OngoingGeneration> findAllByAuthorIdAndStatusList(UUID authorId, List<OngoingGenerationStatus> statusList);
+    List<OngoingGeneration> findAllByStatus(OngoingGenerationStatus status);
 
     void deleteById(UUID id);
 }

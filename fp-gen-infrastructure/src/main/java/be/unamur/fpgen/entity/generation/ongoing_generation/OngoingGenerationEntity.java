@@ -16,6 +16,7 @@ public class OngoingGenerationEntity extends BaseUuidEntity {
     private Set<OngoingGenerationItemEntity> itemList = new HashSet<>();
     private AuthorEntity author;
     private OngoingGenerationStatus status;
+    private Integer promptVersion;
 
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -54,5 +55,14 @@ public class OngoingGenerationEntity extends BaseUuidEntity {
 
     public void setStatus(OngoingGenerationStatus status) {
         this.status = status;
+    }
+
+    @Column(name = "prompt_version", nullable = false)
+    public Integer getPromptVersion() {
+        return promptVersion;
+    }
+
+    public void setPromptVersion(Integer promptVersion) {
+        this.promptVersion = promptVersion;
     }
 }
