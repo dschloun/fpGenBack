@@ -78,7 +78,7 @@ public class InstantMessageOngoingGenerationListener {
                             final List<InstantMessage> instantMessageList = new ArrayList<>();
                             // 3. generate instant messages
                             for (String s : result) {
-                                instantMessageList.add(InstantMessageWebToDomainMapper.mapForCreate(imc, s));
+                                instantMessageList.add(InstantMessageWebToDomainMapper.mapForCreate(imc, s, null));
                             }
                             // 4. save the instant messages
                             List<InstantMessage> saved = messageRepository.saveInstantMessageList(instantMessageList, generation);
