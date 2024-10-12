@@ -68,7 +68,7 @@ public class OngoingGenerationEntity extends BaseUuidEntity {
         this.promptVersion = promptVersion;
     }
 
-    @Column(name = "dataset_id", nullable = false)
+    @Column(name = "dataset_id", nullable = true)
     public UUID getDatasetId() {
         return datasetId;
     }

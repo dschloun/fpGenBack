@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -25,13 +26,14 @@ public class OngoingGenerationService {
     }
 
     @Transactional
-    public OngoingGeneration createOngoingGeneration(GenerationTypeEnum type, UUID datasetId) {
+    public OngoingGeneration createOngoingGeneration(GenerationTypeEnum type, UUID datasetId, Integer promptVersion) {
         final Author author = authorService.getAuthorByTrigram(UserContextHolder.getContext().getTrigram());
         return ongoingGenerationRepository.save(OngoingGeneration.newBuilder()
                 .withType(type)
                 .withAuthor(author)
                 .withStatus(OngoingGenerationStatus.ONGOING)
                 .withDatasetId(datasetId)
+                .withPromptVersion(Optional.ofNullable(promptVersion).orElse(0)) // if null => v0
                 .build());
     }
 
