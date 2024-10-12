@@ -59,7 +59,7 @@ public class ConversationService {
     @Transactional
     public void generateConversationList(ConversationBatchCreation command) {
         // 0. create ongoing generation
-        final OngoingGeneration ongoingGeneration = ongoingGenerationService.createOngoingGeneration(GenerationTypeEnum.CONVERSATION, command.getDatasetId(), command.getPromptVersion());
+        final OngoingGeneration ongoingGeneration = ongoingGenerationService.createOngoingGeneration(GenerationTypeEnum.CONVERSATION, command.getDatasetId(), command.getPromptVersion(), command.getConversationCreationList());
 
         // 1. if the generation refer to a dataset, then inform the dataset that a generation is pending for him
         if (Objects.nonNull(command.getDatasetId())) {

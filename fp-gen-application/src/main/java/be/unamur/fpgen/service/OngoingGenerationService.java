@@ -6,14 +6,16 @@ import be.unamur.fpgen.generation.GenerationTypeEnum;
 import be.unamur.fpgen.generation.ongoing_generation.OngoingGeneration;
 import be.unamur.fpgen.generation.ongoing_generation.OngoingGenerationItem;
 import be.unamur.fpgen.generation.ongoing_generation.OngoingGenerationStatus;
+import be.unamur.fpgen.message.MessageTopicEnum;
+import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.repository.OngoingGenerationRepository;
+import be.unamur.model.Generation;
+import be.unamur.model.GenerationCreation;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class OngoingGenerationService {
@@ -26,14 +28,25 @@ public class OngoingGenerationService {
     }
 
     @Transactional
-    public OngoingGeneration createOngoingGeneration(GenerationTypeEnum type, UUID datasetId, Integer promptVersion) {
+    public OngoingGeneration createOngoingGeneration(GenerationTypeEnum type, UUID datasetId, Integer promptVersion, List<GenerationCreation> generations) {
         final Author author = authorService.getAuthorByTrigram(UserContextHolder.getContext().getTrigram());
+        final Set<OngoingGenerationItem> items = new HashSet<>();
+        for(GenerationCreation g: generations){
+            items.add(
+                    OngoingGenerationItem.newBuilder()
+                            .withMessageType(MessageTypeEnum.valueOf(g.getType().name()))
+                            .withMessageTopic(MessageTopicEnum.valueOf(g.getTopic().name()))
+                            .withQuantity(g.getQuantity())
+                            .build()
+            );
+        }
         return ongoingGenerationRepository.save(OngoingGeneration.newBuilder()
                 .withType(type)
                 .withAuthor(author)
                 .withStatus(OngoingGenerationStatus.WAITING)
                 .withDatasetId(datasetId)
                 .withPromptVersion(Optional.ofNullable(promptVersion).orElse(0)) // if null => v0
+                .withItemList(items)
                 .build());
     }
 
