@@ -31,7 +31,7 @@ public class OngoingGenerationService {
         return ongoingGenerationRepository.save(OngoingGeneration.newBuilder()
                 .withType(type)
                 .withAuthor(author)
-                .withStatus(OngoingGenerationStatus.ONGOING)
+                .withStatus(OngoingGenerationStatus.WAITING)
                 .withDatasetId(datasetId)
                 .withPromptVersion(Optional.ofNullable(promptVersion).orElse(0)) // if null => v0
                 .build());
