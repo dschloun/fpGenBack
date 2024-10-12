@@ -38,6 +38,7 @@ public class JpaAuthorRepository implements AuthorRepository {
         jpaAuthorRepositoryCRUD.findById(author.getId())
                 .ifPresent(a -> {
                     a.setStatus(author.getStatus());
+                    a.setAccountCreated(author.isAccountCreated());
                     jpaAuthorRepositoryCRUD.save(a);
                 });
     }
