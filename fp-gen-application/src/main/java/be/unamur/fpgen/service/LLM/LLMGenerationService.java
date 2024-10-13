@@ -18,6 +18,7 @@ import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.prompt.Prompt;
 import be.unamur.fpgen.repository.ConversationRepository;
 import be.unamur.fpgen.repository.MessageRepository;
+import be.unamur.fpgen.repository.OngoingGenerationItemRepository;
 import be.unamur.fpgen.service.*;
 import be.unamur.fpgen.utils.Alternator;
 import be.unamur.fpgen.utils.TypeCorrespondenceMapper;
@@ -47,6 +48,7 @@ public class LLMGenerationService {
     private final MessageRepository messageRepository;
     private final ConversationRepository conversationRepository;
     private final DatasetService datasetService;
+    private final OngoingGenerationItemRepository ongoingGenerationItemRepository;
 
     public LLMGenerationService(final OngoingGenerationService ongoingGenerationService,
                                 final GenerationService generationService,
@@ -54,7 +56,8 @@ public class LLMGenerationService {
                                 final PromptService promptService,
                                 final MessageRepository messageRepository,
                                 final ConversationRepository conversationRepository,
-                                final DatasetService datasetService) {
+                                final DatasetService datasetService,
+                                final OngoingGenerationItemRepository ongoingGenerationItemRepository) {
         this.ongoingGenerationService = ongoingGenerationService;
         this.generationService = generationService;
         this.interlocutorService = interlocutorService;
@@ -62,6 +65,7 @@ public class LLMGenerationService {
         this.messageRepository = messageRepository;
         this.conversationRepository = conversationRepository;
         this.datasetService = datasetService;
+        this.ongoingGenerationItemRepository = ongoingGenerationItemRepository;
     }
 
 
@@ -92,23 +96,26 @@ public class LLMGenerationService {
     // chatgpt method
     private void generateMessages(final OngoingGeneration ongoingGeneration, final Integer promptVersion) {
 
-        // 0. for each generation item
-        for (OngoingGenerationItem im : ongoingGeneration.getItemList()) {
+        // 0. memorise generation list initial size
+        final int generationListInitialSize = ongoingGeneration.getItemList().size();
+
+        // 1. for each generation item
+        for (OngoingGenerationItem item : ongoingGeneration.getItemList()) {
             // 0. get prompt
             final Prompt prompt;
 
             if (Objects.nonNull(promptVersion)) {
-                prompt = promptService.findByDatasetTypeAndMessageTypeAndVersion(DatasetTypeEnum.INSTANT_MESSAGE, im.getMessageType(), promptVersion)
-                        .orElse(promptService.getDefaultPrompt(DatasetTypeEnum.INSTANT_MESSAGE, im.getMessageType()));
+                prompt = promptService.findByDatasetTypeAndMessageTypeAndVersion(DatasetTypeEnum.INSTANT_MESSAGE, item.getMessageType(), promptVersion)
+                        .orElse(promptService.getDefaultPrompt(DatasetTypeEnum.INSTANT_MESSAGE, item.getMessageType()));
             } else {
-                prompt = promptService.getDefaultPrompt(DatasetTypeEnum.INSTANT_MESSAGE, im.getMessageType());
+                prompt = promptService.getDefaultPrompt(DatasetTypeEnum.INSTANT_MESSAGE, item.getMessageType());
             }
 
             // 0. crate generation
             final GenerationCreation command = new GenerationCreation()
-                    .quantity(im.getQuantity())
-                    .type(MessageType.valueOf(im.getMessageTopic().name()))
-                    .topic(MessageTopic.valueOf(im.getMessageTopic().name()));
+                    .quantity(item.getQuantity())
+                    .type(MessageType.valueOf(item.getMessageTopic().name()))
+                    .topic(MessageTopic.valueOf(item.getMessageTopic().name()));
 
             final Generation generation = generationService.createGeneration(GenerationTypeEnum.INSTANT_MESSAGE, command, prompt);
 
@@ -117,13 +124,13 @@ public class LLMGenerationService {
             int tryCounter = 3; //limit the number of try when failed or duplicated messages
 
             // 2. generation
-            while (tryCounter > 0 && im.getQuantity() > 0) {
+            while (tryCounter > 0 && item.getQuantity() > 0) {
                 // 0. init a list
                 List<String> messages = new ArrayList<>();
 
                 // 1. generate with LLM
                 try {
-                    messages = simulateChatGptCallMessage(im.getMessageType().name(), im.getMessageTopic().name(), im.getQuantity(), prompt);
+                    messages = simulateChatGptCallMessage(item.getMessageType().name(), item.getMessageTopic().name(), item.getQuantity(), prompt);
                 } catch (Exception e) {
                     System.out.println("Error joining CHAT-GPT");
                 }
@@ -137,13 +144,13 @@ public class LLMGenerationService {
                     // check if hash already exist
                     if (simulation) {
                         instantMessageList.add(message);
-                        im.decrementQuantity();
+                        item.decrementQuantity();
                     } else {
                         boolean alreadyExist = messageRepository.existByHash(message.getHash());
 
                         if (!alreadyExist) {
                             instantMessageList.add(message);
-                            im.decrementQuantity();
+                            item.decrementQuantity();
                         } else {
                             hasDuplicated = true;
                         }
@@ -157,10 +164,10 @@ public class LLMGenerationService {
             }
 
             // 4. set generation item status
-            if (im.getQuantity() > 0) {
-                im.updateStatus(OngoingGenerationItemStatus.FAILURE);
+            if (item.getQuantity() > 0) {
+                item.updateStatus(OngoingGenerationItemStatus.FAILURE);
             } else {
-                im.updateStatus(OngoingGenerationItemStatus.SUCCESS);
+                item.updateStatus(OngoingGenerationItemStatus.SUCCESS);
             }
 
             // 5. persist messages
@@ -171,8 +178,24 @@ public class LLMGenerationService {
             if (Objects.nonNull(ongoingGeneration.getDatasetId())) {
                 datasetService.addGenerationListToDataset(ongoingGeneration.getDatasetId(), List.of(generation.getId()));
             }
+
+            // 7. delete item if fully succeded
+            if (item.getQuantity() == 0) {
+                ongoingGeneration.getItemList().remove(item);
+                ongoingGenerationItemRepository.deleteById(item.getId());
+            }
         }
 
+        // 2. adapt status or delete generation
+        if (ongoingGeneration.getItemList().isEmpty()){
+            ongoingGenerationService.deleteOngoingGenerationById(ongoingGeneration.getId());
+        } else {
+            if (!ongoingGeneration.getItemList().isEmpty() && ongoingGeneration.getItemList().size() < generationListInitialSize) {
+                ongoingGenerationService.updateStatus(ongoingGeneration, OngoingGenerationStatus.PARTIALLY_FAILED);
+            } else {
+                ongoingGenerationService.updateStatus(ongoingGeneration, OngoingGenerationStatus.FAILED);
+            }
+        }
     }
 
     private List<String> simulateChatGptCallMessage(String type, String topic, int quantity, final Prompt prompt) {
