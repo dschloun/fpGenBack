@@ -89,14 +89,12 @@ public class LLMGenerationService {
             o.updateStatus(OngoingGenerationStatus.ONGOING);
 
             // 2. generation
-            if (GenerationTypeEnum.INSTANT_MESSAGE.equals(o.getType())) {
-                generateMessages(o, o.getPromptVersion());
-            }
+            generation(o, o.getPromptVersion());
         }
     }
 
     // chatgpt method
-    private void generateMessages(final OngoingGeneration ongoingGeneration, final Integer promptVersion) {
+    private void generation(final OngoingGeneration ongoingGeneration, final Integer promptVersion) {
 
         // 0. memorise generation list initial size
         final int generationListInitialSize = ongoingGeneration.getItemList().size();
@@ -122,70 +120,7 @@ public class LLMGenerationService {
 
             final Generation generation = generationService.createGeneration(GenerationTypeEnum.INSTANT_MESSAGE, command, prompt, ongoingGeneration.getAuthor());
 
-            // 1.1. prepare message list
-            final List<InstantMessage> instantMessageList = new ArrayList<>();
-            int tryCounter = 3; //limit the number of try when failed or duplicated messages
-
-            // 1.2. generation
-            while (tryCounter > 0 && item.getQuantity() > 0) {
-                //1.2.0. init a list of content
-                List<String> messages = new ArrayList<>();
-
-                // 1.2.1. generate with LLM
-                try {
-                    messages = simulateChatGptCallMessage(item.getMessageType().name(), item.getMessageTopic().name(), item.getQuantity(), prompt);
-                } catch (Exception e) {
-                    tryCounter--;
-                    System.out.println("Error joining CHAT-GPT");
-                }
-
-                // 1.2.2. create messages objects (check if duplicated)
-                boolean hasDuplicated = false;
-
-                for (String s : messages) {
-                    String hash = generateSHA256(s);
-                    InstantMessage message = InstantMessageWebToDomainMapper.mapForCreate(command, s, hash);
-                    // check if hash already exist
-                    if (simulation) {
-                        instantMessageList.add(message);
-                        item.decrementQuantity();
-                    } else {
-                        boolean alreadyExist = messageRepository.existByHash(message.getHash());
-
-                        if (!alreadyExist) {
-                            instantMessageList.add(message);
-                            item.decrementQuantity();
-                        } else {
-                            hasDuplicated = true;
-                        }
-                    }
-                }
-
-                // 1.2.3. decrement try number if duplicate
-                if (hasDuplicated) {
-                    tryCounter--;
-                }
-            }
-
-            // 1.3. set generation item status
-            if (item.getQuantity() > 0) {
-                item.updateStatus(OngoingGenerationItemStatus.FAILURE);
-                ongoingGenerationItemRepository.updateStatus(item.getId(), OngoingGenerationItemStatus.FAILURE);
-            } else {
-                item.updateStatus(OngoingGenerationItemStatus.SUCCESS);
-                ongoingGenerationItemRepository.updateStatus(item.getId(), OngoingGenerationItemStatus.SUCCESS);
-            }
-
-            // 1.4. persist messages
-            if(instantMessageList.isEmpty()){
-                generationService.deleteGenerationById(generation.getId());
-            } else {
-                messageRepository.saveInstantMessageList(instantMessageList, generation);
-                // add generation to dataset if needed
-                if (Objects.nonNull(datasetId)) {
-                    datasetService.addGenerationListToDataset(datasetId, List.of(generation.getId()));
-                }
-            }
+            messageTreatment(item, prompt, command, generation, datasetId);
         }
 
         // 2. delete item if fully succeeded
@@ -210,6 +145,73 @@ public class LLMGenerationService {
         // 4. free dataset
         if (Objects.nonNull(datasetId)){
             eventPublisher.publishEvent(new DatasetOngoingGenerationCleanEvent(this, datasetId));
+        }
+    }
+
+    private void messageTreatment(OngoingGenerationItem item, Prompt prompt, GenerationCreation command, Generation generation, UUID datasetId) {
+        // 1.1. prepare message list
+        final List<InstantMessage> instantMessageList = new ArrayList<>();
+        int tryCounter = 3; //limit the number of try when failed or duplicated messages
+
+        // 1.2. generation
+        while (tryCounter > 0 && item.getQuantity() > 0) {
+            //1.2.0. init a list of content
+            List<String> messages = new ArrayList<>();
+
+            // 1.2.1. generate with LLM
+            try {
+                messages = simulateChatGptCallMessage(item.getMessageType().name(), item.getMessageTopic().name(), item.getQuantity(), prompt);
+            } catch (Exception e) {
+                tryCounter--;
+                System.out.println("Error joining CHAT-GPT");
+            }
+
+            // 1.2.2. create messages objects (check if duplicated)
+            boolean hasDuplicated = false;
+
+            for (String s : messages) {
+                String hash = generateSHA256(s);
+                InstantMessage message = InstantMessageWebToDomainMapper.mapForCreate(command, s, hash);
+                // check if hash already exist
+                if (simulation) {
+                    instantMessageList.add(message);
+                    item.decrementQuantity();
+                } else {
+                    boolean alreadyExist = messageRepository.existByHash(message.getHash());
+
+                    if (!alreadyExist) {
+                        instantMessageList.add(message);
+                        item.decrementQuantity();
+                    } else {
+                        hasDuplicated = true;
+                    }
+                }
+            }
+
+            // 1.2.3. decrement try number if duplicate
+            if (hasDuplicated) {
+                tryCounter--;
+            }
+        }
+
+        // 1.3. set generation item status
+        if (item.getQuantity() > 0) {
+            item.updateStatus(OngoingGenerationItemStatus.FAILURE);
+            ongoingGenerationItemRepository.updateStatus(item.getId(), OngoingGenerationItemStatus.FAILURE);
+        } else {
+            item.updateStatus(OngoingGenerationItemStatus.SUCCESS);
+            ongoingGenerationItemRepository.updateStatus(item.getId(), OngoingGenerationItemStatus.SUCCESS);
+        }
+
+        // 1.4. persist messages
+        if(instantMessageList.isEmpty()){
+            generationService.deleteGenerationById(generation.getId());
+        } else {
+            messageRepository.saveInstantMessageList(instantMessageList, generation);
+            // add generation to dataset if needed
+            if (Objects.nonNull(datasetId)) {
+                datasetService.addGenerationListToDataset(datasetId, List.of(generation.getId()));
+            }
         }
     }
 
