@@ -28,7 +28,6 @@ import be.unamur.model.GenerationCreation;
 import be.unamur.model.MessageTopic;
 import be.unamur.model.MessageType;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
@@ -103,7 +102,7 @@ public class LLMGenerationService {
 
         // 1. for each generation item
         for (OngoingGenerationItem item : ongoingGeneration.getItemList()) {
-            // 0. get prompt
+            // 1.0. get prompt
             final Prompt prompt;
 
             if (Objects.nonNull(promptVersion)) {
@@ -113,7 +112,7 @@ public class LLMGenerationService {
                 prompt = promptService.getDefaultPrompt(DatasetTypeEnum.INSTANT_MESSAGE, item.getMessageType());
             }
 
-            // 0. crate generation
+            // 1.0. create generation
             final GenerationCreation command = new GenerationCreation()
                     .quantity(item.getQuantity())
                     .type(MessageType.valueOf(item.getMessageType().name()))
@@ -121,16 +120,16 @@ public class LLMGenerationService {
 
             final Generation generation = generationService.createGeneration(GenerationTypeEnum.INSTANT_MESSAGE, command, prompt, ongoingGeneration.getAuthor());
 
-            // 1. get text
+            // 1.1. prepare message list
             final List<InstantMessage> instantMessageList = new ArrayList<>();
             int tryCounter = 3; //limit the number of try when failed or duplicated messages
 
-            // 2. generation
+            // 1.2. generation
             while (tryCounter > 0 && item.getQuantity() > 0) {
-                // 0. init a list
+                //1.2.0. init a list of content
                 List<String> messages = new ArrayList<>();
 
-                // 1. generate with LLM
+                // 1.2.1. generate with LLM
                 try {
                     messages = simulateChatGptCallMessage(item.getMessageType().name(), item.getMessageTopic().name(), item.getQuantity(), prompt);
                 } catch (Exception e) {
@@ -138,7 +137,7 @@ public class LLMGenerationService {
                     System.out.println("Error joining CHAT-GPT");
                 }
 
-                // 2. create messages objects
+                // 1.2.2. create messages objects (check if duplicated)
                 boolean hasDuplicated = false;
 
                 for (String s : messages) {
@@ -160,13 +159,13 @@ public class LLMGenerationService {
                     }
                 }
 
-                // 3. increment try number if duplicate
+                // 1.2.3. decrement try number if duplicate
                 if (hasDuplicated) {
                     tryCounter--;
                 }
             }
 
-            // 4. set generation item status
+            // 1.3. set generation item status
             if (item.getQuantity() > 0) {
                 item.updateStatus(OngoingGenerationItemStatus.FAILURE);
                 ongoingGenerationItemRepository.updateStatus(item.getId(), OngoingGenerationItemStatus.FAILURE);
@@ -175,12 +174,12 @@ public class LLMGenerationService {
                 ongoingGenerationItemRepository.updateStatus(item.getId(), OngoingGenerationItemStatus.SUCCESS);
             }
 
-            // 5. persist messages
+            // 1.4. persist messages
             if(instantMessageList.isEmpty()){
                 generationService.deleteGenerationById(generation.getId());
             } else {
                 messageRepository.saveInstantMessageList(instantMessageList, generation);
-                // 6. add generation to dataset if needed
+                // add generation to dataset if needed
                 if (Objects.nonNull(ongoingGeneration.getDatasetId())) {
                     datasetService.addGenerationListToDataset(ongoingGeneration.getDatasetId(), List.of(generation.getId()));
                 }
@@ -193,7 +192,7 @@ public class LLMGenerationService {
                 .filter(item -> OngoingGenerationItemStatus.SUCCESS.equals(item.getStatus()))
                 .toList();
 
-        List<UUID> idsToDelete = successItems.stream().map(BaseUuidDomain::getId).toList();
+        final List<UUID> idsToDelete = successItems.stream().map(BaseUuidDomain::getId).toList();
 
         // 3. adapt status or delete generation
         if (successItems.size() == generationListInitialSize){
