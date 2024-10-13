@@ -80,7 +80,7 @@ public class ConversationOngoingGenerationListener {
                         } else {
                             // Generation successful
                             // 1. create generation data
-                            final Generation generation = generationService.createGeneration(event.getType(), cc, null);
+                            final Generation generation = generationService.createGeneration(event.getType(), cc, null, null);
                             // 2. prepare a list of instant messages
                             final List<Conversation> conversationList = new ArrayList<>();
                             // 3. generate instant messages

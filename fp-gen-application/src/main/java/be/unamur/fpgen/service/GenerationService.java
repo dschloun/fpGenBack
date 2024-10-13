@@ -37,9 +37,9 @@ public class GenerationService implements FindByIdService{
     }
 
     @Transactional
-    public Generation createGeneration(final GenerationTypeEnum generationType, final GenerationCreation command, final Prompt prompt) {
+    public Generation createGeneration(final GenerationTypeEnum generationType, final GenerationCreation command, final Prompt prompt, final Author author) {
         // 0. check if author is registered
-        final Author author = authorService.getAuthorByTrigram(UserContextHolder.getContext().getTrigram());
+//        final Author author = authorService.getAuthorByTrigram(UserContextHolder.getContext().getTrigram());
         // 0.1 get prompt version
 //        final Prompt prompt = Optional.ofNullable(command.getPromptVersion()).map(v -> promptService.findByDatasetTypeAndMessageTypeAndVersion(DatasetTypeEnum.valueOf(generationType.name()), MessageTypeEnum.valueOf(command.getType().name()), v)
 //                        .orElse(promptService.getDefaultPrompt(DatasetTypeEnum.INSTANT_MESSAGE, MessageTypeEnum.valueOf(command.getType().name()))))

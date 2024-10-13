@@ -76,7 +76,7 @@ public class ConversationService {
         // 0. for each
         command.getConversationCreationList().forEach(cc -> {
             // 1. create generation data
-            final Generation generation = generationService.createGeneration(GenerationTypeEnum.CONVERSATION, cc, null);
+            final Generation generation = generationService.createGeneration(GenerationTypeEnum.CONVERSATION, cc, null, null);
 
             // 3. generate conversations
             //todo chat gpt api with prompt // return the x messages in json format, unmarshall, ...
