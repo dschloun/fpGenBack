@@ -322,12 +322,13 @@ public class LLMGenerationService {
             throw new RuntimeException(e);
         }
 
-        final String hashString = type.name()
+        final String hashString = generateSHA256(
+                type.name()
                 + topic.name()
                 + messages
                 .stream()
                 .map(c -> c.getOrderNumber() + c.getContent())
-                .collect(Collectors.joining());
+                .collect(Collectors.joining()));
 
         // 3.1. save the conversation
         final Conversation conversation = Conversation.newBuilder()
