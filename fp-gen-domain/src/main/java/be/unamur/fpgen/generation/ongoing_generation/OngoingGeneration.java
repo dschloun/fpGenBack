@@ -16,6 +16,8 @@ public class OngoingGeneration extends BaseUuidDomain {
     private OngoingGenerationStatus status;
     private final Integer promptVersion;
     private final UUID datasetId;
+    private final Integer minInteractionNumber;
+    private final Integer maxInteractionNumber;
 
     private OngoingGeneration(Builder builder) {
         super(builder.getId(), builder.getCreationDate(), builder.getModificationDate());
@@ -25,6 +27,8 @@ public class OngoingGeneration extends BaseUuidDomain {
         status = builder.status;
         promptVersion = builder.promptVersion;
         datasetId = builder.datasetId;
+        minInteractionNumber = builder.minInteractionNumber;
+        maxInteractionNumber = builder.maxInteractionNumber;
     }
 
     public GenerationTypeEnum getType() {
@@ -55,6 +59,14 @@ public class OngoingGeneration extends BaseUuidDomain {
         return datasetId;
     }
 
+    public Integer getMinInteractionNumber() {
+        return minInteractionNumber;
+    }
+
+    public Integer getMaxInteractionNumber() {
+        return maxInteractionNumber;
+    }
+
     public static Builder newBuilder() {
         return new Builder();
     }
@@ -67,6 +79,8 @@ public class OngoingGeneration extends BaseUuidDomain {
         private OngoingGenerationStatus status;
         private Integer promptVersion;
         private UUID datasetId;
+        private Integer minInteractionNumber;
+        private Integer maxInteractionNumber;
 
         private Builder() {
         }
@@ -98,6 +112,16 @@ public class OngoingGeneration extends BaseUuidDomain {
 
         public Builder withDatasetId(UUID val){
             datasetId = val;
+            return this;
+        }
+
+        public Builder withMinInteractionNumber(Integer val) {
+            minInteractionNumber = val;
+            return this;
+        }
+
+        public Builder withMaxInteractionNumber(Integer val) {
+            maxInteractionNumber = val;
             return this;
         }
 

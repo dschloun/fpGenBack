@@ -126,6 +126,26 @@ databaseChangeLog:
                     unique: false
 
   - changeSet:
+      id: add-min-max-on-ongoing-generation
+      author: dsc
+      changes:
+        - addColumn:
+            tableName: ongoing_generation
+            columns:
+              - column:
+                  name: min_interaction_number
+                  type: int
+                  constraints:
+                    nullable: true
+                    unique: false
+              - column:
+                  name: max_interaction_number
+                  type: int
+                  constraints:
+                    nullable: true
+                    unique: false
+
+  - changeSet:
       id: add-hash-on-message
       author: dsc
       changes:

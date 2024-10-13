@@ -19,6 +19,8 @@ public class OngoingGenerationEntity extends BaseUuidEntity {
     private OngoingGenerationStatus status;
     private Integer promptVersion;
     private UUID datasetId;
+    private Integer minInteractionNumber;
+    private Integer maxInteractionNumber;
 
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -75,5 +77,23 @@ public class OngoingGenerationEntity extends BaseUuidEntity {
 
     public void setDatasetId(UUID datasetId) {
         this.datasetId = datasetId;
+    }
+
+    @Column(name = "min_interaction_number", nullable = true)
+    public Integer getMinInteractionNumber() {
+        return minInteractionNumber;
+    }
+
+    public void setMinInteractionNumber(Integer minInteractionNumber) {
+        this.minInteractionNumber = minInteractionNumber;
+    }
+
+    @Column(name = "max_interaction_number", nullable = true)
+    public Integer getMaxInteractionNumber() {
+        return maxInteractionNumber;
+    }
+
+    public void setMaxInteractionNumber(Integer maxInteractionNumber) {
+        this.maxInteractionNumber = maxInteractionNumber;
     }
 }

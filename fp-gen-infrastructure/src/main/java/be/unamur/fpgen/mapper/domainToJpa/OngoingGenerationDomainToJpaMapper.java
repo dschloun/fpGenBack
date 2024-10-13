@@ -15,6 +15,8 @@ public class OngoingGenerationDomainToJpaMapper {
         entity.setPromptVersion(domain.getPromptVersion());
         entity.setDatasetId(domain.getDatasetId());
         entity.setItemList(MapperUtil.mapSet(domain.getItemList(), i -> OngoingGenerationItemDomainToJpaMapper.mapForCreate(i, entity)));
+        entity.setMinInteractionNumber(domain.getMinInteractionNumber());
+        entity.setMaxInteractionNumber(domain.getMaxInteractionNumber());
         return entity;
     }
 }

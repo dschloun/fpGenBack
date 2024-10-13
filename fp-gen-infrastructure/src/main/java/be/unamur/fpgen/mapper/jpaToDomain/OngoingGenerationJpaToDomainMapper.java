@@ -16,6 +16,8 @@ public class OngoingGenerationJpaToDomainMapper {
                 .withStatus(entity.getStatus())
                 .withPromptVersion(entity.getPromptVersion())
                 .withDatasetId(entity.getDatasetId())
+                .withMinInteractionNumber(entity.getMinInteractionNumber())
+                .withMaxInteractionNumber(entity.getMaxInteractionNumber())
                 .build();
     }
 }

@@ -37,6 +37,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class LLMGenerationService {
@@ -118,9 +119,13 @@ public class LLMGenerationService {
                     .type(MessageType.valueOf(item.getMessageType().name()))
                     .topic(MessageTopic.valueOf(item.getMessageTopic().name()));
 
-            final Generation generation = generationService.createGeneration(GenerationTypeEnum.INSTANT_MESSAGE, command, prompt, ongoingGeneration.getAuthor());
+            final Generation generation = generationService.createGeneration(ongoingGeneration.getType(), command, prompt, ongoingGeneration.getAuthor());
 
-            messageTreatment(item, prompt, command, generation, datasetId);
+            if(GenerationTypeEnum.INSTANT_MESSAGE.equals(ongoingGeneration.getType())){
+                messageTreatment(item, prompt, command, generation, datasetId);
+            } else {
+                conversationTreatment(item, ongoingGeneration.getMinInteractionNumber(), ongoingGeneration.getMaxInteractionNumber(), prompt, generation, datasetId);
+            }
         }
 
         // 2. delete item if fully succeeded
@@ -132,7 +137,7 @@ public class LLMGenerationService {
         final List<UUID> idsToDelete = successItems.stream().map(BaseUuidDomain::getId).toList();
 
         // 3. adapt status or delete generation
-        if (successItems.size() == generationListInitialSize){
+        if (successItems.size() == generationListInitialSize) {
             ongoingGenerationService.deleteOngoingGenerationById(ongoingGeneration.getId());
         } else {
             if (!successItems.isEmpty() && successItems.size() < generationListInitialSize) {
@@ -143,7 +148,7 @@ public class LLMGenerationService {
         }
 
         // 4. free dataset
-        if (Objects.nonNull(datasetId)){
+        if (Objects.nonNull(datasetId)) {
             eventPublisher.publishEvent(new DatasetOngoingGenerationCleanEvent(this, datasetId));
         }
     }
@@ -204,7 +209,7 @@ public class LLMGenerationService {
         }
 
         // 1.4. persist messages
-        if(instantMessageList.isEmpty()){
+        if (instantMessageList.isEmpty()) {
             generationService.deleteGenerationById(generation.getId());
         } else {
             messageRepository.saveInstantMessageList(instantMessageList, generation);
@@ -231,8 +236,72 @@ public class LLMGenerationService {
         return result;
     }
 
+    private void conversationTreatment(OngoingGenerationItem item, Integer min, Integer max, Prompt prompt, Generation generation, UUID datasetId) {
+        // 1.1. prepare message list
+        final List<Conversation> conversationList = new ArrayList<>();
+        int tryCounter = 3; //limit the number of try when failed or duplicated messages
+
+        // 1.2. generation
+        while (tryCounter > 0 && item.getQuantity() > 0) {
+            //1.2.0. init a list of content
+            Conversation conv = null;
+
+            // 1.2.1. generate with LLM
+            try {
+                conv = simulateChatGptCallConversation(item.getMessageType(), item.getMessageTopic(), min, max, prompt);
+            } catch (Exception e) {
+                tryCounter--;
+                System.out.println("Error joining CHAT-GPT");
+            }
+
+            // 1.2.2. create messages objects (check if duplicated)
+            boolean hasDuplicated = false;
+
+            if (Objects.nonNull(conv)) {
+                // check if hash already exist
+                if (simulation) {
+                    conversationRepository.saveConversation(conv);
+                    item.decrementQuantity();
+                } else {
+                    boolean alreadyExist = conversationRepository.existsByHash(conv.getHash()); //todo do the same for conversation
+
+                    if (!alreadyExist) {
+                        conversationList.add(conv);
+                        item.decrementQuantity();
+                    } else {
+                        hasDuplicated = true;
+                    }
+                }
+            }
+            // 1.2.3. decrement try number if duplicate
+            if (hasDuplicated) {
+                tryCounter--;
+            }
+        }
+
+        // 1.3. set generation item status
+        if (item.getQuantity() > 0) {
+            item.updateStatus(OngoingGenerationItemStatus.FAILURE);
+            ongoingGenerationItemRepository.updateStatus(item.getId(), OngoingGenerationItemStatus.FAILURE);
+        } else {
+            item.updateStatus(OngoingGenerationItemStatus.SUCCESS);
+            ongoingGenerationItemRepository.updateStatus(item.getId(), OngoingGenerationItemStatus.SUCCESS);
+        }
+
+        // 1.4. persist messages
+        if (conversationList.isEmpty()) {
+            generationService.deleteGenerationById(generation.getId());
+        } else {
+            conversationRepository.saveConversationList(conversationList, generation);
+            // add generation to dataset if needed
+            if (Objects.nonNull(datasetId)) {
+                datasetService.addGenerationListToDataset(datasetId, List.of(generation.getId()));
+            }
+        }
+    }
+
     // chatgpt simulation methods conversation
-    private Conversation simulateChatGptCall(final MessageTypeEnum type, final MessageTopicEnum topic, final int minimalInteraction, final int maxInteraction) {
+    private Conversation simulateChatGptCallConversation(final MessageTypeEnum type, final MessageTopicEnum topic, final int minimalInteraction, final int maxInteraction, final Prompt prompt) {
         // 0. simulate interlocutor
         final Interlocutor interlocutor1 = interlocutorService.getRandomInterlocutorByType(TypeCorrespondenceMapper.getCorrespondence(type));
         final Interlocutor interlocutor2 = interlocutorService.getRandomInterlocutorByType(InterlocutorTypeEnum.GENUINE);
@@ -245,12 +314,20 @@ public class LLMGenerationService {
         try {
             while (i < quantity) {
                 i++;
+                //todo really call chat gpt with prompt
                 messages.add(mockConversationMessageGeneration(type, topic, alternator.getNext(), alternator.getNext(), i, quantity));
             }
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+
+        final String hashString = type.name()
+                + topic.name()
+                + messages
+                .stream()
+                .map(c -> c.getOrderNumber() + c.getContent())
+                .collect(Collectors.joining());
 
         // 3.1. save the conversation
         final Conversation conversation = Conversation.newBuilder()
@@ -259,6 +336,7 @@ public class LLMGenerationService {
                 .withType(type)
                 .withTopic(topic)
                 .withConversationMessageList(messages)
+                .withHash(hashString)
                 .build();
 
         return conversation;

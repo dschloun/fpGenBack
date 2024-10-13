@@ -25,4 +25,6 @@ public interface ConversationRepository {
     List<Conversation> saveConversationList(List<Conversation> conversationList, Generation generation);
 
     List<Conversation> findAllByGenerationId(UUID generationId);
+
+    boolean existsByHash(String hash);
 }
