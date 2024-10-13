@@ -129,6 +129,7 @@ public class LLMGenerationService {
                 try {
                     messages = simulateChatGptCallMessage(item.getMessageType().name(), item.getMessageTopic().name(), item.getQuantity(), prompt);
                 } catch (Exception e) {
+                    tryCounter--;
                     System.out.println("Error joining CHAT-GPT");
                 }
 
@@ -169,12 +170,14 @@ public class LLMGenerationService {
             }
 
             // 5. persist messages
-            messageRepository.saveInstantMessageList(instantMessageList, generation);
-
-            // 6. add generation to dataset if needed
-            //todo what if all items of generation have failed???
-            if (Objects.nonNull(ongoingGeneration.getDatasetId())) {
-                datasetService.addGenerationListToDataset(ongoingGeneration.getDatasetId(), List.of(generation.getId()));
+            if(instantMessageList.isEmpty()){
+                generationService.deleteGenerationById(generation.getId());
+            } else {
+                messageRepository.saveInstantMessageList(instantMessageList, generation);
+                // 6. add generation to dataset if needed
+                if (Objects.nonNull(ongoingGeneration.getDatasetId())) {
+                    datasetService.addGenerationListToDataset(ongoingGeneration.getDatasetId(), List.of(generation.getId()));
+                }
             }
         }
 
