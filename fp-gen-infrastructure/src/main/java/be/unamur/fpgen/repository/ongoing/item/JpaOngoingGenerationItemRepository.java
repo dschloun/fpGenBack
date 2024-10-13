@@ -8,14 +8,14 @@ import java.util.UUID;
 @Repository
 public class JpaOngoingGenerationItemRepository implements OngoingGenerationItemRepository {
 
-    private final OngoingGenerationItemRepository ongoingGenerationItemRepository;
+    private final JpaOngoingGenerationItemRepositoryCRUD jpaOngoingGenerationItemRepositoryCRUD;
 
-    public JpaOngoingGenerationItemRepository(OngoingGenerationItemRepository ongoingGenerationItemRepository) {
-        this.ongoingGenerationItemRepository = ongoingGenerationItemRepository;
+    public JpaOngoingGenerationItemRepository(JpaOngoingGenerationItemRepositoryCRUD jpaOngoingGenerationItemRepositoryCRUD) {
+        this.jpaOngoingGenerationItemRepositoryCRUD = jpaOngoingGenerationItemRepositoryCRUD;
     }
 
     @Override
     public void deleteById(UUID id) {
-        ongoingGenerationItemRepository.deleteById(id);
+        jpaOngoingGenerationItemRepositoryCRUD.deleteById(id);
     }
 }
