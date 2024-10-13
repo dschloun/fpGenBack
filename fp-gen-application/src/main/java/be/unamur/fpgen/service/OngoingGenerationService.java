@@ -29,7 +29,7 @@ public class OngoingGenerationService {
     }
 
     @Transactional
-    public OngoingGeneration createOngoingGeneration(GenerationTypeEnum type, UUID datasetId, Integer promptVersion, List<GenerationCreation> generations) {
+    public OngoingGeneration createOngoingGeneration(GenerationTypeEnum type, UUID datasetId, Integer promptVersion, List<GenerationCreation> generations, Integer min, Integer max) {
         final Author author = authorService.getAuthorByTrigram(UserContextHolder.getContext().getTrigram());
         final Set<OngoingGenerationItem> items = new HashSet<>();
         for(GenerationCreation g: generations){
@@ -49,6 +49,8 @@ public class OngoingGenerationService {
                 .withDatasetId(datasetId)
                 .withPromptVersion(Optional.ofNullable(promptVersion).orElse(0)) // if null => v0
                 .withItemList(items)
+                        .withMinInteractionNumber(min)
+                        .withMaxInteractionNumber(max)
                 .build());
     }
 
