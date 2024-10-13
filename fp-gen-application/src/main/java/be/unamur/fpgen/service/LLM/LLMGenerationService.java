@@ -16,6 +16,7 @@ import be.unamur.fpgen.message.ConversationMessage;
 import be.unamur.fpgen.message.InstantMessage;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
+import be.unamur.fpgen.messaging.event.DatasetOngoingGenerationCleanEvent;
 import be.unamur.fpgen.messaging.event.OngoingGenerationStatusChangeEvent;
 import be.unamur.fpgen.prompt.Prompt;
 import be.unamur.fpgen.repository.ConversationRepository;
@@ -99,6 +100,7 @@ public class LLMGenerationService {
 
         // 0. memorise generation list initial size
         final int generationListInitialSize = ongoingGeneration.getItemList().size();
+        final UUID datasetId = ongoingGeneration.getDatasetId();
 
         // 1. for each generation item
         for (OngoingGenerationItem item : ongoingGeneration.getItemList()) {
@@ -180,8 +182,8 @@ public class LLMGenerationService {
             } else {
                 messageRepository.saveInstantMessageList(instantMessageList, generation);
                 // add generation to dataset if needed
-                if (Objects.nonNull(ongoingGeneration.getDatasetId())) {
-                    datasetService.addGenerationListToDataset(ongoingGeneration.getDatasetId(), List.of(generation.getId()));
+                if (Objects.nonNull(datasetId)) {
+                    datasetService.addGenerationListToDataset(datasetId, List.of(generation.getId()));
                 }
             }
         }
@@ -203,6 +205,11 @@ public class LLMGenerationService {
             } else {
                 eventPublisher.publishEvent(new OngoingGenerationStatusChangeEvent(this, ongoingGeneration.getId(), OngoingGenerationStatus.FAILED, idsToDelete));
             }
+        }
+
+        // 4. free dataset
+        if (Objects.nonNull(datasetId)){
+            eventPublisher.publishEvent(new DatasetOngoingGenerationCleanEvent(this, datasetId));
         }
     }
 

@@ -21,9 +21,11 @@ public class OngoingGenerationStatusListener {
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void generateInstantMessages(final OngoingGenerationStatusChangeEvent event) {
-         ongoingGenerationRepository.updateStatus(event.getOngoingGenerationId(), event.getStatus());
+    public void handle(final OngoingGenerationStatusChangeEvent event) {
+        ongoingGenerationRepository.updateStatus(event.getOngoingGenerationId(), event.getStatus());
 
-         ongoingGenerationItemRepository.deleteAllByIdIn(event.getItemsToDelete());
+        if (!event.getItemsToDelete().isEmpty()) {
+            ongoingGenerationItemRepository.deleteAllByIdIn(event.getItemsToDelete());
+        }
     }
 }
