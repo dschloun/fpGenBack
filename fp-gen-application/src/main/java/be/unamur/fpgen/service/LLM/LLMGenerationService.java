@@ -34,14 +34,12 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class LLMGenerationService {
 
     @Value("${simulationLLM}")
     private boolean simulation;
-
 
     private final OngoingGenerationService ongoingGenerationService;
     private final GenerationService generationService;
@@ -70,8 +68,6 @@ public class LLMGenerationService {
         this.ongoingGenerationItemRepository = ongoingGenerationItemRepository;
     }
 
-
-
     @Transactional
     public void generate() {
 
@@ -91,7 +87,6 @@ public class LLMGenerationService {
             if (GenerationTypeEnum.INSTANT_MESSAGE.equals(o.getType())) {
                 generateMessages(o, o.getPromptVersion());
             }
-
         }
     }
 
@@ -194,8 +189,6 @@ public class LLMGenerationService {
             ongoingGenerationItemRepository.deleteAllByIdIn(idsToDelete);
         }
 
-
-
         // 3. adapt status or delete generation
         if (successItems.size() == generationListInitialSize){
             ongoingGenerationService.deleteOngoingGenerationById(ongoingGeneration.getId());
@@ -256,7 +249,6 @@ public class LLMGenerationService {
 
         return conversation;
     }
-
 
     private ConversationMessage mockConversationMessageGeneration(final MessageTypeEnum type, final MessageTopicEnum topic, final Interlocutor from, final Interlocutor to, final int number, final int quantity) {
         return ConversationMessage.newBuilder()
