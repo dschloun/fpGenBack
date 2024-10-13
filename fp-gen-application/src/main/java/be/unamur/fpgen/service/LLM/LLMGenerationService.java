@@ -1,5 +1,6 @@
 package be.unamur.fpgen.service.LLM;
 
+import be.unamur.fpgen.BaseUuidDomain;
 import be.unamur.fpgen.conversation.Conversation;
 import be.unamur.fpgen.dataset.DatasetTypeEnum;
 import be.unamur.fpgen.generation.Generation;
@@ -33,6 +34,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class LLMGenerationService {
@@ -166,6 +168,7 @@ public class LLMGenerationService {
             // 4. set generation item status
             if (item.getQuantity() > 0) {
                 item.updateStatus(OngoingGenerationItemStatus.FAILURE);
+                ongoingGenerationItemRepository.updateStatus(item.getId(), OngoingGenerationItemStatus.FAILURE);
             } else {
                 item.updateStatus(OngoingGenerationItemStatus.SUCCESS);
             }
@@ -178,19 +181,26 @@ public class LLMGenerationService {
             if (Objects.nonNull(ongoingGeneration.getDatasetId())) {
                 datasetService.addGenerationListToDataset(ongoingGeneration.getDatasetId(), List.of(generation.getId()));
             }
-
-            // 7. delete item if fully succeded
-            if (item.getQuantity() == 0) {
-                ongoingGeneration.getItemList().remove(item);
-                ongoingGenerationItemRepository.deleteById(item.getId());
-            }
         }
 
-        // 2. adapt status or delete generation
-        if (ongoingGeneration.getItemList().isEmpty()){
+        // 2. delete item if fully succeeded
+        final List<OngoingGenerationItem> successItems = ongoingGeneration.getItemList()
+                .stream()
+                .filter(item -> OngoingGenerationItemStatus.SUCCESS.equals(item.getStatus()))
+                .toList();
+
+        if (!successItems.isEmpty()){
+            List<UUID> idsToDelete = successItems.stream().map(BaseUuidDomain::getId).toList();
+            ongoingGenerationItemRepository.deleteAllByIdIn(idsToDelete);
+        }
+
+
+
+        // 3. adapt status or delete generation
+        if (successItems.size() == generationListInitialSize){
             ongoingGenerationService.deleteOngoingGenerationById(ongoingGeneration.getId());
         } else {
-            if (!ongoingGeneration.getItemList().isEmpty() && ongoingGeneration.getItemList().size() < generationListInitialSize) {
+            if (!successItems.isEmpty() && successItems.size() < generationListInitialSize) {
                 ongoingGenerationService.updateStatus(ongoingGeneration, OngoingGenerationStatus.PARTIALLY_FAILED);
             } else {
                 ongoingGenerationService.updateStatus(ongoingGeneration, OngoingGenerationStatus.FAILED);
