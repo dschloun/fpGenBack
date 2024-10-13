@@ -114,7 +114,7 @@ public class LLMGenerationService {
             // 0. crate generation
             final GenerationCreation command = new GenerationCreation()
                     .quantity(item.getQuantity())
-                    .type(MessageType.valueOf(item.getMessageTopic().name()))
+                    .type(MessageType.valueOf(item.getMessageType().name()))
                     .topic(MessageTopic.valueOf(item.getMessageTopic().name()));
 
             final Generation generation = generationService.createGeneration(GenerationTypeEnum.INSTANT_MESSAGE, command, prompt);
