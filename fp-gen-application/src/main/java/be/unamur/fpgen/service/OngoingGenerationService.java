@@ -5,6 +5,7 @@ import be.unamur.fpgen.context.UserContextHolder;
 import be.unamur.fpgen.generation.GenerationTypeEnum;
 import be.unamur.fpgen.generation.ongoing_generation.OngoingGeneration;
 import be.unamur.fpgen.generation.ongoing_generation.OngoingGenerationItem;
+import be.unamur.fpgen.generation.ongoing_generation.OngoingGenerationItemStatus;
 import be.unamur.fpgen.generation.ongoing_generation.OngoingGenerationStatus;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
@@ -37,6 +38,7 @@ public class OngoingGenerationService {
                             .withMessageType(MessageTypeEnum.valueOf(g.getType().name()))
                             .withMessageTopic(MessageTopicEnum.valueOf(g.getTopic().name()))
                             .withQuantity(g.getQuantity())
+                            .withStatus(OngoingGenerationItemStatus.WAITING)
                             .build()
             );
         }
