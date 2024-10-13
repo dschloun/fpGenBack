@@ -172,6 +172,7 @@ public class LLMGenerationService {
                 ongoingGenerationItemRepository.updateStatus(item.getId(), OngoingGenerationItemStatus.FAILURE);
             } else {
                 item.updateStatus(OngoingGenerationItemStatus.SUCCESS);
+                ongoingGenerationItemRepository.updateStatus(item.getId(), OngoingGenerationItemStatus.SUCCESS);
             }
 
             // 5. persist messages
@@ -192,19 +193,16 @@ public class LLMGenerationService {
                 .filter(item -> OngoingGenerationItemStatus.SUCCESS.equals(item.getStatus()))
                 .toList();
 
-        if (!successItems.isEmpty()){
-            List<UUID> idsToDelete = successItems.stream().map(BaseUuidDomain::getId).toList();
-            ongoingGenerationItemRepository.deleteAllByIdIn(idsToDelete);
-        }
+        List<UUID> idsToDelete = successItems.stream().map(BaseUuidDomain::getId).toList();
 
         // 3. adapt status or delete generation
         if (successItems.size() == generationListInitialSize){
             ongoingGenerationService.deleteOngoingGenerationById(ongoingGeneration.getId());
         } else {
             if (!successItems.isEmpty() && successItems.size() < generationListInitialSize) {
-                eventPublisher.publishEvent(new OngoingGenerationStatusChangeEvent(this, ongoingGeneration.getId(), OngoingGenerationStatus.PARTIALLY_FAILED));
+                eventPublisher.publishEvent(new OngoingGenerationStatusChangeEvent(this, ongoingGeneration.getId(), OngoingGenerationStatus.PARTIALLY_FAILED, idsToDelete));
             } else {
-                eventPublisher.publishEvent(new OngoingGenerationStatusChangeEvent(this, ongoingGeneration.getId(), OngoingGenerationStatus.FAILED));
+                eventPublisher.publishEvent(new OngoingGenerationStatusChangeEvent(this, ongoingGeneration.getId(), OngoingGenerationStatus.FAILED, idsToDelete));
             }
         }
     }
