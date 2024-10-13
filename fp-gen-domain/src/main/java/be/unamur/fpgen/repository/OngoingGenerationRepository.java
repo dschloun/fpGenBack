@@ -16,7 +16,7 @@ public interface OngoingGenerationRepository {
 
     void addItemList(OngoingGeneration ongoingGeneration, List<OngoingGenerationItem> itemList);
 
-    void updateStatus(OngoingGeneration ongoingGeneration, OngoingGenerationStatus status);
+    void updateStatus(UUID id, OngoingGenerationStatus status);
 
     List<OngoingGeneration> findAllByAuthorId(UUID authorId);
 

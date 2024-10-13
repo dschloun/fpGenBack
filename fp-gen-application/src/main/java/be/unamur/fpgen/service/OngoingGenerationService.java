@@ -58,8 +58,8 @@ public class OngoingGenerationService {
     }
 
     @Transactional
-    public void updateStatus(OngoingGeneration ongoingGeneration, OngoingGenerationStatus status) {
-        ongoingGenerationRepository.updateStatus(ongoingGeneration, status);
+    public void updateStatus(UUID id, OngoingGenerationStatus status) {
+        ongoingGenerationRepository.updateStatus(id, status);
     }
 
     @Transactional

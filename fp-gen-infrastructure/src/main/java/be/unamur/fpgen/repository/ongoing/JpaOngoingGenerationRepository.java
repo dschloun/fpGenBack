@@ -50,8 +50,8 @@ public class JpaOngoingGenerationRepository implements OngoingGenerationReposito
     }
 
     @Override
-    public void updateStatus(OngoingGeneration ongoingGeneration, OngoingGenerationStatus status) {
-        final OngoingGenerationEntity ongoingGenerationEntity = jpaOngoingGenerationRepositoryCRUD.findById(ongoingGeneration.getId()).orElseThrow();
+    public void updateStatus(UUID id, OngoingGenerationStatus status) {
+        final OngoingGenerationEntity ongoingGenerationEntity = jpaOngoingGenerationRepositoryCRUD.findById(id).orElseThrow();
         ongoingGenerationEntity.setStatus(status);
         jpaOngoingGenerationRepositoryCRUD.save(ongoingGenerationEntity);
     }

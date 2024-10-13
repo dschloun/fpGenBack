@@ -16,6 +16,7 @@ import be.unamur.fpgen.message.ConversationMessage;
 import be.unamur.fpgen.message.InstantMessage;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
+import be.unamur.fpgen.messaging.event.OngoingGenerationStatusChangeEvent;
 import be.unamur.fpgen.prompt.Prompt;
 import be.unamur.fpgen.repository.ConversationRepository;
 import be.unamur.fpgen.repository.MessageRepository;
@@ -27,6 +28,8 @@ import be.unamur.model.GenerationCreation;
 import be.unamur.model.MessageTopic;
 import be.unamur.model.MessageType;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -49,6 +52,7 @@ public class LLMGenerationService {
     private final ConversationRepository conversationRepository;
     private final DatasetService datasetService;
     private final OngoingGenerationItemRepository ongoingGenerationItemRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     public LLMGenerationService(final OngoingGenerationService ongoingGenerationService,
                                 final GenerationService generationService,
@@ -57,7 +61,7 @@ public class LLMGenerationService {
                                 final MessageRepository messageRepository,
                                 final ConversationRepository conversationRepository,
                                 final DatasetService datasetService,
-                                final OngoingGenerationItemRepository ongoingGenerationItemRepository) {
+                                final OngoingGenerationItemRepository ongoingGenerationItemRepository, ApplicationEventPublisher eventPublisher) {
         this.ongoingGenerationService = ongoingGenerationService;
         this.generationService = generationService;
         this.interlocutorService = interlocutorService;
@@ -66,6 +70,7 @@ public class LLMGenerationService {
         this.conversationRepository = conversationRepository;
         this.datasetService = datasetService;
         this.ongoingGenerationItemRepository = ongoingGenerationItemRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     @Transactional
@@ -197,9 +202,9 @@ public class LLMGenerationService {
             ongoingGenerationService.deleteOngoingGenerationById(ongoingGeneration.getId());
         } else {
             if (!successItems.isEmpty() && successItems.size() < generationListInitialSize) {
-                ongoingGenerationService.updateStatus(ongoingGeneration, OngoingGenerationStatus.PARTIALLY_FAILED);
+                eventPublisher.publishEvent(new OngoingGenerationStatusChangeEvent(this, ongoingGeneration.getId(), OngoingGenerationStatus.PARTIALLY_FAILED));
             } else {
-                ongoingGenerationService.updateStatus(ongoingGeneration, OngoingGenerationStatus.FAILED);
+                eventPublisher.publishEvent(new OngoingGenerationStatusChangeEvent(this, ongoingGeneration.getId(), OngoingGenerationStatus.FAILED));
             }
         }
     }
