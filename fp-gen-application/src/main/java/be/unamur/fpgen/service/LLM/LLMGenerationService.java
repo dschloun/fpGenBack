@@ -244,11 +244,11 @@ public class LLMGenerationService {
         // 1.2. generation
         while (tryCounter > 0 && item.getQuantity() > 0) {
             //1.2.0. init a list of content
-            Conversation conv = null;
+            List<Conversation> conversationTempList = new ArrayList<>();
 
             // 1.2.1. generate with LLM
             try {
-                conv = simulateChatGptCallConversation(item.getMessageType(), item.getMessageTopic(), min, max, prompt);
+                conversationTempList = simulateChatGptCallConversationList(item.getMessageType(), item.getMessageTopic(), min, max, prompt, item.getQuantity());
             } catch (Exception e) {
                 tryCounter--;
                 System.out.println("Error joining CHAT-GPT");
@@ -257,7 +257,7 @@ public class LLMGenerationService {
             // 1.2.2. create messages objects (check if duplicated)
             boolean hasDuplicated = false;
 
-            if (Objects.nonNull(conv)) {
+            for (Conversation conv: conversationTempList) {
                 // check if hash already exist
                 if (simulation) {
                     conversationRepository.saveConversation(conv);
@@ -301,6 +301,16 @@ public class LLMGenerationService {
     }
 
     // chatgpt simulation methods conversation
+    private List<Conversation> simulateChatGptCallConversationList(final MessageTypeEnum type, final MessageTopicEnum topic, final int minimalInteraction, final int maxInteraction, final Prompt prompt, final Integer quantity){
+        List<Conversation> conversationList = new ArrayList<>();
+
+        for (int i = 0; i < quantity; i++){
+            conversationList.add(simulateChatGptCallConversation(type, topic, minimalInteraction, maxInteraction, prompt));
+        }
+
+        return conversationList;
+    }
+
     private Conversation simulateChatGptCallConversation(final MessageTypeEnum type, final MessageTopicEnum topic, final int minimalInteraction, final int maxInteraction, final Prompt prompt) {
         // 0. simulate interlocutor
         final Interlocutor interlocutor1 = interlocutorService.getRandomInterlocutorByType(TypeCorrespondenceMapper.getCorrespondence(type));

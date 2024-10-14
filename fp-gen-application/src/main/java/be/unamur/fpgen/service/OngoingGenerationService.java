@@ -49,8 +49,8 @@ public class OngoingGenerationService {
                 .withDatasetId(datasetId)
                 .withPromptVersion(Optional.ofNullable(promptVersion).orElse(0)) // if null => v0
                 .withItemList(items)
-                        .withMinInteractionNumber(min)
-                        .withMaxInteractionNumber(max)
+                .withMinInteractionNumber(min)
+                .withMaxInteractionNumber(max)
                 .build());
     }
 
