@@ -10,6 +10,7 @@ public class Notification extends BaseUuidDomain {
     private final String message;
 
     private Notification(Builder builder) {
+        super(builder.getId(), builder.getCreationDate(), builder.getModificationDate());
         sender = builder.sender;
         receiver = builder.receiver;
         status = builder.status;
