@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -25,33 +26,39 @@ public class NotificationController implements NotificationApi {
         this.notificationService = notificationService;
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Void> deleteNotificationStatus(UUID notificationId) {
         notificationService.deleteById(notificationId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Notification> getNotificationById(UUID notificationId) {
         return new ResponseEntity<>(NotificationDomainToWebMapper.map(notificationService.findById(notificationId)), HttpStatus.OK);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<List<Notification>> getNotificationsByAuthor(UUID authorId) {
         return new ResponseEntity<>(MapperUtil.mapList(notificationService.findByReceiverId(authorId), NotificationDomainToWebMapper::map), HttpStatus.OK);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Void> updateNotificationStatus(UUID notificationId, @NotNull @Valid NotificationStatusEnum notificationStatus) {
         notificationService.updateStatus(notificationId, NotificationStatus.valueOf(notificationStatus.name()));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Boolean> existsUnreadNotificationsByAuthor(UUID authorId) {
         return new ResponseEntity<>(notificationService.existsUnreadNotificationByReceiverID(authorId), HttpStatus.OK);
     }
 
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Notification> createNotification(@Valid NotificationCreation notificationCreation) {
         return new ResponseEntity<>(NotificationDomainToWebMapper.map(notificationService.create(notificationCreation)), HttpStatus.CREATED);
