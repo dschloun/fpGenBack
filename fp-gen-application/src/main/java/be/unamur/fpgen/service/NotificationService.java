@@ -24,8 +24,9 @@ public class NotificationService {
     }
 
     @Transactional(readOnly = true)
-    public List<Notification> findByReceiverId(UUID receiverId){
-        return notificationRepository.findByReceiverId(receiverId);
+    public List<Notification> findNotifications(){
+        final Author author = authorService.getAuthorByTrigram(UserContextHolder.getContext().getTrigram());
+        return notificationRepository.findByReceiverId(author.getId());
     }
 
     @Transactional(readOnly = true)
@@ -62,7 +63,8 @@ public class NotificationService {
     }
 
     @Transactional(readOnly = true)
-    public boolean existsUnreadNotificationByReceiverID(UUID receiverId){
-        return notificationRepository.existsUnreadNotificationByReceiverId(receiverId);
+    public boolean existsUnreadNotificationByReceiverID(){
+        final Author author = authorService.getAuthorByTrigram(UserContextHolder.getContext().getTrigram());
+        return notificationRepository.existsUnreadNotificationByReceiverId(author.getId());
     }
 }

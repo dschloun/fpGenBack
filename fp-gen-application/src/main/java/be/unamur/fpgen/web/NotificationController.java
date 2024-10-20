@@ -41,8 +41,8 @@ public class NotificationController implements NotificationApi {
 
     @RolesAllowed({"user"})
     @Override
-    public ResponseEntity<List<Notification>> getNotificationsByAuthor(UUID authorId) {
-        return new ResponseEntity<>(MapperUtil.mapList(notificationService.findByReceiverId(authorId), NotificationDomainToWebMapper::map), HttpStatus.OK);
+    public ResponseEntity<List<Notification>> getNotifications() {
+        return new ResponseEntity<>(MapperUtil.mapList(notificationService.findNotifications(), NotificationDomainToWebMapper::map), HttpStatus.OK);
     }
 
     @RolesAllowed({"user"})
@@ -54,8 +54,8 @@ public class NotificationController implements NotificationApi {
 
     @RolesAllowed({"user"})
     @Override
-    public ResponseEntity<Boolean> existsUnreadNotificationsByAuthor(UUID authorId) {
-        return new ResponseEntity<>(notificationService.existsUnreadNotificationByReceiverID(authorId), HttpStatus.OK);
+    public ResponseEntity<Boolean> existsUnreadNotifications() {
+        return new ResponseEntity<>(notificationService.existsUnreadNotificationByReceiverID(), HttpStatus.OK);
     }
 
     @RolesAllowed({"user"})
