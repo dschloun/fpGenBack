@@ -48,11 +48,11 @@ public class JpaNotificationRepository implements NotificationRepository {
     }
 
     @Override
-    public void createNotification(Notification notification) {
+    public Notification createNotification(Notification notification) {
         final AuthorEntity sender = jpaAuthorRepositoryCRUD.getReferenceById(notification.getSender().getId());
         final AuthorEntity receiver = jpaAuthorRepositoryCRUD.getReferenceById(notification.getReceiver().getId());
 
-        jpaNotificationRepositoryCRUD.save(NotificationDomainToJpaMapper.mapForCreate(notification, sender, receiver));
+        return NotificationJpaToDomainMapper.map(jpaNotificationRepositoryCRUD.save(NotificationDomainToJpaMapper.mapForCreate(notification, sender, receiver)));
     }
 
     @Override

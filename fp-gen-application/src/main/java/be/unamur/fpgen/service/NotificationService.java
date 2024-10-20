@@ -1,9 +1,12 @@
 package be.unamur.fpgen.service;
 
+import be.unamur.fpgen.author.Author;
+import be.unamur.fpgen.context.UserContextHolder;
 import be.unamur.fpgen.exception.NotificationNotFoundException;
 import be.unamur.fpgen.notification.Notification;
 import be.unamur.fpgen.notification.NotificationStatus;
 import be.unamur.fpgen.repository.NotificationRepository;
+import be.unamur.model.NotificationCreation;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,8 +47,18 @@ public class NotificationService {
     }
 
     @Transactional
-    public void create(Notification notification){
-        notificationRepository.createNotification(notification);
+    public Notification create(NotificationCreation command){
+        final Author sender = authorService.getAuthorByTrigram(UserContextHolder.getContext().getTrigram());
+        final Author receiver = authorService.getAuthorById(command.getAuthorReceiverId());
+
+        final Notification notification = Notification.newBuilder()
+                .withSender(sender)
+                .withReceiver(receiver)
+                .withMessage(command.getMessage())
+                .withStatus(NotificationStatus.UNREAD)
+                .build();
+
+       return notificationRepository.createNotification(notification);
     }
 
     @Transactional(readOnly = true)

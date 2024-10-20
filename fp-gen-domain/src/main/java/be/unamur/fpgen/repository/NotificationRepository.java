@@ -16,7 +16,7 @@ public interface NotificationRepository {
 
     void deleteById(UUID notificationId);
 
-    void createNotification(Notification notification);
+    Notification createNotification(Notification notification);
 
     boolean existsUnreadNotificationByReceiverId(UUID receiverId);
 }
