@@ -8,6 +8,7 @@ import be.unamur.fpgen.generation.ongoing_generation.OngoingGenerationStatus;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "ongoing_generation")
@@ -16,6 +17,10 @@ public class OngoingGenerationEntity extends BaseUuidEntity {
     private Set<OngoingGenerationItemEntity> itemList = new HashSet<>();
     private AuthorEntity author;
     private OngoingGenerationStatus status;
+    private Integer promptVersion;
+    private UUID datasetId;
+    private Integer minInteractionNumber;
+    private Integer maxInteractionNumber;
 
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -54,5 +59,41 @@ public class OngoingGenerationEntity extends BaseUuidEntity {
 
     public void setStatus(OngoingGenerationStatus status) {
         this.status = status;
+    }
+
+    @Column(name = "prompt_version", nullable = false)
+    public Integer getPromptVersion() {
+        return promptVersion;
+    }
+
+    public void setPromptVersion(Integer promptVersion) {
+        this.promptVersion = promptVersion;
+    }
+
+    @Column(name = "dataset_id", nullable = true)
+    public UUID getDatasetId() {
+        return datasetId;
+    }
+
+    public void setDatasetId(UUID datasetId) {
+        this.datasetId = datasetId;
+    }
+
+    @Column(name = "min_interaction_number", nullable = true)
+    public Integer getMinInteractionNumber() {
+        return minInteractionNumber;
+    }
+
+    public void setMinInteractionNumber(Integer minInteractionNumber) {
+        this.minInteractionNumber = minInteractionNumber;
+    }
+
+    @Column(name = "max_interaction_number", nullable = true)
+    public Integer getMaxInteractionNumber() {
+        return maxInteractionNumber;
+    }
+
+    public void setMaxInteractionNumber(Integer maxInteractionNumber) {
+        this.maxInteractionNumber = maxInteractionNumber;
     }
 }

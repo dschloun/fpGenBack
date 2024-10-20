@@ -16,11 +16,11 @@ public interface OngoingGenerationRepository {
 
     void addItemList(OngoingGeneration ongoingGeneration, List<OngoingGenerationItem> itemList);
 
-    void updateStatus(OngoingGeneration ongoingGeneration, OngoingGenerationStatus status);
+    void updateStatus(UUID id, OngoingGenerationStatus status);
 
     List<OngoingGeneration> findAllByAuthorId(UUID authorId);
 
-    List<OngoingGeneration> findAllByAuthorIdAndStatusList(UUID authorId, List<OngoingGenerationStatus> statusList);
+    List<OngoingGeneration> findAllByStatus(OngoingGenerationStatus status);
 
     void deleteById(UUID id);
 }

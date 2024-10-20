@@ -13,6 +13,7 @@ import javax.persistence.*;
 public class InstantMessageEntity extends AbstractInstantMessageEntity {
 
     private InstantMessageGenerationEntity instantMessageGeneration;
+    private String hash;
 
     @ManyToOne
     @JoinColumn(name = "generation_id")
@@ -22,5 +23,14 @@ public class InstantMessageEntity extends AbstractInstantMessageEntity {
 
     public void setInstantMessageGeneration(InstantMessageGenerationEntity generation) {
         this.instantMessageGeneration = generation;
+    }
+
+    @Column(name = "hash", nullable = false)
+    public String getHash() {
+        return hash;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
     }
 }

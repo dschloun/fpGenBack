@@ -10,7 +10,7 @@ public class OngoingGenerationItem extends BaseUuidDomain {
 
     private final MessageTypeEnum messageType;
     private final MessageTopicEnum messageTopic;
-    private final Integer quantity;
+    private Integer quantity;
     private OngoingGenerationItemStatus status;
     private final UUID generationId;
 
@@ -33,6 +33,10 @@ public class OngoingGenerationItem extends BaseUuidDomain {
 
     public Integer getQuantity() {
         return quantity;
+    }
+
+    public void decrementQuantity(){
+        this.quantity--;
     }
 
     public OngoingGenerationItemStatus getStatus() {

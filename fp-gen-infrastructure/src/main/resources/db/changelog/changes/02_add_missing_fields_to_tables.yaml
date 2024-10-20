@@ -104,3 +104,71 @@ databaseChangeLog:
                   constraints:
                       nullable: true
                       unique: false
+
+  - changeSet:
+      id: add-prompt-version-to-ongoing-generation
+      author: dsc
+      changes:
+        - addColumn:
+            tableName: ongoing_generation
+            columns:
+              - column:
+                  name: prompt_version
+                  type: int
+                  constraints:
+                    nullable: false
+                    unique: false
+              - column:
+                  name: dataset_id
+                  type: uuid
+                  constraints:
+                    nullable: true
+                    unique: false
+
+  - changeSet:
+      id: add-min-max-on-ongoing-generation
+      author: dsc
+      changes:
+        - addColumn:
+            tableName: ongoing_generation
+            columns:
+              - column:
+                  name: min_interaction_number
+                  type: int
+                  constraints:
+                    nullable: true
+                    unique: false
+              - column:
+                  name: max_interaction_number
+                  type: int
+                  constraints:
+                    nullable: true
+                    unique: false
+
+  - changeSet:
+      id: add-hash-on-message
+      author: dsc
+      changes:
+        - addColumn:
+            tableName: instant_message
+            columns:
+              - column:
+                  name: hash
+                  type: varchar(64)
+                  constraints:
+                    nullable: true
+                    unique: true
+
+  - changeSet:
+      id: add-hash-on-conversation
+      author: dsc
+      changes:
+        - addColumn:
+            tableName: conversation
+            columns:
+              - column:
+                  name: hash
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+                    unique: true

@@ -1,7 +1,6 @@
 package be.unamur.fpgen.generation;
 
 import be.unamur.fpgen.AbstractItem;
-import be.unamur.fpgen.BaseUuidDomain;
 import be.unamur.fpgen.HasAuthor;
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.message.MessageTopicEnum;
@@ -33,6 +32,7 @@ public class Generation extends AbstractItem implements HasAuthor {
     private final MessageTopicEnum topic;
     private final Prompt prompt;
     private final Set<AbstractItem> itemList = new HashSet<>();
+
 
     private Generation(Builder builder) {
         super(builder.getId(), builder.getCreationDate(), builder.getModificationDate());

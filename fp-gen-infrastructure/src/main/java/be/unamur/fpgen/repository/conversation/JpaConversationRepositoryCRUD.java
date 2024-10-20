@@ -33,4 +33,6 @@ public interface JpaConversationRepositoryCRUD extends JpaRepository<Conversatio
                                               @Param("startDate") OffsetDateTime startDate,
                                               @Param("endDate") OffsetDateTime endDate,
                                               Pageable pageable);
+
+    boolean existsByHash(String hash);
 }

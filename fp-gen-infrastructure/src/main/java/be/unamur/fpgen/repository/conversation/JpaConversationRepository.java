@@ -98,4 +98,9 @@ public class JpaConversationRepository implements ConversationRepository {
     public List<Conversation> findAllByGenerationId(UUID generationId) {
         return MapperUtil.mapList(jpaConversationRepositoryCRUD.findAllByConversationGenerationId(generationId), ConversationJpaToDomainMapper::map);
     }
+
+    @Override
+    public boolean existsByHash(String hash) {
+        return jpaConversationRepositoryCRUD.existsByHash(hash);
+    }
 }

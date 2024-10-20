@@ -16,6 +16,7 @@ public class Conversation extends AbstractItem {
     private final Integer minInteractionNumber;
     private final Set<ConversationMessage> conversationMessageList = new HashSet<>();
     private final UUID generationId;
+    private final String hash;
 
     private Conversation(Builder builder) {
         super(builder.getId(), builder.getCreationDate(), builder.getModificationDate());
@@ -25,6 +26,7 @@ public class Conversation extends AbstractItem {
         minInteractionNumber = builder.minInteractionNumber;
         conversationMessageList.addAll(builder.conversationMessageList);
         generationId = builder.generationId;
+        hash = builder.hash;
     }
 
     public static Builder newBuilder() {
@@ -55,6 +57,10 @@ public class Conversation extends AbstractItem {
         return generationId;
     }
 
+    public String getHash() {
+        return hash;
+    }
+
     public static final class Builder extends AbstractItemBuilder<Builder> {
         private MessageTypeEnum type;
         private MessageTopicEnum topic;
@@ -62,6 +68,7 @@ public class Conversation extends AbstractItem {
         private Integer minInteractionNumber;
         private Set<ConversationMessage> conversationMessageList = new HashSet<>();
         private UUID generationId;
+        private String hash;
 
         private Builder() {
         }
@@ -93,6 +100,11 @@ public class Conversation extends AbstractItem {
 
         public Builder withGenerationId(UUID val) {
             generationId = val;
+            return this;
+        }
+
+        public Builder withHash(String val){
+            hash = val;
             return this;
         }
 

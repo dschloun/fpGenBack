@@ -94,4 +94,9 @@ public class JpaInstantMessageRepository implements MessageRepository {
                 .map(InstantMessageJpaToDomainMapper::map)
                 .toList();
     }
+
+    @Override
+    public boolean existByHash(String hash) {
+        return jpaInstantMessageRepositoryCRUD.existsByHash(hash);
+    }
 }

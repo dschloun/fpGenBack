@@ -12,7 +12,7 @@
     <artifactId>fp-gen-application</artifactId>
 
     <properties>
-        <fpgen-api-version>3.0.0</fpgen-api-version>
+        <fpgen-api-version>3.0.1</fpgen-api-version>
         <spring.data.version>2.4.5</spring.data.version>
         <jackson-databind-nullable.version>0.2.1</jackson-databind-nullable.version>
     </properties>

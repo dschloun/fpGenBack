@@ -37,4 +37,6 @@ public interface MessageRepository {
     InstantMessagesPage findPagination(MessageTopicEnum topic, MessageTypeEnum type, String content, OffsetDateTime startDate, OffsetDateTime endDate, Pageable pageable);
 
     List<InstantMessage> findInstantMessageByGenerationId(UUID generationId);
+
+    boolean existByHash(String hash);
 }
