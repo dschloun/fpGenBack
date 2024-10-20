@@ -3,13 +3,14 @@ package be.unamur.fpgen.repository;
 import be.unamur.fpgen.notification.Notification;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface NotificationRepository {
 
-    List<Notification> findByAuthorId(UUID authorId);
+    List<Notification> findByReceiverId(UUID receiverId);
 
-    Notification findById(UUID notificationId);
+    Optional<Notification> findById(UUID notificationId);
 
     void update(Notification notification);
 
@@ -17,5 +18,5 @@ public interface NotificationRepository {
 
     void createNotification(Notification notification);
 
-    boolean existsUnreadNotificationByAuthorId(UUID authorId);
+    boolean existsUnreadNotificationByReceiverId(UUID receiverId);
 }
