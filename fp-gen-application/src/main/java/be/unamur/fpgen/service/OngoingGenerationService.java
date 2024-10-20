@@ -10,11 +10,9 @@ import be.unamur.fpgen.generation.ongoing_generation.OngoingGenerationStatus;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.repository.OngoingGenerationRepository;
-import be.unamur.model.Generation;
 import be.unamur.model.GenerationCreation;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 import java.util.*;
 

@@ -6,11 +6,9 @@ import be.unamur.fpgen.generation.ongoing_generation.OngoingGeneration;
 import be.unamur.fpgen.message.InstantMessage;
 import be.unamur.fpgen.message.pagination.InstantMessage.InstantMessagesPage;
 import be.unamur.fpgen.message.pagination.InstantMessage.PagedInstantMessagesQuery;
-import be.unamur.fpgen.messaging.event.InstantMessageOngoingGenerationEvent;
 import be.unamur.fpgen.repository.MessageRepository;
 import be.unamur.fpgen.utils.DateUtil;
 import be.unamur.model.InstantMessageBatchCreation;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,16 +24,13 @@ public class InstantMessageService {
     private final MessageRepository messageRepository;
     private final DatasetService datasetService;
     private final OngoingGenerationService ongoingGenerationService;
-    private final ApplicationEventPublisher applicationEventPublisher;
 
     public InstantMessageService(final MessageRepository messageRepository,
                                  final DatasetService datasetService,
-                                 OngoingGenerationService ongoingGenerationService,
-                                 ApplicationEventPublisher applicationEventPublisher) {
+                                 OngoingGenerationService ongoingGenerationService) {
         this.messageRepository = messageRepository;
         this.datasetService = datasetService;
         this.ongoingGenerationService = ongoingGenerationService;
-        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Transactional
