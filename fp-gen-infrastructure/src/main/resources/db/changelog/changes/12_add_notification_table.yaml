@@ -1,0 +1,58 @@
+databaseChangeLog:
+  - changeSet:
+      id: add_notification_table
+      author: dsc
+      changes:
+        - createTable:
+            tableName: notification
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_notification
+                    nullable: false
+                    unique: true
+              - column:
+                  name: creation_date
+                  type: datetime
+                  constraints:
+                    nullable: false
+                    unique: false
+              - column:
+                  name: modification_date
+                  type: datetime
+                  constraints:
+                    nullable: false
+                    unique: false
+              - column:
+                  name: sender_id
+                  type: uuid
+                  constraints:
+                    foreignKeyName: fk_notification_sender_author
+                    references: author(id)
+                    onDelete: CASCADE
+                    nullable: true
+                    unique: false
+              - column:
+                  name: receiver_id
+                  type: uuid
+                  constraints:
+                    foreignKeyName: fk_notification_receiver_author
+                    references: author(id)
+                    onDelete: CASCADE
+                    nullable: false
+                    unique: false
+              - column:
+                  name: status
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+                    unique: false
+              - column:
+                  name: message
+                  type: text
+                  constraints:
+                    nullable: false
+                    unique: false

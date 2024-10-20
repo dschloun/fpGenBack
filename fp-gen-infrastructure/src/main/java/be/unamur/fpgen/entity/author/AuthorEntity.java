@@ -6,6 +6,7 @@ import be.unamur.fpgen.entity.base.BaseUuidEntity;
 import be.unamur.fpgen.entity.dataset.DatasetEntity;
 import be.unamur.fpgen.entity.generation.GenerationEntity;
 import be.unamur.fpgen.entity.generation.ongoing_generation.OngoingGenerationEntity;
+import be.unamur.fpgen.entity.notification.NotificationEntity;
 import be.unamur.fpgen.entity.project.ProjectEntity;
 import be.unamur.fpgen.entity.result.ResultEntity;
 
@@ -31,6 +32,7 @@ public class AuthorEntity extends BaseUuidEntity {
     private Set<OngoingGenerationEntity> ongoingGenerationList;
     private Set<ResultEntity> resultList = new HashSet<>();
     private Set<PromptEntity> promptList = new HashSet<>();
+    private Set<NotificationEntity> notificationList = new HashSet<>();
     private AuthorStatusEnum status;
     private boolean acceptTermsOfUse;
     private String motivation;
@@ -153,6 +155,15 @@ public class AuthorEntity extends BaseUuidEntity {
 
     public void setPromptList(Set<PromptEntity> promptList) {
         this.promptList = promptList;
+    }
+
+    @OneToMany(mappedBy = "sender", orphanRemoval = true)
+    public Set<NotificationEntity> getNotificationList() {
+        return notificationList;
+    }
+
+    public void setNotificationList(Set<NotificationEntity> notificationList) {
+        this.notificationList = notificationList;
     }
 
     @Column(name = "status", nullable = false)
