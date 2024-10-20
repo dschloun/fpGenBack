@@ -16,7 +16,8 @@ public class NotificationDomainToWebMapper {
                 .creationDate(domain.getCreationDate())
                 .message(domain.getMessage())
                 .status(map(domain.getStatus()))
-                .sender(map(domain.getSender()));
+                .sender(map(domain.getSender()))
+                .senderName(domain.getSender().getFirstName() + " " + domain.getSender().getLastName());
     }
 
     public static SenderContact map(final Author sender){
