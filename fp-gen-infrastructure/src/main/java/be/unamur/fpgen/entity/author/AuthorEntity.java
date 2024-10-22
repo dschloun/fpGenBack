@@ -6,6 +6,7 @@ import be.unamur.fpgen.entity.base.BaseUuidEntity;
 import be.unamur.fpgen.entity.dataset.DatasetEntity;
 import be.unamur.fpgen.entity.generation.GenerationEntity;
 import be.unamur.fpgen.entity.generation.ongoing_generation.OngoingGenerationEntity;
+import be.unamur.fpgen.entity.notification.NotificationEntity;
 import be.unamur.fpgen.entity.project.ProjectEntity;
 import be.unamur.fpgen.entity.result.ResultEntity;
 
@@ -31,6 +32,8 @@ public class AuthorEntity extends BaseUuidEntity {
     private Set<OngoingGenerationEntity> ongoingGenerationList;
     private Set<ResultEntity> resultList = new HashSet<>();
     private Set<PromptEntity> promptList = new HashSet<>();
+    private Set<NotificationEntity> sentNotificationList = new HashSet<>();
+    private Set<NotificationEntity> receivedNotificationList = new HashSet<>();
     private AuthorStatusEnum status;
     private boolean acceptTermsOfUse;
     private String motivation;
@@ -153,6 +156,24 @@ public class AuthorEntity extends BaseUuidEntity {
 
     public void setPromptList(Set<PromptEntity> promptList) {
         this.promptList = promptList;
+    }
+
+    @OneToMany(mappedBy = "sender", orphanRemoval = true)
+    public Set<NotificationEntity> getSentNotificationList() {
+        return sentNotificationList;
+    }
+
+    public void setSentNotificationList(Set<NotificationEntity> notificationList) {
+        this.sentNotificationList = notificationList;
+    }
+
+    @OneToMany(mappedBy = "receiver", orphanRemoval = true)
+    public Set<NotificationEntity> getReceivedNotificationList() {
+        return receivedNotificationList;
+    }
+
+    public void setReceivedNotificationList(Set<NotificationEntity> receivedNotificationList) {
+        this.receivedNotificationList = receivedNotificationList;
     }
 
     @Column(name = "status", nullable = false)
