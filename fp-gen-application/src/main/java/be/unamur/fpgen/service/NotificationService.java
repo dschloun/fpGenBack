@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -48,14 +50,14 @@ public class NotificationService {
     }
 
     @Transactional
-    public Notification create(NotificationCreation command){
-        final Author sender = authorService.getAuthorByTrigram(UserContextHolder.getContext().getTrigram());
-        final Author receiver = authorService.getAuthorById(command.getAuthorReceiverId());
+    public Notification create(UUID authorReceiverId, String message){
+        final Author sender = authorService.getAuthorByTrigram(Objects.nonNull(UserContextHolder.getContext().getTrigram()) ? UserContextHolder.getContext().getTrigram() : "SYSTEM");
+        final Author receiver = authorService.getAuthorById(authorReceiverId);
 
         final Notification notification = Notification.newBuilder()
                 .withSender(sender)
                 .withReceiver(receiver)
-                .withMessage(command.getMessage())
+                .withMessage(message)
                 .withStatus(NotificationStatus.UNREAD)
                 .build();
 

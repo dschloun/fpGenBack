@@ -61,6 +61,6 @@ public class NotificationController implements NotificationApi {
     @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Notification> createNotification(@Valid NotificationCreation notificationCreation) {
-        return new ResponseEntity<>(NotificationDomainToWebMapper.map(notificationService.create(notificationCreation)), HttpStatus.CREATED);
+        return new ResponseEntity<>(NotificationDomainToWebMapper.map(notificationService.create(notificationCreation.getAuthorReceiverId(), notificationCreation.getMessage())), HttpStatus.CREATED);
     }
 }

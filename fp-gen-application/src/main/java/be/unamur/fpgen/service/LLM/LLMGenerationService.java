@@ -54,6 +54,7 @@ public class LLMGenerationService {
     private final DatasetService datasetService;
     private final OngoingGenerationItemRepository ongoingGenerationItemRepository;
     private final ApplicationEventPublisher eventPublisher;
+    private final NotificationService notificationService;
 
     public LLMGenerationService(final OngoingGenerationService ongoingGenerationService,
                                 final GenerationService generationService,
@@ -62,7 +63,9 @@ public class LLMGenerationService {
                                 final MessageRepository messageRepository,
                                 final ConversationRepository conversationRepository,
                                 final DatasetService datasetService,
-                                final OngoingGenerationItemRepository ongoingGenerationItemRepository, ApplicationEventPublisher eventPublisher) {
+                                final OngoingGenerationItemRepository ongoingGenerationItemRepository,
+                                final ApplicationEventPublisher eventPublisher,
+                                final NotificationService notificationService) {
         this.ongoingGenerationService = ongoingGenerationService;
         this.generationService = generationService;
         this.interlocutorService = interlocutorService;
@@ -72,6 +75,7 @@ public class LLMGenerationService {
         this.datasetService = datasetService;
         this.ongoingGenerationItemRepository = ongoingGenerationItemRepository;
         this.eventPublisher = eventPublisher;
+        this.notificationService = notificationService;
     }
 
     @Transactional
@@ -91,6 +95,9 @@ public class LLMGenerationService {
 
             // 2. generation
             generation(o, o.getPromptVersion());
+
+            // 3. send notification
+            notificationService.create(o.getAuthor().getId(), generateNotificationMessage(o));
         }
     }
 
@@ -396,5 +403,9 @@ public class LLMGenerationService {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("Erreur : Algorithme SHA-256 non trouvé", e);
         }
+    }
+
+    private String generateNotificationMessage(OngoingGeneration ongoingGeneration){
+        return "Hello " + ongoingGeneration.getAuthor().getFirstName() + " " + ongoingGeneration.getAuthor().getLastName() +". Your generation from " + ongoingGeneration.getCreationDate() + " from type " + ongoingGeneration.getType() + " is done";
     }
 }
