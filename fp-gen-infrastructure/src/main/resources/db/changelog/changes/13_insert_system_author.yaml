@@ -1,0 +1,51 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-system-author
+      author: dsc
+      changes:
+        - insert:
+            tableName: author
+            columns:
+              - column:
+                  name: id
+                  value: '45e25d10-850f-4d95-8eb7-98821ad25289'
+              - column:
+                  name: creation_date
+                  value: '2024-07-01 00:00:00'
+              - column:
+                  name: modification_date
+                  value: '2024-07-01 00:00:00'
+              - column:
+                  name: lastname
+                  value: 'System'
+              - column:
+                  name: firstname
+                  value: 'FPGen'
+              - column:
+                  name: trigram
+                  value: 'SYSTEM'
+              - column:
+                  name: organization
+                  value: 'FPGEN'
+              - column:
+                  name: function
+                  value: 'SYSTEM'
+              - column:
+                  name: email
+                  value: 'noreply@fpgen.edu'
+              - column:
+                  name: phone_number
+                  value: 'none'
+              - column:
+                  name: status
+                  value: 'VERIFIED'
+              - column:
+                  name: accept_terms_of_use
+                  valueBoolean: 'true'
+              - column:
+                  name: motivation
+                  value: 'none'
+              - column:
+                  name: account_created
+                  valueBoolean: 'true'
+
