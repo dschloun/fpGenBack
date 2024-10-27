@@ -22,7 +22,8 @@ public class PromptDomainToWebMapper {
                 .userContent(domain.getUserPrompt())
                 .systemContent(domain.getSystemPrompt())
                 .author(AuthorDomainToWebMapper.map(domain.getAuthor()))
-                .status(map(domain.getStatus()));
+                .status(map(domain.getStatus()))
+                ._default(domain.isDefaultPrompt());
     }
 
     public static PromptStatusEnum map(be.unamur.fpgen.prompt.PromptStatusEnum status) {
