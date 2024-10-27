@@ -51,7 +51,7 @@ public class AdministrationController implements AdministrationApi {
                 PromptDomainToWebMapper::map), HttpStatus.OK);
     }
 
-    @RolesAllowed({"administrator"})
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<List<Prompt>> getPromptsByStatus(@NotNull @Valid PromptStatusEnum promptStatus) {
         return new ResponseEntity<>(MapperUtil.mapList(promptService.findAllPromptsByStatus(PromptWebToDomainMapper.map(promptStatus)),
