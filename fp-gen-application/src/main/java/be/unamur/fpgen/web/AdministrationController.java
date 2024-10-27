@@ -37,14 +37,14 @@ public class AdministrationController implements AdministrationApi {
                 HttpStatus.CREATED);
     }
 
-    @RolesAllowed({"administrator"})
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Prompt> getPromptById(UUID promptId) {
         return new ResponseEntity<>(PromptDomainToWebMapper.map(promptService.findById(promptId)),
                 HttpStatus.OK);
     }
 
-    @RolesAllowed({"administrator"})
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<List<Prompt>> getPromptsByDatasetTypeAndMessageType(@NotNull @Valid DatasetType datasetType, @NotNull @Valid MessageType messageType) {
         return new ResponseEntity<>(MapperUtil.mapList(promptService.findAllPromptsByDatasetTypeAndMessageType(DatasetTypeWebToDomainMapper.map(datasetType), MessageTypeWebToDomainMapper.map(messageType)),
