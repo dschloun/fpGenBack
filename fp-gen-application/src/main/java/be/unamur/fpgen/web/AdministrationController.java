@@ -30,7 +30,7 @@ public class AdministrationController implements AdministrationApi {
         this.authorService = authorService;
     }
 
-    @RolesAllowed({"administrator"})
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Prompt> createPrompt(@Valid PromptCreation promptCreation) {
         return new ResponseEntity<>(PromptDomainToWebMapper.map(promptService.create(promptCreation)),
@@ -72,11 +72,13 @@ public class AdministrationController implements AdministrationApi {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @RolesAllowed({"administrator"})
     @Override
     public ResponseEntity<Prompt> updatePromptById(UUID promptId, @Valid PromptUpdate promptUpdate) {
         return new ResponseEntity<>(PromptDomainToWebMapper.map(promptService.updatePrompt(promptId, promptUpdate)),HttpStatus.OK);
     }
 
+    @RolesAllowed({"administrator"})
     @Override
     public ResponseEntity<Void> updatePromptStatus(UUID promptId, @NotNull @Valid PromptStatusEnum promptStatus) {
         promptService.updatePromptStatus(promptId, PromptWebToDomainMapper.map(promptStatus));
