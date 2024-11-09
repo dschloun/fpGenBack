@@ -38,8 +38,11 @@ import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.openai.OpenAiChatModelName;
 import dev.langchain4j.model.output.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -60,7 +63,9 @@ public class LLMGenerationService {
     @Value("${open_ai_api_key}")
     private String openaiApiKey;
 
-    private static final String MESSAGE_FORMAT_PATH = "../../../../resources/promptChatGpt/message_format.json";
+    @Value("classpath:promptChatGpt/message_format.json")
+    Resource resourceFile;
+    //private static final String MESSAGE_FORMAT_PATH = "../../../../../../../resources/promptChatGpt/message_format.json";
 
     private final OngoingGenerationService ongoingGenerationService;
     private final GenerationService generationService;
@@ -72,6 +77,9 @@ public class LLMGenerationService {
     private final OngoingGenerationItemRepository ongoingGenerationItemRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final NotificationService notificationService;
+    private final ResourceLoader resourceLoader;
+
+
 
     public LLMGenerationService(final OngoingGenerationService ongoingGenerationService,
                                 final GenerationService generationService,
@@ -82,7 +90,7 @@ public class LLMGenerationService {
                                 final DatasetService datasetService,
                                 final OngoingGenerationItemRepository ongoingGenerationItemRepository,
                                 final ApplicationEventPublisher eventPublisher,
-                                final NotificationService notificationService) {
+                                final NotificationService notificationService, ResourceLoader resourceLoader) {
         this.ongoingGenerationService = ongoingGenerationService;
         this.generationService = generationService;
         this.interlocutorService = interlocutorService;
@@ -93,6 +101,7 @@ public class LLMGenerationService {
         this.ongoingGenerationItemRepository = ongoingGenerationItemRepository;
         this.eventPublisher = eventPublisher;
         this.notificationService = notificationService;
+        this.resourceLoader = resourceLoader;
     }
 
     @Transactional
@@ -437,7 +446,8 @@ public class LLMGenerationService {
     //-----------------
     private List<String> openAiGenerateMessages(MessageTopicEnum topic, Integer maxInteractionNumber, Integer quantity, Prompt prompt) throws IOException {
         // Load message format from JSON file
-        String formatJson = new String(Files.readAllBytes(Paths.get(MESSAGE_FORMAT_PATH)));
+        //get content file as string
+        String formatJson = getFileContentAsJson("promptChatGpt/message_format.json");
 
         // define the model
         final ChatLanguageModel model = OpenAiChatModel.builder()
@@ -467,5 +477,10 @@ public class LLMGenerationService {
         });
 
         return messages;
+    }
+
+    private String getFileContentAsJson(String filePath) throws IOException {
+        Resource resource = resourceLoader.getResource("classpath:" + filePath);
+        return new String(Files.readAllBytes(Paths.get(resource.getURI())));
     }
 }

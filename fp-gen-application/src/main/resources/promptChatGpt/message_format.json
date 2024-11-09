@@ -1,4 +1,5 @@
 {
+  "type": "json_schema",
   "generations": [
     {
       "messageType": "SOCIAL_ENGINEERING",
