@@ -30,28 +30,28 @@ public class AdministrationController implements AdministrationApi {
         this.authorService = authorService;
     }
 
-    @RolesAllowed({"administrator"})
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Prompt> createPrompt(@Valid PromptCreation promptCreation) {
         return new ResponseEntity<>(PromptDomainToWebMapper.map(promptService.create(promptCreation)),
                 HttpStatus.CREATED);
     }
 
-    @RolesAllowed({"administrator"})
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Prompt> getPromptById(UUID promptId) {
         return new ResponseEntity<>(PromptDomainToWebMapper.map(promptService.findById(promptId)),
                 HttpStatus.OK);
     }
 
-    @RolesAllowed({"administrator"})
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<List<Prompt>> getPromptsByDatasetTypeAndMessageType(@NotNull @Valid DatasetType datasetType, @NotNull @Valid MessageType messageType) {
         return new ResponseEntity<>(MapperUtil.mapList(promptService.findAllPromptsByDatasetTypeAndMessageType(DatasetTypeWebToDomainMapper.map(datasetType), MessageTypeWebToDomainMapper.map(messageType)),
                 PromptDomainToWebMapper::map), HttpStatus.OK);
     }
 
-    @RolesAllowed({"administrator"})
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<List<Prompt>> getPromptsByStatus(@NotNull @Valid PromptStatusEnum promptStatus) {
         return new ResponseEntity<>(MapperUtil.mapList(promptService.findAllPromptsByStatus(PromptWebToDomainMapper.map(promptStatus)),
@@ -72,11 +72,13 @@ public class AdministrationController implements AdministrationApi {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @RolesAllowed({"administrator"})
     @Override
     public ResponseEntity<Prompt> updatePromptById(UUID promptId, @Valid PromptUpdate promptUpdate) {
         return new ResponseEntity<>(PromptDomainToWebMapper.map(promptService.updatePrompt(promptId, promptUpdate)),HttpStatus.OK);
     }
 
+    @RolesAllowed({"administrator"})
     @Override
     public ResponseEntity<Void> updatePromptStatus(UUID promptId, @NotNull @Valid PromptStatusEnum promptStatus) {
         promptService.updatePromptStatus(promptId, PromptWebToDomainMapper.map(promptStatus));
