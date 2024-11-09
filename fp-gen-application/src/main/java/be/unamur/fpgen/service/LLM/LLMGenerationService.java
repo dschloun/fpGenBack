@@ -19,6 +19,8 @@ import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.messaging.event.DatasetOngoingGenerationCleanEvent;
 import be.unamur.fpgen.messaging.event.OngoingGenerationStatusChangeEvent;
 import be.unamur.fpgen.prompt.Prompt;
+import be.unamur.fpgen.prompt.response.ResponseFormatConverter;
+import be.unamur.fpgen.prompt.response.message.MessageResponse;
 import be.unamur.fpgen.repository.ConversationRepository;
 import be.unamur.fpgen.repository.MessageRepository;
 import be.unamur.fpgen.repository.OngoingGenerationItemRepository;
@@ -28,12 +30,23 @@ import be.unamur.fpgen.utils.TypeCorrespondenceMapper;
 import be.unamur.model.GenerationCreation;
 import be.unamur.model.MessageTopic;
 import be.unamur.model.MessageType;
+import dev.langchain4j.data.message.AiMessage;
+import dev.langchain4j.data.message.SystemMessage;
+import dev.langchain4j.data.message.TextContent;
+import dev.langchain4j.data.message.UserMessage;
+import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.openai.OpenAiChatModel;
+import dev.langchain4j.model.openai.OpenAiChatModelName;
+import dev.langchain4j.model.output.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
@@ -44,6 +57,10 @@ public class LLMGenerationService {
 
     @Value("${simulationLLM}")
     private boolean simulation;
+    @Value("${open_ai_key}")
+    private String openaiApiKey;
+
+    private static final String MESSAGE_FORMAT_PATH = "../../../../resources/promptChatGpt/message_format.json";
 
     private final OngoingGenerationService ongoingGenerationService;
     private final GenerationService generationService;
@@ -175,7 +192,7 @@ public class LLMGenerationService {
                 if(simulation) {
                     messages = simulateChatGptCallMessage(item.getMessageType().name(), item.getMessageTopic().name(), item.getQuantity(), prompt);
                 } else {
-
+                    messages = openAiGenerateMessages(item.getMessageTopic(), item.getQuantity(), item.getQuantity(), prompt);
                 }
                 } catch (Exception e) {
                 tryCounter--;
@@ -415,5 +432,40 @@ public class LLMGenerationService {
 
     private String generateNotificationMessage(OngoingGeneration ongoingGeneration){
         return "Hello " + ongoingGeneration.getAuthor().getFirstName() + " " + ongoingGeneration.getAuthor().getLastName() +". Your generation from " + ongoingGeneration.getCreationDate() + " from type " + ongoingGeneration.getType() + " is done";
+    }
+
+    //-----------------
+    private List<String> openAiGenerateMessages(MessageTopicEnum topic, Integer maxInteractionNumber, Integer quantity, Prompt prompt) throws IOException {
+        // Load message format from JSON file
+        String formatJson = new String(Files.readAllBytes(Paths.get(MESSAGE_FORMAT_PATH)));
+
+        // define the model
+        final ChatLanguageModel model = OpenAiChatModel.builder()
+                .apiKey(openaiApiKey)
+                .modelName(OpenAiChatModelName.GPT_4_O_MINI)
+                .responseFormat(formatJson)
+                .strictJsonSchema(true)
+                .build();
+
+        final SystemMessage systemMessage = SystemMessage.from(
+                prompt.replacePlaceholder(quantity, maxInteractionNumber, topic)
+        );
+
+        final UserMessage userMessage = UserMessage.from(
+                TextContent.from(prompt.getSystemPrompt())
+        );
+
+        final Response<AiMessage> response = model.generate(systemMessage, userMessage);
+
+        // convert response into response object
+        final MessageResponse messageResponse = ResponseFormatConverter.messageFromJson(response.content().text());
+
+        // return
+        List<String> messages = new ArrayList<>();
+        messageResponse.getGenerations().forEach( generation -> {
+            messages.add(generation.getMessage());
+        });
+
+        return messages;
     }
 }
