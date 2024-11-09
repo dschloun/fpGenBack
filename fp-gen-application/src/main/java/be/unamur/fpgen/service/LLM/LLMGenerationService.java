@@ -57,7 +57,7 @@ public class LLMGenerationService {
 
     @Value("${simulationLLM}")
     private boolean simulation;
-    @Value("${open_ai_key}")
+    @Value("${open_ai_api_key}")
     private String openaiApiKey;
 
     private static final String MESSAGE_FORMAT_PATH = "../../../../resources/promptChatGpt/message_format.json";
