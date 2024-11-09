@@ -1,0 +1,35 @@
+{
+  "generationType": "SOCIAL_ENGINEERING",
+  "conversations": [
+    {
+      "conversationType": "SOCIAL_ENGINEERING",
+      "contents": [
+        {
+          "orderMessage": "1",
+          "actorType": "SOCIAL_ENGINEER",
+          "content": "content 1"
+        },
+        {
+          "orderMessage": "2",
+          "actorType": "GENUINE",
+          "content": "content 2"
+        }
+      ]
+    },
+    {
+      "conversationType": "SOCIAL_ENGINEERING",
+      "contents": [
+        {
+          "orderMessage": "1",
+          "actorType": "SOCIAL_ENGINEER",
+          "content": "content 1"
+        },
+        {
+          "orderMessage": "2",
+          "actorType": "GENUINE",
+          "content": "content 2"
+        }
+      ]
+    }
+  ]
+}

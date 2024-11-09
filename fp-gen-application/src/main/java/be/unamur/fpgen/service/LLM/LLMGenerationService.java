@@ -172,8 +172,12 @@ public class LLMGenerationService {
 
             // 1.2.1. generate with LLM
             try {
-                messages = simulateChatGptCallMessage(item.getMessageType().name(), item.getMessageTopic().name(), item.getQuantity(), prompt);
-            } catch (Exception e) {
+                if(simulation) {
+                    messages = simulateChatGptCallMessage(item.getMessageType().name(), item.getMessageTopic().name(), item.getQuantity(), prompt);
+                } else {
+
+                }
+                } catch (Exception e) {
                 tryCounter--;
                 System.out.println("Error joining CHAT-GPT");
             }
@@ -255,8 +259,12 @@ public class LLMGenerationService {
 
             // 1.2.1. generate with LLM
             try {
-                conversationTempList = simulateChatGptCallConversationList(item.getMessageType(), item.getMessageTopic(), min, max, prompt, item.getQuantity());
-            } catch (Exception e) {
+                if(simulation) {
+                    conversationTempList = simulateChatGptCallConversationList(item.getMessageType(), item.getMessageTopic(), min, max, prompt, item.getQuantity());
+                } else {
+
+                }
+                } catch (Exception e) {
                 tryCounter--;
                 System.out.println("Error joining CHAT-GPT");
             }
