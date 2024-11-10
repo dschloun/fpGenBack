@@ -85,7 +85,6 @@ public class LLMGenerationService {
     private final ResourceLoader resourceLoader;
 
 
-
     public LLMGenerationService(final OngoingGenerationService ongoingGenerationService,
                                 final GenerationService generationService,
                                 final InterlocutorService interlocutorService,
@@ -161,7 +160,7 @@ public class LLMGenerationService {
 
             final Generation generation = generationService.createGeneration(ongoingGeneration.getType(), command, prompt, ongoingGeneration.getAuthor());
 
-            if(GenerationTypeEnum.INSTANT_MESSAGE.equals(ongoingGeneration.getType())){
+            if (GenerationTypeEnum.INSTANT_MESSAGE.equals(ongoingGeneration.getType())) {
                 messageTreatment(item, prompt, command, generation, datasetId);
             } else {
                 conversationTreatment(item, ongoingGeneration.getMinInteractionNumber(), ongoingGeneration.getMaxInteractionNumber(), prompt, generation, datasetId);
@@ -205,12 +204,12 @@ public class LLMGenerationService {
 
             // 1.2.1. generate with LLM
             try {
-                if(simulation) {
+                if (simulation) {
                     messages = simulateChatGptCallMessage(item.getMessageType().name(), item.getMessageTopic().name(), item.getQuantity(), prompt);
                 } else {
                     messages = openAiGenerateMessages(item.getMessageTopic(), item.getQuantity(), prompt);
                 }
-                } catch (Exception e) {
+            } catch (Exception e) {
                 tryCounter--;
                 System.out.println("Error joining CHAT-GPT");
             }
@@ -292,12 +291,12 @@ public class LLMGenerationService {
 
             // 1.2.1. generate with LLM
             try {
-                if(simulation) {
+                if (simulation) {
                     conversationTempList = simulateChatGptCallConversationList(item.getMessageType(), item.getMessageTopic(), min, max, prompt, item.getQuantity());
                 } else {
                     conversationTempList = openAiGenerateConversations(item.getMessageType(), item.getMessageTopic(), min, max, prompt, item.getQuantity());
                 }
-                } catch (Exception e) {
+            } catch (Exception e) {
                 tryCounter--;
                 System.out.println("Error joining CHAT-GPT");
             }
@@ -305,7 +304,7 @@ public class LLMGenerationService {
             // 1.2.2. create messages objects (check if duplicated)
             boolean hasDuplicated = false;
 
-            for (Conversation conv: conversationTempList) {
+            for (Conversation conv : conversationTempList) {
                 // check if hash already exist
                 if (simulation) {
                     conversationRepository.saveConversation(conv);
@@ -349,10 +348,10 @@ public class LLMGenerationService {
     }
 
     // chatgpt simulation methods conversation
-    private List<Conversation> simulateChatGptCallConversationList(final MessageTypeEnum type, final MessageTopicEnum topic, final int minimalInteraction, final int maxInteraction, final Prompt prompt, final Integer quantity){
+    private List<Conversation> simulateChatGptCallConversationList(final MessageTypeEnum type, final MessageTopicEnum topic, final int minimalInteraction, final int maxInteraction, final Prompt prompt, final Integer quantity) {
         List<Conversation> conversationList = new ArrayList<>();
 
-        for (int i = 0; i < quantity; i++){
+        for (int i = 0; i < quantity; i++) {
             conversationList.add(simulateChatGptCallConversation(type, topic, minimalInteraction, maxInteraction, prompt));
         }
 
@@ -382,11 +381,11 @@ public class LLMGenerationService {
 
         final String hashString = generateSHA256(
                 type.name()
-                + topic.name()
-                + messages
-                .stream()
-                .map(c -> c.getOrderNumber() + c.getContent())
-                .collect(Collectors.joining()));
+                        + topic.name()
+                        + messages
+                        .stream()
+                        .map(c -> c.getOrderNumber() + c.getContent())
+                        .collect(Collectors.joining()));
 
         // 3.1. save the conversation
         final Conversation conversation = Conversation.newBuilder()
@@ -446,8 +445,8 @@ public class LLMGenerationService {
         }
     }
 
-    private String generateNotificationMessage(OngoingGeneration ongoingGeneration){
-        return "Hello " + ongoingGeneration.getAuthor().getFirstName() + " " + ongoingGeneration.getAuthor().getLastName() +". Your generation from " + ongoingGeneration.getCreationDate() + " from type " + ongoingGeneration.getType() + " is done";
+    private String generateNotificationMessage(OngoingGeneration ongoingGeneration) {
+        return "Hello " + ongoingGeneration.getAuthor().getFirstName() + " " + ongoingGeneration.getAuthor().getLastName() + ". Your generation from " + ongoingGeneration.getCreationDate() + " from type " + ongoingGeneration.getType() + " is done";
     }
 
     //-----------------
@@ -479,7 +478,7 @@ public class LLMGenerationService {
 
         // return
         List<String> messages = new ArrayList<>();
-        messageResponse.getGenerations().forEach( generation -> {
+        messageResponse.getGenerations().forEach(generation -> {
             messages.add(generation.getMessage());
         });
 
@@ -516,7 +515,7 @@ public class LLMGenerationService {
         List<Conversation> conversations = new ArrayList<>();
         // prepare conversation messages
 
-        conversationResponse.getConversations().forEach( conversation -> {
+        conversationResponse.getConversations().forEach(conversation -> {
             conversations.add(Conversation.newBuilder()
                     .withType(type)
                     .withTopic(topic)
@@ -524,26 +523,26 @@ public class LLMGenerationService {
                     .withMinInteractionNumber(minInteraction)
                     .withConversationMessageList(conversation.getContents()
                             .stream()
-                            .map( c -> buildConversationMessage(c, type))
+                            .map(c -> buildConversationMessage(c, type, topic, Integer.parseInt(c.getMessageOrder())))
                             .collect(Collectors.toSet()))
-                            .withHash(generateSHA256(
-                                    type.name()
-                                            + topic.name()
-                                            + conversation.getContents()
-                                            .stream()
-                                            .map(c -> c.getMessageOrder() + c.getContent())
-                                            .collect(Collectors.joining())))
+                    .withHash(generateSHA256(
+                            type.name()
+                                    + topic.name()
+                                    + conversation.getContents()
+                                    .stream()
+                                    .map(c -> c.getMessageOrder() + c.getContent())
+                                    .collect(Collectors.joining())))
                     .build());
         });
 
         return conversations;
     }
 
-    private ConversationMessage buildConversationMessage(be.unamur.fpgen.prompt.response.conversation.ConversationMessage message, MessageTypeEnum type){
+    private ConversationMessage buildConversationMessage(be.unamur.fpgen.prompt.response.conversation.ConversationMessage message, MessageTypeEnum type, MessageTopicEnum topic, int orderNumber) {
         final Interlocutor sender = interlocutorService.getInterlocutorByType(InterlocutorTypeEnum.valueOf(message.getActorType()));
         final Interlocutor receiver;
         // determine receiver depending of sender type
-        if (sender.getType().equals(InterlocutorTypeEnum.GENUINE) && type.equals(MessageTypeEnum.SOCIAL_ENGINEERING)){
+        if (sender.getType().equals(InterlocutorTypeEnum.GENUINE) && type.equals(MessageTypeEnum.SOCIAL_ENGINEERING)) {
             receiver = interlocutorService.getInterlocutorByType(InterlocutorTypeEnum.SOCIAL_ENGINEER);
         } else if (sender.getType().equals(InterlocutorTypeEnum.GENUINE) && type.equals(MessageTypeEnum.HARASSMENT)) {
             receiver = interlocutorService.getInterlocutorByType(InterlocutorTypeEnum.HARASSER);
@@ -551,6 +550,9 @@ public class LLMGenerationService {
             receiver = interlocutorService.getInterlocutorByType(InterlocutorTypeEnum.GENUINE);
         }
         return ConversationMessage.newBuilder()
+                .withType(type)
+                .withTopic(topic)
+                .withOrderNumber(orderNumber)
                 .withSender(sender)
                 .withReceiver(receiver)
                 .withOrderNumber(Integer.valueOf(message.getMessageOrder()))
