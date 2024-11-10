@@ -526,6 +526,13 @@ public class LLMGenerationService {
                             .stream()
                             .map( c -> buildConversationMessage(c, type))
                             .collect(Collectors.toSet()))
+                            .withHash(generateSHA256(
+                                    type.name()
+                                            + topic.name()
+                                            + conversation.getContents()
+                                            .stream()
+                                            .map(c -> c.getMessageOrder() + c.getContent())
+                                            .collect(Collectors.joining())))
                     .build());
         });
 
