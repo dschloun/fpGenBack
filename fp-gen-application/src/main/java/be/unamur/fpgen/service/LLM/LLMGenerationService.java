@@ -185,11 +185,12 @@ public class LLMGenerationService {
                 eventPublisher.publishEvent(new OngoingGenerationStatusChangeEvent(this, ongoingGeneration.getId(), OngoingGenerationStatus.FAILED, idsToDelete));
             }
         }
-
-        // 4. free dataset
-        if (Objects.nonNull(datasetId)) {
-            eventPublisher.publishEvent(new DatasetOngoingGenerationCleanEvent(this, datasetId));
-        }
+            // comment because it caused problem and was not usefull because the clean was automatic due to cascade
+        // let just in case ...
+//        // 4. free dataset
+//        if (Objects.nonNull(datasetId)) {
+//           // eventPublisher.publishEvent(new DatasetOngoingGenerationCleanEvent(this, datasetId));
+//        }
     }
 
     private void messageTreatment(OngoingGenerationItem item, Prompt prompt, GenerationCreation command, Generation generation, UUID datasetId) {
