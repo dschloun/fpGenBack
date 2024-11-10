@@ -1,5 +1,5 @@
 package be.unamur.fpgen.prompt;
 
 public enum Placeholder {
-    NUMBER, TOPIC, INTERACTION_NUMBER
+    NUMBER, TOPIC, MIN_INTERACTION, MAX_INTERACTION
 }

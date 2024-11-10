@@ -20,6 +20,7 @@ import be.unamur.fpgen.messaging.event.DatasetOngoingGenerationCleanEvent;
 import be.unamur.fpgen.messaging.event.OngoingGenerationStatusChangeEvent;
 import be.unamur.fpgen.prompt.Prompt;
 import be.unamur.fpgen.prompt.response.ResponseFormatConverter;
+import be.unamur.fpgen.prompt.response.conversation.ConversationResponse;
 import be.unamur.fpgen.prompt.response.message.MessageResponse;
 import be.unamur.fpgen.repository.ConversationRepository;
 import be.unamur.fpgen.repository.MessageRepository;
@@ -205,7 +206,7 @@ public class LLMGenerationService {
                 if(simulation) {
                     messages = simulateChatGptCallMessage(item.getMessageType().name(), item.getMessageTopic().name(), item.getQuantity(), prompt);
                 } else {
-                    messages = openAiGenerateMessages(item.getMessageTopic(), item.getQuantity(), item.getQuantity(), prompt);
+                    messages = openAiGenerateMessages(item.getMessageTopic(), item.getQuantity(), prompt);
                 }
                 } catch (Exception e) {
                 tryCounter--;
@@ -448,7 +449,7 @@ public class LLMGenerationService {
     }
 
     //-----------------
-    private List<String> openAiGenerateMessages(MessageTopicEnum topic, Integer maxInteractionNumber, Integer quantity, Prompt prompt) throws IOException {
+    private List<String> openAiGenerateMessages(MessageTopicEnum topic, Integer quantity, Prompt prompt) throws IOException {
         // Load message format from JSON file
         //get content file as string
 
@@ -462,7 +463,7 @@ public class LLMGenerationService {
                 .build();
 
         final SystemMessage systemMessage = SystemMessage.from(
-                prompt.replacePlaceholder(quantity, maxInteractionNumber, topic)
+                prompt.replacePlaceholder(quantity, null, null, topic)
         );
 
         final UserMessage userMessage = UserMessage.from(
@@ -483,22 +484,46 @@ public class LLMGenerationService {
         return messages;
     }
 
-    private String getFileContentAsJson(String filePath) throws IOException {
-        Resource resource = resourceLoader.getResource("classpath:" + filePath);
-        return new String(Files.readAllBytes(Paths.get(resource.getURI())));
+    private List<Conversation> openAiGenerateConversations(final MessageTypeEnum type, final MessageTopicEnum topic, final int minInteraction, final int maxInteraction, final Prompt prompt, final Integer quantity) throws IOException {
+        // Load message format from JSON file
+        //get content file as string
+
+        // define the model
+        final ChatLanguageModel model = OpenAiChatModel.builder()
+                .apiKey(openaiApiKey)
+                .modelName(OpenAiChatModelName.GPT_4_O_MINI)
+                .strictTools(true)
+                .responseFormat("json_object")
+                .strictJsonSchema(true)
+                .build();
+
+        final SystemMessage systemMessage = SystemMessage.from(
+                prompt.replacePlaceholder(quantity, minInteraction, maxInteraction, topic)
+        );
+
+        final UserMessage userMessage = UserMessage.from(
+                TextContent.from(prompt.getSystemPrompt())
+        );
+
+        final Response<AiMessage> response = model.generate(systemMessage, userMessage);
+
+        // convert response into response object
+        final ConversationResponse conversationResponse = ResponseFormatConverter.conversationFromJson(response.content().text());
+
+        // return
+        List<Conversation> conversations = new ArrayList<>();
+        conversationResponse.getConversations().forEach( conversation -> {
+            conversations.add(Conversation.Builder()
+                    .withMinInteractionNumber(minInteraction)
+                    .withMaxInteractionNumber(maxInteraction)
+                    .withType(type)
+                    .withTopic(topic)
+                    .withConversationMessageList(conversation)
+                    .build();
+        });
+
+        return conversations;
     }
 
-    private String buildResponseFormat() {
-        return "\"ResponseFormat\"= { " +
-                "\"type\" = \"JSON\"," +
-                "\"jsonSchema\" = { " +
-                "  \"generations\": [\n" +
-                "    {\n" +
-                "      \"messageType\": \"SOCIAL_ENGINEERING\",\n" +
-                "      \"messageTopic\": \"WORK\",\n" +
-                "      \"message\": \"Example message\"\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}";
-    }
+
 }

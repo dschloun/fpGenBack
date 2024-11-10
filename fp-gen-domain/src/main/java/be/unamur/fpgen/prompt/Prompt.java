@@ -75,13 +75,16 @@ public class Prompt extends BaseUuidDomain {
     }
 
     // method to replace Placeholder with actual value in userPrompt
-    public String replacePlaceholder(final Integer number, final Integer maxInteractionNumber, final MessageTopicEnum topic){
+    public String replacePlaceholder(final Integer number, final Integer minInteractionNumber, final Integer maxInteractionNumber, final MessageTopicEnum topic){
         String output = this.userPrompt;
         if(Objects.nonNull(number)){
             output = this.userPrompt.replace(Placeholder.NUMBER.name(), number.toString());
         }
+        if (Objects.nonNull(minInteractionNumber)){
+            output = output.replace(Placeholder.MIN_INTERACTION.name(), minInteractionNumber.toString());
+        }
         if (Objects.nonNull(maxInteractionNumber)){
-            output = output.replace(Placeholder.INTERACTION_NUMBER.name(), maxInteractionNumber.toString());
+            output = output.replace(Placeholder.MAX_INTERACTION.name(), maxInteractionNumber.toString());
         }
         if (Objects.nonNull(topic)){
             output = output.replace(Placeholder.TOPIC.name(), topic.name());
