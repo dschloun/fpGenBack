@@ -81,10 +81,10 @@ public class Prompt extends BaseUuidDomain {
             output = this.userPrompt.replace(Placeholder.NUMBER.name(), number.toString());
         }
         if (Objects.nonNull(maxInteractionNumber)){
-            output = this.userPrompt.replace(Placeholder.INTERACTION_NUMBER.name(), maxInteractionNumber.toString());
+            output = output.replace(Placeholder.INTERACTION_NUMBER.name(), maxInteractionNumber.toString());
         }
         if (Objects.nonNull(topic)){
-            output = this.userPrompt.replace(Placeholder.TOPIC.name(), topic.name());
+            output = output.replace(Placeholder.TOPIC.name(), topic.name());
         }
         return output;
     }

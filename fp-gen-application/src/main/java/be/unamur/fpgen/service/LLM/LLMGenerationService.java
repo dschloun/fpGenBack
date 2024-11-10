@@ -35,6 +35,10 @@ import dev.langchain4j.data.message.SystemMessage;
 import dev.langchain4j.data.message.TextContent;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.request.ResponseFormat;
+import dev.langchain4j.model.chat.request.ResponseFormatType;
+import dev.langchain4j.model.chat.request.json.JsonSchema;
+import dev.langchain4j.model.chat.request.json.JsonSchemaElement;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.openai.OpenAiChatModelName;
 import dev.langchain4j.model.output.Response;
@@ -447,13 +451,13 @@ public class LLMGenerationService {
     private List<String> openAiGenerateMessages(MessageTopicEnum topic, Integer maxInteractionNumber, Integer quantity, Prompt prompt) throws IOException {
         // Load message format from JSON file
         //get content file as string
-        String formatJson = getFileContentAsJson("promptChatGpt/message_format.json");
 
         // define the model
         final ChatLanguageModel model = OpenAiChatModel.builder()
                 .apiKey(openaiApiKey)
                 .modelName(OpenAiChatModelName.GPT_4_O_MINI)
-                .responseFormat(formatJson)
+                .strictTools(true)
+                .responseFormat("json_object")
                 .strictJsonSchema(true)
                 .build();
 
@@ -482,5 +486,19 @@ public class LLMGenerationService {
     private String getFileContentAsJson(String filePath) throws IOException {
         Resource resource = resourceLoader.getResource("classpath:" + filePath);
         return new String(Files.readAllBytes(Paths.get(resource.getURI())));
+    }
+
+    private String buildResponseFormat() {
+        return "\"ResponseFormat\"= { " +
+                "\"type\" = \"JSON\"," +
+                "\"jsonSchema\" = { " +
+                "  \"generations\": [\n" +
+                "    {\n" +
+                "      \"messageType\": \"SOCIAL_ENGINEERING\",\n" +
+                "      \"messageTopic\": \"WORK\",\n" +
+                "      \"message\": \"Example message\"\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}";
     }
 }
