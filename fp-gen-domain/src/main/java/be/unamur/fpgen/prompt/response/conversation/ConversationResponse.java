@@ -3,13 +3,13 @@ package be.unamur.fpgen.prompt.response.conversation;
 import java.util.List;
 
 public class ConversationResponse {
-    private List<Conversation> conversations;
+    private List<Conversation> generations;
 
-    public List<Conversation> getConversations() {
-        return conversations;
+    public List<Conversation> getGenerations() {
+        return generations;
     }
 
-    public void setConversations(List<Conversation> conversations) {
-        this.conversations = conversations;
+    public void setGenerations(List<Conversation> generations) {
+        this.generations = generations;
     }
 }

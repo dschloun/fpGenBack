@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Conversation {
     private String conversationType;
-    private List<ConversationMessage> contents;
+    private List<ConversationMessage> messages;
 
     public String getConversationType() {
         return conversationType;
@@ -14,11 +14,11 @@ public class Conversation {
         this.conversationType = conversationType;
     }
 
-    public List<ConversationMessage> getContents() {
-        return contents;
+    public List<ConversationMessage> getMessages() {
+        return messages;
     }
 
-    public void setContents(List<ConversationMessage> contents) {
-        this.contents = contents;
+    public void setMessages(List<ConversationMessage> messages) {
+        this.messages = messages;
     }
 }

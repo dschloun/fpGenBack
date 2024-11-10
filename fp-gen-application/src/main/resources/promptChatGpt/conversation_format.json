@@ -1,8 +1,8 @@
 {
-  "conversations": [
+  "generations": [
     {
       "conversationType": "SOCIAL_ENGINEERING",
-      "contents": [
+      "messages": [
         {
           "messageOrder": "1",
           "actorType": "SOCIAL_ENGINEER",
@@ -17,7 +17,7 @@
     },
     {
       "conversationType": "SOCIAL_ENGINEERING",
-      "contents": [
+      "messages": [
         {
           "messageOrder": "1",
           "actorType": "SOCIAL_ENGINEER",

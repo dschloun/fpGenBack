@@ -16,7 +16,6 @@ import be.unamur.fpgen.message.ConversationMessage;
 import be.unamur.fpgen.message.InstantMessage;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
-import be.unamur.fpgen.messaging.event.DatasetOngoingGenerationCleanEvent;
 import be.unamur.fpgen.messaging.event.OngoingGenerationStatusChangeEvent;
 import be.unamur.fpgen.prompt.Prompt;
 import be.unamur.fpgen.prompt.response.ResponseFormatConverter;
@@ -36,14 +35,9 @@ import dev.langchain4j.data.message.SystemMessage;
 import dev.langchain4j.data.message.TextContent;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.model.chat.ChatLanguageModel;
-import dev.langchain4j.model.chat.request.ResponseFormat;
-import dev.langchain4j.model.chat.request.ResponseFormatType;
-import dev.langchain4j.model.chat.request.json.JsonSchema;
-import dev.langchain4j.model.chat.request.json.JsonSchemaElement;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.openai.OpenAiChatModelName;
 import dev.langchain4j.model.output.Response;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.io.Resource;
@@ -53,8 +47,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
@@ -516,20 +508,20 @@ public class LLMGenerationService {
         List<Conversation> conversations = new ArrayList<>();
         // prepare conversation messages
 
-        conversationResponse.getConversations().forEach(conversation -> {
+        conversationResponse.getGenerations().forEach(conversation -> {
             conversations.add(Conversation.newBuilder()
                     .withType(type)
                     .withTopic(topic)
                     .withMaxInteractionNumber(maxInteraction)
                     .withMinInteractionNumber(minInteraction)
-                    .withConversationMessageList(conversation.getContents()
+                    .withConversationMessageList(conversation.getMessages()
                             .stream()
                             .map(c -> buildConversationMessage(c, type, topic, Integer.parseInt(c.getMessageOrder())))
                             .collect(Collectors.toSet()))
                     .withHash(generateSHA256(
                             type.name()
                                     + topic.name()
-                                    + conversation.getContents()
+                                    + conversation.getMessages()
                                     .stream()
                                     .map(c -> c.getMessageOrder() + c.getContent())
                                     .collect(Collectors.joining())))
