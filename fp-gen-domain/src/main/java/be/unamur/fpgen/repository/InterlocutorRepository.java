@@ -7,5 +7,7 @@ public interface InterlocutorRepository {
 
     Interlocutor getRandomInterlocutorByType(InterlocutorTypeEnum type);
 
+    Interlocutor getInterlocutorByType(InterlocutorTypeEnum type);
+
     Interlocutor saveInterlocutor(Interlocutor interlocutor);
 }

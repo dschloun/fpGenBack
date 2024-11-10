@@ -1,0 +1,34 @@
+{
+  "generations": [
+    {
+      "conversationType": "SOCIAL_ENGINEERING",
+      "messages": [
+        {
+          "messageOrder": "1",
+          "actorType": "SOCIAL_ENGINEER",
+          "content": "content 1"
+        },
+        {
+          "messageOrder": "2",
+          "actorType": "GENUINE",
+          "content": "content 2"
+        }
+      ]
+    },
+    {
+      "conversationType": "SOCIAL_ENGINEERING",
+      "messages": [
+        {
+          "messageOrder": "1",
+          "actorType": "SOCIAL_ENGINEER",
+          "content": "content 1"
+        },
+        {
+          "messageOrder": "2",
+          "actorType": "GENUINE",
+          "content": "content 2"
+        }
+      ]
+    }
+  ]
+}

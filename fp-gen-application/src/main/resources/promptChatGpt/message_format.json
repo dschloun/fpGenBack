@@ -1,0 +1,14 @@
+{
+  "generations": [
+    {
+      "messageType": "SOCIAL_ENGINEERING",
+      "messageTopic": "WORK",
+      "message": "message 1"
+    },
+    {
+      "messageType": "GENUINE",
+      "messageTopic": "SPORT",
+      "message": "message 2"
+    }
+  ]
+}

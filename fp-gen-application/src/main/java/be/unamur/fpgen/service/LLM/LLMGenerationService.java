@@ -16,9 +16,11 @@ import be.unamur.fpgen.message.ConversationMessage;
 import be.unamur.fpgen.message.InstantMessage;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
-import be.unamur.fpgen.messaging.event.DatasetOngoingGenerationCleanEvent;
 import be.unamur.fpgen.messaging.event.OngoingGenerationStatusChangeEvent;
 import be.unamur.fpgen.prompt.Prompt;
+import be.unamur.fpgen.prompt.response.ResponseFormatConverter;
+import be.unamur.fpgen.prompt.response.conversation.ConversationResponse;
+import be.unamur.fpgen.prompt.response.message.MessageResponse;
 import be.unamur.fpgen.repository.ConversationRepository;
 import be.unamur.fpgen.repository.MessageRepository;
 import be.unamur.fpgen.repository.OngoingGenerationItemRepository;
@@ -28,11 +30,22 @@ import be.unamur.fpgen.utils.TypeCorrespondenceMapper;
 import be.unamur.model.GenerationCreation;
 import be.unamur.model.MessageTopic;
 import be.unamur.model.MessageType;
+import dev.langchain4j.data.message.AiMessage;
+import dev.langchain4j.data.message.SystemMessage;
+import dev.langchain4j.data.message.TextContent;
+import dev.langchain4j.data.message.UserMessage;
+import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.openai.OpenAiChatModel;
+import dev.langchain4j.model.openai.OpenAiChatModelName;
+import dev.langchain4j.model.output.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -44,6 +57,12 @@ public class LLMGenerationService {
 
     @Value("${simulationLLM}")
     private boolean simulation;
+    @Value("${open_ai_api_key}")
+    private String openaiApiKey;
+
+    @Value("classpath:promptChatGpt/message_format.json")
+    Resource resourceFile;
+    //private static final String MESSAGE_FORMAT_PATH = "../../../../../../../resources/promptChatGpt/message_format.json";
 
     private final OngoingGenerationService ongoingGenerationService;
     private final GenerationService generationService;
@@ -55,6 +74,8 @@ public class LLMGenerationService {
     private final OngoingGenerationItemRepository ongoingGenerationItemRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final NotificationService notificationService;
+    private final ResourceLoader resourceLoader;
+
 
     public LLMGenerationService(final OngoingGenerationService ongoingGenerationService,
                                 final GenerationService generationService,
@@ -65,7 +86,7 @@ public class LLMGenerationService {
                                 final DatasetService datasetService,
                                 final OngoingGenerationItemRepository ongoingGenerationItemRepository,
                                 final ApplicationEventPublisher eventPublisher,
-                                final NotificationService notificationService) {
+                                final NotificationService notificationService, ResourceLoader resourceLoader) {
         this.ongoingGenerationService = ongoingGenerationService;
         this.generationService = generationService;
         this.interlocutorService = interlocutorService;
@@ -76,6 +97,7 @@ public class LLMGenerationService {
         this.ongoingGenerationItemRepository = ongoingGenerationItemRepository;
         this.eventPublisher = eventPublisher;
         this.notificationService = notificationService;
+        this.resourceLoader = resourceLoader;
     }
 
     @Transactional
@@ -113,11 +135,13 @@ public class LLMGenerationService {
             // 1.0. get prompt
             final Prompt prompt;
 
+            final DatasetTypeEnum datasetType = DatasetTypeEnum.valueOf(ongoingGeneration.getType().name());
+
             if (Objects.nonNull(promptVersion)) {
-                prompt = promptService.findByDatasetTypeAndMessageTypeAndVersion(DatasetTypeEnum.INSTANT_MESSAGE, item.getMessageType(), promptVersion)
-                        .orElse(promptService.getDefaultPrompt(DatasetTypeEnum.INSTANT_MESSAGE, item.getMessageType()));
+                prompt = promptService.findByDatasetTypeAndMessageTypeAndVersion(datasetType, item.getMessageType(), promptVersion)
+                        .orElse(promptService.getDefaultPrompt(datasetType, item.getMessageType()));
             } else {
-                prompt = promptService.getDefaultPrompt(DatasetTypeEnum.INSTANT_MESSAGE, item.getMessageType());
+                prompt = promptService.getDefaultPrompt(datasetType, item.getMessageType());
             }
 
             // 1.0. create generation
@@ -128,7 +152,7 @@ public class LLMGenerationService {
 
             final Generation generation = generationService.createGeneration(ongoingGeneration.getType(), command, prompt, ongoingGeneration.getAuthor());
 
-            if(GenerationTypeEnum.INSTANT_MESSAGE.equals(ongoingGeneration.getType())){
+            if (GenerationTypeEnum.INSTANT_MESSAGE.equals(ongoingGeneration.getType())) {
                 messageTreatment(item, prompt, command, generation, datasetId);
             } else {
                 conversationTreatment(item, ongoingGeneration.getMinInteractionNumber(), ongoingGeneration.getMaxInteractionNumber(), prompt, generation, datasetId);
@@ -153,11 +177,12 @@ public class LLMGenerationService {
                 eventPublisher.publishEvent(new OngoingGenerationStatusChangeEvent(this, ongoingGeneration.getId(), OngoingGenerationStatus.FAILED, idsToDelete));
             }
         }
-
-        // 4. free dataset
-        if (Objects.nonNull(datasetId)) {
-            eventPublisher.publishEvent(new DatasetOngoingGenerationCleanEvent(this, datasetId));
-        }
+            // comment because it caused problem and was not usefull because the clean was automatic due to cascade
+        // let just in case ...
+//        // 4. free dataset
+//        if (Objects.nonNull(datasetId)) {
+//           // eventPublisher.publishEvent(new DatasetOngoingGenerationCleanEvent(this, datasetId));
+//        }
     }
 
     private void messageTreatment(OngoingGenerationItem item, Prompt prompt, GenerationCreation command, Generation generation, UUID datasetId) {
@@ -172,7 +197,11 @@ public class LLMGenerationService {
 
             // 1.2.1. generate with LLM
             try {
-                messages = simulateChatGptCallMessage(item.getMessageType().name(), item.getMessageTopic().name(), item.getQuantity(), prompt);
+                if (simulation) {
+                    messages = simulateChatGptCallMessage(item.getMessageType().name(), item.getMessageTopic().name(), item.getQuantity(), prompt);
+                } else {
+                    messages = openAiGenerateMessages(item.getMessageTopic(), item.getQuantity(), prompt);
+                }
             } catch (Exception e) {
                 tryCounter--;
                 System.out.println("Error joining CHAT-GPT");
@@ -255,7 +284,11 @@ public class LLMGenerationService {
 
             // 1.2.1. generate with LLM
             try {
-                conversationTempList = simulateChatGptCallConversationList(item.getMessageType(), item.getMessageTopic(), min, max, prompt, item.getQuantity());
+                if (simulation) {
+                    conversationTempList = simulateChatGptCallConversationList(item.getMessageType(), item.getMessageTopic(), min, max, prompt, item.getQuantity());
+                } else {
+                    conversationTempList = openAiGenerateConversations(item.getMessageType(), item.getMessageTopic(), min, max, prompt, item.getQuantity());
+                }
             } catch (Exception e) {
                 tryCounter--;
                 System.out.println("Error joining CHAT-GPT");
@@ -264,7 +297,7 @@ public class LLMGenerationService {
             // 1.2.2. create messages objects (check if duplicated)
             boolean hasDuplicated = false;
 
-            for (Conversation conv: conversationTempList) {
+            for (Conversation conv : conversationTempList) {
                 // check if hash already exist
                 if (simulation) {
                     conversationRepository.saveConversation(conv);
@@ -308,10 +341,10 @@ public class LLMGenerationService {
     }
 
     // chatgpt simulation methods conversation
-    private List<Conversation> simulateChatGptCallConversationList(final MessageTypeEnum type, final MessageTopicEnum topic, final int minimalInteraction, final int maxInteraction, final Prompt prompt, final Integer quantity){
+    private List<Conversation> simulateChatGptCallConversationList(final MessageTypeEnum type, final MessageTopicEnum topic, final int minimalInteraction, final int maxInteraction, final Prompt prompt, final Integer quantity) {
         List<Conversation> conversationList = new ArrayList<>();
 
-        for (int i = 0; i < quantity; i++){
+        for (int i = 0; i < quantity; i++) {
             conversationList.add(simulateChatGptCallConversation(type, topic, minimalInteraction, maxInteraction, prompt));
         }
 
@@ -341,11 +374,11 @@ public class LLMGenerationService {
 
         final String hashString = generateSHA256(
                 type.name()
-                + topic.name()
-                + messages
-                .stream()
-                .map(c -> c.getOrderNumber() + c.getContent())
-                .collect(Collectors.joining()));
+                        + topic.name()
+                        + messages
+                        .stream()
+                        .map(c -> c.getOrderNumber() + c.getContent())
+                        .collect(Collectors.joining()));
 
         // 3.1. save the conversation
         final Conversation conversation = Conversation.newBuilder()
@@ -405,7 +438,119 @@ public class LLMGenerationService {
         }
     }
 
-    private String generateNotificationMessage(OngoingGeneration ongoingGeneration){
-        return "Hello " + ongoingGeneration.getAuthor().getFirstName() + " " + ongoingGeneration.getAuthor().getLastName() +". Your generation from " + ongoingGeneration.getCreationDate() + " from type " + ongoingGeneration.getType() + " is done";
+    private String generateNotificationMessage(OngoingGeneration ongoingGeneration) {
+        return "Hello " + ongoingGeneration.getAuthor().getFirstName() + " " + ongoingGeneration.getAuthor().getLastName() + ". Your generation from " + ongoingGeneration.getCreationDate() + " from type " + ongoingGeneration.getType() + " is done";
     }
+
+    //-----------------
+    private List<String> openAiGenerateMessages(MessageTopicEnum topic, Integer quantity, Prompt prompt) throws IOException {
+        // Load message format from JSON file
+        //get content file as string
+
+        // define the model
+        final ChatLanguageModel model = OpenAiChatModel.builder()
+                .apiKey(openaiApiKey)
+                .modelName(OpenAiChatModelName.GPT_4_O_MINI)
+                .strictTools(true)
+                .responseFormat("json_object")
+                .strictJsonSchema(true)
+                .build();
+
+        final SystemMessage systemMessage = SystemMessage.from(
+                prompt.getSystemPrompt()
+        );
+
+        final UserMessage userMessage = UserMessage.from(
+                TextContent.from(prompt.replacePlaceholder(quantity, null, null, topic))
+        );
+
+        final Response<AiMessage> response = model.generate(systemMessage, userMessage);
+
+        // convert response into response object
+        final MessageResponse messageResponse = ResponseFormatConverter.messageFromJson(response.content().text());
+
+        // return
+        List<String> messages = new ArrayList<>();
+        messageResponse.getGenerations().forEach(generation -> {
+            messages.add(generation.getMessage());
+        });
+
+        return messages;
+    }
+
+    private List<Conversation> openAiGenerateConversations(final MessageTypeEnum type, final MessageTopicEnum topic, final int minInteraction, final int maxInteraction, final Prompt prompt, final Integer quantity) throws IOException {
+        // Load message format from JSON file
+        //get content file as string
+
+        // define the model
+        final ChatLanguageModel model = OpenAiChatModel.builder()
+                .apiKey(openaiApiKey)
+                .modelName(OpenAiChatModelName.GPT_4_O_MINI)
+                .strictTools(true)
+                .responseFormat("json_object")
+                .strictJsonSchema(true)
+                .build();
+
+        final SystemMessage systemMessage = SystemMessage.from(
+                prompt.getSystemPrompt()
+        );
+
+        final UserMessage userMessage = UserMessage.from(
+                TextContent.from(prompt.replacePlaceholder(quantity, minInteraction, maxInteraction, topic))
+        );
+
+        final Response<AiMessage> response = model.generate(systemMessage, userMessage);
+
+        // convert response into response object
+        final ConversationResponse conversationResponse = ResponseFormatConverter.conversationFromJson(response.content().text());
+
+        // return
+        List<Conversation> conversations = new ArrayList<>();
+        // prepare conversation messages
+
+        conversationResponse.getGenerations().forEach(conversation -> {
+            conversations.add(Conversation.newBuilder()
+                    .withType(type)
+                    .withTopic(topic)
+                    .withMaxInteractionNumber(maxInteraction)
+                    .withMinInteractionNumber(minInteraction)
+                    .withConversationMessageList(conversation.getMessages()
+                            .stream()
+                            .map(c -> buildConversationMessage(c, type, topic, Integer.parseInt(c.getMessageOrder())))
+                            .collect(Collectors.toSet()))
+                    .withHash(generateSHA256(
+                            type.name()
+                                    + topic.name()
+                                    + conversation.getMessages()
+                                    .stream()
+                                    .map(c -> c.getMessageOrder() + c.getContent())
+                                    .collect(Collectors.joining())))
+                    .build());
+        });
+
+        return conversations;
+    }
+
+    private ConversationMessage buildConversationMessage(be.unamur.fpgen.prompt.response.conversation.ConversationMessage message, MessageTypeEnum type, MessageTopicEnum topic, int orderNumber) {
+        final Interlocutor sender = interlocutorService.getInterlocutorByType(InterlocutorTypeEnum.valueOf(message.getActorType()));
+        final Interlocutor receiver;
+        // determine receiver depending of sender type
+        if (sender.getType().equals(InterlocutorTypeEnum.GENUINE) && type.equals(MessageTypeEnum.SOCIAL_ENGINEERING)) {
+            receiver = interlocutorService.getInterlocutorByType(InterlocutorTypeEnum.SOCIAL_ENGINEER);
+        } else if (sender.getType().equals(InterlocutorTypeEnum.GENUINE) && type.equals(MessageTypeEnum.HARASSMENT)) {
+            receiver = interlocutorService.getInterlocutorByType(InterlocutorTypeEnum.HARASSER);
+        } else {
+            receiver = interlocutorService.getInterlocutorByType(InterlocutorTypeEnum.GENUINE);
+        }
+        return ConversationMessage.newBuilder()
+                .withType(type)
+                .withTopic(topic)
+                .withOrderNumber(orderNumber)
+                .withSender(sender)
+                .withReceiver(receiver)
+                .withOrderNumber(Integer.valueOf(message.getMessageOrder()))
+                .withContent(message.getContent())
+                .build();
+    }
+
 }

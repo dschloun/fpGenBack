@@ -3,7 +3,10 @@ package be.unamur.fpgen.prompt;
 import be.unamur.fpgen.BaseUuidDomain;
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.dataset.DatasetTypeEnum;
+import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
+
+import java.util.Objects;
 
 public class Prompt extends BaseUuidDomain {
     private final DatasetTypeEnum datasetType;
@@ -69,6 +72,24 @@ public class Prompt extends BaseUuidDomain {
 
     public void updateUserPrompt(final String content){
         this.userPrompt = content;
+    }
+
+    // method to replace Placeholder with actual value in userPrompt
+    public String replacePlaceholder(final Integer number, final Integer minInteractionNumber, final Integer maxInteractionNumber, final MessageTopicEnum topic){
+        String output = this.userPrompt;
+        if(Objects.nonNull(number)){
+            output = this.userPrompt.replace(Placeholder.NUMBER.name(), number.toString());
+        }
+        if (Objects.nonNull(minInteractionNumber)){
+            output = output.replace(Placeholder.MIN_INTERACTION.name(), minInteractionNumber.toString());
+        }
+        if (Objects.nonNull(maxInteractionNumber)){
+            output = output.replace(Placeholder.MAX_INTERACTION.name(), maxInteractionNumber.toString());
+        }
+        if (Objects.nonNull(topic)){
+            output = output.replace(Placeholder.TOPIC.name(), topic.name());
+        }
+        return output;
     }
 
     public static final class Builder extends AbstractBaseUuidDomainBuilder<Builder>{
