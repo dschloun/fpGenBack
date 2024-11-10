@@ -144,11 +144,13 @@ public class LLMGenerationService {
             // 1.0. get prompt
             final Prompt prompt;
 
+            final DatasetTypeEnum datasetType = DatasetTypeEnum.valueOf(ongoingGeneration.getType().name());
+
             if (Objects.nonNull(promptVersion)) {
-                prompt = promptService.findByDatasetTypeAndMessageTypeAndVersion(DatasetTypeEnum.INSTANT_MESSAGE, item.getMessageType(), promptVersion)
-                        .orElse(promptService.getDefaultPrompt(DatasetTypeEnum.INSTANT_MESSAGE, item.getMessageType()));
+                prompt = promptService.findByDatasetTypeAndMessageTypeAndVersion(datasetType, item.getMessageType(), promptVersion)
+                        .orElse(promptService.getDefaultPrompt(datasetType, item.getMessageType()));
             } else {
-                prompt = promptService.getDefaultPrompt(DatasetTypeEnum.INSTANT_MESSAGE, item.getMessageType());
+                prompt = promptService.getDefaultPrompt(datasetType, item.getMessageType());
             }
 
             // 1.0. create generation
@@ -463,11 +465,11 @@ public class LLMGenerationService {
                 .build();
 
         final SystemMessage systemMessage = SystemMessage.from(
-                prompt.replacePlaceholder(quantity, null, null, topic)
+                prompt.getSystemPrompt()
         );
 
         final UserMessage userMessage = UserMessage.from(
-                TextContent.from(prompt.getSystemPrompt())
+                TextContent.from(prompt.replacePlaceholder(quantity, null, null, topic))
         );
 
         final Response<AiMessage> response = model.generate(systemMessage, userMessage);
@@ -498,11 +500,11 @@ public class LLMGenerationService {
                 .build();
 
         final SystemMessage systemMessage = SystemMessage.from(
-                prompt.replacePlaceholder(quantity, minInteraction, maxInteraction, topic)
+                prompt.getSystemPrompt()
         );
 
         final UserMessage userMessage = UserMessage.from(
-                TextContent.from(prompt.getSystemPrompt())
+                TextContent.from(prompt.replacePlaceholder(quantity, minInteraction, maxInteraction, topic))
         );
 
         final Response<AiMessage> response = model.generate(systemMessage, userMessage);
