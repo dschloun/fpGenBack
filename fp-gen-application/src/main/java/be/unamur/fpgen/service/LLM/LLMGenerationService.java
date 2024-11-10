@@ -293,7 +293,7 @@ public class LLMGenerationService {
                 if(simulation) {
                     conversationTempList = simulateChatGptCallConversationList(item.getMessageType(), item.getMessageTopic(), min, max, prompt, item.getQuantity());
                 } else {
-
+                    conversationTempList = openAiGenerateConversations(item.getMessageType(), item.getMessageTopic(), min, max, prompt, item.getQuantity());
                 }
                 } catch (Exception e) {
                 tryCounter--;
@@ -512,18 +512,41 @@ public class LLMGenerationService {
 
         // return
         List<Conversation> conversations = new ArrayList<>();
+        // prepare conversation messages
+
         conversationResponse.getConversations().forEach( conversation -> {
-            conversations.add(Conversation.Builder()
-                    .withMinInteractionNumber(minInteraction)
-                    .withMaxInteractionNumber(maxInteraction)
+            conversations.add(Conversation.newBuilder()
                     .withType(type)
                     .withTopic(topic)
-                    .withConversationMessageList(conversation)
-                    .build();
+                    .withMaxInteractionNumber(maxInteraction)
+                    .withMinInteractionNumber(minInteraction)
+                    .withConversationMessageList(conversation.getContents()
+                            .stream()
+                            .map( c -> buildConversationMessage(c, type))
+                            .collect(Collectors.toSet()))
+                    .build());
         });
 
         return conversations;
     }
 
+    private ConversationMessage buildConversationMessage(be.unamur.fpgen.prompt.response.conversation.ConversationMessage message, MessageTypeEnum type){
+        final Interlocutor sender = interlocutorService.getInterlocutorByType(InterlocutorTypeEnum.valueOf(message.getActorType()));
+        final Interlocutor receiver;
+        // determine receiver depending of sender type
+        if (sender.getType().equals(InterlocutorTypeEnum.GENUINE) && type.equals(MessageTypeEnum.SOCIAL_ENGINEERING)){
+            receiver = interlocutorService.getInterlocutorByType(InterlocutorTypeEnum.SOCIAL_ENGINEER);
+        } else if (sender.getType().equals(InterlocutorTypeEnum.GENUINE) && type.equals(MessageTypeEnum.HARASSMENT)) {
+            receiver = interlocutorService.getInterlocutorByType(InterlocutorTypeEnum.HARASSER);
+        } else {
+            receiver = interlocutorService.getInterlocutorByType(InterlocutorTypeEnum.GENUINE);
+        }
+        return ConversationMessage.newBuilder()
+                .withSender(sender)
+                .withReceiver(receiver)
+                .withOrderNumber(Integer.valueOf(message.getMessageOrder()))
+                .withContent(message.getContent())
+                .build();
+    }
 
 }

@@ -38,6 +38,11 @@ public class JpaInterlocutorRepository implements InterlocutorRepository {
     }
 
     @Override
+    public Interlocutor getInterlocutorByType(InterlocutorTypeEnum type) {
+        return jpaInterlocutorRepositoryCRUD.getInterlocutorEntityByInterlocutorTypeEnum(type).map(InterlocutorJpaToDomainMapper::map).orElse(null);
+    }
+
+    @Override
     public Interlocutor saveInterlocutor(Interlocutor interlocutor) {
         return InterlocutorJpaToDomainMapper.map(
                 jpaInterlocutorRepositoryCRUD.save(
