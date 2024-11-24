@@ -17,6 +17,7 @@ public class Prompt extends BaseUuidDomain {
     private final Author author;
     private final PromptStatusEnum status;
     private final boolean defaultPrompt;
+    private final String motivation;
 
     private Prompt(Builder builder) {
         super(builder.getId(), builder.getCreationDate(), builder.getModificationDate());
@@ -28,6 +29,7 @@ public class Prompt extends BaseUuidDomain {
         author = builder.author;
         status = builder.status;
         defaultPrompt = builder.defaultPrompt;
+        motivation = builder.motivation;
     }
 
     public DatasetTypeEnum getDatasetType() {
@@ -60,6 +62,10 @@ public class Prompt extends BaseUuidDomain {
 
     public boolean isDefaultPrompt() {
         return defaultPrompt;
+    }
+
+    public String getMotivation() {
+        return motivation;
     }
 
     public static Builder newBuilder() {
@@ -101,6 +107,7 @@ public class Prompt extends BaseUuidDomain {
         private Author author;
         private PromptStatusEnum status;
         private boolean defaultPrompt;
+        private String motivation;
 
         private Builder() {
         }
@@ -142,6 +149,11 @@ public class Prompt extends BaseUuidDomain {
 
         public Builder withDefaultPrompt(boolean val) {
             defaultPrompt = val;
+            return this;
+        }
+
+        public Builder withMotivation(String val) {
+            motivation = val;
             return this;
         }
 

@@ -180,3 +180,17 @@ databaseChangeLog:
                     foreignKeyName: fk_ongoing_generation_item_prompt
                     references: prompt(id)
                     onDelete: CASCADE
+
+  - changeSet:
+      id: add-prompt-motivation
+      author: dsc
+      changes:
+        - addColumn:
+            tableName: prompt
+            columns:
+              - column:
+                  name: motivation
+                  type: text
+                  constraints:
+                      nullable: true
+                      unique: false

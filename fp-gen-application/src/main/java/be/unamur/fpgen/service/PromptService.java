@@ -44,6 +44,7 @@ public class PromptService {
                         .withUserPrompt(command.getUserContent())
                         .withSystemPrompt(command.getSystemContent())
                         .withVersion(lastVersion + 1)
+                        .withMotivation(command.getMotivation())
                         .build());
     }
 
