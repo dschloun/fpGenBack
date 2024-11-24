@@ -153,3 +153,30 @@ databaseChangeLog:
                   constraints:
                     - nullable: false
                     - unique: false
+
+  - changeSet:
+      id: remove-prompt-version-from-ongoing-generation
+      author: dsc
+      changes:
+        - dropColumn:
+            tableName: ongoing_generation
+            columns:
+              - column:
+                  name: prompt_version
+
+  - changeSet:
+      id: add-prompt-on-ongoing-item
+      author: dsc
+      changes:
+        - addColumn:
+            tableName: ongoing_generation_item
+            columns:
+              - column:
+                  name: prompt_id
+                  type: uuid
+                  constraints:
+                    nullable: true
+                    unique: false
+                    foreignKeyName: fk_ongoing_generation_item_prompt
+                    references: prompt(id)
+                    onDelete: CASCADE

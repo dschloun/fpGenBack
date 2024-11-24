@@ -14,6 +14,7 @@ public class OngoingGenerationItemJpaToDomainMapper {
                 .withMessageTopic(entity.getMessageTopic())
                 .withQuantity(entity.getQuantity())
                 .withStatus(entity.getStatus())
+                .withPromptId(entity.getPromptId())
                 .build();
     }
 }

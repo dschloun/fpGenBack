@@ -6,6 +6,7 @@ import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 @Table(name = "ongoing_generation_item")
@@ -15,6 +16,7 @@ public class OngoingGenerationItemEntity extends BaseUuidEntity {
     private MessageTopicEnum messageTopic;
     private Integer quantity;
     private OngoingGenerationItemStatus status;
+    private UUID promptId;
 
     @ManyToOne
     @JoinColumn(name = "ongoing_generation_id")
@@ -63,5 +65,14 @@ public class OngoingGenerationItemEntity extends BaseUuidEntity {
 
     public void setStatus(OngoingGenerationItemStatus status) {
         this.status = status;
+    }
+
+    @Column(name = "prompt_id")
+    public UUID getPromptId() {
+        return promptId;
+    }
+
+    public void setPromptId(UUID promptId) {
+        this.promptId = promptId;
     }
 }
