@@ -56,8 +56,12 @@ group Cron generate conversation/message periodically
                                                 loop forEach item of conversation|messageList
                                                     LLMGenerationService -> LLMGenerationService : generateHash(item) : hash
                                                     LLMGenerationService -> ConversationMessageService : existByHash(hash) : hashExists
+                                                    activate ConversationMessageService
+                                                        ConversationMessageService -> LLMGenerationService : hashExists (boolean)
+                                                    deactivate ConversationMessageService
                                                     alt hashExists
                                                         LLMGenerationService -> LLMGenerationService : decrementTryCounter()
+                                                        LLMGenerationService -> LLMGenerationService : setItemStatus(FAILURE)
                                                     else
                                                         LLMGenerationService -> LLMGenerationService : decrementQuantity()
                                                         LLMGenerationService -> LLMGenerationService : setItemStatus(SUCCESS)
