@@ -14,7 +14,6 @@ participant GenerationService
 participant ConversationMessageService
 participant PromptService
 participant OpenAI
-database DB
 
 group Cron generate conversation/message periodically
     activate CronTaskService
@@ -56,7 +55,7 @@ group Cron generate conversation/message periodically
                                                 LLMGenerationService -> LLMGenerationService : convertResponseToConversationList() : conversation|messageList
                                                 loop forEach item of conversation|messageList
                                                     LLMGenerationService -> LLMGenerationService : generateHash(item) : hash
-                                                    LLMGenerationService -> ConversationService : existByHash(hash) : hashExists
+                                                    LLMGenerationService -> ConversationMessageService : existByHash(hash) : hashExists
                                                     alt hashExists
                                                         LLMGenerationService -> LLMGenerationService : decrementTryCounter()
                                                     else
