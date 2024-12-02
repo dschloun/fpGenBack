@@ -1,0 +1,69 @@
+@startuml
+title Generation Inbox Pattern
+!theme toy
+skinparam Participantpadding 35
+skinparam defaultFontName Aapex
+skinparam Shadowing false
+skinparam sequenceMessageAlign direction
+
+actor User
+participant ConversationService
+participant DatasetService
+participant OnGoingGenerationService
+participant AuthorService
+database DB
+
+group User post a conversation generation request
+    User -> ConversationService : generateConversation()
+    note right User
+    {   datasetId,
+        conversationCreationList [
+            {type,
+            topic,
+            promptId,
+            quantity}
+            ]
+    }
+    end note
+
+    activate ConversationService
+        ConversationService -> OnGoingGenerationService : createOnGoingGeneration()
+         note right ConversationService
+            {   generationType,
+                datasetId,
+                conversationCreationList []
+            }
+            end note
+        activate OnGoingGenerationService
+            OnGoingGenerationService -> AuthorService : getAuthorById()
+            activate AuthorService
+                return Author
+            deactivate AuthorService
+            OnGoingGenerationService -> OnGoingGenerationService : buildOngoingGenerationObject()
+            OnGoingGenerationService -> DB : saveOnGoingGeneration()
+            activate DB
+                return
+            deactivate DB
+             OnGoingGenerationService -->> ConversationService
+        deactivate OnGoingGenerationService
+
+        alt datasetId != null
+        ConversationService -> DatasetService : addOnGoingGenerationIdToDataset()
+        activate DatasetService
+            return
+        deactivate DatasetService
+        end
+    deactivate ConversationService
+
+end group
+
+
+
+
+
+
+
+
+
+
+@enduml
