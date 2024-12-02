@@ -11,8 +11,7 @@ participant LLMGenerationService
 participant NotificationService
 participant OnGoingGenerationService
 participant GenerationService
-participant MessageService
-participant ConversationService
+participant ConversationMessageService
 participant PromptService
 participant OpenAI
 database DB
@@ -20,8 +19,8 @@ database DB
 group Cron generate conversation/message periodically
     activate CronTaskService
     loop Cron task every minute
-        alt taskStatus != RUNNING
-        CronTaskService -> CronTaskService: setStatus(RUNNING)
+        alt !running
+        CronTaskService -> CronTaskService: setRunning(true)
          group try
             CronTaskService -> LLMGenerationService : generate()
             activate LLMGenerationService
@@ -62,21 +61,34 @@ group Cron generate conversation/message periodically
                                                         LLMGenerationService -> LLMGenerationService : decrementTryCounter()
                                                     else
                                                         LLMGenerationService -> LLMGenerationService : decrementQuantity()
+                                                        LLMGenerationService -> LLMGenerationService : setItemStatus(SUCCESS)
                                                     end alt
                                                 end loop
                                        else catch
+                                            LLMGenerationService -> LLMGenerationService : setItemStatus(FAILURE)
                                             LLMGenerationService -> LLMGenerationService : decrementTryCounter()
+                                       else finally
+                                            LLMGenerationService -> ConversationMessageService : saveSuccessfulConversation|Message()
+                                            activate ConversationMessageService
+                                            deactivate ConversationMessageService
                                        end group
                                     end loop
-
+                                    return
                                 end group
+                                LLMGenerationService -> OnGoingGenerationService : removeAllSuccessfullItem(successfullList)
+                                activate OnGoingGenerationService
+                                deactivate OnGoingGenerationService
+                                return
                             end loop
-
+                            LLMGenerationService -> NotificationService : notify()
+                            activate NotificationService
+                            deactivate NotificationService
+                            return
                     end loop
                 end alt
             deactivate LLMGenerationService
          else finally
-
+            CronTaskService -> CronTaskService : setRunning(false)
          end group
         end alt
     end loop
