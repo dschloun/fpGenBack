@@ -5,7 +5,7 @@
   "defaultSignatureAlgorithm": "RS256",
   "revokeRefreshToken": false,
   "refreshTokenMaxReuse": 0,
-  "accessTokenLifespan": 3600,
+  "accessTokenLifespan": 31536000,
   "accessTokenLifespanForImplicitFlow": 900,
   "ssoSessionIdleTimeout": 1800,
   "ssoSessionMaxLifespan": 36000,
@@ -65,12 +65,20 @@
             "uma_authorization"
           ],
           "client": {
-            "account": [
-              "manage-account",
-              "view-profile"
+            "fpgen_app": [
+              "user"
             ]
           }
         },
+        "clientRole": false,
+        "containerId": "54de9012-36dd-47ad-85f6-a6613e50296b",
+        "attributes": {}
+      },
+      {
+        "id": "65b6be55-385f-4ddf-9091-7e9bff34ccf9",
+        "name": "adminusercreation",
+        "description": "",
+        "composite": false,
         "clientRole": false,
         "containerId": "54de9012-36dd-47ad-85f6-a6613e50296b",
         "attributes": {}
@@ -816,6 +824,18 @@
           {
             "id": "ab7f5eb2-aba0-4cba-8c15-38cf5360a9d4",
             "name": "manage-group-membership"
+          },
+          {
+            "id": "cf3bd2e3-c9e7-4960-b8a7-aa00e414d505",
+            "name": "map-role"
+          },
+          {
+            "id": "9d209727-9090-4ce9-b3d4-5032a280d59a",
+            "name": "map-role-client-scope"
+          },
+          {
+            "id": "c793da32-868f-463f-beed-e13170050f46",
+            "name": "map-role-composite"
           }
         ],
         "decisionStrategy": "UNANIMOUS"
@@ -1417,7 +1437,20 @@
     "xXSSProtection": "1; mode=block",
     "strictTransportSecurity": "max-age=31536000; includeSubDomains"
   },
-  "smtpServer": {},
+  "smtpServer": {
+    "replyToDisplayName": "",
+    "starttls": "false",
+    "auth": "true",
+    "envelopeFrom": "",
+    "ssl": "false",
+    "password": "**********",
+    "port": "587",
+    "replyTo": "",
+    "host": "smtp.gmail.com",
+    "from": "fpgen305@gmail.com",
+    "fromDisplayName": "noreply@fpgen.com",
+    "user": "fpgen305@gmail.com"
+  },
   "eventsEnabled": false,
   "eventsListeners": [
     "jboss-logging"
