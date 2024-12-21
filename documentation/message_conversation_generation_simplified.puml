@@ -1,0 +1,96 @@
+@startuml
+title Generation
+!theme toy
+skinparam Participantpadding 35
+skinparam defaultFontName Aapex
+skinparam Shadowing false
+skinparam sequenceMessageAlign direction
+
+participant CronTaskService
+participant LLMGenerationService
+participant NotificationService
+participant OnGoingGenerationService
+participant GenerationService
+participant ConversationMessageService
+participant PromptService
+participant OpenAI
+
+group Cron generate conversation/message periodically
+
+         group try
+            CronTaskService -> LLMGenerationService : generate()
+            activate LLMGenerationService
+                LLMGenerationService -> OnGoingGenerationService : findAllInStatus(WAITING)
+                activate OnGoingGenerationService
+                    OnGoingGenerationService -->> LLMGenerationService : Generation List []
+                deactivate OnGoingGenerationService
+                    loop forEach ongoing generation item
+                                LLMGenerationService -> LLMGenerationService : getGenerationType() [Message | Conversation]
+                                LLMGenerationService -> PromptService : getPrompt(promptId)
+                                activate PromptService
+                                    PromptService -->> LLMGenerationService : prompt
+                                deactivate PromptService
+                                LLMGenerationService -> GenerationService : createGeneration(type, topic, prompt, quantity)
+                                activate GenerationService
+                                    GenerationService -->> LLMGenerationService : generation
+                                deactivate GenerationService
+                                group CONVERSATION | MESSAGE -> treatment
+                                LLMGenerationService -> LLMGenerationService ++ : generateConversation|Message()
+                                    LLMGenerationService -> LLMGenerationService : setTryCounter(3)
+                                    loop while (quantity > 0 && tryCounter > 0)
+                                       group try
+                                            LLMGenerationService -> LLMGenerationService ++ : openAiGenerateConversations|Messages(type, topic, prompt, quantity)
+                                                LLMGenerationService -> LLMGenerationService : prepareRequest
+                                                LLMGenerationService -> OpenAI : externalCallOpenAI(request)
+                                                activate OpenAI
+                                                    OpenAI -> LLMGenerationService : response
+                                                deactivate OpenAI
+                                                LLMGenerationService -> LLMGenerationService : convertResponseToConversationList() : conversation|messageList
+                                                loop forEach item of conversation|messageList
+                                                    LLMGenerationService -> LLMGenerationService : generateHash(item) : hash
+                                                    LLMGenerationService -> ConversationMessageService : existByHash(hash) : hashExists
+                                                    activate ConversationMessageService
+                                                        ConversationMessageService -> LLMGenerationService : hashExists (boolean)
+                                                    deactivate ConversationMessageService
+                                                    alt hashExists
+                                                        LLMGenerationService -> LLMGenerationService : decrementTryCounter()
+                                                        LLMGenerationService -> LLMGenerationService : setItemStatus(FAILURE)
+                                                    else
+                                                        LLMGenerationService -> LLMGenerationService : decrementQuantity()
+                                                        LLMGenerationService -> LLMGenerationService : setItemStatus(SUCCESS)
+                                                    end alt
+                                                end loop
+                                       else catch
+                                            LLMGenerationService -> LLMGenerationService : setItemStatus(FAILURE)
+                                            LLMGenerationService -> LLMGenerationService : decrementTryCounter()
+                                       else finally
+                                            LLMGenerationService -> ConversationMessageService : saveSuccessfulConversation|Message()
+                                            activate ConversationMessageService
+                                            deactivate ConversationMessageService
+                                       end group
+                                    end loop
+                                    return
+                                end group
+                                LLMGenerationService -> OnGoingGenerationService : removeAllSuccessfullItem(successfullList)
+                                activate OnGoingGenerationService
+                                deactivate OnGoingGenerationService
+                                return
+                            end loop
+                            LLMGenerationService -> NotificationService : notify()
+                            activate NotificationService
+                            deactivate NotificationService
+                            return
+            deactivate LLMGenerationService
+
+end group
+
+
+
+
+
+
+
+
+
+
+@enduml
