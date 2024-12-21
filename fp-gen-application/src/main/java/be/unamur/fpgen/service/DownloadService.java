@@ -17,9 +17,8 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class DownloadService {
@@ -123,19 +122,35 @@ public class DownloadService {
         // CSV header
         records.add(new String[]{
                 "conversationId",
-                "orderNumber",
                 "type",
                 "content"
         });
 
-        conversationMessages.forEach(cm -> records.add(new String[]{
-                cm.getConversationId(),
-                cm.getOrderNumber(),
-                cm.getType(),
-                cm.getContent()
-        }));
+        // Group by conversationId
+        Map<String, List<ConversationMessageDownload>> groupedMessages = conversationMessages.stream()
+                .collect(Collectors.groupingBy(ConversationMessageDownload::getConversationId));
 
-        return records;
+        // Process each conversation
+        groupedMessages.forEach((conversationId, messages) -> {
+            // Sort messages by orderNumber
+            messages.sort(Comparator.comparing(ConversationMessageDownload::getOrderNumber));
+
+            // Concatenate message content
+            String concatenatedContent = messages.stream()
+                    .map(ConversationMessageDownload::getContent)
+                    .collect(Collectors.joining(" | "));
+
+            // Extract type (assume all messages in a group have the same type)
+            String type = messages.get(0).getType();
+
+            // Add to records
+            records.add(new String[]{
+                    conversationId,
+                    type,
+                    concatenatedContent
+            });
+        });
+            return records;
     }
 
     private String prepareFileName(final Dataset dataset){
