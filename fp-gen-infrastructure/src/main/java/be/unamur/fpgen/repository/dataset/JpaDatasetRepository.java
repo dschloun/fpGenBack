@@ -66,7 +66,11 @@ public class JpaDatasetRepository implements DatasetRepository {
         // maybe it's not the old version author
         final AuthorEntity author = jpaAuthorRepositoryCRUD.getReferenceById(newVersion.getAuthor().getId());
 
-        return createInstantMessageDatasetNewVersion(oldVersion, newVersion, author);
+        if(DatasetTypeEnum.INSTANT_MESSAGE.equals(oldVersion.getType())) {
+            return createInstantMessageDatasetNewVersion(oldVersion, newVersion, author);
+        } else {
+            return createConversationDatasetNewVersion(oldVersion, newVersion, author);
+        }
     }
 
     private Dataset createInstantMessageDatasetNewVersion(Dataset oldVersion, Dataset newVersion, AuthorEntity author) {
@@ -83,6 +87,22 @@ public class JpaDatasetRepository implements DatasetRepository {
                 jpaDatasetRepositoryCRUD.save(
                         DataSetDomainToJpaMapper
                                 .mapForCreateNewVersionMessageDataset(entity, detachedGenerations, author, newVersion)));
+    }
+
+    private Dataset createConversationDatasetNewVersion(Dataset oldVersion, Dataset newVersion, AuthorEntity author) {
+        final ConversationDatasetEntity entity = jpaConversationDatasetRepositoryCRUD.findById(oldVersion.getId()).orElseThrow();
+
+        // detach old generations in order to copy them
+        final Set<ConversationGenerationEntity> detachedGenerations = new HashSet<>();
+        for (ConversationGenerationEntity generation : entity.getConversationGenerationList()) {
+            entityManager.detach(generation);
+            detachedGenerations.add(generation);
+        }
+
+        return DatasetJpaToDomainMapper.map(
+                jpaDatasetRepositoryCRUD.save(
+                        DataSetDomainToJpaMapper
+                                .mapForCreateNewConversationDataset(entity, detachedGenerations, author, newVersion)));
     }
 
 
