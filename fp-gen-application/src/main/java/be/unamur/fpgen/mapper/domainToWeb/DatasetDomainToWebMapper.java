@@ -31,6 +31,7 @@ public class DatasetDomainToWebMapper {
                 .statistic(StatisticDomainToWebMapper.map(domain.getStatistic()))
                 .validated(domain.isValidated())
                 .isLastVersion(domain.isLastVersion())
-                .hasResult(domain.hasResult());
+                .hasResult(domain.hasResult())
+                .recordNumber(domain.getRecordNumber());
     }
 }

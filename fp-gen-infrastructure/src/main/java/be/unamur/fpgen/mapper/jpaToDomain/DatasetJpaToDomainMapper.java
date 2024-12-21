@@ -10,6 +10,7 @@ import be.unamur.fpgen.utils.MapperUtil;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 public class DatasetJpaToDomainMapper {
 
@@ -46,6 +47,7 @@ public class DatasetJpaToDomainMapper {
                 .withLastVersion(entity.isLastVersion())
                 .withResult(!entity.getResultList().isEmpty())
                 .withOriginalDatasetId(entity.getOriginalDatasetId())
+                .withRecordNumber(entity.countMessages())
                 .build();
     }
 
@@ -72,6 +74,7 @@ public class DatasetJpaToDomainMapper {
                 .withLastVersion(entity.isLastVersion())
                 .withOriginalDatasetId(entity.getOriginalDatasetId())
                 .withResult(!entity.getResultList().isEmpty())
+                .withRecordNumber(entity.countConversations())
                 .build();
     }
 }

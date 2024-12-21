@@ -24,4 +24,15 @@ public class ConversationDatasetEntity extends DatasetEntity {
     public void setConversationGenerationList(Set<ConversationGenerationEntity> conversationGenerationList) {
         this.conversationGenerationList = conversationGenerationList;
     }
+
+    public int countConversations() {
+        if (this.getConversationGenerationList() == null || this.getConversationGenerationList().isEmpty()) {
+            return 0;
+        }
+
+        return this.getConversationGenerationList().stream()
+                .filter(generation -> generation.getConversationList() != null)
+                .mapToInt(generation -> generation.getConversationList().size())
+                .sum();
+    }
 }

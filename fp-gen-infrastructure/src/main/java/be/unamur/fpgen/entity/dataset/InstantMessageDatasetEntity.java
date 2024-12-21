@@ -25,4 +25,15 @@ public class InstantMessageDatasetEntity extends DatasetEntity {
     public void setInstantMessageGenerationList(Set<InstantMessageGenerationEntity> instantMessageGeneration) {
         this.instantMessageGenerationList = instantMessageGeneration;
     }
+
+    public int countMessages() {
+        if (this.getInstantMessageGenerationList() == null || this.getInstantMessageGenerationList().isEmpty()) {
+            return 0;
+        }
+
+        return this.getInstantMessageGenerationList().stream()
+                .filter(generation -> generation.getInstantMessageList() != null)
+                .mapToInt(generation -> generation.getInstantMessageList().size())
+                .sum();
+    }
 }
