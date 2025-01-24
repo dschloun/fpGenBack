@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: correct_dataset_name_length
+      author: dsc
+      changes:
+        - modifyDataType:
+            tableName: dataset
+            columnName: name
+            newDataType: varchar(255)
