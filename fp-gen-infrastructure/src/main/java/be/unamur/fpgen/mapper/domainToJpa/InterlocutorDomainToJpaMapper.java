@@ -21,6 +21,7 @@ public class InterlocutorDomainToJpaMapper {
         final InterlocutorEntity entity = new InterlocutorEntity();
         entity.setId(domain.getId());
         entity.setInterlocutorTypeEnum(domain.getType());
+        entity.setNumber(domain.getNumber());
         return entity;
     }
 }

@@ -545,7 +545,20 @@ public class LLMGenerationService {
     }
 
     private ConversationMessage buildConversationMessage(be.unamur.fpgen.prompt.response.conversation.ConversationMessage message, MessageTypeEnum type, MessageTopicEnum topic, int orderNumber) {
-        final Interlocutor sender = interlocutorService.getInterlocutorByType(InterlocutorTypeEnum.valueOf(message.getActorType()));
+        final Interlocutor sender;
+        if(MessageTypeEnum.GENUINE.equals(type)){
+            if(orderNumber % 2 == 0){
+                sender = interlocutorService.getGenuineInterlocutor2();
+            } else {
+                sender = interlocutorService.getGenuineInterlocutor1();
+            }
+        } else {
+            if(message.getActorType().equals("GENUINE")){
+                sender = interlocutorService.getGenuineInterlocutor1();
+            } else {
+                sender = interlocutorService.getInterlocutorByType(InterlocutorTypeEnum.valueOf(message.getActorType()));
+            }
+        }
         final Interlocutor receiver;
         // determine receiver depending of sender type
         if (sender.getType().equals(InterlocutorTypeEnum.GENUINE) && type.equals(MessageTypeEnum.SOCIAL_ENGINEERING)) {
@@ -553,7 +566,15 @@ public class LLMGenerationService {
         } else if (sender.getType().equals(InterlocutorTypeEnum.GENUINE) && type.equals(MessageTypeEnum.HARASSMENT)) {
             receiver = interlocutorService.getInterlocutorByType(InterlocutorTypeEnum.HARASSER);
         } else {
-            receiver = interlocutorService.getInterlocutorByType(InterlocutorTypeEnum.GENUINE);
+            if (Objects.isNull(sender.getNumber())){
+                receiver = interlocutorService.getGenuineInterlocutor1();
+            } else {
+                if (sender.getNumber().equals(1)) {
+                    receiver = interlocutorService.getGenuineInterlocutor2();
+                } else {
+                    receiver = interlocutorService.getGenuineInterlocutor1();
+                }
+            }
         }
         return ConversationMessage.newBuilder()
                 .withType(type)

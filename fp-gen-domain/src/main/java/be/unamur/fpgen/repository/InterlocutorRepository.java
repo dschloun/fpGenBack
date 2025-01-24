@@ -10,4 +10,8 @@ public interface InterlocutorRepository {
     Interlocutor getInterlocutorByType(InterlocutorTypeEnum type);
 
     Interlocutor saveInterlocutor(Interlocutor interlocutor);
+
+    Interlocutor getGenuineInterlocutor1();
+
+    Interlocutor getGenuineInterlocutor2();
 }

@@ -48,4 +48,18 @@ public class JpaInterlocutorRepository implements InterlocutorRepository {
                 jpaInterlocutorRepositoryCRUD.save(
                         InterlocutorDomainToJpaMapper.mapForCreate(interlocutor)));
     }
+
+    @Override
+    public Interlocutor getGenuineInterlocutor1() {
+        return jpaInterlocutorRepositoryCRUD.getInterlocutorEntityByInterlocutorTypeEnumAndNumber(InterlocutorTypeEnum.GENUINE, 1)
+                .map(InterlocutorJpaToDomainMapper::map)
+                .orElse(null);
+    }
+
+    @Override
+    public Interlocutor getGenuineInterlocutor2() {
+        return jpaInterlocutorRepositoryCRUD.getInterlocutorEntityByInterlocutorTypeEnumAndNumber(InterlocutorTypeEnum.GENUINE, 2)
+                .map(InterlocutorJpaToDomainMapper::map)
+                .orElse(null);
+    }
 }

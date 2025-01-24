@@ -13,4 +13,6 @@ public interface JpaInterlocutorRepositoryCRUD extends JpaRepository<Interlocuto
     List<InterlocutorEntity> findByInterlocutorTypeEnum(final InterlocutorTypeEnum type);
 
     Optional<InterlocutorEntity> getInterlocutorEntityByInterlocutorTypeEnum(final InterlocutorTypeEnum type);
+
+    Optional<InterlocutorEntity> getInterlocutorEntityByInterlocutorTypeEnumAndNumber(InterlocutorTypeEnum type, int number);
 }

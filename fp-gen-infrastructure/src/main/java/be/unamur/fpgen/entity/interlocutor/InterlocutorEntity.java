@@ -12,6 +12,7 @@ public class InterlocutorEntity extends BaseOnlyIntegerIdEntity {
 
     // members
     private InterlocutorTypeEnum interlocutorTypeEnum;
+    private Integer number;
 
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -23,4 +24,12 @@ public class InterlocutorEntity extends BaseOnlyIntegerIdEntity {
         this.interlocutorTypeEnum = interlocutorTypeEnum;
     }
 
+    @Column(name = "number")
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
 }
