@@ -6,4 +6,6 @@ public interface ConversationMessageDownloadProjection {
     Integer getOrderNumber();
     String getType();
     String getContent();
+    Integer getSenderId();
+    Integer getReceiverId();
 }

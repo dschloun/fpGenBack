@@ -15,6 +15,8 @@ public class ConversationMessageDownloadProjectionJpaToDomainMapper {
                 .withOrderNumber(entity.getOrderNumber().toString())
                 .withType(entity.getType())
                 .withContent(entity.getContent())
+                .withSenderId(entity.getSenderId())
+                .withReceiverId(entity.getReceiverId())
                 .build();
     }
 }

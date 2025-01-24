@@ -16,7 +16,9 @@ public interface JpaConversationMessageDownloadProjectionRepositoryCRUD extends 
                     "conversation_id as conversationId, " +
                     "order_number as orderNumber, " +
                     "type as type, " +
-                    "content as content " +
+                    "content as content, " +
+                    "sender_id as senderId, " +
+                    "receiver_id as receiverId " +
                     "FROM conversation_search_view " +
                     "WHERE dataset_id = :datasetId " +
                     "ORDER BY conversation_id ASC, order_number ASC "

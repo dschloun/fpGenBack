@@ -123,6 +123,8 @@ public class DownloadService {
         records.add(new String[]{
                 "conversationId",
                 "type",
+                "interlocutor_1_id",
+                "interlocutor_2_id",
                 "content"
         });
 
@@ -135,10 +137,24 @@ public class DownloadService {
             // Sort messages by orderNumber
             messages.sort(Comparator.comparing(ConversationMessageDownload::getOrderNumber));
 
-            // Concatenate message content
-            String concatenatedContent = messages.stream()
-                    .map(ConversationMessageDownload::getContent)
-                    .collect(Collectors.joining(" | "));
+            // id interlocultor (always 2)
+            Integer senderId = messages.get(0).getSenderId();
+            Integer receiverId = messages.get(0).getReceiverId();
+
+            Integer interlocutor1Id = generateRandomId(1, 100, null);
+            Integer interlocutor2Id = generateRandomId(1, 100, interlocutor1Id);
+
+            Map<Integer, Integer> interlocutorMap = new HashMap<>();
+            interlocutorMap.put(senderId, interlocutor1Id);
+            interlocutorMap.put(receiverId, interlocutor2Id);
+
+            // Extract sender and receiver ids
+            StringBuilder content = new StringBuilder();
+            for(ConversationMessageDownload message: messages){
+                Integer interlocutor = interlocutorMap.get(message.getSenderId());
+                content.append(String.format(" (%s) ", interlocutor));
+                content.append(message.getContent());
+            }
 
             // Extract type (assume all messages in a group have the same type)
             String type = messages.get(0).getType();
@@ -147,7 +163,9 @@ public class DownloadService {
             records.add(new String[]{
                     conversationId,
                     type,
-                    concatenatedContent
+                    interlocutor1Id.toString(),
+                    interlocutor2Id.toString(),
+                    content.toString()
             });
         });
             return records;
@@ -156,5 +174,16 @@ public class DownloadService {
     private String prepareFileName(final Dataset dataset){
         final String kind = DatasetTypeEnum.INSTANT_MESSAGE.equals(dataset.getType()) ? "IM " : "CM ";
         return kind + dataset.getName();
+    }
+
+    private Integer generateRandomId(Integer min, Integer max, Integer exclude) {
+        Random random = new Random();
+        int result;
+
+        do {
+            result = random.nextInt(max - min + 1) + min;
+        } while (Objects.nonNull(exclude) && result == exclude);
+
+        return result;
     }
 }
