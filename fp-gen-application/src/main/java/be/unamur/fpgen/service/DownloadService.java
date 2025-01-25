@@ -133,7 +133,8 @@ public class DownloadService {
                 "topic",
                 "content",
                 "type",
-                "malicious"
+                "malicious",
+                "malicious_interlocutor_id"
         });
 
         // Group by conversationId
@@ -177,7 +178,8 @@ public class DownloadService {
                     topic,
                     content.toString(),
                     type,
-                    malicious ? "true" : "false"
+                    malicious ? "true" : "false",
+                    type.equals("GENUINE") ? "none" : interlocutor1Id.toString()
             });
         });
             return records;
