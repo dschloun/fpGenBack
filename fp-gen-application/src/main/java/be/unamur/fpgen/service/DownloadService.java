@@ -80,13 +80,19 @@ public class DownloadService {
 
         //CSV header
         records.add(new String[]{
+                "messageId",
+                "topic",
+                "content",
                 "type",
-                "content"
+                "malicious"
         });
 
         instantMessages.forEach(im -> records.add(new String[]{
+                im.getMessageId(),
+                im.getTopic(),
+                im.getContent(),
                 im.getType(),
-                im.getContent()
+                im.isMalicious() ? "true" : "false"
         }));
 
         return records;
@@ -122,10 +128,12 @@ public class DownloadService {
         // CSV header
         records.add(new String[]{
                 "conversationId",
-                "type",
                 "interlocutor_1_id",
                 "interlocutor_2_id",
-                "content"
+                "topic",
+                "content",
+                "type",
+                "malicious"
         });
 
         // Group by conversationId
@@ -158,14 +166,18 @@ public class DownloadService {
 
             // Extract type (assume all messages in a group have the same type)
             String type = messages.get(0).getType();
+            boolean malicious = messages.get(0).isMalicious();
+            String topic = messages.get(0).getTopic();
 
             // Add to records
             records.add(new String[]{
                     conversationId,
-                    type,
                     interlocutor1Id.toString(),
                     interlocutor2Id.toString(),
-                    content.toString()
+                    topic,
+                    content.toString(),
+                    type,
+                    malicious ? "true" : "false"
             });
         });
             return records;

@@ -16,6 +16,7 @@ public interface JpaConversationMessageDownloadProjectionRepositoryCRUD extends 
                     "conversation_id as conversationId, " +
                     "order_number as orderNumber, " +
                     "type as type, " +
+                    "topic as topic, " +
                     "content as content, " +
                     "sender_id as senderId, " +
                     "receiver_id as receiverId " +
