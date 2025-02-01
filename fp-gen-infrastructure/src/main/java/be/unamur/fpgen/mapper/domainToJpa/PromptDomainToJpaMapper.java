@@ -23,26 +23,7 @@ public class PromptDomainToJpaMapper {
         entity.setAuthor(author);
         entity.setStatus(domain.getStatus());
         entity.setDefaultPrompt(domain.isDefaultPrompt());
-        return entity;
-    }
-
-    public static PromptEntity map(Prompt domain) {
-        if (domain == null) {
-            return null;
-        }
-
-        PromptEntity entity = new PromptEntity();
-        entity.setId(domain.getId());
-        entity.setCreationDate(domain.getCreationDate());
-        entity.setModificationDate(domain.getModificationDate());
-        entity.setDatasetType(domain.getDatasetType());
-        entity.setMessageType(domain.getMessageType());
-        entity.setVersion(domain.getVersion());
-        entity.setUserPrompt(domain.getUserPrompt());
-        entity.setSystemPrompt(domain.getSystemPrompt());
-        entity.setAuthor(AuthorDomainToJpaMapper.map(domain.getAuthor()));
-        entity.setStatus(domain.getStatus());
-        entity.setDefaultPrompt(domain.isDefaultPrompt());
+        entity.setMotivation(domain.getMotivation());
         return entity;
     }
 }

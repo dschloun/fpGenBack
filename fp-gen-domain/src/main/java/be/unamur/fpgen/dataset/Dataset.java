@@ -28,6 +28,7 @@ public class Dataset extends BaseUuidDomain implements HasAuthor {
     private final UUID originalDatasetId;
     private final boolean result;
     private final Set<AbstractItem> itemList = new HashSet<>();
+    private final Integer recordNumber;
 
     private Dataset(Builder builder) {
         super(builder.getId(), builder.getCreationDate(), builder.getModificationDate());
@@ -46,6 +47,7 @@ public class Dataset extends BaseUuidDomain implements HasAuthor {
         originalDatasetId = builder.originalDatasetId;
         result = builder.result;
         itemList.addAll(builder.itemList);
+        recordNumber = builder.recordNumber;
     }
 
     public DatasetTypeEnum getType() {
@@ -120,6 +122,10 @@ public class Dataset extends BaseUuidDomain implements HasAuthor {
         return itemList;
     }
 
+    public Integer getRecordNumber() {
+        return recordNumber;
+    }
+
     public static Builder newBuilder() {
         return new Builder();
     }
@@ -140,6 +146,7 @@ public class Dataset extends BaseUuidDomain implements HasAuthor {
         private UUID originalDatasetId;
         private boolean result;
         private Set<AbstractItem> itemList = new HashSet<>();
+        private Integer recordNumber;
 
         private Builder() {
         }
@@ -216,6 +223,11 @@ public class Dataset extends BaseUuidDomain implements HasAuthor {
 
         public Builder withItemList(Set<AbstractItem> val) {
             itemList = val;
+            return this;
+        }
+
+        public Builder withRecordNumber(Integer recordNumber){
+            this.recordNumber = recordNumber;
             return this;
         }
 

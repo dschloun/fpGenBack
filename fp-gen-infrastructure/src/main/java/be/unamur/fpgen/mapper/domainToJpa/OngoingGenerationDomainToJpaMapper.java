@@ -12,7 +12,6 @@ public class OngoingGenerationDomainToJpaMapper {
         entity.setType(domain.getType());
         entity.setStatus(domain.getStatus());
         entity.setAuthor(author);
-        entity.setPromptVersion(domain.getPromptVersion());
         entity.setDatasetId(domain.getDatasetId());
         entity.setItemList(MapperUtil.mapSet(domain.getItemList(), i -> OngoingGenerationItemDomainToJpaMapper.mapForCreate(i, entity)));
         entity.setMinInteractionNumber(domain.getMinInteractionNumber());

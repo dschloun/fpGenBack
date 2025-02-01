@@ -23,6 +23,7 @@ public class PromptDomainToWebMapper {
                 .systemContent(domain.getSystemPrompt())
                 .author(AuthorDomainToWebMapper.map(domain.getAuthor()))
                 .status(map(domain.getStatus()))
+                .motivation(domain.getMotivation())
                 ._default(domain.isDefaultPrompt());
     }
 

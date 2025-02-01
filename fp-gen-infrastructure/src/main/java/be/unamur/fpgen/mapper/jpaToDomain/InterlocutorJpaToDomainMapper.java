@@ -14,6 +14,7 @@ public class InterlocutorJpaToDomainMapper {
         return Interlocutor.newBuilder()
                 .withId(entity.getId())
                 .withType(entity.getInterlocutorTypeEnum())
+                .withNumber(entity.getNumber())
                 .build();
     }
 }

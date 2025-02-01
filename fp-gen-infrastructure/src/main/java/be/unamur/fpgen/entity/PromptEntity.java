@@ -19,6 +19,7 @@ public class PromptEntity extends BaseUuidEntity {
     private AuthorEntity author;
     private PromptStatusEnum status;
     private boolean defaultPrompt;
+    private String motivation;
 
     @Column(name = "dataset_type", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -95,5 +96,14 @@ public class PromptEntity extends BaseUuidEntity {
 
     public void setDefaultPrompt(boolean defaultPrompt) {
         this.defaultPrompt = defaultPrompt;
+    }
+
+    @Column(name = "motivation")
+    public String getMotivation() {
+        return motivation;
+    }
+
+    public void setMotivation(String motivation) {
+        this.motivation = motivation;
     }
 }

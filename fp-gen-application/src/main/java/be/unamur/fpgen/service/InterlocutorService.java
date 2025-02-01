@@ -32,4 +32,14 @@ public class InterlocutorService {
     public Interlocutor getInterlocutorByType(final InterlocutorTypeEnum type){
         return interlocutorRepository.getInterlocutorByType(type);
     }
+
+    @Transactional
+    public Interlocutor getGenuineInterlocutor1(){
+        return interlocutorRepository.getGenuineInterlocutor1();
+    }
+
+    @Transactional
+    public Interlocutor getGenuineInterlocutor2(){
+        return interlocutorRepository.getGenuineInterlocutor2();
+    }
 }

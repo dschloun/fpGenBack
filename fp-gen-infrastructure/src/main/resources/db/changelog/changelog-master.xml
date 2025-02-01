@@ -14,5 +14,6 @@
     <include file="changes/11_view.yaml" relativeToChangelogFile="true"/>
     <include file="changes/12_add_notification_table.yaml" relativeToChangelogFile="true"/>
     <include file="changes/13_insert_system_author.yaml" relativeToChangelogFile="true"/>
+    <include file="changes/14_corrections.yaml" relativeToChangelogFile="true"/>
     <include file="changelog-quartz.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

@@ -27,7 +27,7 @@ public class OngoingGenerationService {
     }
 
     @Transactional
-    public OngoingGeneration createOngoingGeneration(GenerationTypeEnum type, UUID datasetId, Integer promptVersion, List<GenerationCreation> generations, Integer min, Integer max) {
+    public OngoingGeneration createOngoingGeneration(GenerationTypeEnum type, UUID datasetId, List<GenerationCreation> generations, Integer min, Integer max) {
         final Author author = authorService.getAuthorByTrigram(UserContextHolder.getContext().getTrigram());
         final Set<OngoingGenerationItem> items = new HashSet<>();
         for(GenerationCreation g: generations){
@@ -37,6 +37,7 @@ public class OngoingGenerationService {
                             .withMessageTopic(MessageTopicEnum.valueOf(g.getTopic().name()))
                             .withQuantity(g.getQuantity())
                             .withStatus(OngoingGenerationItemStatus.WAITING)
+                            .withPromptId(g.getPromptId())
                             .build()
             );
         }
@@ -45,7 +46,6 @@ public class OngoingGenerationService {
                 .withAuthor(author)
                 .withStatus(OngoingGenerationStatus.WAITING)
                 .withDatasetId(datasetId)
-                .withPromptVersion(Optional.ofNullable(promptVersion).orElse(0)) // if null => v0
                 .withItemList(items)
                 .withMinInteractionNumber(min)
                 .withMaxInteractionNumber(max)

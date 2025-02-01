@@ -1,0 +1,35 @@
+@startuml
+!theme plain
+!define primary_key(x) <b><u>x</u></b>
+!define foreign_key(x) <i>x</i>
+
+entity AuthorEntity {
+    primary_key(id) : UUID
+    lastname : String
+    firstname : String
+    trigram : String
+    organization : String
+    function_ : String
+    email : String
+    phoneNumber : String
+    status : AuthorStatusEnum
+    acceptTermsOfUse : boolean
+    motivation : String
+    accountCreate : boolean
+}
+
+entity PromptEntity {
+    primary_key(id) : UUID
+    datasetType : DatasetTypeEnum
+    messageType : MessageTypeEnum
+    version : Integer
+    userPrompt : String
+    systemPrompt : String
+    foreign_key(authorId) : UUID
+    status : PromptStatusEnum
+    defaultPrompt : boolean
+    motivation : String
+}
+
+AuthorEntity ||--o{ PromptEntity : prompts
+@enduml

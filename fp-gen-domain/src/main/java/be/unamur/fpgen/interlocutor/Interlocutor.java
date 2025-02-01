@@ -4,14 +4,20 @@ import be.unamur.fpgen.BaseOnlyIntegerId;
 
 public class Interlocutor extends BaseOnlyIntegerId {
     private final InterlocutorTypeEnum type;
+    private final Integer number;
 
     private Interlocutor(Builder builder) {
         super(builder.getId());
         type = builder.type;
+        number = builder.number;
     }
 
     public InterlocutorTypeEnum getType() {
         return type;
+    }
+
+    public Integer getNumber() {
+        return number;
     }
 
     public static Builder newBuilder() {
@@ -20,12 +26,18 @@ public class Interlocutor extends BaseOnlyIntegerId {
 
     public static final class Builder extends AbstractBaseOnlyIntegerIdBuilder<Builder>{
         private InterlocutorTypeEnum type;
+        private Integer number;
 
         private Builder() {
         }
 
         public Builder withType(InterlocutorTypeEnum val) {
             type = val;
+            return this;
+        }
+
+        public Builder withNumber(Integer val) {
+            number = val;
             return this;
         }
 

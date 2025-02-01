@@ -13,6 +13,7 @@ public class OngoingGenerationItem extends BaseUuidDomain {
     private Integer quantity;
     private OngoingGenerationItemStatus status;
     private final UUID generationId;
+    private final UUID promptId;
 
     private OngoingGenerationItem(Builder builder) {
         super(builder.getId(), builder.getCreationDate(), builder.getModificationDate());
@@ -21,6 +22,7 @@ public class OngoingGenerationItem extends BaseUuidDomain {
         quantity = builder.quantity;
         status = builder.status;
         generationId = builder.generationId;
+        promptId = builder.promptId;
     }
 
     public MessageTypeEnum getMessageType() {
@@ -51,6 +53,10 @@ public class OngoingGenerationItem extends BaseUuidDomain {
         return generationId;
     }
 
+    public UUID getPromptId() {
+        return promptId;
+    }
+
     public static Builder newBuilder() {
         return new Builder();
     }
@@ -61,6 +67,7 @@ public class OngoingGenerationItem extends BaseUuidDomain {
         private Integer quantity;
         private OngoingGenerationItemStatus status;
         private UUID generationId;
+        private UUID promptId;
 
         private Builder() {
         }
@@ -88,6 +95,11 @@ public class OngoingGenerationItem extends BaseUuidDomain {
 
         public Builder withGenerationId(UUID val) {
             generationId = val;
+            return this;
+        }
+
+        public Builder withPromptId(UUID promptId){
+            this.promptId = promptId;
             return this;
         }
 

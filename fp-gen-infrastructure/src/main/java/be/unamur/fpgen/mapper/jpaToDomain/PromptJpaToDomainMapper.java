@@ -22,6 +22,7 @@ public class PromptJpaToDomainMapper {
                 .withAuthor(AuthorJpaToDomainMapper.map(entity.getAuthor()))
                 .withStatus(entity.getStatus())
                 .withDefaultPrompt(entity.isDefaultPrompt())
+                .withMotivation(entity.getMotivation())
                 .build();
     }
 }

@@ -17,9 +17,8 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class DownloadService {
@@ -81,13 +80,19 @@ public class DownloadService {
 
         //CSV header
         records.add(new String[]{
+                "messageId",
+                "topic",
+                "content",
                 "type",
-                "content"
+                "malicious"
         });
 
         instantMessages.forEach(im -> records.add(new String[]{
+                im.getMessageId(),
+                im.getTopic(),
+                im.getContent(),
                 im.getType(),
-                im.getContent()
+                im.isMalicious() ? "true" : "false"
         }));
 
         return records;
@@ -123,23 +128,76 @@ public class DownloadService {
         // CSV header
         records.add(new String[]{
                 "conversationId",
-                "orderNumber",
+                "interlocutor_1_id",
+                "interlocutor_2_id",
+                "topic",
+                "content",
                 "type",
-                "content"
+                "malicious",
+                "malicious_interlocutor_id"
         });
 
-        conversationMessages.forEach(cm -> records.add(new String[]{
-                cm.getConversationId(),
-                cm.getOrderNumber(),
-                cm.getType(),
-                cm.getContent()
-        }));
+        // Group by conversationId
+        Map<String, List<ConversationMessageDownload>> groupedMessages = conversationMessages.stream()
+                .collect(Collectors.groupingBy(ConversationMessageDownload::getConversationId));
 
-        return records;
+        // Process each conversation
+        groupedMessages.forEach((conversationId, messages) -> {
+            // Sort messages by orderNumber
+            messages.sort(Comparator.comparing(ConversationMessageDownload::getOrderNumber));
+
+            // id interlocultor (always 2)
+            Integer senderId = messages.get(0).getSenderId();
+            Integer receiverId = messages.get(0).getReceiverId();
+
+            Integer interlocutor1Id = generateRandomId(1, 100, null);
+            Integer interlocutor2Id = generateRandomId(1, 100, interlocutor1Id);
+
+            Map<Integer, Integer> interlocutorMap = new HashMap<>();
+            interlocutorMap.put(senderId, interlocutor1Id);
+            interlocutorMap.put(receiverId, interlocutor2Id);
+
+            // Extract sender and receiver ids
+            StringBuilder content = new StringBuilder();
+            for(ConversationMessageDownload message: messages){
+                Integer interlocutor = interlocutorMap.get(message.getSenderId());
+                content.append(String.format(" (%s) ", interlocutor));
+                content.append(message.getContent());
+            }
+
+            // Extract type (assume all messages in a group have the same type)
+            String type = messages.get(0).getType();
+            boolean malicious = messages.get(0).isMalicious();
+            String topic = messages.get(0).getTopic();
+
+            // Add to records
+            records.add(new String[]{
+                    conversationId,
+                    interlocutor1Id.toString(),
+                    interlocutor2Id.toString(),
+                    topic,
+                    content.toString(),
+                    type,
+                    malicious ? "true" : "false",
+                    type.equals("GENUINE") ? "none" : interlocutor1Id.toString()
+            });
+        });
+            return records;
     }
 
     private String prepareFileName(final Dataset dataset){
         final String kind = DatasetTypeEnum.INSTANT_MESSAGE.equals(dataset.getType()) ? "IM " : "CM ";
         return kind + dataset.getName();
+    }
+
+    private Integer generateRandomId(Integer min, Integer max, Integer exclude) {
+        Random random = new Random();
+        int result;
+
+        do {
+            result = random.nextInt(max - min + 1) + min;
+        } while (Objects.nonNull(exclude) && result == exclude);
+
+        return result;
     }
 }

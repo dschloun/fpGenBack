@@ -14,7 +14,6 @@ public class OngoingGeneration extends BaseUuidDomain {
     private final Set<OngoingGenerationItem> itemList = new HashSet<>();
     private final Author author;
     private OngoingGenerationStatus status;
-    private final Integer promptVersion;
     private final UUID datasetId;
     private final Integer minInteractionNumber;
     private final Integer maxInteractionNumber;
@@ -25,7 +24,6 @@ public class OngoingGeneration extends BaseUuidDomain {
         itemList.addAll(builder.itemList);
         author = builder.author;
         status = builder.status;
-        promptVersion = builder.promptVersion;
         datasetId = builder.datasetId;
         minInteractionNumber = builder.minInteractionNumber;
         maxInteractionNumber = builder.maxInteractionNumber;
@@ -51,10 +49,6 @@ public class OngoingGeneration extends BaseUuidDomain {
         this.status = status;
     }
 
-    public Integer getPromptVersion() {
-        return promptVersion;
-    }
-
     public UUID getDatasetId() {
         return datasetId;
     }
@@ -77,7 +71,6 @@ public class OngoingGeneration extends BaseUuidDomain {
         private Set<OngoingGenerationItem> itemList = new HashSet<>();
         private Author author;
         private OngoingGenerationStatus status;
-        private Integer promptVersion;
         private UUID datasetId;
         private Integer minInteractionNumber;
         private Integer maxInteractionNumber;
@@ -102,11 +95,6 @@ public class OngoingGeneration extends BaseUuidDomain {
 
         public Builder withStatus(OngoingGenerationStatus val) {
             status = val;
-            return this;
-        }
-
-        public Builder withPromptVersion(Integer val) {
-            promptVersion = val;
             return this;
         }
 

@@ -17,7 +17,6 @@ public class OngoingGenerationEntity extends BaseUuidEntity {
     private Set<OngoingGenerationItemEntity> itemList = new HashSet<>();
     private AuthorEntity author;
     private OngoingGenerationStatus status;
-    private Integer promptVersion;
     private UUID datasetId;
     private Integer minInteractionNumber;
     private Integer maxInteractionNumber;
@@ -59,15 +58,6 @@ public class OngoingGenerationEntity extends BaseUuidEntity {
 
     public void setStatus(OngoingGenerationStatus status) {
         this.status = status;
-    }
-
-    @Column(name = "prompt_version", nullable = false)
-    public Integer getPromptVersion() {
-        return promptVersion;
-    }
-
-    public void setPromptVersion(Integer promptVersion) {
-        this.promptVersion = promptVersion;
     }
 
     @Column(name = "dataset_id", nullable = true)

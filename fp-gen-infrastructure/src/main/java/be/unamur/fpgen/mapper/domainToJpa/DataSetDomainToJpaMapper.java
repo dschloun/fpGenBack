@@ -6,6 +6,7 @@ import be.unamur.fpgen.entity.author.AuthorEntity;
 import be.unamur.fpgen.entity.dataset.ConversationDatasetEntity;
 import be.unamur.fpgen.entity.dataset.DatasetEntity;
 import be.unamur.fpgen.entity.dataset.InstantMessageDatasetEntity;
+import be.unamur.fpgen.entity.generation.ConversationGenerationEntity;
 import be.unamur.fpgen.entity.generation.GenerationEntity;
 import be.unamur.fpgen.entity.generation.InstantMessageGenerationEntity;
 import be.unamur.fpgen.entity.project.ProjectEntity;
@@ -65,6 +66,24 @@ public class DataSetDomainToJpaMapper {
         entity.setFunction(oldVersionEntity.getFunction());
         entity.setAuthor(author);
         entity.setInstantMessageGenerationList(generations);
+        entity.setValidated(newVersion.isValidated());
+        entity.setLastVersion(newVersion.isLastVersion());
+        entity.setOriginalDatasetId(newVersion.getOriginalDatasetId());
+        entity.setProject(oldVersionEntity.getProject());
+        entity.setStatistic(StatisticDomainToJpaMapper.mapForCreate(newVersion.getStatistic(), entity));
+        return entity;
+    }
+
+    public static ConversationDatasetEntity mapForCreateNewConversationDataset(final ConversationDatasetEntity oldVersionEntity, final Set<ConversationGenerationEntity> generations, final AuthorEntity author, final Dataset newVersion){
+        final ConversationDatasetEntity entity = new ConversationDatasetEntity();
+        entity.setBusinessId(newVersion.getBusinessId());
+        entity.setVersion(newVersion.getVersion());
+        entity.setName(newVersion.getName());
+        entity.setDescription(oldVersionEntity.getDescription());
+        entity.setComment(oldVersionEntity.getComment());
+        entity.setFunction(oldVersionEntity.getFunction());
+        entity.setAuthor(author);
+        entity.setConversationGenerationList(generations);
         entity.setValidated(newVersion.isValidated());
         entity.setLastVersion(newVersion.isLastVersion());
         entity.setOriginalDatasetId(newVersion.getOriginalDatasetId());

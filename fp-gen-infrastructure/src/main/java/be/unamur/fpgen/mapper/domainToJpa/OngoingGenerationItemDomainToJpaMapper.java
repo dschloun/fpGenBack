@@ -13,6 +13,7 @@ public class OngoingGenerationItemDomainToJpaMapper {
         entity.setMessageTopic(domain.getMessageTopic());
         entity.setQuantity(domain.getQuantity());
         entity.setStatus(domain.getStatus());
+        entity.setPromptId(domain.getPromptId());
         return entity;
     }
 }

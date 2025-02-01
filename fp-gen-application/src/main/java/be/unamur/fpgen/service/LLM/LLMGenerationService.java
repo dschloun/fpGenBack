@@ -116,7 +116,7 @@ public class LLMGenerationService {
             o.updateStatus(OngoingGenerationStatus.ONGOING);
 
             // 2. generation
-            generation(o, o.getPromptVersion());
+            generation(o);
 
             // 3. send notification
             notificationService.create(o.getAuthor().getId(), generateNotificationMessage(o));
@@ -124,7 +124,7 @@ public class LLMGenerationService {
     }
 
     // chatgpt method
-    private void generation(final OngoingGeneration ongoingGeneration, final Integer promptVersion) {
+    private void generation(final OngoingGeneration ongoingGeneration) {
 
         // 0. memorise generation list initial size
         final int generationListInitialSize = ongoingGeneration.getItemList().size();
@@ -133,16 +133,8 @@ public class LLMGenerationService {
         // 1. for each generation item
         for (OngoingGenerationItem item : ongoingGeneration.getItemList()) {
             // 1.0. get prompt
-            final Prompt prompt;
-
             final DatasetTypeEnum datasetType = DatasetTypeEnum.valueOf(ongoingGeneration.getType().name());
-
-            if (Objects.nonNull(promptVersion)) {
-                prompt = promptService.findByDatasetTypeAndMessageTypeAndVersion(datasetType, item.getMessageType(), promptVersion)
-                        .orElse(promptService.getDefaultPrompt(datasetType, item.getMessageType()));
-            } else {
-                prompt = promptService.getDefaultPrompt(datasetType, item.getMessageType());
-            }
+            Prompt prompt = getPrompt(item, datasetType);
 
             // 1.0. create generation
             final GenerationCreation command = new GenerationCreation()
@@ -183,6 +175,27 @@ public class LLMGenerationService {
 //        if (Objects.nonNull(datasetId)) {
 //           // eventPublisher.publishEvent(new DatasetOngoingGenerationCleanEvent(this, datasetId));
 //        }
+    }
+
+    private Prompt getPrompt(OngoingGenerationItem item, DatasetTypeEnum datasetType) {
+        Prompt prompt;
+        if (Objects.nonNull(item.getPromptId())) {
+            try {
+                prompt = promptService.findById(item.getPromptId());
+            } catch(Exception e) {
+                System.out.println("prompt id do not exist select default prompt");
+                prompt = promptService.getDefaultPrompt(datasetType, item.getMessageType());
+            }
+            //check coherence
+            if (!datasetType.equals(prompt.getDatasetType()) || !item.getMessageType().equals(prompt.getMessageType())){
+                System.out.println("an incoherence prompt has been found select default one for type");
+                prompt = promptService.getDefaultPrompt(datasetType, item.getMessageType());
+            }
+        } else {
+            // no pomptId in parameter take the default one
+            prompt = promptService.getDefaultPrompt(datasetType, item.getMessageType());
+        }
+        return prompt;
     }
 
     private void messageTreatment(OngoingGenerationItem item, Prompt prompt, GenerationCreation command, Generation generation, UUID datasetId) {
@@ -532,7 +545,20 @@ public class LLMGenerationService {
     }
 
     private ConversationMessage buildConversationMessage(be.unamur.fpgen.prompt.response.conversation.ConversationMessage message, MessageTypeEnum type, MessageTopicEnum topic, int orderNumber) {
-        final Interlocutor sender = interlocutorService.getInterlocutorByType(InterlocutorTypeEnum.valueOf(message.getActorType()));
+        final Interlocutor sender;
+        if(MessageTypeEnum.GENUINE.equals(type)){
+            if(orderNumber % 2 == 0){
+                sender = interlocutorService.getGenuineInterlocutor2();
+            } else {
+                sender = interlocutorService.getGenuineInterlocutor1();
+            }
+        } else {
+            if(message.getActorType().equals("GENUINE")){
+                sender = interlocutorService.getGenuineInterlocutor1();
+            } else {
+                sender = interlocutorService.getInterlocutorByType(InterlocutorTypeEnum.valueOf(message.getActorType()));
+            }
+        }
         final Interlocutor receiver;
         // determine receiver depending of sender type
         if (sender.getType().equals(InterlocutorTypeEnum.GENUINE) && type.equals(MessageTypeEnum.SOCIAL_ENGINEERING)) {
@@ -540,7 +566,15 @@ public class LLMGenerationService {
         } else if (sender.getType().equals(InterlocutorTypeEnum.GENUINE) && type.equals(MessageTypeEnum.HARASSMENT)) {
             receiver = interlocutorService.getInterlocutorByType(InterlocutorTypeEnum.HARASSER);
         } else {
-            receiver = interlocutorService.getInterlocutorByType(InterlocutorTypeEnum.GENUINE);
+            if (Objects.isNull(sender.getNumber())){
+                receiver = interlocutorService.getGenuineInterlocutor1();
+            } else {
+                if (sender.getNumber().equals(1)) {
+                    receiver = interlocutorService.getGenuineInterlocutor2();
+                } else {
+                    receiver = interlocutorService.getGenuineInterlocutor1();
+                }
+            }
         }
         return ConversationMessage.newBuilder()
                 .withType(type)
