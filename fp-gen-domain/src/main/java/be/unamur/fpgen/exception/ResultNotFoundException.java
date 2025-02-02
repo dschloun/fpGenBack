@@ -2,6 +2,9 @@ package be.unamur.fpgen.exception;
 
 import java.util.UUID;
 
+/**
+ * Exception thrown when a result is not found
+ */
 public class ResultNotFoundException extends NotFoundException{
 
     private static final String FPGEN_CODE = "FP_GEN_RESULT_NOT_FOUND";

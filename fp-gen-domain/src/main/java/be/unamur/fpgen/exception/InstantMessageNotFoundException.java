@@ -2,6 +2,9 @@ package be.unamur.fpgen.exception;
 
 import java.util.UUID;
 
+/**
+ * Exception thrown when an instant message is not found.
+ */
 public class InstantMessageNotFoundException extends NotFoundException{
 
     private static final String FPGEN_CODE = "FP_GEN_INSTANT_MESSAGE_NOT_FOUND";

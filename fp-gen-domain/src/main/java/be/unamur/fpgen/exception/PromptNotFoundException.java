@@ -2,6 +2,9 @@ package be.unamur.fpgen.exception;
 
 import java.util.UUID;
 
+/**
+ * Exception thrown when a prompt is not found
+ */
 public class PromptNotFoundException extends NotFoundException{
 
     private static final String FPGEN_CODE = "FP_GEN_PROMPT_NOT_FOUND";

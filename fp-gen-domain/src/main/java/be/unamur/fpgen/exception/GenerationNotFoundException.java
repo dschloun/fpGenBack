@@ -2,6 +2,9 @@ package be.unamur.fpgen.exception;
 
 import java.util.UUID;
 
+/**
+ * Exception thrown when a generation is not found.
+ */
 public class GenerationNotFoundException extends NotFoundException{
 
     private static final String FPGEN_CODE = "FP_GEN_GENERATION_NOT_FOUND";
