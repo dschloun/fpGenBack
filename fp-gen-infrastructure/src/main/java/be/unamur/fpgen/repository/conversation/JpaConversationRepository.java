@@ -5,7 +5,6 @@ import be.unamur.fpgen.conversation.pagination.ConversationsPage;
 import be.unamur.fpgen.entity.generation.ConversationGenerationEntity;
 import be.unamur.fpgen.generation.Generation;
 import be.unamur.fpgen.mapper.domainToJpa.ConversationDomainToJpaMapper;
-import be.unamur.fpgen.mapper.jpaToDomain.ConversationGenerationJpaToDomainMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.ConversationJpaToDomainMapper;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;

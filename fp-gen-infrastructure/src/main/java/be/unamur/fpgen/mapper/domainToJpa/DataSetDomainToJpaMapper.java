@@ -7,7 +7,6 @@ import be.unamur.fpgen.entity.dataset.ConversationDatasetEntity;
 import be.unamur.fpgen.entity.dataset.DatasetEntity;
 import be.unamur.fpgen.entity.dataset.InstantMessageDatasetEntity;
 import be.unamur.fpgen.entity.generation.ConversationGenerationEntity;
-import be.unamur.fpgen.entity.generation.GenerationEntity;
 import be.unamur.fpgen.entity.generation.InstantMessageGenerationEntity;
 import be.unamur.fpgen.entity.project.ProjectEntity;
 

@@ -3,7 +3,6 @@ package be.unamur.fpgen.mapper.domainToJpa;
 import be.unamur.fpgen.entity.result.AlgorithmSettingEntity;
 import be.unamur.fpgen.entity.result.ResultEntity;
 import be.unamur.fpgen.result.AlgorithmSetting;
-import be.unamur.fpgen.result.Result;
 
 public class AlgorithmSettingDomainToJpaMapper {
 

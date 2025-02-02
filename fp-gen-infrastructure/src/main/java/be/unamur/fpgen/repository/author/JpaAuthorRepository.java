@@ -3,7 +3,6 @@ package be.unamur.fpgen.repository.author;
 import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.author.AuthorStatusEnum;
 import be.unamur.fpgen.author.pagination.AuthorsPage;
-import be.unamur.fpgen.entity.author.AuthorEntity;
 import be.unamur.fpgen.mapper.domainToJpa.AuthorDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.AuthorJpaToDomainMapper;
 import be.unamur.fpgen.pagination.Pagination;
