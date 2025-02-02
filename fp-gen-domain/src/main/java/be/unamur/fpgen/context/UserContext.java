@@ -1,5 +1,9 @@
 package be.unamur.fpgen.context;
 
+/**
+ * This class is used to store the user context.
+ * Used by the interceptor to store email, token, trigram
+ */
 public class UserContext {
 
     private String token;

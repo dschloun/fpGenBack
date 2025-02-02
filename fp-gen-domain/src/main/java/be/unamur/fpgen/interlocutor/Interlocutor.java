@@ -2,6 +2,9 @@ package be.unamur.fpgen.interlocutor;
 
 import be.unamur.fpgen.BaseOnlyIntegerId;
 
+/**
+ * Represents an interlocutor of a conversation
+ */
 public class Interlocutor extends BaseOnlyIntegerId {
     private final InterlocutorTypeEnum type;
     private final Integer number;

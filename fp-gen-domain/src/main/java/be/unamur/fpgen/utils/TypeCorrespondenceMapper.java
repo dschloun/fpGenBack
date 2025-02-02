@@ -6,6 +6,9 @@ import be.unamur.fpgen.interlocutor.InterlocutorTypeEnum;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Utility class for correspondence between InterlocutorTypeEnum and MessageTypeEnum which are related concepts
+ */
 public class TypeCorrespondenceMapper {
 
         private static final Map<InterlocutorTypeEnum, MessageTypeEnum> enumMap = new HashMap<>();

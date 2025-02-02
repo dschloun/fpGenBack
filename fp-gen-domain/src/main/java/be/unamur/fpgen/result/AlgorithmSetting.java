@@ -2,6 +2,11 @@ package be.unamur.fpgen.result;
 
 import be.unamur.fpgen.BaseUuidDomain;
 
+/**
+ * This class represents a setting for an algorithm.
+ * It is composed of a parameter name and a value.
+ * It's used in the result to indicate what were the settings used by the model
+ */
 public class AlgorithmSetting extends BaseUuidDomain {
     private final String parameterName;
     private final String value;

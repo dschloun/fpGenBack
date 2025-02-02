@@ -5,6 +5,10 @@ import be.unamur.fpgen.AbstractItem;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
+/**
+ * Abstract class for messages.
+ * Here are the commune attributes of all messages.
+ */
 public abstract class AbstractInstantMessage extends AbstractItem {
     // members
     private MessageTopicEnum topic;

@@ -6,6 +6,9 @@ import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
 
+/**
+ * Utility class for handling violations in domain object builder.
+ */
 public abstract class ViolationHandler {
     //validation methods
     protected List<String> cannotBeNull(Object o, String objectName) {
@@ -14,14 +17,6 @@ public abstract class ViolationHandler {
             requireNonNull(o);
         } catch (NullPointerException e) {
             errors.add(String.format("%s cannot be null", objectName));
-        }
-        return errors;
-    }
-
-    protected List<String> invalidEmail(String email, String objectName) {
-        List<String> errors = new ArrayList<>();
-        if (!email.contains("@")) {
-            errors.add(String.format("%s is invalid", objectName));
         }
         return errors;
     }

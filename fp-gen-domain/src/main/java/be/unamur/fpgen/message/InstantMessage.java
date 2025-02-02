@@ -2,6 +2,10 @@ package be.unamur.fpgen.message;
 
 import java.util.UUID;
 
+/**
+ * Represents an instant message
+ * The hash is used to ensure an unicity of message
+ */
 public class InstantMessage extends AbstractInstantMessage {
     private final UUID generationTechniqueId;
     private final String generationBusinessId;

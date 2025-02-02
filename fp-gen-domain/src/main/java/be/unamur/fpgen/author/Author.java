@@ -2,6 +2,10 @@ package be.unamur.fpgen.author;
 
 import be.unamur.fpgen.BaseUuidDomain;
 
+/**
+ * Represents an author of a message, conversation, project, dataset or prompt
+ * It's a user of the application
+ */
 public class Author extends BaseUuidDomain {
     private final String lastName;
     private final String firstName;
@@ -78,14 +82,24 @@ public class Author extends BaseUuidDomain {
         return accountCreated;
     }
 
+    /**
+     * Accept the terms of use
+     */
     public void acceptTermsOfUse(){
         acceptTermsOfUse = true;
     }
 
+    /**
+     * Update the status of the author
+     * @param status the new status
+     */
     public void updateStatus(AuthorStatusEnum status){
         this.status = status;
     }
 
+    /**
+     * Indicate that account is created in Keycloak
+     */
     public void createAccount(){
         accountCreated = true;
     }

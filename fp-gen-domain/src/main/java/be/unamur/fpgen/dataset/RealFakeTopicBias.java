@@ -2,6 +2,10 @@ package be.unamur.fpgen.dataset;
 
 import be.unamur.fpgen.message.MessageTopicEnum;
 
+/**
+ * This class represents the bias between the number of real and fake messages for a given topic.
+ * The bias is the difference between the number of real and fake messages.
+ */
 public class RealFakeTopicBias {
     private final MessageTopicEnum topic;
     private final Integer realNumber;

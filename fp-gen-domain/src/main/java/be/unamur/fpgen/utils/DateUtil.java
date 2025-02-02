@@ -7,6 +7,9 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
+/**
+ * This class is used to convert dates from one format to another.
+ */
 public class DateUtil {
 
     private DateUtil() {

@@ -6,6 +6,10 @@ import be.unamur.fpgen.utils.ViolationHandler;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class represents the pagination of a list of elements.
+ * It contains the page number, the size of the page and the total size of the list.
+ */
 public class Pagination {
     //members
     private Integer page;

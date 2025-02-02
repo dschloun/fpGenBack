@@ -8,6 +8,10 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * Utility class to map a list of objects to another list of objects
+ * Typically to map a list of entities objects to domain objects
+ */
 public class MapperUtil {
 
     private MapperUtil(){

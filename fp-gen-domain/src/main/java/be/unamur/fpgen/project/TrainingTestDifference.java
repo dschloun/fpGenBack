@@ -2,6 +2,11 @@ package be.unamur.fpgen.project;
 
 import java.util.Set;
 
+/**
+ * This class represents the differences between the training and test sets.
+ * It contains the differences for the fake, real, social engineering and harassment topics.
+ * It also contains the differences for each type of topic.
+ */
 public class TrainingTestDifference {
     private final Integer fakeDifference;
     private final Integer realDifference;
