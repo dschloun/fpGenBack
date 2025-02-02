@@ -9,6 +9,9 @@ import be.unamur.fpgen.mapper.webToDomain.PaginationWebToDomainMapper;
 import be.unamur.fpgen.utils.DateUtil;
 import be.unamur.model.PagedConversationQuery;
 
+/**
+ * This class is a mapper which map the web object to the domain object
+ */
 public class ConversationPaginationWebToDomainMapper {
 
     public static ConversationQuery map(be.unamur.model.ConversationQuery web) {

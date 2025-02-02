@@ -8,6 +8,9 @@ import be.unamur.model.ProjectType;
 
 import java.util.Optional;
 
+/**
+ * This class is a mapper which map the web object to the domain object
+ */
 public class ProjectWebToDomainMapper {
     public static Project map(final be.unamur.model.ProjectCreation web, final Author author){
         return Project.newBuilder()

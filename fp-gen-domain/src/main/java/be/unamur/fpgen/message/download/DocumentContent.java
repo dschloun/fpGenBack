@@ -2,6 +2,9 @@ package be.unamur.fpgen.message.download;
 
 import org.springframework.core.io.Resource;
 
+/**
+ * Represents the content of a downloaded document.
+ */
 public class DocumentContent {
     private final String fileName;
     private final String mimeType;

@@ -6,6 +6,9 @@ import org.springframework.context.ApplicationEvent;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Event that is published when the status of an ongoing generation changes.
+ */
 public class OngoingGenerationStatusChangeEvent extends ApplicationEvent {
     private final UUID ongoingGenerationId;
     private final OngoingGenerationStatus status;

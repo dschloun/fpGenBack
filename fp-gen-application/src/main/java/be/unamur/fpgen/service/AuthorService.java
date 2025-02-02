@@ -15,6 +15,9 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Service class for Author
+ */
 @Service
 public class AuthorService {
 
@@ -26,12 +29,21 @@ public class AuthorService {
         this.keycloakService = keycloakService;
     }
 
-
+    /**
+     * Create a new author
+     * @param author the author to create
+     * @return the created author
+     */
     @Transactional
     public Author create(final Author author){
         return authorRepository.saveAuthor(author);
     }
 
+    /**
+     * Create a new author if not exists
+     * @param author the author to create
+     * @return the created author
+     */
     @Transactional
     public Author createIfNotExists(final Author author){
         if(authorRepository.existsAuthorByTrigram(author.getTrigram())){
@@ -41,21 +53,40 @@ public class AuthorService {
         return authorRepository.saveAuthor(author);
     }
 
+    /**
+     * Get author by id
+     * @param authorId the author id
+     * @return the author
+     */
     @Transactional
     public Author getAuthorById(final UUID authorId){
         return authorRepository.getAuthorById(authorId).orElseThrow(() -> AuthorNotFoundException.withId(authorId));
     }
 
+    /**
+     * Get author by trigram
+     * @param trigram the author trigram
+     * @return the author
+     */
     @Transactional
     public Author getAuthorByTrigram(final String trigram){
         return authorRepository.findAuthorByTrigram(trigram).orElseThrow(() -> AuthorNotFoundException.withTrigram(trigram));
     }
 
+    /**
+     * Get all authors
+     * @return the authors
+     */
     @Transactional
     public List<Author> getAuthors(){
         return authorRepository.getAuthors();
     }
 
+    /**
+     * Search authors
+     * @param query the query
+     * @return the author list matching the query
+     */
     @Transactional
     public AuthorsPage searchAuthorPaginate(final PagedAuthorsQuery query){
         //1. get pageable
@@ -75,6 +106,11 @@ public class AuthorService {
                 pageable);
     }
 
+    /**
+     * Update author status
+     * @param authorId the author id
+     * @param status the new status
+     */
     @Transactional
     public void updateAuthorStatus(final UUID authorId, final AuthorStatusEnum status){
         // 1. get author

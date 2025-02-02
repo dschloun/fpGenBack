@@ -5,6 +5,9 @@ import be.unamur.model.GenerationType;
 
 import java.util.Optional;
 
+/**
+ * This class is a mapper which map the domain object to the web object
+ */
 public class GenerationTypeDomainToWebMapper {
     public static GenerationType map(GenerationTypeEnum web){
         return Optional.ofNullable(web)

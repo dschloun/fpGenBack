@@ -29,6 +29,9 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+/**
+ * Service class for project.
+ */
 @Service
 public class ProjectService implements FindByIdService{
     private final AuthorService authorService;
@@ -39,6 +42,11 @@ public class ProjectService implements FindByIdService{
         this.projectRepository = projectRepository;
     }
 
+    /**
+     * Create a project.
+     * @param projectCreation the project creation object
+     * @return the created project
+     */
     @Transactional
     public Project createProject(ProjectCreation projectCreation){
         // 0. get author
@@ -51,12 +59,22 @@ public class ProjectService implements FindByIdService{
         return projectRepository.save(project, author);
     }
 
+    /**
+     * Find a project by its id.
+     * @param projectId the project id
+     * @return the project throw an exception if not found
+     */
     @Transactional
     public Project findById(UUID projectId) {
         return projectRepository.findById(projectId)
                 .orElseThrow(() -> ProjectNotFoundException.withId(projectId));
     }
 
+    /**
+     * Search projects with pagination.
+     * @param query the query
+     * @return the projects page
+     */
     @Transactional
     public ProjectsPage searchProjectPaginate(final PagedProjectsQuery query){
         final Pageable pageable = PageRequest
@@ -74,19 +92,20 @@ public class ProjectService implements FindByIdService{
                 pageable);
     }
 
+    /**
+     * Delete a project by its id.
+     * @param projectId the project id
+     */
     @Transactional
     public void deleteById(UUID projectId){
         projectRepository.deleteById(projectId);
     }
 
-    private DatasetTypeEnum getDatasetType(final ProjectCreation projectCreation){
-        if (projectCreation.getProjectType().name().equals(DatasetTypeEnum.INSTANT_MESSAGE.name())){
-            return DatasetTypeEnum.INSTANT_MESSAGE;
-        } else {
-            return DatasetTypeEnum.CONVERSATION;
-        }
-    }
-
+    /**
+     * Compute the difference between training and test datasets.
+     * @param projectId the project id
+     * @return the training test difference
+     */
     @Transactional
     public TrainingTestDifference computeTrainingTestDifference(UUID projectId){
         // 0. get project
@@ -138,6 +157,24 @@ public class ProjectService implements FindByIdService{
                 .build();
     }
 
+    /**
+     * Get the dataset type from the project creation.
+     * @param projectCreation the project creation
+     * @return the dataset type
+     */
+    private DatasetTypeEnum getDatasetType(final ProjectCreation projectCreation){
+        if (projectCreation.getProjectType().name().equals(DatasetTypeEnum.INSTANT_MESSAGE.name())){
+            return DatasetTypeEnum.INSTANT_MESSAGE;
+        } else {
+            return DatasetTypeEnum.CONVERSATION;
+        }
+    }
+
+    /**
+     * Count the number of fake messages in a dataset.
+     * @param dataset the dataset
+     * @return the number of fake messages
+     */
     private Integer countFake(final Dataset dataset){
         return dataset.getItemList()
                 .stream()
@@ -146,6 +183,11 @@ public class ProjectService implements FindByIdService{
                 .reduce(0, Integer::sum);
     }
 
+    /**
+     * Count the number of real messages in a dataset.
+     * @param dataset the dataset
+     * @return the number of real messages
+     */
     private Integer countReal(final Dataset dataset){
         return dataset.getItemList()
                 .stream()
@@ -154,6 +196,11 @@ public class ProjectService implements FindByIdService{
                 .reduce(0, Integer::sum);
     }
 
+    /**
+     * Count the number of social engineering messages in a dataset.
+     * @param dataset
+     * @return the number of social engineering messages
+     */
     private Integer countSocialEngineering(final Dataset dataset){
         return dataset.getItemList()
                 .stream()
@@ -162,6 +209,11 @@ public class ProjectService implements FindByIdService{
                 .reduce(0, Integer::sum);
     }
 
+    /**
+     * Count the number of harassment messages in a dataset.
+     * @param dataset the dataset
+     * @return the number of harassment messages
+     */
     private Integer countHarassment(final Dataset dataset){
         return dataset.getItemList()
                 .stream()
@@ -170,6 +222,11 @@ public class ProjectService implements FindByIdService{
                 .reduce(0, Integer::sum);
     }
 
+    /**
+     * Count the number of messages per type and topic in a dataset.
+     * @param dataset the dataset
+     * @return the map of type and topic to the number of messages
+     */
     private Map<String, Integer> countTypeTopic(final Dataset dataset){
         return dataset.getItemList()
                 .stream()
@@ -177,6 +234,12 @@ public class ProjectService implements FindByIdService{
                         Collectors.summingInt(i -> ((Generation)i).getQuantity())));
     }
 
+    /**
+     * Compute the difference between training and test datasets for each type and topic.
+     * @param training the training dataset
+     * @param test the test dataset
+     * @return the set of type topic differences
+     */
     private Set<TypeTopicDifference> computeTypeTopicDifference(final Map<String, Integer> training, final Map<String, Integer> test){
         // Create a set of all keys from both training and test datasets
         Set<String> allKeys = new HashSet<>(training.keySet());

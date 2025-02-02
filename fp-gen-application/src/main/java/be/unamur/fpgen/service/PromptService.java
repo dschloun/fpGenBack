@@ -19,6 +19,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Service class for managing prompts.
+ */
 @Service
 public class PromptService {
     private final AuthorService authorService;
@@ -29,6 +32,12 @@ public class PromptService {
         this.promptRepository = promptRepository;
     }
 
+    /**
+     * Create a new prompt.
+     *
+     * @param command the prompt creation command
+     * @return the created prompt
+     */
     @Transactional
     public Prompt create(final PromptCreation command) {
         final Author author = authorService.getAuthorByTrigram(UserContextHolder.getContext().getTrigram());
@@ -48,12 +57,25 @@ public class PromptService {
                         .build());
     }
 
+    /**
+     * Find a prompt by its id.
+     *
+     * @param id the prompt id
+     * @return the prompt
+     */
     @Transactional
     public Prompt findById(UUID id) {
         return promptRepository.findPromptBId(id)
                 .orElseThrow(() -> PromptNotFoundException.withId(id));
     }
 
+    /**
+     * Update a prompt.
+     *
+     * @param id the prompt id
+     * @param promptUpdate the prompt update command
+     * @return the updated prompt
+     */
     @Transactional
     public Prompt updatePrompt(final UUID id, final PromptUpdate promptUpdate) {
         final Prompt currentPrompt = findById(id);
@@ -63,40 +85,82 @@ public class PromptService {
         return currentPrompt;
     }
 
+    /**
+     * set a prompt as default.
+     * @param id
+     */
     @Transactional
     public void setDefaultPrompt(UUID id) {
         promptRepository.setDefaultPrompt(id);
     }
 
+    /**
+     * Get the default prompt for a dataset type and a message type.
+     *
+     * @param datasetType the dataset type
+     * @param messageType the message type
+     * @return the default prompt
+     */
     @Transactional
     public Prompt getDefaultPrompt(final DatasetTypeEnum datasetType, final MessageTypeEnum messageType) {
         return promptRepository.getDefaultPrompt(datasetType, messageType)
                 .orElseThrow(PromptNotFoundException::withDefaultPrompt);
     }
 
+    /**
+     * update the status of a prompt.
+     * @param id the prompt id
+     * @param status the new status
+     */
     @Transactional
     public void updatePromptStatus(UUID id, PromptStatusEnum status) {
         promptRepository.updatePromptStatus(id, status);
     }
 
+    /**
+     * Find all prompts for a dataset type and a message type.
+     *
+     * @param datasetType the dataset type
+     * @param messageType the message type
+     * @return the list of prompts
+     */
     @Transactional
     public List<Prompt> findAllPromptsByDatasetTypeAndMessageType(DatasetTypeEnum datasetType, MessageTypeEnum messageType) {
         return promptRepository.findAllByDatasetTypeAndMessageType(datasetType, messageType, PromptStatusEnum.VALIDATED);
     }
 
+    /**
+     * Find all prompts by status.
+     * @param status the status
+     * @return the list of prompts
+     */
     @Transactional
     public List<Prompt> findAllPromptsByStatus(PromptStatusEnum status) {
         return promptRepository.findAllPromptsByStatus(status);
     }
 
+    /**
+     * Find all prompts for a dataset type and a message type.
+     *
+     * @param datasetType the dataset type
+     * @param messageType the message type
+     * @return the list of prompts
+     */
     @Transactional
     public Integer findMaxVersionByDatasetTypeAndMessageType(DatasetTypeEnum datasetType, MessageTypeEnum messageType) {
         return promptRepository.findMaxVersionByDatasetTypeAndMessageType(datasetType, messageType);
     }
 
+    /**
+     * Find a prompt by its dataset type, message type and version.
+     *
+     * @param datasetType the dataset type
+     * @param messageType the message type
+     * @param version the version
+     * @return the prompt
+     */
     @Transactional
     public Optional<Prompt> findByDatasetTypeAndMessageTypeAndVersion(DatasetTypeEnum datasetType, MessageTypeEnum messageType, Integer version) {
         return promptRepository.findPromptByDatasetTypeAndMessageTypeAndVersion(datasetType, messageType, version);
-               // .orElseThrow(() -> PromptNotFoundException.withTypeAndVersion(messageType.name(), version));
     }
 }

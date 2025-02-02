@@ -27,22 +27,29 @@ import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Service to manage datasets
+ */
 @Service
 public class DatasetService implements FindByIdService{
     private final AuthorService authorService;
     private final DatasetRepository datasetRepository;
     private final GenerationService generationService;
-    private final OngoingGenerationService ongoingGenerationService;
     private final ApplicationEventPublisher eventPublisher;
 
-    public DatasetService(AuthorService authorService, DatasetRepository datasetRepository, GenerationService generationService, OngoingGenerationService ongoingGenerationService, ApplicationEventPublisher eventPublisher) {
+    public DatasetService(AuthorService authorService, DatasetRepository datasetRepository, GenerationService generationService, ApplicationEventPublisher eventPublisher) {
         this.authorService = authorService;
         this.datasetRepository = datasetRepository;
         this.generationService = generationService;
-        this.ongoingGenerationService = ongoingGenerationService;
         this.eventPublisher = eventPublisher;
     }
 
+    /**
+     * Create a dataset
+     * @param datasetCreation dataset creation
+     * @param type dataset type
+     * @return created dataset
+     */
     @Transactional
     public Dataset createDataset(DatasetCreation datasetCreation, DatasetTypeEnum type) {
         final Author author = authorService.getAuthorByTrigram(UserContextHolder.getContext().getTrigram());
@@ -59,12 +66,21 @@ public class DatasetService implements FindByIdService{
                         .build());
     }
 
+    /**
+     * Find a dataset by id
+     * @param datasetId dataset id
+     * @return dataset
+     */
     @Transactional
     public Dataset findById(UUID datasetId) {
         return datasetRepository.findDatasetById(datasetId)
                 .orElseThrow(() -> DatasetNotFoundException.withId(datasetId));
     }
 
+    /**
+     * delete a dataset by id
+     * @param datasetId
+     */
     @Transactional
     public void deleteDatasetById(UUID datasetId) {
         // 1. get dataset
@@ -88,6 +104,11 @@ public class DatasetService implements FindByIdService{
         datasetRepository.deleteDatasetById(datasetId);
     }
 
+    /**
+     * Add generation list to dataset
+     * @param datasetId dataset id
+     * @param generationIdsList generation id list
+     */
     @Transactional
     public void addGenerationListToDataset(UUID datasetId, List<UUID> generationIdsList) {
         // 1. get dataset
@@ -107,6 +128,11 @@ public class DatasetService implements FindByIdService{
         eventPublisher.publishEvent(new StatisticComputationEvent(this, datasetId, DatasetTypeEnum.INSTANT_MESSAGE));
     }
 
+    /**
+     * Remove generation list from dataset
+     * @param datasetId dataset id
+     * @param generationIdsList generation id list
+     */
     @Transactional
     public void removeGenerationListFromDataset(UUID datasetId, List<UUID> generationIdsList) {
         // 1. get dataset
@@ -126,7 +152,11 @@ public class DatasetService implements FindByIdService{
         eventPublisher.publishEvent(new StatisticComputationEvent(this, datasetId, DatasetTypeEnum.INSTANT_MESSAGE));
     }
 
-
+    /**
+     * Search dataset and paginate
+     * @param query query
+     * @return paginated dataset
+     */
     @Transactional
     public DatasetsPage searchDatasetPaginate(final PagedDatasetsQuery query) {
         //1. get pageable
@@ -147,24 +177,11 @@ public class DatasetService implements FindByIdService{
                 pageable);
     }
 
-    private Set<Generation> getGenerationList(List<UUID> generationIdsList) {
-        // 1. get instant message generations
-        final Set<Generation> generationList = new HashSet<>();
-        generationIdsList.forEach(i -> {
-            try {
-                final Generation generation = generationService.findById(i);
-                generationList.add(generation);
-            } catch (GenerationNotFoundException e) {
-                System.out.println("generation does not exist");
-            }
-        });
-        // 2. check if list is not empty
-        if (generationList.isEmpty()) {
-            throw new IllegalArgumentException("No instant message generation found");
-        }
-        return generationList;
-    }
-
+    /**
+     * Add ongoing generation to dataset
+     * @param datasetId dataset id
+     * @param generation ongoing generation
+     */
     @Transactional
     public void addOngoingGenerationToDataset(UUID datasetId, OngoingGeneration generation) {
         final Dataset dataset = findById(datasetId);
@@ -173,6 +190,10 @@ public class DatasetService implements FindByIdService{
         datasetRepository.addOngoingGenerationToDataset(dataset, generation);
     }
 
+    /**
+     * Remove ongoing generation from dataset
+     * @param datasetId dataset id
+     */
     @Transactional
     public void removeOngoingGenerationFromDataset(UUID datasetId) {
         final Dataset dataset = findById(datasetId);
@@ -181,6 +202,10 @@ public class DatasetService implements FindByIdService{
         datasetRepository.removeOngoingGenerationFromDataset(dataset);
     }
 
+    /**
+     * Validate dataset
+     * @param datasetId dataset id
+     */
     @Transactional
     public void validateDataset(UUID datasetId) {
         final Dataset dataset = findById(datasetId);
@@ -189,6 +214,12 @@ public class DatasetService implements FindByIdService{
         datasetRepository.updateDataset(dataset);
     }
 
+    /**
+     * Create new version of dataset
+     * @param oldDatasetId old dataset id
+     * @param authorId author id
+     * @return new version of dataset
+     */
     @Transactional
     public Dataset createNewVersion(UUID oldDatasetId, UUID authorId) {
         // 0. get author
@@ -229,32 +260,11 @@ public class DatasetService implements FindByIdService{
         return datasetRepository.saveNewVersion(oldDataset, newVersion);
     }
 
-    private void checkDatasetValidationState(Dataset dataset, boolean requiredStatus) {
-        if (dataset.isValidated() != requiredStatus){
-            throw DatasetValidatedException.withId(dataset.getId());
-        }
-    }
-
-    private void checkIfDatasetIsLastVersion(Dataset dataset, boolean requiredStatus) {
-        if (dataset.isLastVersion() != requiredStatus){
-            throw DatasetLastVersionException.withId(dataset.getId());
-        }
-    }
-
-    private void checkIfDatasetIsEmpty(Dataset dataset) {
-        if (dataset.getItemList().isEmpty()){
-            throw EmptyDatasetException.withId(dataset.getId());
-        }
-    }
-
-    private int getNewVersion(Dataset oldDataset) {
-        return oldDataset.getVersion() + 1;
-    }
-
-    private String getNewName(Dataset oldDataset, int version) {
-        return String.format("%s%s%s",oldDataset.getName(), " | V-", version);
-    }
-
+    /**
+     * Get all dataset versions
+     * @param datasetId dataset id
+     * @return all dataset versions
+     */
     @Transactional
     public List<Dataset> getAllDatasetVersions(UUID datasetId) {
         // 1. get the reference dataset
@@ -264,6 +274,11 @@ public class DatasetService implements FindByIdService{
         return datasetRepository.findAllDatasetVersions(Objects.nonNull(dataset.getOriginalDatasetId()) ? dataset.getOriginalDatasetId() : datasetId);
     }
 
+    /**
+     * Check dataset bias
+     * @param datasetId dataset id
+     * @return real fake topic bias
+     */
     @Transactional
     public List<RealFakeTopicBias> checkDatasetBias(UUID datasetId) {
         // 1. get dataset
@@ -288,6 +303,88 @@ public class DatasetService implements FindByIdService{
                 .toList();
     }
 
+    /**
+     * Get generation list for a generation id list
+     * @param generationIdsList
+     * @return generation list
+     */
+    private Set<Generation> getGenerationList(List<UUID> generationIdsList) {
+        // 1. get instant message generations
+        final Set<Generation> generationList = new HashSet<>();
+        generationIdsList.forEach(i -> {
+            try {
+                final Generation generation = generationService.findById(i);
+                generationList.add(generation);
+            } catch (GenerationNotFoundException e) {
+                System.out.println("generation does not exist");
+            }
+        });
+        // 2. check if list is not empty
+        if (generationList.isEmpty()) {
+            throw new IllegalArgumentException("No instant message generation found");
+        }
+        return generationList;
+    }
+
+    /**
+     * Check if dataset is validated
+     * @param dataset dataset
+     * @param requiredStatus required status
+     * throws DatasetValidatedException if dataset is not validated
+     */
+    private void checkDatasetValidationState(Dataset dataset, boolean requiredStatus) {
+        if (dataset.isValidated() != requiredStatus){
+            throw DatasetValidatedException.withId(dataset.getId());
+        }
+    }
+
+    /**
+     * Check if dataset is last version
+     * @param dataset dataset
+     * @param requiredStatus required status
+     * throws DatasetLastVersionException if dataset is not last version
+     */
+    private void checkIfDatasetIsLastVersion(Dataset dataset, boolean requiredStatus) {
+        if (dataset.isLastVersion() != requiredStatus){
+            throw DatasetLastVersionException.withId(dataset.getId());
+        }
+    }
+
+    /**
+     * Check if dataset is empty
+     * @param dataset dataset
+     * throws EmptyDatasetException if dataset is empty
+     */
+    private void checkIfDatasetIsEmpty(Dataset dataset) {
+        if (dataset.getItemList().isEmpty()){
+            throw EmptyDatasetException.withId(dataset.getId());
+        }
+    }
+
+    /**
+     * Get new version
+     * @param oldDataset old dataset
+     * @return new version number
+     */
+    private int getNewVersion(Dataset oldDataset) {
+        return oldDataset.getVersion() + 1;
+    }
+
+    /**
+     * Get new name
+     * @param oldDataset old dataset
+     * @param version version
+     * @return new name
+     */
+    private String getNewName(Dataset oldDataset, int version) {
+        return String.format("%s%s%s",oldDataset.getName(), " | V-", version);
+    }
+
+    /**
+     * Count the number of fake messages per topic
+     * @param dataset
+     * @return a map with the topic as key and the number of fake messages as value
+     */
     private Map<String, Integer> countFake(final Dataset dataset) {
         final List<Generation> socialEngineeringGenerationList = dataset.getItemList()
                 .stream()
@@ -298,6 +395,11 @@ public class DatasetService implements FindByIdService{
         return countType(socialEngineeringGenerationList);
     }
 
+    /**
+     * Count the number of real messages per topic
+     * @param dataset
+     * @return a map with the topic as key and the number of real messages as value
+     */
     private Map<String, Integer> countReal(final Dataset dataset) {
         final List<Generation> socialEngineeringGenerationList = dataset.getItemList()
                 .stream()
@@ -308,12 +410,23 @@ public class DatasetService implements FindByIdService{
         return countType(socialEngineeringGenerationList);
     }
 
+    /**
+     * Count the number of messages per topic
+     * @param generationList
+     * @return a map with the topic as key and the number of messages as value
+     */
     private Map<String, Integer> countType(final List<Generation> generationList){
         return generationList.stream()
                 .collect(Collectors.groupingBy(i -> i.getTopic().name(),
                         Collectors.summingInt(Generation::getQuantity)));
     }
 
+    /**
+     * Compute the difference between the number of real and fake messages per topic
+     * @param real
+     * @param fake
+     * @return a map with the topic as key and the number of real, fake and the difference between the two as value
+     */
     private Map<MessageTopicEnum, Triple<Integer, Integer, Integer>> computeDifference(final Map<String, Integer> real, final Map<String, Integer> fake) {
         final Set<String> allKeys = new HashSet<>();
         allKeys.addAll(real.keySet());

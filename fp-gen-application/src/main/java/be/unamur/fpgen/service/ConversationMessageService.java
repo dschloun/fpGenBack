@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+/**
+ * Service class for managing conversation messages.
+ */
 @Service
 public class ConversationMessageService {
     private final ConversationMessageRepository conversationMessageRepository;
@@ -18,6 +21,12 @@ public class ConversationMessageService {
         this.conversationMessageRepository = conversationMessageRepository;
     }
 
+    /**
+     * Search conversation messages with pagination.
+     *
+     * @param query the query to search conversation messages.
+     * @return the conversation messages page.
+     */
     @Transactional
     public ConversationMessagesPage searchConversationMessagePaginate(final PagedConversationMessagesQuery query){
         final Pageable pageable = PageRequest

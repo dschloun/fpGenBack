@@ -3,6 +3,9 @@ package be.unamur.fpgen.mapper.webToDomain;
 import be.unamur.fpgen.message.InstantMessage;
 import be.unamur.model.GenerationCreation;
 
+/**
+ * This class is a mapper which map the web object to the domain object
+ */
 public class InstantMessageWebToDomainMapper {
 
 

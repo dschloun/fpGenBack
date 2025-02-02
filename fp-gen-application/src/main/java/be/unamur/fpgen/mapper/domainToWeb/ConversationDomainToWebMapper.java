@@ -7,6 +7,9 @@ import be.unamur.model.ConversationSummary;
 
 import java.util.Comparator;
 
+/**
+ * This class is a mapper which map the domain object to the web object
+ */
 public class ConversationDomainToWebMapper {
     public static Conversation map(be.unamur.fpgen.conversation.Conversation domain) {
         return new Conversation()

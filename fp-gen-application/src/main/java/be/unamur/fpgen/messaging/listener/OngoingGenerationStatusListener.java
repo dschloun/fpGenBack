@@ -9,6 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
+/**
+ * Listener for {@link OngoingGenerationStatusChangeEvent} that updates the status of the ongoing generation and deletes
+ * the items that are no longer needed.
+ */
 @Component
 public class OngoingGenerationStatusListener {
     private final OngoingGenerationRepository ongoingGenerationRepository;
@@ -19,6 +23,11 @@ public class OngoingGenerationStatusListener {
         this.ongoingGenerationItemRepository = ongoingGenerationItemRepository;
     }
 
+    /**
+     * Updates the status of the ongoing generation and deletes the items that are no longer needed.
+     *
+     * @param event the event to handle
+     */
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void handle(final OngoingGenerationStatusChangeEvent event) {

@@ -4,6 +4,9 @@ import org.springframework.context.ApplicationEvent;
 
 import java.util.UUID;
 
+/**
+ * This class is an event used to delete the ongoing generation once they have been generated
+ */
 public class DatasetOngoingGenerationCleanEvent extends ApplicationEvent {
     private final UUID datasetId;
 

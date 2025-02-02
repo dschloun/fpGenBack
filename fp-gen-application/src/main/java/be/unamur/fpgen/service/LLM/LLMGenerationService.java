@@ -41,7 +41,6 @@ import dev.langchain4j.model.output.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -52,6 +51,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Service to generate messages and conversations using LLM (Language Learning Model) OpenAI
+ */
 @Service
 public class LLMGenerationService {
 
@@ -62,7 +64,6 @@ public class LLMGenerationService {
 
     @Value("classpath:promptChatGpt/message_format.json")
     Resource resourceFile;
-    //private static final String MESSAGE_FORMAT_PATH = "../../../../../../../resources/promptChatGpt/message_format.json";
 
     private final OngoingGenerationService ongoingGenerationService;
     private final GenerationService generationService;
@@ -74,7 +75,6 @@ public class LLMGenerationService {
     private final OngoingGenerationItemRepository ongoingGenerationItemRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final NotificationService notificationService;
-    private final ResourceLoader resourceLoader;
 
 
     public LLMGenerationService(final OngoingGenerationService ongoingGenerationService,
@@ -86,7 +86,7 @@ public class LLMGenerationService {
                                 final DatasetService datasetService,
                                 final OngoingGenerationItemRepository ongoingGenerationItemRepository,
                                 final ApplicationEventPublisher eventPublisher,
-                                final NotificationService notificationService, ResourceLoader resourceLoader) {
+                                final NotificationService notificationService) {
         this.ongoingGenerationService = ongoingGenerationService;
         this.generationService = generationService;
         this.interlocutorService = interlocutorService;
@@ -97,9 +97,11 @@ public class LLMGenerationService {
         this.ongoingGenerationItemRepository = ongoingGenerationItemRepository;
         this.eventPublisher = eventPublisher;
         this.notificationService = notificationService;
-        this.resourceLoader = resourceLoader;
     }
 
+    /**
+     * Generate messages and conversations for ongoing generations
+     */
     @Transactional
     public void generate() {
 
@@ -123,7 +125,11 @@ public class LLMGenerationService {
         }
     }
 
-    // chatgpt method
+    /**
+     * Generate messages and conversations for a specific ongoing generation
+     *
+     * @param ongoingGeneration the ongoing generation
+     */
     private void generation(final OngoingGeneration ongoingGeneration) {
 
         // 0. memorise generation list initial size
@@ -169,14 +175,14 @@ public class LLMGenerationService {
                 eventPublisher.publishEvent(new OngoingGenerationStatusChangeEvent(this, ongoingGeneration.getId(), OngoingGenerationStatus.FAILED, idsToDelete));
             }
         }
-            // comment because it caused problem and was not usefull because the clean was automatic due to cascade
-        // let just in case ...
-//        // 4. free dataset
-//        if (Objects.nonNull(datasetId)) {
-//           // eventPublisher.publishEvent(new DatasetOngoingGenerationCleanEvent(this, datasetId));
-//        }
     }
 
+    /**
+     * Get the prompt to use for the generation
+     * @param item        the generation item
+     * @param datasetType the dataset type
+     * @return the prompt
+     */
     private Prompt getPrompt(OngoingGenerationItem item, DatasetTypeEnum datasetType) {
         Prompt prompt;
         if (Objects.nonNull(item.getPromptId())) {
@@ -198,6 +204,14 @@ public class LLMGenerationService {
         return prompt;
     }
 
+    /**
+     * Generate messages for a specific generation item (message)
+     * @param item    the generation item
+     * @param prompt  the prompt
+     * @param command the generation creation command
+     * @param generation the generation
+     * @param datasetId the dataset id
+     */
     private void messageTreatment(OngoingGenerationItem item, Prompt prompt, GenerationCreation command, Generation generation, UUID datasetId) {
         // 1.1. prepare message list
         final List<InstantMessage> instantMessageList = new ArrayList<>();
@@ -211,7 +225,7 @@ public class LLMGenerationService {
             // 1.2.1. generate with LLM
             try {
                 if (simulation) {
-                    messages = simulateChatGptCallMessage(item.getMessageType().name(), item.getMessageTopic().name(), item.getQuantity(), prompt);
+                    messages = simulateLLMCallMessage(item.getMessageType().name(), item.getMessageTopic().name(), item.getQuantity());
                 } else {
                     messages = openAiGenerateMessages(item.getMessageTopic(), item.getQuantity(), prompt);
                 }
@@ -269,11 +283,17 @@ public class LLMGenerationService {
         }
     }
 
-    private List<String> simulateChatGptCallMessage(String type, String topic, int quantity, final Prompt prompt) {
+    /**
+     * Simulate a call to LLM to generate messages (during development)
+     * @param type     the message type
+     * @param topic    the message topic
+     * @param quantity the quantity
+     * @return the list of messages
+     */
+    private List<String> simulateLLMCallMessage(String type, String topic, int quantity) {
         final List<String> result = new ArrayList<>();
         int i = 0;
         try {
-            // todo use prompt for real generation
             while (i < quantity) {
                 i++;
                 result.add(String.format("message %s %s: %s of %s", type, topic, i, quantity));
@@ -285,6 +305,15 @@ public class LLMGenerationService {
         return result;
     }
 
+    /**
+     * Generate conversations for a specific generation item (conversation)
+     * @param item    the generation item
+     * @param min     the minimal number of interactions
+     * @param max     the maximal number of interactions
+     * @param prompt  the prompt
+     * @param generation the generation
+     * @param datasetId the dataset id
+     */
     private void conversationTreatment(OngoingGenerationItem item, Integer min, Integer max, Prompt prompt, Generation generation, UUID datasetId) {
         // 1.1. prepare message list
         final List<Conversation> conversationList = new ArrayList<>();
@@ -298,13 +327,13 @@ public class LLMGenerationService {
             // 1.2.1. generate with LLM
             try {
                 if (simulation) {
-                    conversationTempList = simulateChatGptCallConversationList(item.getMessageType(), item.getMessageTopic(), min, max, prompt, item.getQuantity());
+                    conversationTempList = simulateLLMCallConversationList(item.getMessageType(), item.getMessageTopic(), min, max, prompt, item.getQuantity());
                 } else {
                     conversationTempList = openAiGenerateConversations(item.getMessageType(), item.getMessageTopic(), min, max, prompt, item.getQuantity());
                 }
             } catch (Exception e) {
                 tryCounter--;
-                System.out.println("Error joining CHAT-GPT");
+                System.out.println("Error joining LLM");
             }
 
             // 1.2.2. create messages objects (check if duplicated)
@@ -316,7 +345,7 @@ public class LLMGenerationService {
                     conversationRepository.saveConversation(conv);
                     item.decrementQuantity();
                 } else {
-                    boolean alreadyExist = conversationRepository.existsByHash(conv.getHash()); //todo do the same for conversation
+                    boolean alreadyExist = conversationRepository.existsByHash(conv.getHash());
 
                     if (!alreadyExist) {
                         conversationList.add(conv);
@@ -353,18 +382,36 @@ public class LLMGenerationService {
         }
     }
 
-    // chatgpt simulation methods conversation
-    private List<Conversation> simulateChatGptCallConversationList(final MessageTypeEnum type, final MessageTopicEnum topic, final int minimalInteraction, final int maxInteraction, final Prompt prompt, final Integer quantity) {
+    /**
+     * Simulate a call to LLM to generate conversations (during development)
+     * @param type     the message type
+     * @param topic    the message topic
+     * @param minimalInteraction the minimal number of interactions
+     * @param maxInteraction the maximal number of interactions
+     * @param prompt   the prompt
+     * @param quantity the quantity
+     * @return the list of conversations
+     */
+    private List<Conversation> simulateLLMCallConversationList(final MessageTypeEnum type, final MessageTopicEnum topic, final int minimalInteraction, final int maxInteraction, final Prompt prompt, final Integer quantity) {
         List<Conversation> conversationList = new ArrayList<>();
 
         for (int i = 0; i < quantity; i++) {
-            conversationList.add(simulateChatGptCallConversation(type, topic, minimalInteraction, maxInteraction, prompt));
+            conversationList.add(simulateLLMCallConversation(type, topic, minimalInteraction, maxInteraction, prompt));
         }
 
         return conversationList;
     }
 
-    private Conversation simulateChatGptCallConversation(final MessageTypeEnum type, final MessageTopicEnum topic, final int minimalInteraction, final int maxInteraction, final Prompt prompt) {
+    /**
+     * Simulate a call to LLM to generate a conversation (during development)
+     * @param type     the message type
+     * @param topic    the message topic
+     * @param minimalInteraction the minimal number of interactions
+     * @param maxInteraction the maximal number of interactions
+     * @param prompt   the prompt
+     * @return the conversation
+     */
+    private Conversation simulateLLMCallConversation(final MessageTypeEnum type, final MessageTopicEnum topic, final int minimalInteraction, final int maxInteraction, final Prompt prompt) {
         // 0. simulate interlocutor
         final Interlocutor interlocutor1 = interlocutorService.getRandomInterlocutorByType(TypeCorrespondenceMapper.getCorrespondence(type));
         final Interlocutor interlocutor2 = interlocutorService.getRandomInterlocutorByType(InterlocutorTypeEnum.GENUINE);
@@ -377,7 +424,6 @@ public class LLMGenerationService {
         try {
             while (i < quantity) {
                 i++;
-                //todo really call chat gpt with prompt
                 messages.add(mockConversationMessageGeneration(type, topic, alternator.getNext(), alternator.getNext(), i, quantity));
             }
             Thread.sleep(1000);
@@ -406,6 +452,16 @@ public class LLMGenerationService {
         return conversation;
     }
 
+    /**
+     * Mock a conversation message
+     * @param type     the message type
+     * @param topic    the message topic
+     * @param from     the sender
+     * @param to       the receiver
+     * @param number   the order number
+     * @param quantity the quantity
+     * @return the conversation message
+     */
     private ConversationMessage mockConversationMessageGeneration(final MessageTypeEnum type, final MessageTopicEnum topic, final Interlocutor from, final Interlocutor to, final int number, final int quantity) {
         return ConversationMessage.newBuilder()
                 .withSender(from)
@@ -417,6 +473,12 @@ public class LLMGenerationService {
                 .build();
     }
 
+    /**
+     * Generate a random number in a range
+     * @param min the minimal value
+     * @param max the maximal value
+     * @return the random number
+     */
     private int getRandomNumberInRange(int min, int max) {
         if (min >= max) {
             throw new IllegalArgumentException("max must be greater than min");
@@ -426,15 +488,20 @@ public class LLMGenerationService {
         return random.nextInt((max - min) + 1) + min;
     }
 
+    /**
+     * Generate a SHA-256 hash
+     * @param input the input
+     * @return the hash
+     */
     public static String generateSHA256(String input) {
         try {
-            // Crée une instance de l'algorithme SHA-256
+            // Create a SHA-256 instance
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
 
-            // Applique l'algorithme SHA-256 sur l'entrée convertie en bytes (encodage UTF-8)
+            // Apply the SHA-256 algorithm to the input converted to bytes (UTF-8 encoding).
             byte[] hashBytes = digest.digest(input.getBytes(StandardCharsets.UTF_8));
 
-            // Convertit les bytes en une chaîne hexadécimale
+            // Convert the bytes to a hexadecimal string
             StringBuilder hexString = new StringBuilder(2 * hashBytes.length);
             for (byte b : hashBytes) {
                 String hex = Integer.toHexString(0xff & b);
@@ -444,18 +511,30 @@ public class LLMGenerationService {
                 hexString.append(hex);
             }
 
-            return hexString.toString();  // Renvoie le hash sous forme de chaîne hexadécimale
+            return hexString.toString();  // Return the hash as a hexadecimal string
 
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Erreur : Algorithme SHA-256 non trouvé", e);
+            throw new RuntimeException("Error : Algorithm SHA-256 not found", e);
         }
     }
 
+    /**
+     * Generate a notification message
+     * @param ongoingGeneration the ongoing generation
+     * @return the notification message
+     */
     private String generateNotificationMessage(OngoingGeneration ongoingGeneration) {
         return "Hello " + ongoingGeneration.getAuthor().getFirstName() + " " + ongoingGeneration.getAuthor().getLastName() + ". Your generation from " + ongoingGeneration.getCreationDate() + " from type " + ongoingGeneration.getType() + " is done";
     }
 
-    //-----------------
+    /**
+     * Generate messages using LLM (Language Learning Model) OpenAI
+     * @param topic    the message topic
+     * @param quantity the quantity
+     * @param prompt   the prompt
+     * @return the list of messages
+     * @throws IOException if an error occurs
+     */
     private List<String> openAiGenerateMessages(MessageTopicEnum topic, Integer quantity, Prompt prompt) throws IOException {
         // Load message format from JSON file
         //get content file as string
@@ -491,6 +570,17 @@ public class LLMGenerationService {
         return messages;
     }
 
+    /**
+     * Generate conversations using LLM (Language Learning Model) OpenAI
+     * @param type            the message type
+     * @param topic           the message topic
+     * @param minInteraction  the minimal number of interactions
+     * @param maxInteraction  the maximal number of interactions
+     * @param prompt          the prompt
+     * @param quantity        the quantity
+     * @return the list of conversations
+     * @throws IOException if an error occurs
+     */
     private List<Conversation> openAiGenerateConversations(final MessageTypeEnum type, final MessageTopicEnum topic, final int minInteraction, final int maxInteraction, final Prompt prompt, final Integer quantity) throws IOException {
         // Load message format from JSON file
         //get content file as string
@@ -544,6 +634,14 @@ public class LLMGenerationService {
         return conversations;
     }
 
+    /**
+     * Build a conversation message
+     * @param message    the message
+     * @param type       the message type
+     * @param topic      the message topic
+     * @param orderNumber the order number
+     * @return the conversation message
+     */
     private ConversationMessage buildConversationMessage(be.unamur.fpgen.prompt.response.conversation.ConversationMessage message, MessageTypeEnum type, MessageTopicEnum topic, int orderNumber) {
         final Interlocutor sender;
         if(MessageTypeEnum.GENUINE.equals(type)){

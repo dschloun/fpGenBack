@@ -8,6 +8,9 @@ import be.unamur.fpgen.mapper.webToDomain.PaginationWebToDomainMapper;
 import be.unamur.fpgen.utils.DateUtil;
 import be.unamur.model.PagedInstantMessageQuery;
 
+/**
+ * This class is a mapper which map the web object to the domain object
+ */
 public class InstantMessagePaginationWebToDomainMapper {
 
     public static InstantMessageQuery map(be.unamur.model.InstantMessageQuery web) {

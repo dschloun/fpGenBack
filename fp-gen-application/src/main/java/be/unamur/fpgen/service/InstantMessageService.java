@@ -18,6 +18,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Service for managing instant messages
+ */
 @Service
 public class InstantMessageService {
 
@@ -33,6 +36,10 @@ public class InstantMessageService {
         this.ongoingGenerationService = ongoingGenerationService;
     }
 
+    /**
+     * Generate instant messages
+     * @param command the command to generate instant messages
+     */
     @Transactional
     public void generateInstantMessages(final InstantMessageBatchCreation command) {
         // 0. create ongoing generation
@@ -45,12 +52,22 @@ public class InstantMessageService {
         }
     }
 
+    /**
+     * Get instant message by id
+     * @param instantMessageId the instant message id to get
+     * @return the instant message or throw an exception if not found
+     */
     @Transactional
     public InstantMessage getInstantMessageById(UUID instantMessageId) {
         return messageRepository.getInstantMessageById(instantMessageId)
                 .orElseThrow(() -> InstantMessageNotFoundException.withId(instantMessageId));
     }
 
+    /**
+     * search instant messages with pagination
+     * @param query
+     * @return the instant messages page
+     */
     @Transactional
     public InstantMessagesPage searchInstantMessagesPaginate(final PagedInstantMessagesQuery query) {
         final Pageable pageable = PageRequest
@@ -66,11 +83,20 @@ public class InstantMessageService {
                 pageable);
     }
 
+    /**
+     * delete instant message by id
+     * @param instantMessageId
+     */
     @Transactional
     public void deleteById(UUID instantMessageId) {
         messageRepository.deleteInstantMessageById(instantMessageId);
     }
 
+    /**
+     * find all instant messages by generation id
+     * @param generationId
+     * @return the list of instant messages
+     */
     @Transactional
     public List<InstantMessage> findAllByGenerationId(UUID generationId) {
         return messageRepository.findInstantMessageByGenerationId(generationId);

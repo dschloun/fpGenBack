@@ -3,6 +3,10 @@ package be.unamur.fpgen.service.LLM;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service to execute a task at a fixed rate using cron expression.
+
+ */
 @Service
 public class CronTaskService {
     private final TaskStatus taskStatus;
@@ -16,16 +20,16 @@ public class CronTaskService {
     @Scheduled(cron = "0 */1 * * * *")
     public void executeTask() {
         if (taskStatus.isRunning()) {
-            System.out.println("Tâche déjà en cours, saut de l'exécution.");
+            System.out.println("Task already running, skipping execution");
             return;
         }
 
         taskStatus.setRunning(true);
         try {
-            // Exécuter la tâche longue ici
+            // Execute the expensive generation task
             llmGenerationService.generate();
         } finally {
-            taskStatus.setRunning(false); // Réinitialiser le flag
+            taskStatus.setRunning(false); // reinitialize the task status
         }
     }
 }
