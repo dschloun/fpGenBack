@@ -8,6 +8,9 @@ import be.unamur.fpgen.entity.generation.InstantMessageGenerationEntity;
 import be.unamur.fpgen.generation.Generation;
 import be.unamur.fpgen.generation.GenerationTypeEnum;
 
+/**
+ * This class is used to map the domain to the JPA entity.
+ */
 public class GenerationDomainToJpaMapper {
 
     public static GenerationEntity mapForCreate(final Generation domain, final AuthorEntity author, final PromptEntity prompt) {

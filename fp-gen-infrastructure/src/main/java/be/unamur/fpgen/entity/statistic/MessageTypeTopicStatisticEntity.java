@@ -7,6 +7,9 @@ import be.unamur.fpgen.message.MessageTypeEnum;
 import javax.persistence.*;
 import java.math.BigDecimal;
 
+/**
+ * This class represents the type/topic distribution
+ */
 @Entity
 @Table(name = "message_type_topic_statistic")
 public class MessageTypeTopicStatisticEntity extends BaseUuidEntity {

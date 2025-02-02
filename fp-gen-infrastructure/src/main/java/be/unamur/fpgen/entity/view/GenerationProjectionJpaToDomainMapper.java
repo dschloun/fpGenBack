@@ -12,6 +12,9 @@ import java.time.ZoneOffset;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * This class is used to map the JPA entity to the domain entity.
+ */
 public class GenerationProjectionJpaToDomainMapper {
     public static Generation map(final GenerationProjection entity) {
         if (Objects.isNull(entity)) {

@@ -3,6 +3,9 @@ package be.unamur.fpgen.mapper.jpaToDomain;
 import be.unamur.fpgen.entity.PromptEntity;
 import be.unamur.fpgen.prompt.Prompt;
 
+/**
+ * This class is used to map the JPA entity to the domain entity.
+ */
 public class PromptJpaToDomainMapper {
 
     public static Prompt map(PromptEntity entity) {

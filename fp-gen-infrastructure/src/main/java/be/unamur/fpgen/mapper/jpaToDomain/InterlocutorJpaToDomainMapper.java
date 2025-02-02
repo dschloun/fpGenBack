@@ -5,6 +5,9 @@ import be.unamur.fpgen.interlocutor.Interlocutor;
 
 import java.util.Objects;
 
+/**
+ * This class is used to map the JPA entity to the domain entity.
+ */
 public class InterlocutorJpaToDomainMapper {
 
     public static Interlocutor map(final InterlocutorEntity entity){

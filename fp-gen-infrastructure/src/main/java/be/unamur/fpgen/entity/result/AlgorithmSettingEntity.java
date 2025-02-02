@@ -5,6 +5,11 @@ import be.unamur.fpgen.entity.base.BaseUuidEntity;
 
 import javax.persistence.*;
 
+/**
+ * This class represents a setting for an algorithm.
+ * It is composed of a parameter name and a value.
+ * It's used in the result to indicate what were the settings used by the model
+ */
 @Entity
 @Table(name = "algorithm_setting")
 public class AlgorithmSettingEntity extends BaseUuidEntity {

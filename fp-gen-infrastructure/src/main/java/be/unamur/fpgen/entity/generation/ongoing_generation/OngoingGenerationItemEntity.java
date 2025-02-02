@@ -8,6 +8,10 @@ import be.unamur.fpgen.message.MessageTypeEnum;
 import javax.persistence.*;
 import java.util.UUID;
 
+/**
+ * Represents an ongoing generation item of a dataset.
+ * It's an item of the generation request, which has not been generated yet
+ */
 @Entity
 @Table(name = "ongoing_generation_item")
 public class OngoingGenerationItemEntity extends BaseUuidEntity {

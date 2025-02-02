@@ -10,6 +10,9 @@ import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * This class represent a result obtain by a ML algorithm on a given dataset.
+ */
 @Entity
 @Table(name = "result")
 public class ResultEntity extends BaseUuidEntity {

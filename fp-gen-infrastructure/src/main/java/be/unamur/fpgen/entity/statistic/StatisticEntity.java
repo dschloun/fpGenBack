@@ -8,6 +8,11 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Represent the descriptive statistics of a dataset.
+ * actually it's more the characteristics of the dataset
+ * it shows the distributions between real and fake profile with different metrics
+ */
 @Entity
 @Table(name = "statistic")
 public class StatisticEntity extends BaseUuidEntity {

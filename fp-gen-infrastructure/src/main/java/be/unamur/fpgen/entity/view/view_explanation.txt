@@ -1,0 +1,2 @@
+Theses classes are used in some request in order to get all the data needed for the functionalities
+When it was not possible to get all data from classical entities

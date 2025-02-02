@@ -9,6 +9,9 @@ import be.unamur.fpgen.project.Project;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * This class is used to map the domain to the JPA entity.
+ */
 public class ProjectDomainToJpaMapper {
     public static ProjectEntity mapForCreate(final Project domain, final AuthorEntity authorEntity) {
         ProjectEntity projectEntity = new ProjectEntity();

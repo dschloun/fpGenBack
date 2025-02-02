@@ -10,6 +10,10 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * Represents an ongoing generation of a dataset.
+ * It's a generation request, it has not been generated yet
+ */
 @Entity
 @Table(name = "ongoing_generation")
 public class OngoingGenerationEntity extends BaseUuidEntity {

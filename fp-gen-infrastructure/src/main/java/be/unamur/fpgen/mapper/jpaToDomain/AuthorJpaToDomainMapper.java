@@ -5,6 +5,9 @@ import be.unamur.fpgen.entity.author.AuthorEntity;
 
 import java.util.Objects;
 
+/**
+ * This class is used to map the JPA entity to the domain entity.
+ */
 public class AuthorJpaToDomainMapper {
 
     public static Author map(final AuthorEntity entity){

@@ -8,6 +8,12 @@ import be.unamur.fpgen.prompt.PromptStatusEnum;
 
 import javax.persistence.*;
 
+/**
+ * A prompt is dedicated to a dataset type(CONVERSATION / MESSAGE) and a message type (SOCIAL_ENGINEERING / HARASSMENT / GENUINE)
+ * A version allow to track the evolution of the prompt
+ * It's composed of a user prompt and a system prompt
+ * it has a status because it has to be validated by the administrator
+ */
 @Entity
 @Table(name = "prompt")
 public class PromptEntity extends BaseUuidEntity {

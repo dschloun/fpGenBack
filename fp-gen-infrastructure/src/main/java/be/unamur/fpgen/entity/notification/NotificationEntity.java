@@ -6,6 +6,9 @@ import be.unamur.fpgen.notification.NotificationStatus;
 
 import javax.persistence.*;
 
+/**
+ * Represents a notification sent by an author to another author.
+ */
 @Entity
 @Table(name = "notification")
 public class NotificationEntity extends BaseUuidEntity {

@@ -8,16 +8,8 @@ import javax.persistence.*;
 import java.io.Serial;
 
 /**
- * @overview
- * InstantMessageEntity is a mapped superclass for instant messages.
- * It provides the basic structure for instant messages.
- * InstantMessageEntity is mutable.
- * @specfield generationId: String // the generation id of the instant message
- * format = start by SIM if instantMessage CIM if conversationInstantMessage + 'trigram + date + time': ex SIM_DSC202407120814
- * @specfield topic: MessageTopicEnum // the topic of the message
- * @specfield type: MessageTypeEnum // the type of the message
- * @specfield content: String // the content of the message
- * @invariant generationId != null && this.topic != null && this.type != null && this.content != null
+ * Abstract class for messages.
+ * Here are the commune attributes of all messages.
  */
 @Entity
 @Table(name = "instant_message")

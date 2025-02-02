@@ -5,6 +5,11 @@ import be.unamur.fpgen.entity.interlocutor.InterlocutorEntity;
 
 import javax.persistence.*;
 
+/**
+ * Inherit from AbstractInstantMessageEntity
+ * Conversation messages has two interlocutors a sender and a receiver
+ * Order number is crucial to keep the order of the messages in the conversation
+ */
 @Entity
 @DiscriminatorValue(value = "CIM")
 public class ConversationInstantMessageEntity extends AbstractInstantMessageEntity {
