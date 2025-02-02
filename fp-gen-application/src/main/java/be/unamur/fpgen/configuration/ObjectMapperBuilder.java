@@ -6,6 +6,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+/**
+ * Builder for Jackson {@link ObjectMapper} with default configuration.
+ */
 public class ObjectMapperBuilder {
     private ObjectMapperBuilder() {
     }

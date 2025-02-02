@@ -6,6 +6,10 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+/**
+ * Configuration class to allow CORS requests from the Angular frontend. (for development purposes)
+ * //todo: remove this configuration in production
+ */
 @Configuration
 public class CorsConfig {
     @Bean
