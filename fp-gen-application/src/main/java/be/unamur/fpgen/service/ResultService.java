@@ -44,7 +44,7 @@ public class ResultService implements FindByIdService{
 
     @Transactional
     public void deleteResult(UUID resultId) {
-        resultRepository.DeleteResult(resultId);
+        resultRepository.deleteResult(resultId);
     }
 
     @Transactional

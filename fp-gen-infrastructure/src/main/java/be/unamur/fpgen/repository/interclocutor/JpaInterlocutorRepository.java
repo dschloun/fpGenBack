@@ -4,12 +4,16 @@ import be.unamur.fpgen.interlocutor.Interlocutor;
 import be.unamur.fpgen.interlocutor.InterlocutorTypeEnum;
 import be.unamur.fpgen.mapper.domainToJpa.InterlocutorDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.InterlocutorJpaToDomainMapper;
+import be.unamur.fpgen.repository.GenerationRepository;
 import be.unamur.fpgen.repository.InterlocutorRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Random;
 
+/**
+ * See the specifications in the {@link InterlocutorRepository} interface.
+ */
 @Repository
 public class JpaInterlocutorRepository implements InterlocutorRepository {
 

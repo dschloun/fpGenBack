@@ -25,6 +25,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * See the specifications in the {@link GenerationRepository} interface.
+ */
 @Repository
 public class JpaGenerationRepository implements GenerationRepository {
     private final JpaGenerationRepositoryCRUD jpaGenerationRepositoryCRUD;

@@ -81,7 +81,7 @@ public class PromptService {
 
     @Transactional
     public List<Prompt> findAllPromptsByDatasetTypeAndMessageType(DatasetTypeEnum datasetType, MessageTypeEnum messageType) {
-        return promptRepository.ByDatasetTypeAndMessageType(datasetType, messageType, PromptStatusEnum.VALIDATED);
+        return promptRepository.findAllByDatasetTypeAndMessageType(datasetType, messageType, PromptStatusEnum.VALIDATED);
     }
 
     @Transactional

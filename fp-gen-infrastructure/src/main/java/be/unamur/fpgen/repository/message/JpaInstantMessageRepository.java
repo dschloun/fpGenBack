@@ -10,6 +10,7 @@ import be.unamur.fpgen.message.pagination.InstantMessage.InstantMessagesPage;
 import be.unamur.fpgen.mapper.domainToJpa.InstantMessageDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.InstantMessageJpaToDomainMapper;
 import be.unamur.fpgen.pagination.Pagination;
+import be.unamur.fpgen.repository.InterlocutorRepository;
 import be.unamur.fpgen.repository.MessageRepository;
 import be.unamur.fpgen.repository.generation.JpaInstantMessageGenerationRepositoryCRUD;
 import be.unamur.fpgen.utils.StringUtil;
@@ -23,6 +24,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * See the specifications in the {@link MessageRepository} interface.
+ */
 @Repository
 public class JpaInstantMessageRepository implements MessageRepository {
 

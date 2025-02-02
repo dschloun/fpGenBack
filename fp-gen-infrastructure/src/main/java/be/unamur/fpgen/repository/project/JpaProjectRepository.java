@@ -8,6 +8,7 @@ import be.unamur.fpgen.pagination.Pagination;
 import be.unamur.fpgen.project.Project;
 import be.unamur.fpgen.project.ProjectTypeEnum;
 import be.unamur.fpgen.project.pagination.ProjectsPage;
+import be.unamur.fpgen.repository.OngoingGenerationRepository;
 import be.unamur.fpgen.repository.author.JpaAuthorRepositoryCRUD;
 import be.unamur.fpgen.repository.ProjectRepository;
 import be.unamur.fpgen.utils.MapperUtil;
@@ -21,6 +22,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * See the specifications in the {@link ProjectRepository} interface.
+ */
 @Repository
 public class JpaProjectRepository implements ProjectRepository {
     private final JpaAuthorRepositoryCRUD jpaAuthorRepositoryCRUD;

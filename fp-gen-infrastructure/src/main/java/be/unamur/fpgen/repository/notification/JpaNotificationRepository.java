@@ -6,6 +6,7 @@ import be.unamur.fpgen.mapper.domainToJpa.NotificationDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.NotificationJpaToDomainMapper;
 import be.unamur.fpgen.notification.Notification;
 import be.unamur.fpgen.notification.NotificationStatus;
+import be.unamur.fpgen.repository.MessageRepository;
 import be.unamur.fpgen.repository.NotificationRepository;
 import be.unamur.fpgen.repository.author.JpaAuthorRepositoryCRUD;
 import be.unamur.fpgen.utils.MapperUtil;
@@ -15,6 +16,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * See the specifications in the {@link NotificationRepository} interface.
+ */
 @Repository
 public class JpaNotificationRepository implements NotificationRepository {
 

@@ -30,6 +30,9 @@ import javax.persistence.EntityManager;
 import java.time.OffsetDateTime;
 import java.util.*;
 
+/**
+ * See the specifications in the {@link DatasetRepository} interface.
+ */
 @Repository
 public class JpaDatasetRepository implements DatasetRepository {
 
