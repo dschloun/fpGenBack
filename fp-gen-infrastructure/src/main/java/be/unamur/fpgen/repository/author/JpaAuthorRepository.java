@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * See the specifications in the {@link AuthorRepository} interface.
+ */
 @Repository
 public class JpaAuthorRepository implements AuthorRepository {
 
