@@ -2,6 +2,11 @@ package be.unamur.fpgen.text;
 
 import be.unamur.fpgen.BaseUuidDomain;
 
+/**
+ * This class could have been used to show some text to the front end such as general usage condition and so on.
+ * It hasn't been used in the final version of the project.
+ * We let it here for future work
+ */
 public class Text extends BaseUuidDomain {
     private final String title;
     private final String content;

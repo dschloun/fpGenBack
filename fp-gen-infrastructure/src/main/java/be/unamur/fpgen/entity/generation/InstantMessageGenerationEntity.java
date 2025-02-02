@@ -9,6 +9,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * inherit from class ConversationEntity
+ * add the adapted generation set (instant message)
+ * add the adapted dataset set (instant message)
+ */
 @Entity
 @DiscriminatorValue(value = "IMG")
 public class InstantMessageGenerationEntity extends GenerationEntity {

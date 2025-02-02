@@ -6,6 +6,9 @@ import be.unamur.model.InterlocutorType;
 
 import java.util.Optional;
 
+/**
+ * This class is a mapper which map the domain object to the web object
+ */
 public class InterlocutorDomainToWebMapper {
 
     public static Interlocutor map(be.unamur.fpgen.interlocutor.Interlocutor domain){

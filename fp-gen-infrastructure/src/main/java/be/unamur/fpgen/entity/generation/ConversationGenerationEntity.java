@@ -7,6 +7,11 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * inherit from class ConversationEntity
+ * add the adapted generation set (conversation)
+ * add the adapted dataset set (conversation)
+ */
 @Entity
 @DiscriminatorValue(value = "CMG")
 public class ConversationGenerationEntity extends GenerationEntity {

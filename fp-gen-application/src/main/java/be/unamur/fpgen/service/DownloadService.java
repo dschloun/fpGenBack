@@ -20,6 +20,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Service class for downloading datasets.
+ */
 @Service
 public class DownloadService {
 
@@ -37,6 +40,11 @@ public class DownloadService {
         this.downloadRepository = downloadRepository;
     }
 
+    /**
+     * Downloads a dataset.
+     * @param datasetId the dataset id
+     * @return the document content which is the download format
+     */
     @Transactional
     public DocumentContent downloadDataset(final UUID datasetId){
         // 1. Get dataset
@@ -50,7 +58,11 @@ public class DownloadService {
         }
     }
 
-
+    /**
+     * Downloads instant message dataset.
+     * @param fileName the file name
+     * @param instantMessageDownloadList the instant message download list
+     */
     private DocumentContent downloadInstantMessageDataset(final String fileName, final List<InstantMessageDownload> instantMessageDownloadList){
         final byte[] bom = new byte[] { (byte) 239, (byte) 187, (byte) 191 };
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()){
@@ -75,6 +87,11 @@ public class DownloadService {
         }
     }
 
+    /**
+     * Instant message elements to string array.
+     * @param instantMessages the instant messages
+     * @return the list of string array
+     */
     private List<String[]> instantMessageElementsToStringArray(final List<InstantMessageDownload> instantMessages) {
         final List<String[]> records = new ArrayList<>(instantMessages.size());
 
@@ -98,6 +115,11 @@ public class DownloadService {
         return records;
     }
 
+    /**
+     * Downloads conversation message dataset.
+     * @param fileName the file name
+     * @param conversationMessageDownloadList the conversation message download list
+     */
     private DocumentContent downloadConversationMessageDataset(final String fileName, final List<ConversationMessageDownload> conversationMessageDownloadList) {
         final byte[] bom = new byte[] { (byte) 239, (byte) 187, (byte) 191 };
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
@@ -122,6 +144,11 @@ public class DownloadService {
         }
     }
 
+    /**
+     * Conversation message elements to string array.
+     * @param conversationMessages the conversation messages
+     * @return the list of string array
+     */
     private List<String[]> conversationMessageElementsToStringArray(final List<ConversationMessageDownload> conversationMessages) {
         final List<String[]> records = new ArrayList<>(conversationMessages.size());
 
@@ -185,11 +212,23 @@ public class DownloadService {
             return records;
     }
 
+    /**
+     * Prepare file name.
+     * @param dataset the dataset
+     * @return the file name
+     */
     private String prepareFileName(final Dataset dataset){
         final String kind = DatasetTypeEnum.INSTANT_MESSAGE.equals(dataset.getType()) ? "IM " : "CM ";
         return kind + dataset.getName();
     }
 
+    /**
+     * Generate random id.
+     * @param min the min
+     * @param max the max
+     * @param exclude the exclude
+     * @return the integer
+     */
     private Integer generateRandomId(Integer min, Integer max, Integer exclude) {
         Random random = new Random();
         int result;

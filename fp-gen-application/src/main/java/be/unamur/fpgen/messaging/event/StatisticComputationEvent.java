@@ -5,6 +5,9 @@ import org.springframework.context.ApplicationEvent;
 
 import java.util.UUID;
 
+/**
+ * Event that is published when the computation of statistics for a dataset is requested.
+ */
 public class StatisticComputationEvent extends ApplicationEvent {
     private final UUID datasetId;
     private final DatasetTypeEnum datasetType;

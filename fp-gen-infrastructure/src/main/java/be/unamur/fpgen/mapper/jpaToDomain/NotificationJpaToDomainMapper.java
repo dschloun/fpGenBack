@@ -3,6 +3,9 @@ package be.unamur.fpgen.mapper.jpaToDomain;
 import be.unamur.fpgen.entity.notification.NotificationEntity;
 import be.unamur.fpgen.notification.Notification;
 
+/**
+ * This class is used to map the JPA entity to the domain entity.
+ */
 public class NotificationJpaToDomainMapper {
 
     public static Notification map(final NotificationEntity entity){

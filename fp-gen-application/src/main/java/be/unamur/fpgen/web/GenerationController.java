@@ -15,6 +15,10 @@ import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.util.UUID;
 
+/**
+ * This rest controller class is the implementation of the GenerationApi interface.
+ * It is used to manage the generations of the application.
+ */
 @Controller
 public class GenerationController implements GenerationApi {
     private final GenerationService generationService;
@@ -25,6 +29,13 @@ public class GenerationController implements GenerationApi {
         this.authorVerification = AuthorVerification.newBuilder().withFindByIdService(generationService).build();
     }
 
+    /**
+     * This method is used to search generations with pagination.
+     * It is only accessible to users.
+     *
+     * @param pagedGenerationQuery the query to search generations
+     * @return the generations page
+     */
     @RolesAllowed({"user"})
     @Override
     public ResponseEntity<GenerationsPage> searchGenerationsPaginate(@Valid PagedGenerationQuery pagedGenerationQuery) {
@@ -36,6 +47,11 @@ public class GenerationController implements GenerationApi {
         return new ResponseEntity<>(generationsPage, HttpStatus.OK);
     }
 
+    /**
+     * This method is used to delete a generation by its id.
+     * It is only accessible to administrators.
+     * @param generationId the id of the generation to delete
+     */
     @RolesAllowed({"administrator"})
     @Override
     public ResponseEntity<Void> deleteGenerationById(UUID generationId) {

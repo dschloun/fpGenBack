@@ -6,6 +6,10 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * inherit from class DatasetEntity
+ * add the adapted generation set (instant messages)
+ */
 @Entity
 @DiscriminatorValue(value = "INSTANT_MESSAGE_DATASET")
 public class InstantMessageDatasetEntity extends DatasetEntity {

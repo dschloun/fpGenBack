@@ -8,6 +8,9 @@ import be.unamur.fpgen.utils.MapperUtil;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * This class is used to map the JPA entity to the domain entity.
+ */
 public class StatisticJpaToDomainMapper {
     public static Statistic map(StatisticEntity entity) {
         if(Objects.isNull(entity)) {

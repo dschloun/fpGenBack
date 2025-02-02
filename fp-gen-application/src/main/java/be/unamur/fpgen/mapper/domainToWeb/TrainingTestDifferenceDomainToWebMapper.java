@@ -6,6 +6,9 @@ import be.unamur.model.TypeTopicDifference;
 
 import java.util.Comparator;
 
+/**
+ * This class is a mapper which map the domain object to the web object
+ */
 public class TrainingTestDifferenceDomainToWebMapper {
 
     public static TypeTopicDifference map(final be.unamur.fpgen.project.TypeTopicDifference domain){

@@ -4,6 +4,9 @@ import be.unamur.fpgen.dataset.DatasetFunctionEnum;
 
 import java.util.Optional;
 
+/**
+ * This class is a mapper which map the web object to the domain object
+ */
 public class DatasetWebToDomainMapper {
 
     public static DatasetFunctionEnum mapFunction(final be.unamur.model.DatasetFunctionEnum web){

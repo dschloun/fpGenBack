@@ -5,6 +5,9 @@ import be.unamur.model.DatasetType;
 
 import java.util.Optional;
 
+/**
+ * This class is a mapper which map the web object to the domain object
+ */
 public class DatasetTypeWebToDomainMapper {
 
     public static DatasetTypeEnum map(final DatasetType web){

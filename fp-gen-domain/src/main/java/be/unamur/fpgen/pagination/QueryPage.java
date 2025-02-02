@@ -7,6 +7,10 @@ import be.unamur.fpgen.utils.ViolationHandler;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class represents the query page of a list of elements.
+ * It contains the page number and the size of the page.
+ */
 public class QueryPage {
     //members
     private Integer page;

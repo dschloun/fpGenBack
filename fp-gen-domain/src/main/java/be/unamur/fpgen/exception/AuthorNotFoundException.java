@@ -2,6 +2,9 @@ package be.unamur.fpgen.exception;
 
 import java.util.UUID;
 
+/**
+ * Exception thrown when an author is not found in the database
+ */
 public class AuthorNotFoundException extends NotFoundException{
 
     private static final String FPGEN_CODE = "FP_GEN_AUTHOR_NOT_FOUND";

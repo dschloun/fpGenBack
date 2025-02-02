@@ -8,6 +8,9 @@ import be.unamur.model.SenderContact;
 
 import java.util.Optional;
 
+/**
+ * This class is a mapper which map the domain object to the web object
+ */
 public class NotificationDomainToWebMapper {
 
     public static Notification map(final be.unamur.fpgen.notification.Notification domain){

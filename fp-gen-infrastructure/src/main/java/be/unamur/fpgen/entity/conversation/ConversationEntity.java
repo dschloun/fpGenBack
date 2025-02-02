@@ -10,6 +10,15 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Represents a conversation between a two interlocutors
+ * The conversation has a type (e.g. SOCIAL_ENGINEERING) and a topic (e.g. WORK)
+ * A conversation has several messages
+ * e.g. message from interlocutor 1 to interlocutor 2
+ * e.g. message from interlocutor 2 to interlocutor 1
+ * ...
+ * the hash is used to ensure an unicity of conversation
+ */
 @Entity
 @Table(name = "conversation")
 public class ConversationEntity extends BaseUuidEntity {

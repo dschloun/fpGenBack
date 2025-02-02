@@ -6,6 +6,9 @@ import be.unamur.fpgen.interlocutor.InterlocutorTypeEnum;
 
 import javax.persistence.*;
 
+/**
+ * Represents an interlocutor of a conversation
+ */
 @Entity
 @Table(name = "interlocutor")
 public class InterlocutorEntity extends BaseOnlyIntegerIdEntity {

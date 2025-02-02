@@ -4,6 +4,9 @@ import be.unamur.fpgen.entity.generation.ConversationGenerationEntity;
 import be.unamur.fpgen.generation.Generation;
 import be.unamur.fpgen.utils.MapperUtil;
 
+/**
+ * This class is used to map the JPA entity to the domain entity.
+ */
 public class ConversationGenerationJpaToDomainMapper {
 
     public static Generation map(final ConversationGenerationEntity entity){

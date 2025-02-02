@@ -8,6 +8,7 @@ import be.unamur.fpgen.generation.ongoing_generation.OngoingGenerationStatus;
 import be.unamur.fpgen.mapper.domainToJpa.OngoingGenerationDomainToJpaMapper;
 import be.unamur.fpgen.mapper.domainToJpa.OngoingGenerationItemDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.OngoingGenerationJpaToDomainMapper;
+import be.unamur.fpgen.repository.OngoingGenerationItemRepository;
 import be.unamur.fpgen.repository.author.JpaAuthorRepositoryCRUD;
 import be.unamur.fpgen.repository.OngoingGenerationRepository;
 import be.unamur.fpgen.utils.MapperUtil;
@@ -17,6 +18,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * See the specifications in the {@link OngoingGenerationRepository} interface.
+ */
 @Repository
 public class JpaOngoingGenerationRepository implements OngoingGenerationRepository {
 
@@ -54,11 +58,6 @@ public class JpaOngoingGenerationRepository implements OngoingGenerationReposito
         final OngoingGenerationEntity ongoingGenerationEntity = jpaOngoingGenerationRepositoryCRUD.findById(id).orElseThrow();
         ongoingGenerationEntity.setStatus(status);
         jpaOngoingGenerationRepositoryCRUD.save(ongoingGenerationEntity);
-    }
-
-    @Override
-    public List<OngoingGeneration> findAllByAuthorId(UUID authorId) {
-        return null;
     }
 
     @Override

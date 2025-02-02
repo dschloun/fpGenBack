@@ -5,6 +5,9 @@ import be.unamur.model.MessageType;
 
 import java.util.Optional;
 
+/**
+ * This class is a mapper which map the domain object to the web object
+ */
 public class MessageTypeDomainToWebMapper {
 
     public static MessageType map(final MessageTypeEnum domain){

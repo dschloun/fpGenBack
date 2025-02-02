@@ -3,6 +3,10 @@ package be.unamur.fpgen.project;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
 
+/**
+ * This class represents the difference between the number of messages of a given type and topic.
+ * within a given dataset
+ */
 public class TypeTopicDifference {
     private final String key;
     private final MessageTypeEnum type;

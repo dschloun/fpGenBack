@@ -10,6 +10,10 @@ import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * A Project is composed of 3 datasets (TRAINING, TEST, VALIDATION) and is created by an Author.
+ * it has an organisation, a businessId, a name and a description.
+ */
 public class Project extends BaseUuidDomain implements HasAuthor {
     private final ProjectTypeEnum type;
     private final String name;

@@ -10,6 +10,9 @@ import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * This class represent a result obtain by a ML algorithm on a given dataset.
+ */
 public class Result extends BaseUuidDomain implements HasAuthor {
     private final Dataset dataset;
     private final Author author;

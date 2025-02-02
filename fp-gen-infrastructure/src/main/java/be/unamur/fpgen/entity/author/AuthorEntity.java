@@ -14,6 +14,10 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Represents an author of a message, conversation, project, dataset or prompt
+ * It's a user of the application
+ */
 @Entity
 @Table(name = "author")
 public class AuthorEntity extends BaseUuidEntity {

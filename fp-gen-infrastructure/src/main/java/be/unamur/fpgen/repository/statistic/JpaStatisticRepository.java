@@ -4,6 +4,7 @@ import be.unamur.fpgen.dataset.Dataset;
 import be.unamur.fpgen.entity.dataset.DatasetEntity;
 import be.unamur.fpgen.mapper.domainToJpa.StatisticDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.StatisticJpaToDomainMapper;
+import be.unamur.fpgen.repository.ResultRepository;
 import be.unamur.fpgen.repository.StatisticRepository;
 import be.unamur.fpgen.repository.dataset.JpaDatasetRepositoryCRUD;
 import be.unamur.fpgen.statistic.Statistic;
@@ -14,6 +15,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * See the specifications in the {@link StatisticRepository} interface.
+ */
 @Repository
 public class JpaStatisticRepository implements StatisticRepository {
     private final JpaStatisticRepositoryCRUD jpaStatisticRepositoryCRUD;

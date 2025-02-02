@@ -7,6 +7,9 @@ import be.unamur.model.*;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * This class is a mapper which map the domain object to the web object
+ */
 public class StatisticDomainToWebMapper {
     private static TopicRatioCouple map(MessageTypeTopicStatistic domain) {
         return new TopicRatioCouple()

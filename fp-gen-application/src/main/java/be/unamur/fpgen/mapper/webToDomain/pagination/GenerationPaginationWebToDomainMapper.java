@@ -11,6 +11,9 @@ import be.unamur.fpgen.mapper.webToDomain.PaginationWebToDomainMapper;
 import be.unamur.fpgen.utils.DateUtil;
 import be.unamur.model.PagedGenerationQuery;
 
+/**
+ * This class is a mapper which map the web object to the domain object
+ */
 public class GenerationPaginationWebToDomainMapper {
 
     public static GenerationQuery map(be.unamur.model.GenerationQuery web) {

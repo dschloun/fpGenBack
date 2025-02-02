@@ -20,6 +20,10 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * This rest controller class is the implementation of the AdministrationApi interface.
+ * It is used to manage the prompts and authors.
+ */
 @Controller
 public class AdministrationController implements AdministrationApi {
     private final PromptService promptService;
@@ -30,6 +34,11 @@ public class AdministrationController implements AdministrationApi {
         this.authorService = authorService;
     }
 
+    /**
+     * This method is used to create a prompt.
+     * @param promptCreation the prompt to create
+     * @return the created prompt
+     */
     @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Prompt> createPrompt(@Valid PromptCreation promptCreation) {
@@ -37,6 +46,11 @@ public class AdministrationController implements AdministrationApi {
                 HttpStatus.CREATED);
     }
 
+    /**
+     * This method is used to get a prompt by its id.
+     * @param promptId
+     * @return the prompt
+     */
     @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Prompt> getPromptById(UUID promptId) {
@@ -44,6 +58,10 @@ public class AdministrationController implements AdministrationApi {
                 HttpStatus.OK);
     }
 
+    /**
+     * This method is used to get all the prompts.
+     * @return the list of prompts
+     */
     @RolesAllowed({"user"})
     @Override
     public ResponseEntity<List<Prompt>> getPromptsByDatasetTypeAndMessageType(@NotNull @Valid DatasetType datasetType, @NotNull @Valid MessageType messageType) {
@@ -51,6 +69,11 @@ public class AdministrationController implements AdministrationApi {
                 PromptDomainToWebMapper::map), HttpStatus.OK);
     }
 
+    /**
+     * This method is used to get all the prompts by their status.
+     * @param promptStatus
+     * @return the list of prompts
+     */
     @RolesAllowed({"user"})
     @Override
     public ResponseEntity<List<Prompt>> getPromptsByStatus(@NotNull @Valid PromptStatusEnum promptStatus) {
@@ -58,6 +81,10 @@ public class AdministrationController implements AdministrationApi {
                 PromptDomainToWebMapper::map), HttpStatus.OK);
     }
 
+    /**
+     * This method is used to set a prompt as the default prompt.
+     * @param promptId
+     */
     @RolesAllowed({"administrator"})
     @Override
     public ResponseEntity<Void> selectDefaultPrompt(UUID promptId) {
@@ -65,6 +92,11 @@ public class AdministrationController implements AdministrationApi {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /**
+     * update the status of an author
+     * @param authorId
+     * @param authorStatus
+     */
     @RolesAllowed({"administrator"})
     @Override
     public ResponseEntity<Void> updateAuthorStatus(UUID authorId, @NotNull @Valid AuthorStatusEnum authorStatus) {
@@ -72,12 +104,23 @@ public class AdministrationController implements AdministrationApi {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /**
+     * update a prompt
+     * @param promptId
+     * @param promptUpdate
+     * @return the updated prompt
+     */
     @RolesAllowed({"administrator"})
     @Override
     public ResponseEntity<Prompt> updatePromptById(UUID promptId, @Valid PromptUpdate promptUpdate) {
         return new ResponseEntity<>(PromptDomainToWebMapper.map(promptService.updatePrompt(promptId, promptUpdate)),HttpStatus.OK);
     }
 
+    /**
+     * update the status of a prompt
+     * @param promptId
+     * @param promptStatus
+     */
     @RolesAllowed({"administrator"})
     @Override
     public ResponseEntity<Void> updatePromptStatus(UUID promptId, @NotNull @Valid PromptStatusEnum promptStatus) {

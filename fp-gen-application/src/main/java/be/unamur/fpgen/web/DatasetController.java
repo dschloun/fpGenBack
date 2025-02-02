@@ -26,6 +26,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * This class is the rest controller for the dataset. It implements the DatasetApi interface.
+ */
 @Controller
 public class DatasetController implements DatasetApi {
     private static final String ATTACHMENT_FILENAME = "attachment; filename=\"%s\"";
@@ -41,6 +44,11 @@ public class DatasetController implements DatasetApi {
         this.authorVerification = AuthorVerification.newBuilder().withFindByIdService(datasetService).build();
     }
 
+    /**
+     * This method is used to add a list of generations to a dataset.
+     * @param datasetId the dataset id
+     * @param List<UUID> the list of generations id
+     */
     @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Void> addGenerationListToDataset(UUID datasetId, @Valid List<UUID> UUID) {
@@ -49,6 +57,11 @@ public class DatasetController implements DatasetApi {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /**
+     * This method is used to remove a list of generations from a dataset.
+     * @param datasetId the dataset id
+     * @param List<UUID> the list of generations id
+     */
     @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Void> removeGenerationFromDataset(UUID datasetId, @Valid List<UUID> UUID) {
@@ -57,6 +70,12 @@ public class DatasetController implements DatasetApi {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /**
+     * create a dataset
+     * @param datasetType
+     * @param datasetCreation
+     * @return the created dataset
+     */
     @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Dataset> createDataset(@NotNull @Valid DatasetType datasetType, @Valid DatasetCreation datasetCreation) {
@@ -64,6 +83,10 @@ public class DatasetController implements DatasetApi {
         return new ResponseEntity<>(dataset, HttpStatus.CREATED);
     }
 
+    /**
+     * delete a dataset by its id
+     * @param datasetId
+     */
     @RolesAllowed({"administrator"})
     @Override
     public ResponseEntity<Void> deleteDataset(UUID datasetId) {
@@ -72,6 +95,11 @@ public class DatasetController implements DatasetApi {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /**
+     * get a dataset by its id
+     * @param datasetId
+     * @return the dataset
+     */
     @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Dataset> getDatasetById(UUID datasetId) {
@@ -80,6 +108,11 @@ public class DatasetController implements DatasetApi {
         return new ResponseEntity<>(dataset, HttpStatus.OK);
     }
 
+    /**
+     * search datasets by pagination
+     * @param pagedDatasetQuery
+     * @return the paginated datasets
+     */
     @RolesAllowed({"user"})
     @Override
     public ResponseEntity<DatasetsPage> searchDatasetsPaginate(@Valid PagedDatasetQuery pagedDatasetQuery) {
@@ -87,6 +120,12 @@ public class DatasetController implements DatasetApi {
         return new ResponseEntity<>(datasetsPage, HttpStatus.OK);
     }
 
+    /**
+     * create a new dataset version
+     * @param datasetId
+     * @param authorId
+     * @return the new dataset version
+     */
     @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Dataset> createNewDatasetVersion(UUID datasetId, @Valid UUID authorId) {
@@ -95,6 +134,11 @@ public class DatasetController implements DatasetApi {
         return new ResponseEntity<>(DatasetDomainToWebMapper.map(dataset), HttpStatus.CREATED);
     }
 
+    /**
+     * get all dataset versions for a given dataset id
+     * @param datasetId
+     * @return the list of dataset versions
+     */
     @RolesAllowed({"user"})
     @Override
     public ResponseEntity<List<Dataset>> getDatasetAllVersions(UUID datasetId) {
@@ -104,6 +148,10 @@ public class DatasetController implements DatasetApi {
                 HttpStatus.OK);
     }
 
+    /**
+     * validate a dataset
+     * @param datasetId
+     */
     @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Void> validateDataset(UUID datasetId) {
@@ -112,6 +160,11 @@ public class DatasetController implements DatasetApi {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /**
+     * download a dataset
+     * @param datasetId
+     * @return the dataset content (csv file)
+     */
     @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Resource> downloadDataset(UUID datasetId) {
@@ -130,6 +183,11 @@ public class DatasetController implements DatasetApi {
         return new ResponseEntity<>(documentContent.getContentStream(), headers, HttpStatus.OK);
     }
 
+    /**
+     * check the bias of a dataset
+     * @param datasetId
+     * @return the list of real/fake topic bias
+     */
     @Override
     public ResponseEntity<List<RealFakeTopicBias>> checkDatasetBias(UUID datasetId) {
         return new ResponseEntity<>(MapperUtil.mapList(datasetService.checkDatasetBias(datasetId), RealFakeTopicBiasDomainToWebMapper::map), HttpStatus.OK);

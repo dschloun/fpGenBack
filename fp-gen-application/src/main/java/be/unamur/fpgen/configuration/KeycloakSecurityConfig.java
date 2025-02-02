@@ -16,6 +16,9 @@ import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 
+/**
+ * KeycloakSecurityConfig
+ */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(jsr250Enabled = true)
@@ -35,7 +38,6 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
                 .authorizeRequests()
                 .antMatchers("/v1/authors").permitAll()
                 .anyRequest().authenticated();
-//                .anyRequest().permitAll();
     }
 
     @Autowired

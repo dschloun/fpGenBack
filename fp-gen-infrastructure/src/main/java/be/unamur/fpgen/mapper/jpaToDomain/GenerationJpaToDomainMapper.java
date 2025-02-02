@@ -7,6 +7,9 @@ import be.unamur.fpgen.generation.Generation;
 import be.unamur.fpgen.generation.GenerationTypeEnum;
 import be.unamur.fpgen.utils.MapperUtil;
 
+/**
+ * This class is used to map the JPA entity to the domain entity.
+ */
 public class GenerationJpaToDomainMapper {
 
     public static Generation map(final GenerationEntity entity){

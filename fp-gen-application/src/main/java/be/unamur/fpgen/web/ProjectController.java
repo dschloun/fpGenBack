@@ -17,6 +17,10 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * This rest controller class is the implementation of the ProjectApi interface.
+ * It is used to manage the projects of the application.
+ */
 @Controller
 public class ProjectController implements ProjectApi {
     private final ProjectService projectService;
@@ -27,6 +31,11 @@ public class ProjectController implements ProjectApi {
         this.authorVerification = AuthorVerification.newBuilder().withFindByIdService(projectService).build();
     }
 
+    /**
+     * This method is used to create a new project.
+     * @param projectCreation the project creation data
+     * @return the created project
+     */
     @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Project> createProject(@Valid ProjectCreation projectCreation) {
@@ -35,6 +44,11 @@ public class ProjectController implements ProjectApi {
         ), HttpStatus.OK);
     }
 
+    /**
+     * This method is used to delete a project.
+     * @param projectId the id of the project to delete
+     * @return a response entity with no content
+     */
     @RolesAllowed({"administrator"})
     @Override
     public ResponseEntity<Void> deleteProject(UUID projectId) {
@@ -43,6 +57,11 @@ public class ProjectController implements ProjectApi {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /**
+     * This method is used to get a project by its id.
+     * @param projectId the id of the project to get
+     * @return the project
+     */
     @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Project> getProjectById(UUID projectId) {
@@ -51,6 +70,11 @@ public class ProjectController implements ProjectApi {
         ), HttpStatus.OK);
     }
 
+    /**
+     * search projects with pagination
+     * @param pagedProjectQuery
+     * @return a page of projects
+     */
     @RolesAllowed({"user"})
     @Override
     public ResponseEntity<ProjectsPage> searchProjectsPaginate(@Valid PagedProjectQuery pagedProjectQuery) {
@@ -61,12 +85,23 @@ public class ProjectController implements ProjectApi {
         ), HttpStatus.OK);
     }
 
+    /**
+     * This method is used to update the data of a project.
+     * @param projectId the id of the project to update
+     * @param UUID the list of UUIDs to update
+     * @return the updated project
+     */
     @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Project> updateProjectData(UUID projectId, @Valid List<UUID> UUID) {
         return ProjectApi.super.updateProjectData(projectId, UUID);
     }
 
+    /**
+     * This method is used to get the training and test differences of a project.
+     * @param projectId the id of the project
+     * @return the training and test differences
+     */
     @RolesAllowed({"user"})
     @Override
     public ResponseEntity<TrainingTestDifferences> getDatasetsTrainingTestDifferencesByProjectId(UUID projectId) {

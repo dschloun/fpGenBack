@@ -7,6 +7,7 @@ import be.unamur.fpgen.entity.dataset.DatasetEntity;
 import be.unamur.fpgen.entity.result.ResultEntity;
 import be.unamur.fpgen.mapper.domainToJpa.ResultDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.ResultJpaToDomainMapper;
+import be.unamur.fpgen.repository.PromptRepository;
 import be.unamur.fpgen.repository.ResultRepository;
 import be.unamur.fpgen.repository.author.JpaAuthorRepositoryCRUD;
 import be.unamur.fpgen.repository.dataset.JpaDatasetRepositoryCRUD;
@@ -17,6 +18,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * See the specifications in the {@link ResultRepository} interface.
+ */
 @Repository
 public class JpaResultRepository implements ResultRepository {
 
@@ -49,7 +53,7 @@ public class JpaResultRepository implements ResultRepository {
     }
 
     @Override
-    public void DeleteResult(UUID resultId) {
+    public void deleteResult(UUID resultId) {
         jpaResultRepositoryCRUD.deleteById(resultId);
     }
 

@@ -9,6 +9,10 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * A Project is composed of 3 datasets (TRAINING, TEST, VALIDATION) and is created by an Author.
+ * it has an organisation, a businessId, a name and a description.
+ */
 @Entity
 @Table(name = "project")
 public class ProjectEntity extends BaseUuidEntity {

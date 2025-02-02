@@ -7,6 +7,9 @@ import be.unamur.model.Project;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * This class is a mapper which map the domain object to the web object
+ */
 public class ProjectDomainToWebMapper {
 
     public static Project map(be.unamur.fpgen.project.Project domain) {

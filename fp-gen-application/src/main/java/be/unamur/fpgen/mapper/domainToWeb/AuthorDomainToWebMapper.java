@@ -5,6 +5,9 @@ import be.unamur.model.AuthorStatusEnum;
 
 import java.util.Optional;
 
+/**
+ * This class is a mapper which map the domain object to the web object
+ */
 public class AuthorDomainToWebMapper {
     public static Author map(be.unamur.fpgen.author.Author domain) {
         return new Author().id(domain.getId())

@@ -3,6 +3,9 @@ package be.unamur.fpgen.notification;
 import be.unamur.fpgen.BaseUuidDomain;
 import be.unamur.fpgen.author.Author;
 
+/**
+ * Represents a notification sent by an author to another author.
+ */
 public class Notification extends BaseUuidDomain {
     private final Author sender;
     private final Author receiver;

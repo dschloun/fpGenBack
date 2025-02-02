@@ -9,6 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
+/**
+ * Listener that cleans the ongoing generation from the dataset after the generation transaction is committed.
+ */
 @Component
 public class DatasetOngoingGenerationCleanListener {
     private final DatasetService datasetService;
@@ -17,6 +20,9 @@ public class DatasetOngoingGenerationCleanListener {
         this.datasetService = datasetService;
     }
 
+    /**
+     * Cleans: removes the ongoing generation from the dataset after the generation transaction is committed.
+     */
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Transactional(propagation = Propagation.REQUIRES_NEW)

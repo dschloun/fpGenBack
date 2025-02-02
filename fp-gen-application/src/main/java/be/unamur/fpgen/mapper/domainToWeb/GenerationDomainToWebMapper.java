@@ -2,6 +2,9 @@ package be.unamur.fpgen.mapper.domainToWeb;
 
 import be.unamur.fpgen.generation.Generation;
 
+/**
+ * This class is a mapper which map the domain object to the web object
+ */
 public class GenerationDomainToWebMapper {
 
     public static be.unamur.model.Generation map(final Generation domain){

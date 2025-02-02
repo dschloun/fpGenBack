@@ -8,6 +8,7 @@ import be.unamur.fpgen.mapper.jpaToDomain.PromptJpaToDomainMapper;
 import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.prompt.Prompt;
 import be.unamur.fpgen.prompt.PromptStatusEnum;
+import be.unamur.fpgen.repository.ProjectRepository;
 import be.unamur.fpgen.repository.PromptRepository;
 import be.unamur.fpgen.repository.author.JpaAuthorRepositoryCRUD;
 import be.unamur.fpgen.utils.MapperUtil;
@@ -17,6 +18,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * See the specifications in the {@link PromptRepository} interface.
+ */
 @Repository
 public class JpaPromptRepository implements PromptRepository {
     private final JpaPromptRepositoryCRUD jpaPromptRepositoryCRUD;
@@ -64,7 +68,7 @@ public class JpaPromptRepository implements PromptRepository {
     }
 
     @Override
-    public List<Prompt> ByDatasetTypeAndMessageType(DatasetTypeEnum datasetType, MessageTypeEnum messageType, PromptStatusEnum status) {
+    public List<Prompt> findAllByDatasetTypeAndMessageType(DatasetTypeEnum datasetType, MessageTypeEnum messageType, PromptStatusEnum status) {
         return MapperUtil.mapList(jpaPromptRepositoryCRUD.findAllByDatasetTypeAndMessageTypeAndStatusOrderByVersionAsc(datasetType, messageType, status), PromptJpaToDomainMapper::map);
     }
 

@@ -5,11 +5,11 @@ import be.unamur.fpgen.conversation.pagination.ConversationsPage;
 import be.unamur.fpgen.entity.generation.ConversationGenerationEntity;
 import be.unamur.fpgen.generation.Generation;
 import be.unamur.fpgen.mapper.domainToJpa.ConversationDomainToJpaMapper;
-import be.unamur.fpgen.mapper.jpaToDomain.ConversationGenerationJpaToDomainMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.ConversationJpaToDomainMapper;
 import be.unamur.fpgen.message.MessageTopicEnum;
 import be.unamur.fpgen.message.MessageTypeEnum;
 import be.unamur.fpgen.pagination.Pagination;
+import be.unamur.fpgen.repository.ConversationMessageRepository;
 import be.unamur.fpgen.repository.ConversationRepository;
 import be.unamur.fpgen.repository.generation.JpaConversationGenerationRepositoryCRUD;
 import be.unamur.fpgen.utils.MapperUtil;
@@ -21,6 +21,9 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * See the specifications in the {@link ConversationRepository} interface.
+ */
 @Repository
 public class JpaConversationRepository implements ConversationRepository {
     private final JpaConversationRepositoryCRUD jpaConversationRepositoryCRUD;

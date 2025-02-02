@@ -2,6 +2,9 @@ package be.unamur.fpgen.exception;
 
 import java.util.UUID;
 
+/**
+ * Exception thrown when a notification is not found.
+ */
 public class NotificationNotFoundException extends NotFoundException{
 
     private static final String FPGEN_CODE = "FP_GEN_NOTIFICATION_NOT_FOUND";

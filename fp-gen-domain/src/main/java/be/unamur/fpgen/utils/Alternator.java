@@ -1,5 +1,10 @@
 package be.unamur.fpgen.utils;
 
+/**
+ * This class was used tduring the development stage, before using openAi to generate conversation
+ * We simply created a conversation with a list of fictif messages
+ * Not used for real conditions
+ */
 public class Alternator<T> {
         private T first;
         private T second;

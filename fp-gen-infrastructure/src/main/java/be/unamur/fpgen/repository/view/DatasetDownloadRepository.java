@@ -10,6 +10,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * See the specifications in the {@link DownloadRepository} interface.
+ */
 @Repository
 public class DatasetDownloadRepository implements DownloadRepository {
 

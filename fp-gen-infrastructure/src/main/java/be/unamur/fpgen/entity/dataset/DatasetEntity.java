@@ -13,6 +13,12 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * Represents a dataset
+ * a dataset as a type (Message or Conversation)
+ * a function (TRAINING, TEST, VALIDATION)
+ * a descriptive statistic which represent the distribution, size, ...
+ */
 @Entity
 @Table(name = "dataset")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)

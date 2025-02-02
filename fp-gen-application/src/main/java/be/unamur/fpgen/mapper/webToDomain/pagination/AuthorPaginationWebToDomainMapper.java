@@ -8,6 +8,9 @@ import be.unamur.model.PagedAuthorQuery;
 
 import java.util.Optional;
 
+/**
+ * This class is a mapper which map the web object to the domain object
+ */
 public class AuthorPaginationWebToDomainMapper {
     public static AuthorQuery map(be.unamur.model.AuthorQuery web) {
         return AuthorQuery.newBuilder()

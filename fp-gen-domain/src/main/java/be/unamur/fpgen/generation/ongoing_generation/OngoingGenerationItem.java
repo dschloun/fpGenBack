@@ -6,6 +6,10 @@ import be.unamur.fpgen.message.MessageTypeEnum;
 
 import java.util.UUID;
 
+/**
+ * Represents an ongoing generation item of a dataset.
+ * It's an item of the generation request, which has not been generated yet
+ */
 public class OngoingGenerationItem extends BaseUuidDomain {
 
     private final MessageTypeEnum messageType;

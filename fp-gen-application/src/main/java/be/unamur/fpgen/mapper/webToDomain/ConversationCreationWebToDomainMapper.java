@@ -7,6 +7,9 @@ import be.unamur.model.GenerationCreation;
 import be.unamur.model.MessageTopic;
 import be.unamur.model.MessageType;
 
+/**
+ * This class is a mapper which map the web object to the domain object
+ */
 public class ConversationCreationWebToDomainMapper {
 
     public static Conversation map(final GenerationCreation web, final int minInteractionNumber, final int maxInteractionNumber) {

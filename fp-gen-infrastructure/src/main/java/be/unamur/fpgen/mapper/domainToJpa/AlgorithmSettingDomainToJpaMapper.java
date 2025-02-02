@@ -3,8 +3,10 @@ package be.unamur.fpgen.mapper.domainToJpa;
 import be.unamur.fpgen.entity.result.AlgorithmSettingEntity;
 import be.unamur.fpgen.entity.result.ResultEntity;
 import be.unamur.fpgen.result.AlgorithmSetting;
-import be.unamur.fpgen.result.Result;
 
+/**
+ * This class is used to map the domain to the JPA entity.
+ */
 public class AlgorithmSettingDomainToJpaMapper {
 
     public static AlgorithmSettingEntity map(AlgorithmSetting domain, ResultEntity result) {

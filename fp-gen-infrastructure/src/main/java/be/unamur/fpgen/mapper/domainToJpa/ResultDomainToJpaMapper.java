@@ -6,6 +6,9 @@ import be.unamur.fpgen.entity.result.ResultEntity;
 import be.unamur.fpgen.result.Result;
 import be.unamur.fpgen.utils.MapperUtil;
 
+/**
+ * This class is used to map the domain to the JPA entity.
+ */
 public class ResultDomainToJpaMapper {
 
     public static ResultEntity map(final Result domain, final DatasetEntity dataset, final AuthorEntity author){

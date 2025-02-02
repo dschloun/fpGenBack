@@ -8,6 +8,12 @@ import be.unamur.fpgen.message.MessageTypeEnum;
 
 import java.util.Objects;
 
+/**
+ * A prompt is dedicated to a dataset type(CONVERSATION / MESSAGE) and a message type (SOCIAL_ENGINEERING / HARASSMENT / GENUINE)
+ * A version allow to track the evolution of the prompt
+ * It's composed of a user prompt and a system prompt
+ * it has a status because it has to be validated by the administrator
+ */
 public class Prompt extends BaseUuidDomain {
     private final DatasetTypeEnum datasetType;
     private final MessageTypeEnum messageType;

@@ -5,6 +5,9 @@ import be.unamur.fpgen.entity.generation.ongoing_generation.OngoingGenerationEnt
 import be.unamur.fpgen.generation.ongoing_generation.OngoingGeneration;
 import be.unamur.fpgen.utils.MapperUtil;
 
+/**
+ * This class is used to map the domain to the JPA entity.
+ */
 public class OngoingGenerationDomainToJpaMapper {
 
     public static OngoingGenerationEntity mapForCreate(OngoingGeneration domain, AuthorEntity author) {

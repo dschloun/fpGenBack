@@ -6,6 +6,9 @@ import be.unamur.fpgen.utils.MapperUtil;
 
 import java.util.Objects;
 
+/**
+ * This class is used to map the JPA entity to the domain entity.
+ */
 public class ResultJpaToDomainMapper {
 
     public static final Result map(final ResultEntity entity){

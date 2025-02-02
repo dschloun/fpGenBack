@@ -4,6 +4,9 @@ import be.unamur.fpgen.message.download.ConversationMessageDownload;
 
 import java.util.Objects;
 
+/**
+ * This class is used to map the JPA entity to the domain entity.
+ */
 public class ConversationMessageDownloadProjectionJpaToDomainMapper {
 
     public static ConversationMessageDownload map(final ConversationMessageDownloadProjection entity) {

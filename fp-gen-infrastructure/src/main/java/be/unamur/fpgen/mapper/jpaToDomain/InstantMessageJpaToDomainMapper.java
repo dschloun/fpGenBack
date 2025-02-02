@@ -6,9 +6,7 @@ import be.unamur.fpgen.message.InstantMessage;
 import java.util.Objects;
 
 /**
- * @overview
- * InstantMessageJpaToDomainMapper is a utility class providing methods to map InstantMessageEntity JPA objects to
- * InstantMessage domain objects.
+ * This class is used to map the JPA entity to the domain entity.
  */
 public class InstantMessageJpaToDomainMapper {
 

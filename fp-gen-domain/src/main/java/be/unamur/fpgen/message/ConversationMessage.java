@@ -4,6 +4,10 @@ import be.unamur.fpgen.interlocutor.Interlocutor;
 
 import java.util.UUID;
 
+/**
+ * Conversation messages has two interlocutors a sender and a receiver
+ * Order number is crucial to keep the order of the messages in the conversation
+ */
 public class ConversationMessage extends AbstractInstantMessage {
     private final Interlocutor sender;
     private final Interlocutor receiver;

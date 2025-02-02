@@ -12,6 +12,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * This class is used to map the JPA entity to the domain entity.
+ */
 public class DatasetJpaToDomainMapper {
 
     public static Dataset map(final DatasetEntity entity){

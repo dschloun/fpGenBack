@@ -12,6 +12,12 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * Represents a dataset
+ * a dataset as a type (Message or Conversation)
+ * a function (TRAINING, TEST, VALIDATION)
+ * a descriptive statistic which represent the distribution, size, ...
+ */
 public class Dataset extends BaseUuidDomain implements HasAuthor {
     private final DatasetTypeEnum type;
     private final String businessId;
@@ -236,6 +242,10 @@ public class Dataset extends BaseUuidDomain implements HasAuthor {
             return new Dataset(this);
         }
 
+        /**
+         * Generate a unique identifier for the dataset
+         * @return the generated identifier
+         */
         public String generateGenerationId() {
             return String.format("%s-%s-%s-%s", this.type, this.datasetFunction, this.author.getTrigram(), DateUtil.convertOffsetDateTimeToString(OffsetDateTime.now()));
         }

@@ -10,6 +10,9 @@ import be.unamur.model.PagedDatasetQuery;
 
 import java.util.Objects;
 
+/**
+ * This class is a mapper which map the web object to the domain object
+ */
 public class DatasetPaginationWebToDomainMapper {
 
     public static DatasetQuery map(be.unamur.model.DatasetQuery web) {

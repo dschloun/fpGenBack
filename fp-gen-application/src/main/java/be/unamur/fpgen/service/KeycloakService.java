@@ -16,6 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Service class to interact with Keycloak API
+ */
 @Service
 public class KeycloakService {
     @Value("${keycloak.auth-server-url}")
@@ -36,6 +39,10 @@ public class KeycloakService {
     @Value("${default-password}")
     private String defaultPassword;
 
+    /**
+     * Get access token for admin user
+     * @return access token
+     */
     @Transactional
     public String getAdminAccessToken(){
         RestTemplate restTemplate = new RestTemplate();
@@ -55,6 +62,10 @@ public class KeycloakService {
         return  response.getBody().get("access_token").toString();
     }
 
+    /**
+     * Create a new user in Keycloak
+     * @param author Author object
+     */
     @Transactional
     public void createUser(Author author) {
         // 0. get admin access token
@@ -94,6 +105,11 @@ public class KeycloakService {
         }
     }
 
+    /**
+     * Update user status
+     * @param enabled true if user is enabled, false otherwise
+     * @param userName username of the user
+     */
     @Transactional
     public void updateUserStatus(final boolean enabled, final String userName){
         // 0. get admin access token
@@ -124,6 +140,11 @@ public class KeycloakService {
         System.out.println("User status updated successfully");
     }
 
+    /**
+     * Search user by username
+     * @param username username of the user
+     * @return userId
+     */
     @Transactional
     public UUID searchUserByUsername(String username) {
         String accessToken = getAdminAccessToken();

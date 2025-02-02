@@ -6,6 +6,9 @@ import be.unamur.fpgen.message.MessageTypeEnum;
 
 import java.math.BigDecimal;
 
+/**
+ * This class represents the type/topic distribution
+ */
 public class MessageTypeTopicStatistic extends BaseUuidDomain {
      private final MessageTypeEnum messageType;
      private final MessageTopicEnum messageTopic;

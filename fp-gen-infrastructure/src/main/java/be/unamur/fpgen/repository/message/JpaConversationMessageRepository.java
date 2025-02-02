@@ -21,6 +21,9 @@ import org.springframework.stereotype.Repository;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+/**
+ * See the specifications in the {@link ConversationMessageRepository} interface.
+ */
 @Repository
 public class JpaConversationMessageRepository implements ConversationMessageRepository {
 

@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Base64;
 import java.util.Map;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+/**
+ * Interceptor to extract the token from the Authorization header and set the user context.
+ */
 @Component
 public class TokenInterceptor implements HandlerInterceptor {
 

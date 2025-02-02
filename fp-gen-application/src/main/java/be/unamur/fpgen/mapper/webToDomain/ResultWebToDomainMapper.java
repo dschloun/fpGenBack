@@ -1,16 +1,16 @@
 package be.unamur.fpgen.mapper.webToDomain;
 
-import be.unamur.fpgen.author.Author;
-import be.unamur.fpgen.dataset.Dataset;
 import be.unamur.fpgen.result.Result;
 import be.unamur.fpgen.utils.BigDecimalSafeMapper;
 import be.unamur.fpgen.utils.DateUtil;
 import be.unamur.model.ResultCreation;
 import be.unamur.model.ResultUpdate;
 
-import java.math.BigDecimal;
 import java.util.stream.Collectors;
 
+/**
+ * This class is a mapper which map the web object to the domain object
+ */
 public class ResultWebToDomainMapper {
 
     public static Result map(final ResultCreation web){

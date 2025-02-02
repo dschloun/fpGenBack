@@ -1,5 +1,8 @@
 package be.unamur.fpgen.exception;
 
+/**
+ * Exception thrown when a resource is not found.
+ */
 public class NotFoundException extends RuntimeException implements BusinessException{
     private final String code;
 

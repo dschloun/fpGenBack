@@ -2,6 +2,9 @@ package be.unamur.fpgen.exception;
 
 import java.util.UUID;
 
+/**
+ * Exception thrown when a project is not found.
+ */
 public class ProjectNotFoundException extends NotFoundException{
 
     private static final String FPGEN_CODE = "FP_GEN_PROJECT_NOT_FOUND";

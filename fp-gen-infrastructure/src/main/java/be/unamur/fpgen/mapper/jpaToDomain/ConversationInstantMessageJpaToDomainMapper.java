@@ -5,6 +5,9 @@ import be.unamur.fpgen.message.ConversationMessage;
 
 import java.util.Objects;
 
+/**
+ * This class is used to map the JPA entity to the domain entity.
+ */
 public class ConversationInstantMessageJpaToDomainMapper {
 
     public static ConversationMessage map(final ConversationInstantMessageEntity entity){

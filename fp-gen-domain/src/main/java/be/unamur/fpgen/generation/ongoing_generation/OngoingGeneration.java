@@ -8,6 +8,10 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * Represents an ongoing generation of a dataset.
+ * It's a generation request, it has not been generated yet
+ */
 public class OngoingGeneration extends BaseUuidDomain {
 
     private final GenerationTypeEnum type;

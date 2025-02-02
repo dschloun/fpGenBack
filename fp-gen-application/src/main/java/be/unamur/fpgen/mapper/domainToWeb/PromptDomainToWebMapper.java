@@ -6,6 +6,9 @@ import be.unamur.model.PromptStatusEnum;
 
 import java.util.Optional;
 
+/**
+ * This class is a mapper which map the domain object to the web object
+ */
 public class PromptDomainToWebMapper {
 
     public static Prompt map(be.unamur.fpgen.prompt.Prompt domain) {

@@ -7,6 +7,9 @@ import be.unamur.fpgen.service.FindByIdService;
 
 import java.util.UUID;
 
+/**
+ * This class is responsible for verifying if the author of a resource is the same as the one who is currently logged in.
+ */
 public class AuthorVerification {
 
     private final FindByIdService findByIdService;
@@ -15,10 +18,10 @@ public class AuthorVerification {
         findByIdService = builder.findByIdService;
     }
 
-    public FindByIdService getFindByIdService() {
-        return findByIdService;
-    }
-
+    /**
+     * Verifies if the author of a resource is the same as the one who is currently logged in.
+     * @param resourceId the id of the resource to verify
+     */
     public void verifyAuthor(UUID resourceId){
         final String authorEmail = UserContextHolder.getContext().getEmail();
         final Author initial_author = findByIdService.findById(resourceId).getAuthor();

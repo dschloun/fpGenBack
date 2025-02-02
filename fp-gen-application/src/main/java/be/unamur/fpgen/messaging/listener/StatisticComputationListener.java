@@ -23,6 +23,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * Listener that listens to {@link StatisticComputationEvent} and computes the statistic for the dataset when requested.
+ */
 @Component
 public class StatisticComputationListener {
 
@@ -38,6 +41,11 @@ public class StatisticComputationListener {
         this.applicationEventPublisher = applicationEventPublisher;
     }
 
+    /**
+     * Method that computes the statistic for the dataset.
+     *
+     * @param event the event that contains the dataset id for which the statistic should be computed.
+     */
     @Async
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
