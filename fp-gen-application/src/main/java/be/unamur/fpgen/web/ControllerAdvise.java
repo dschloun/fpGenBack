@@ -14,6 +14,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.util.UUID;
 
+/**
+ * This class is used to handle exceptions thrown by the application in order to send exception back to the front end in a certain format.
+ */
 @org.springframework.web.bind.annotation.ControllerAdvice
 public class ControllerAdvise extends ResponseEntityExceptionHandler {
 

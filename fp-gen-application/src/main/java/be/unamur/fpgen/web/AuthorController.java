@@ -20,6 +20,10 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * This rest controller class is the implementation of the AuthorApi interface.
+ * It is used to manage the authors.
+ */
 @Controller
 public class AuthorController implements AuthorApi {
 
@@ -29,18 +33,33 @@ public class AuthorController implements AuthorApi {
         this.authorService = authorService;
     }
 
+    /**
+     * This method is used to create an author.
+     * @param authorCreation the author to create
+     * @return the created author
+     */
     @Override
     public ResponseEntity<Author> createAuthor(@Valid AuthorCreation authorCreation) {
         final Author author = AuthorDomainToWebMapper.map(authorService.createIfNotExists(AuthorWebToDomainMapper.map(authorCreation)));
         return new ResponseEntity<>(author, HttpStatus.CREATED);
     }
 
+    /**
+     * This method is used to get an author by its id.
+     * @param authorId
+     * @return the author
+     */
     @RolesAllowed({"administrator"})
     @Override
     public ResponseEntity<Author> getAuthorById(UUID authorId) {
         return new ResponseEntity<>(AuthorDomainToWebMapper.map(authorService.getAuthorById(authorId)), HttpStatus.OK);
     }
 
+    /**
+     * paginate search authors
+     * @param pagedAuthorQuery
+     * @return the authors page
+     */
     @RolesAllowed({"administrator"})
     @Override
     public ResponseEntity<AuthorsPage> searchAuthorsPaginate(@Valid PagedAuthorQuery pagedAuthorQuery) {
@@ -51,6 +70,10 @@ public class AuthorController implements AuthorApi {
                 ), HttpStatus.OK);
     }
 
+    /**
+     * This method is used to get the list of authors.
+     * @return the list of authors
+     */
     @RolesAllowed({"administrator"})
     @Override
     public ResponseEntity<List<Author>> getAuthorList() {

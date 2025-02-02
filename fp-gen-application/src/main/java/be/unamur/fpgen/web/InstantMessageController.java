@@ -1,5 +1,6 @@
 package be.unamur.fpgen.web;
 
+import be.unamur.api.GenerationApi;
 import be.unamur.api.InstantMessageApi;
 import be.unamur.fpgen.mapper.domainToWeb.InstantMessageDomainToWebMapper;
 import be.unamur.fpgen.mapper.domainToWeb.pagination.InstantMessagePaginationDomainToWebMapper;
@@ -19,6 +20,10 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * This rest controller class is the implementation of the InstantMessageApi interface.
+ * It is used to manage the instant messages.
+ */
 @Controller
 public class InstantMessageController implements InstantMessageApi {
 
@@ -28,6 +33,11 @@ public class InstantMessageController implements InstantMessageApi {
         this.instantMessageService = instantMessageService;
     }
 
+    /**
+     * This method is used to create a new instant message.
+     * @param instantMessageBatchCreation the instant message to create
+     * @return a response entity with the status code
+     */
     @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Void> createMessage(@Valid InstantMessageBatchCreation instantMessageBatchCreation) {
@@ -35,6 +45,11 @@ public class InstantMessageController implements InstantMessageApi {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    /**
+     * This method is used to get an instant message by its id.
+     * @param instantMessageId the id of the instant message
+     * @return a response entity with the instant message
+     */
     @RolesAllowed({"user"})
     @Override
     public ResponseEntity<InstantMessage> getInstantMessageById(UUID instantMessageId) {
@@ -43,6 +58,11 @@ public class InstantMessageController implements InstantMessageApi {
                         instantMessageService.getInstantMessageById(instantMessageId)), HttpStatus.OK);
     }
 
+    /**
+     * This method is used to search instant messages with pagination.
+     * @param pagedInstantMessageQuery the query to search instant messages
+     * @return a response entity with the instant messages page
+     */
     @RolesAllowed({"user"})
     @Override
     public ResponseEntity<InstantMessagesPage> searchInstantMessagesPaginate(@Valid PagedInstantMessageQuery pagedInstantMessageQuery) {
@@ -54,6 +74,10 @@ public class InstantMessageController implements InstantMessageApi {
         );
     }
 
+    /**
+     * delete an instant message by its id
+     * @param instantMessageId
+     */
     @RolesAllowed({"administrator"})
     @Override
     public ResponseEntity<Void> deleteInstantMessageById(UUID instantMessageId) {
@@ -61,6 +85,11 @@ public class InstantMessageController implements InstantMessageApi {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /**
+     * find all instant messages by generation id
+     * @param generationId
+     * @return
+     */
     @RolesAllowed({"user"})
     @Override
     public ResponseEntity<List<InstantMessage>> findInstantMessagesByGenerationId(UUID generationId) {
