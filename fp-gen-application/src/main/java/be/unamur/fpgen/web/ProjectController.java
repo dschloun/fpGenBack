@@ -49,7 +49,7 @@ public class ProjectController implements ProjectApi {
      * @param projectId the id of the project to delete
      * @return a response entity with no content
      */
-    @RolesAllowed({"administrator"})
+    @RolesAllowed({"user"})
     @Override
     public ResponseEntity<Void> deleteProject(UUID projectId) {
         authorVerification.verifyAuthor(projectId);
