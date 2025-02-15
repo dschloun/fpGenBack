@@ -67,4 +67,11 @@ public interface AuthorRepository {
      * @return a paginate search result
      */
     AuthorsPage findAuthorsPagination(String lastName, String firstName, String organization, String function, String trigram, String email, AuthorStatusEnum status, Pageable pageable);
+
+    /**
+     * Find all administrator
+     * @return the list of administrators
+     */
+    List<Author> findAdministrators();
+
 }

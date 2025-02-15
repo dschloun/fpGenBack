@@ -1,5 +1,6 @@
 package be.unamur.fpgen.repository.author;
 
+import be.unamur.fpgen.author.Author;
 import be.unamur.fpgen.author.AuthorStatusEnum;
 import be.unamur.fpgen.entity.author.AuthorEntity;
 import org.springframework.data.domain.Page;
@@ -38,5 +39,5 @@ public interface JpaAuthorRepositoryCRUD extends JpaRepository<AuthorEntity, UUI
                                       @Param("status") AuthorStatusEnum status,
                                       Pageable pageable);
 
-
+    List<AuthorEntity> findAllByAdministratorIsTrue();
 }

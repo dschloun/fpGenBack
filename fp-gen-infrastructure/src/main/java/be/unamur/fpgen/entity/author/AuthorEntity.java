@@ -42,6 +42,7 @@ public class AuthorEntity extends BaseUuidEntity {
     private boolean acceptTermsOfUse;
     private String motivation;
     private boolean accountCreated;
+    private Boolean administrator;
 
     // getters and setters
 
@@ -215,5 +216,14 @@ public class AuthorEntity extends BaseUuidEntity {
 
     public void setAccountCreated(boolean accountCreated) {
         this.accountCreated = accountCreated;
+    }
+
+    @Column(name = "administrator")
+    public Boolean isAdministrator() {
+        return administrator;
+    }
+
+    public void setAdministrator(Boolean administrator) {
+        this.administrator = administrator;
     }
 }

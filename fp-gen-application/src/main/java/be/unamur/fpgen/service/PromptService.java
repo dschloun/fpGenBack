@@ -34,6 +34,7 @@ public class PromptService {
 
     /**
      * Create a new prompt.
+     * Send notification to all administrators to verify the prompt.
      *
      * @param command the prompt creation command
      * @return the created prompt
@@ -43,18 +44,22 @@ public class PromptService {
         final Author author = authorService.getAuthorByTrigram(UserContextHolder.getContext().getTrigram());
         final Integer lastVersion = findMaxVersionByDatasetTypeAndMessageType(DatasetTypeWebToDomainMapper.map(command.getDatasetType()), MessageTypeWebToDomainMapper.map(command.getMessageType()));
 
-        return promptRepository.savePrompt(
-                Prompt.newBuilder()
-                        .withAuthor(author)
-                        .withDefaultPrompt(false)
-                        .withDatasetType(DatasetTypeWebToDomainMapper.map(command.getDatasetType()))
-                        .withMessageType(MessageTypeWebToDomainMapper.map(command.getMessageType()))
-                        .withStatus(PromptStatusEnum.WAITING_ANALYSE)
-                        .withUserPrompt(command.getUserContent())
-                        .withSystemPrompt(command.getSystemContent())
-                        .withVersion(lastVersion + 1)
-                        .withMotivation(command.getMotivation())
-                        .build());
+        final Prompt prompt =  Prompt.newBuilder()
+                .withAuthor(author)
+                .withDefaultPrompt(false)
+                .withDatasetType(DatasetTypeWebToDomainMapper.map(command.getDatasetType()))
+                .withMessageType(MessageTypeWebToDomainMapper.map(command.getMessageType()))
+                .withStatus(PromptStatusEnum.WAITING_ANALYSE)
+                .withUserPrompt(command.getUserContent())
+                .withSystemPrompt(command.getSystemContent())
+                .withVersion(lastVersion + 1)
+                .withMotivation(command.getMotivation())
+                .build();
+
+        authorService.sendNotificationToAllAdministrators(String.format
+                ("VERIFY PROMPT: prompt %s %s from author %s %s with trigram %s", prompt.getDatasetType(), prompt.getMessageType(), author.getFirstName(), author.getLastName(), author.getTrigram()));
+
+        return promptRepository.savePrompt(prompt);
     }
 
     /**

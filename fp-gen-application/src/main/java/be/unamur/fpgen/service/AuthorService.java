@@ -3,16 +3,23 @@ package be.unamur.fpgen.service;
 import be.unamur.fpgen.author.AuthorStatusEnum;
 import be.unamur.fpgen.author.pagination.AuthorsPage;
 import be.unamur.fpgen.author.pagination.PagedAuthorsQuery;
+import be.unamur.fpgen.context.UserContextHolder;
 import be.unamur.fpgen.exception.AuthorAlreadyExistException;
 import be.unamur.fpgen.exception.AuthorNotFoundException;
 import be.unamur.fpgen.author.Author;
+import be.unamur.fpgen.mapper.jpaToDomain.AuthorJpaToDomainMapper;
+import be.unamur.fpgen.notification.Notification;
+import be.unamur.fpgen.notification.NotificationStatus;
 import be.unamur.fpgen.repository.AuthorRepository;
+import be.unamur.fpgen.repository.NotificationRepository;
+import be.unamur.fpgen.utils.MapperUtil;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -23,10 +30,12 @@ public class AuthorService {
 
     private final AuthorRepository authorRepository;
     private final KeycloakService keycloakService;
+    private final NotificationRepository notificationRepository;
 
-    public AuthorService(AuthorRepository authorRepository, KeycloakService keycloakService) {
+    public AuthorService(AuthorRepository authorRepository, KeycloakService keycloakService, NotificationRepository notificationRepository) {
         this.authorRepository = authorRepository;
         this.keycloakService = keycloakService;
+        this.notificationRepository = notificationRepository;
     }
 
     /**
@@ -50,6 +59,10 @@ public class AuthorService {
             throw AuthorAlreadyExistException.withTrigram(author.getTrigram());
         }
         author.updateStatus(AuthorStatusEnum.WAITING_VERIFICATION);
+
+        sendNotificationToAllAdministrators(String.format
+                ("VERIFY ACCOUNT: %s %s with trigram %s", author.getFirstName(), author.getLastName(), author.getTrigram()));
+
         return authorRepository.saveAuthor(author);
     }
 
@@ -129,5 +142,34 @@ public class AuthorService {
         // 3. update author status
         author.updateStatus(status);
         authorRepository.updateAuthor(author);
+    }
+
+    /**
+     * Find all administrator
+     * @return the list of administrators
+     */
+    @Transactional
+    public List<Author> getAdministrators(){
+        return authorRepository.findAdministrators();
+    }
+
+    /**
+     * Send a notification to all administrators
+     * @param message
+     */
+    @Transactional
+    public void sendNotificationToAllAdministrators(final String message) {
+        final Author sender = getAuthorByTrigram(Objects.nonNull(UserContextHolder.getContext().getTrigram()) ? UserContextHolder.getContext().getTrigram() : "SYSTEM");
+        final List<Author> administrators = getAdministrators();
+
+        administrators.forEach(administrator -> {
+            final Notification notificationToCreate = Notification.newBuilder()
+                    .withSender(sender)
+                    .withReceiver(administrator)
+                    .withMessage(message)
+                    .withStatus(NotificationStatus.UNREAD)
+                    .build();
+            notificationRepository.createNotification(notificationToCreate);
+        });
     }
 }

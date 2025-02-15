@@ -7,6 +7,7 @@ import be.unamur.fpgen.mapper.domainToJpa.AuthorDomainToJpaMapper;
 import be.unamur.fpgen.mapper.jpaToDomain.AuthorJpaToDomainMapper;
 import be.unamur.fpgen.pagination.Pagination;
 import be.unamur.fpgen.repository.AuthorRepository;
+import be.unamur.fpgen.utils.MapperUtil;
 import be.unamur.fpgen.utils.StringUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -94,5 +95,10 @@ public class JpaAuthorRepository implements AuthorRepository {
 
         // 3. return
         return authorsPage;
+    }
+
+    @Override
+    public List<Author> findAdministrators() {
+        return MapperUtil.mapList(jpaAuthorRepositoryCRUD.findAllByAdministratorIsTrue(), AuthorJpaToDomainMapper::map);
     }
 }

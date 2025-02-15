@@ -46,3 +46,22 @@ databaseChangeLog:
               - column:
                   name: modification_date
                   value: '2025-01-01 00:00:00.000000'
+
+  - changeSet:
+      id: add_administrator_boolean
+      author: dsc
+      changes:
+        - addColumn:
+            tableName: author
+            columns:
+              - column:
+                  name: administrator
+                  type: boolean
+
+        - update:
+            tableName: author
+            columns:
+              - column:
+                  name: administrator
+                  value: 'true'
+            where: trigram = 'dsc'
